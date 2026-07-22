@@ -5,6 +5,10 @@
   "license": "MIT",
   "author": "Martin Zachariassen",
   "type": "module",
+  "engines": {
+    "node": ">=20.16",
+    "bun": ">=1.1"
+  },
   "sideEffects": ["**/*.css"],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
