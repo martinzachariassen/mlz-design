@@ -1,0 +1,39 @@
+/* =============================================================================
+   MLZ Design — base.css  (optional)
+   A thin base layer for apps that want the paper/ink defaults applied globally
+   without writing them by hand. Import AFTER Tailwind and theme.css:
+
+       @import "tailwindcss";
+       @import "@martinzachariassen/design/styles/theme.css";
+       @import "@martinzachariassen/design/styles/base.css";
+
+   Skip this file if you'd rather set the body styles yourself.
+   ============================================================================= */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    background: var(--background);
+    color-scheme: light;
+  }
+
+  html.dark,
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  body {
+    min-height: 100%;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--accent) 30%, transparent);
+  }
+}

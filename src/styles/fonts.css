@@ -1,0 +1,22 @@
+/* =============================================================================
+   MLZ Design — fonts.css
+   The four typefaces the system uses, pulled from Google Fonts.
+
+   Two ways to load them — pick one, don't do both:
+
+   A) CSS import (simplest; what this file does):
+        @import "@martinzachariassen/design/fonts.css";
+
+   B) HTML <link> (fastest first paint — preferred for production):
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" />
+
+   Roles (map to --font-* in theme.css):
+     Space Mono          → mono / sans   (body & default UI text — technical)
+     Architects Daughter → hand          (display / name / hero headline)
+     Space Grotesk       → grotesk       (alt display, tighter & modern)
+     Instrument Serif    → serif          (editorial display)
+   ============================================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");

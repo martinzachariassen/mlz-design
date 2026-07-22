@@ -1,0 +1,197 @@
+/* =============================================================================
+   MLZ Design — theme.css
+   The single source of truth for colour, type, spacing and motion tokens,
+   distilled from mlz.no (the paper / hand-drawn engineering-notebook look).
+
+   Consume in any Tailwind v4 app:
+
+       @import "tailwindcss";
+       @import "@martinzachariassen/design/theme.css";
+
+   Three layers, in order:
+     1. Primitives   — raw brand values, framework-agnostic. Never referenced by
+                        components directly.
+     2. Semantic     — shadcn/ui-standard role names (background, foreground,
+                        primary, accent, border, ring …). Light + dark + the
+                        data-accent families live here; swapping a theme means
+                        swapping only this layer.
+     3. @theme inline — re-exports the semantic vars to Tailwind so utilities
+                        (bg-background, text-foreground, ring-ring …) generate.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. PRIMITIVES
+   Exact values carried over from mlz.no — no drift. Neutrals stay in their
+   original hex (a warm paper/ink scale); accents stay in oklch so they mix and
+   lighten predictably.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Paper (warm off-white surfaces) */
+  --mlz-paper:    #ecebe4;
+  --mlz-paper-2:  #e4e2da;
+
+  /* Ink (near-black text, warm) */
+  --mlz-ink:      #1a1a18;
+  --mlz-ink-2:    #4a4a45;
+  --mlz-muted:    #6e6c64;
+  --mlz-line:     #cbc9be;
+
+  /* Accent families — { base, deep }. Cyan is the house colour. */
+  --mlz-cyan:       oklch(0.74 0.13 195);
+  --mlz-cyan-deep:  oklch(0.52 0.10 200);
+  --mlz-blue:       oklch(0.62 0.15 250);
+  --mlz-blue-deep:  oklch(0.46 0.13 255);
+  --mlz-green:      oklch(0.70 0.13 155);
+  --mlz-green-deep: oklch(0.48 0.11 158);
+  --mlz-rust:       oklch(0.66 0.15 45);
+  --mlz-rust-deep:  oklch(0.48 0.13 42);
+  --mlz-slate:      oklch(0.32 0.02 250);
+  --mlz-slate-deep: oklch(0.24 0.015 250);
+
+  /* Signal — the cyberpunk glitch pair (also drives `destructive`) */
+  --mlz-glitch-red: oklch(0.62 0.22 18);
+
+  /* Type stacks */
+  --mlz-font-hand:    "Architects Daughter", cursive;
+  --mlz-font-mono:    "Space Mono", ui-monospace, "SFMono-Regular", monospace;
+  --mlz-font-grotesk: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --mlz-font-serif:   "Instrument Serif", ui-serif, Georgia, serif;
+
+  /* Motion — the site's signature easings/durations */
+  --mlz-ease-out:  cubic-bezier(.22, .61, .36, 1);
+  --mlz-dur-fast:  .2s;
+  --mlz-dur-base:  .3s;
+  --mlz-dur-slow:  .9s;
+}
+
+/* -----------------------------------------------------------------------------
+   2. SEMANTIC (shadcn/ui role names) — light theme is the default.
+   These are the only variables a component should ever touch.
+   -------------------------------------------------------------------------- */
+:root {
+  --radius: 0.25rem; /* the brand leans sharp/technical; keep corners tight */
+
+  --background:            var(--mlz-paper);
+  --foreground:            var(--mlz-ink);
+
+  --card:                  var(--mlz-paper);
+  --card-foreground:       var(--mlz-ink);
+  --popover:               var(--mlz-paper);
+  --popover-foreground:    var(--mlz-ink);
+
+  /* Primary = ink emphasis (matches the site's default button/text weight) */
+  --primary:               var(--mlz-ink);
+  --primary-foreground:    var(--mlz-paper);
+
+  --secondary:             var(--mlz-paper-2);
+  --secondary-foreground:  var(--mlz-ink-2);
+
+  --muted:                 var(--mlz-paper-2);
+  --muted-foreground:      var(--mlz-muted);
+
+  /* Accent = the house cyan; also what focus rings & hovers reach for */
+  --accent:                var(--mlz-cyan);
+  --accent-deep:           var(--mlz-cyan-deep);
+  --accent-foreground:     var(--mlz-ink);
+
+  --destructive:           var(--mlz-glitch-red);
+  --destructive-foreground: var(--mlz-paper);
+
+  --border:                var(--mlz-line);
+  --input:                 var(--mlz-line);
+  --ring:                  var(--mlz-cyan);
+
+  /* Per-character glitch pair (see fonts/animation notes in README) */
+  --glitch-1:              var(--mlz-cyan);
+  --glitch-2:              var(--mlz-glitch-red);
+
+  /* Default text font for the system; pages may switch via data-font */
+  --font-sans:  var(--mlz-font-mono);
+  --font-mono:  var(--mlz-font-mono);
+  --font-hand:  var(--mlz-font-hand);
+  --font-serif: var(--mlz-font-serif);
+}
+
+/* Dark theme — an ink-paper inversion that keeps the same accent. Opt in with
+   `<html class="dark">` (or data-theme="dark"). mlz.no ships light-only; this is
+   the extra mile so downstream apps get a real dark mode for free. */
+.dark,
+[data-theme="dark"] {
+  --background:            oklch(0.21 0.004 110);   /* ink as surface */
+  --foreground:            oklch(0.93 0.006 100);   /* paper as text  */
+
+  --card:                  oklch(0.24 0.004 110);
+  --card-foreground:       oklch(0.93 0.006 100);
+  --popover:               oklch(0.24 0.004 110);
+  --popover-foreground:    oklch(0.93 0.006 100);
+
+  --primary:               oklch(0.93 0.006 100);
+  --primary-foreground:    oklch(0.21 0.004 110);
+
+  --secondary:             oklch(0.28 0.004 110);
+  --secondary-foreground:  oklch(0.86 0.006 100);
+
+  --muted:                 oklch(0.28 0.004 110);
+  --muted-foreground:      oklch(0.68 0.008 100);
+
+  --accent:                var(--mlz-cyan);
+  --accent-deep:           oklch(0.66 0.12 197);
+  --accent-foreground:     oklch(0.21 0.004 110);
+
+  --destructive:           var(--mlz-glitch-red);
+  --destructive-foreground: oklch(0.96 0.004 100);
+
+  --border:                oklch(0.32 0.004 110);
+  --input:                 oklch(0.32 0.004 110);
+  --ring:                  var(--mlz-cyan);
+}
+
+/* -----------------------------------------------------------------------------
+   Accent families — swap only the accent/ring/glitch role, any theme.
+   Set on any element: <html data-accent="rust"> …
+   -------------------------------------------------------------------------- */
+[data-accent="cyan"]  { --accent: var(--mlz-cyan);  --accent-deep: var(--mlz-cyan-deep);  --ring: var(--mlz-cyan);  --glitch-1: var(--mlz-cyan); }
+[data-accent="blue"]  { --accent: var(--mlz-blue);  --accent-deep: var(--mlz-blue-deep);  --ring: var(--mlz-blue);  --glitch-1: var(--mlz-blue); }
+[data-accent="green"] { --accent: var(--mlz-green); --accent-deep: var(--mlz-green-deep); --ring: var(--mlz-green); --glitch-1: var(--mlz-green); }
+[data-accent="rust"]  { --accent: var(--mlz-rust);  --accent-deep: var(--mlz-rust-deep);  --ring: var(--mlz-rust);  --glitch-1: var(--mlz-rust); }
+[data-accent="ink"]   { --accent: var(--mlz-slate); --accent-deep: var(--mlz-slate-deep); --ring: var(--mlz-slate); --glitch-1: var(--mlz-slate); }
+
+/* -----------------------------------------------------------------------------
+   3. @theme inline — hand the semantic layer to Tailwind v4 so utilities and
+   the design tokens stay one and the same. `inline` means Tailwind emits
+   var(--background) etc. rather than freezing the value, so runtime theme swaps
+   (.dark, data-accent) keep working.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-deep:            var(--accent-deep);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:                 var(--border);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+
+  --font-sans:  var(--font-sans);
+  --font-mono:  var(--font-mono);
+  --font-hand:  var(--font-hand);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+
+  --ease-out: var(--mlz-ease-out);
+}
