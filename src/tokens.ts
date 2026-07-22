@@ -8,11 +8,20 @@
 export const colors = {
   paper: "#ecebe4",
   paper2: "#e4e2da",
+  paper3: "#dcdad1",
   ink: "#1a1a18",
   ink2: "#4a4a45",
   muted: "#6e6c64",
   line: "#cbc9be",
   glitchRed: "oklch(0.62 0.22 18)",
+} as const;
+
+/** Meaning-carrying signal colours, harmonised with the palette. */
+export const signals = {
+  danger: "oklch(0.62 0.22 18)",
+  success: "oklch(0.60 0.13 150)",
+  warning: "oklch(0.80 0.15 78)",
+  info: "oklch(0.62 0.15 250)",
 } as const;
 
 export type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
@@ -43,6 +52,6 @@ export const radius = {
   base: "0.25rem",
 } as const;
 
-export const tokens = { colors, accents, fonts, motion, radius } as const;
+export const tokens = { colors, signals, accents, fonts, motion, radius } as const;
 
 export type Tokens = typeof tokens;

@@ -1,0 +1,9 @@
+/* Storybook's own stylesheet: pull in Tailwind, the design tokens, the fonts and
+   the optional base layer, then let Tailwind scan ../src for the classes used by
+   components and stories. */
+@import "tailwindcss";
+@import "../src/styles/theme.css";
+@import "../src/styles/fonts.css";
+@import "../src/styles/base.css";
+
+@source "../src";

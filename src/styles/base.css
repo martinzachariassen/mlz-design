@@ -1,13 +1,14 @@
 /* =============================================================================
    MLZ Design — base.css  (optional)
-   A thin base layer for apps that want the paper/ink defaults applied globally
-   without writing them by hand. Import AFTER Tailwind and theme.css:
+   A thin, opinionated base layer for apps that want the paper/ink defaults, sane
+   resets and accessible focus without writing them by hand. Import AFTER Tailwind
+   and theme.css:
 
        @import "tailwindcss";
        @import "@martinzachariassen/design/styles/theme.css";
        @import "@martinzachariassen/design/styles/base.css";
 
-   Skip this file if you'd rather set the body styles yourself.
+   Skip this file if you'd rather own the body styles yourself.
    ============================================================================= */
 @layer base {
   * {
@@ -17,6 +18,9 @@
   html {
     background: var(--background);
     color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    tab-size: 4;
   }
 
   html.dark,
@@ -29,11 +33,31 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
+    font-synthesis-weight: none;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  /* A single, consistent, accent-coloured focus ring across the whole app. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 
   ::selection {
     background: color-mix(in oklch, var(--accent) 30%, transparent);
+  }
+
+  /* Respect the user's motion preference everywhere by default. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
