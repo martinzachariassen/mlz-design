@@ -1,10 +1,13 @@
 <div align="center">
 
-# MLZ Design
+<img src="assets/banner.svg" alt="MLZ · Design — one design system, every project" width="100%">
 
-**Martin Zachariassen's design system.**
-One canonical source of colour, type, style and motion — so every project I build
-inherits the same look and can't drift.
+<br><br>
+
+**Martin Zachariassen's design system** — one canonical source of colour, type,
+style and motion, shipped as an installable **React + Tailwind v4** package (plus a
+generated **SwiftUI** token layer) so every project I build inherits the same look
+and can't drift.
 
 `@martinzachariassen/design`
 
@@ -179,6 +182,7 @@ Every component reads only semantic tokens, so all of them re-theme with the
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
 | `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Foundations/Logo |
+| `RepoBanner` | the README header banner at the top of this file — `standard` · `minimal` · `terminal` · `split` layouts, sized for GitHub's README width; one structure, per-project copy |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
@@ -291,6 +295,7 @@ bun run typecheck     # tsc --noEmit
 bun run test          # Vitest + Testing Library
 bun run lint          # Biome (lint:fix / format to write)
 bun run gen:swift     # regenerate the SwiftUI token layer
+bun run gen:banner    # regenerate assets/banner.svg (README header, embeds font subsets)
 bun run preview       # static token reference page (preview/index.html) on :4321
 ```
 
@@ -307,7 +312,7 @@ src/
   lib/cn.ts            clsx + tailwind-merge
   components/*.tsx      Button, Input, Card, Dialog, ProjectCard, Prose… (+ .stories, .test)
   foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Responsive,
-                        Portfolio, Blog, Social Cards, SwiftUI
+                        Portfolio, Blog, Social Cards, Repo Banner, SwiftUI
   styles/
     index.css           the one-import bundle     → ./styles/index.css
     theme.css           the token system          → ./styles/theme.css

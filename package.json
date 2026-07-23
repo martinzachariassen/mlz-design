@@ -47,6 +47,7 @@
     "serve:storybook": "node server.mjs",
     "preview": "python3 -m http.server 4321 --directory preview",
     "gen:swift": "bun scripts/generate-swift-tokens.ts",
+    "gen:banner": "bun scripts/generate-banner.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "bun run build && changeset publish",

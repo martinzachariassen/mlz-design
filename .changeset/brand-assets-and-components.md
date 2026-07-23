@@ -19,6 +19,12 @@ for free):
   tokens (engineering frame, ruled grid, brand lockup, grotesk headline), with a
   `width` prop that scales the whole card as one and a Next.js / `@vercel/og`
   generation recipe.
+- **`RepoBanner`** — the README header banner, sized for GitHub's ~896px README
+  width (1280×340), with four shared-structure layouts (`standard` · `minimal` ·
+  `terminal` · `split`) driven only by per-project copy. A Foundations/Repo Banner
+  page shows all four, light/dark capture and the `<picture>` export recipe; a
+  `bun run gen:banner` script renders this repo's `assets/banner.svg` with the brand
+  fonts subset and embedded, so it renders self-contained and theme-adaptive.
 - **New components** — `Alert` (+ `Title`/`Description`), `Avatar`
   (+ `Image`/`Fallback`), `Checkbox`, `Switch`, `Label`, `Textarea`, `Tabs`
   (Radix-free, keyboard-navigable), `Progress`, `Skeleton`, `Spinner`,
