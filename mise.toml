@@ -3,8 +3,8 @@
 # List tasks:  mise tasks
 
 [tools]
-# Matches package.json "engines" (node >= 20.16 for Storybook 10, bun >= 1.1).
-node = "22"
+# Latest toolchain; comfortably clears package.json "engines" and Storybook 10.
+node = "26"
 bun = "1.3"
 
 [env]
