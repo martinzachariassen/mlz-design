@@ -1,15 +1,15 @@
-export { cn } from "./lib/cn";
+export { Badge, type BadgeProps, badgeVariants } from "./components/badge";
 
-export { Button, buttonVariants, type ButtonProps } from "./components/button";
-export { Input, type InputProps } from "./components/input";
-export { Badge, badgeVariants, type BadgeProps } from "./components/badge";
+export { Button, type ButtonProps, buttonVariants } from "./components/button";
 export {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "./components/card";
+export { Input, type InputProps } from "./components/input";
+export { cn } from "./lib/cn";
 
 export * from "./tokens";
