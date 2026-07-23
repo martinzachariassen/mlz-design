@@ -63,5 +63,7 @@ for free):
 - **Accessibility** — the light `--muted-foreground` role is nudged a hair darker
   (`#63615a`) so muted text clears WCAG AA (4.5:1) on every paper surface (the
   `--mlz-muted` primitive is unchanged); `Alert` titles now render in high-contrast
-  ink with the signal carried by the rail and icon. Every foundation page passes
-  axe with zero violations in light and dark.
+  ink with the signal carried by the rail and icon. `Progress` now carries a default
+  accessible name (`aria-label`) when none is supplied, and `Prose` links use the
+  deeper accent for legibility. Every story is checked against axe (WCAG 2.1 A/AA)
+  in CI, in light and dark.

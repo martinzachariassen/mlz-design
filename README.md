@@ -11,6 +11,18 @@ and can't drift.
 
 `@martinzachariassen/design`
 
+[![CI](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martinzachariassen/mlz-design/badge)](https://scorecard.dev/viewer/?uri=github.com/martinzachariassen/mlz-design)
+[![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design?style=flat-square&color=1a1a18)](LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?style=flat-square&label=version&color=1a1a18)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
+
+![React 19](https://img.shields.io/badge/React-19-1a1a18?style=flat-square&logo=react)
+![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-1a1a18?style=flat-square&logo=tailwindcss)
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-1a1a18?style=flat-square&logo=typescript&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1a1a18?style=flat-square&logo=bun&logoColor=white)
+![Storybook 10](https://img.shields.io/badge/Storybook-10-1a1a18?style=flat-square&logo=storybook)
+
 </div>
 
 ---
@@ -334,9 +346,20 @@ server.mjs  Dockerfile  railway.json   Railway deploy
 ## Quality & CI
 
 - **CI** (`.github/workflows/ci.yml`): lint · typecheck · test · build ·
-  build-storybook on every push/PR.
-- **CodeQL** and **Dependency Review** for security; **Dependabot** for updates.
+  build-storybook, plus a **Storybook a11y** job that runs axe (WCAG 2.1 A/AA) over
+  every story in a headless browser — a violation fails the build.
+- **Security & supply-chain**: **CodeQL** and **Dependency Review**, **OpenSSF
+  Scorecard** and **`zizmor`** (Actions static analysis) with results in the
+  Security tab, plus **Dependabot** for updates. Every workflow pins its actions to
+  a commit SHA and runs under `step-security/harden-runner`; releases publish with
+  build **provenance** (Sigstore). See [`SECURITY.md`](SECURITY.md).
 - `main` is protected (enforced for admins) and merges require green checks.
+
+> **a11y notes.** Two small-text contrast gaps are known and scoped (not silenced)
+> in the a11y gate pending a palette decision: the brand **destructive** red lands
+> ~3.6:1 under light foreground, and **`--accent-deep`** as body text lands ~4.1:1
+> on paper — both just under the 4.5:1 AA threshold for small text. The affected
+> stories carry a per-rule `a11y` scope with a comment; everything else is enforced.
 
 ## Releasing
 

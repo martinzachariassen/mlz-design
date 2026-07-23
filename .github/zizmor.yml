@@ -1,0 +1,8 @@
+# zizmor configuration — https://docs.zizmor.sh/configuration/
+rules:
+  cache-poisoning:
+    ignore:
+      # The release job runs only on a `v*` tag we push. setup-node sets no
+      # `cache:` input (it restores no package cache) and setup-bun runs with
+      # `no-cache: true`, so there is no runtime cache to poison here.
+      - release.yml

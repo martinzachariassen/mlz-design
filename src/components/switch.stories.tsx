@@ -17,19 +17,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => <Switch {...args} />,
+  render: (args) => <Switch aria-label="Example switch" {...args} />,
 };
 
 export const Checked: Story = {
   args: { defaultChecked: true },
-  render: (args) => <Switch {...args} />,
+  render: (args) => <Switch aria-label="Example switch" {...args} />,
 };
 
 export const Disabled: Story = {
   render: () => (
     <div className="flex items-center gap-4">
-      <Switch disabled />
-      <Switch disabled defaultChecked />
+      <Switch disabled aria-label="Disabled switch" />
+      <Switch disabled defaultChecked aria-label="Disabled checked switch" />
     </div>
   ),
 };

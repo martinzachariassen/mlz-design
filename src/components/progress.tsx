@@ -25,10 +25,14 @@ export interface ProgressProps
 export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ className, value = 0, variant, ...props }, ref) => {
     const pct = Math.min(100, Math.max(0, value));
+    // A progressbar must carry an accessible name; fall back to a generic one
+    // when the consumer hasn't supplied aria-label / aria-labelledby.
+    const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
     return (
       <div
         ref={ref}
         role="progressbar"
+        aria-label={hasLabel ? undefined : "Progress"}
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
