@@ -50,10 +50,24 @@ export const motion = {
   durationSlow: "0.9s",
 } as const;
 
+/**
+ * Named animation shorthands, mirroring the `--animate-*` tokens in theme.css
+ * (Tailwind emits these as `animate-rise`, `animate-blink`, … utilities). Kept
+ * here for JS consumers (e.g. framer-motion, canvas) that want the same feel;
+ * easings are expanded from the motion tokens so they resolve outside CSS.
+ */
+export const animations = {
+  rise: "rise 0.9s cubic-bezier(.22, .61, .36, 1) backwards",
+  pulseSoft: "pulse-soft 5.2s cubic-bezier(.65, 0, .35, 1) infinite",
+  blink: "blink 1.4s steps(1, end) infinite",
+  float: "float linear infinite",
+  glitch: "glitch 0.4s steps(1, end) both",
+} as const;
+
 export const radius = {
   base: "0.25rem",
 } as const;
 
-export const tokens = { colors, signals, accents, fonts, motion, radius } as const;
+export const tokens = { colors, signals, accents, fonts, motion, animations, radius } as const;
 
 export type Tokens = typeof tokens;
