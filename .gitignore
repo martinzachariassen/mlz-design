@@ -1,6 +1,6 @@
 node_modules/
-dist/
 storybook-static/
+dist/**/*.map
 coverage/
 .DS_Store
 .claude/

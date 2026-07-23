@@ -1,0 +1,28 @@
+/* =============================================================================
+   MLZ Design — index.css  (the one-import bundle)
+   The batteries-included entry: tokens + fonts + base defaults + the source scan
+   that emits the shipped components' classes. Inherit the whole system in TWO
+   lines — after Tailwind, import this:
+
+       @import "tailwindcss";
+       @import "@martinzachariassen/design/styles/index.css";
+
+   That's it. No manual `@source` for the package, no separate theme/font/base
+   imports. Your own files are auto-scanned by Tailwind v4; this file adds the one
+   thing v4 can't see on its own — the utility classes baked into the compiled
+   package under node_modules.
+
+   Want finer control? Skip this file and import the pieces yourself:
+       styles/theme.css   tokens only (required)
+       styles/fonts.css   Google-Fonts loading (or self-host — see its header)
+       styles/base.css    optional paper/ink body defaults
+   ============================================================================= */
+
+@import "./theme.css";
+@import "./fonts.css";
+@import "./base.css";
+
+/* The components ship as compiled JS; their Tailwind classes live as strings in
+   that bundle, which Tailwind ignores inside node_modules by default. Point it
+   there so consumers get every component's styles with no extra config. */
+@source "../*.js";
