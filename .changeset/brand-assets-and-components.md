@@ -6,11 +6,15 @@ Expand the system into a broad component kit plus brand/marketing assets, all
 styled purely from semantic tokens (so they re-theme with `dark` / `data-accent`
 for free):
 
-- **Brand assets** — `BrandMark` (the MLZ monogram: a geometric `M` with a
-  terminal caret, `tile`/`glyph` variants) and `BrandLockup` (mark + wordmark,
-  now `horizontal` or `stacked`). New Foundations/Logo page (lockups, sizing,
-  clear space, on-background treatments, misuse) and a Brand & Favicon page with
-  sizes, browser-chrome previews and an export recipe.
+- **Brand assets (the logo)** — a fixed two-part identity: `BrandMark`
+  (the solid **Block M** on an ink tile, always monochrome, `tile`/`glyph`
+  variants) and `BrandWordmark` (`mlz.` in Space Mono Bold, the accent period
+  driven by the new `--brand-period` token — deep on light for AA, base on dark),
+  paired by `BrandLockup` (`horizontal` or `stacked`, mark = 1.45× wordmark, an
+  optional 40px+ tagline). New Foundations/Logo page (system, construction,
+  lockups, colour, sizing/clear-space, applications, misuse, hand-off) and a
+  Brand & Favicon page with sizes, browser-chrome previews and an export recipe.
+  The earlier stroked-`M`-plus-caret mark is retired.
 - **`SocialCard`** — a ready-to-screenshot 1200×630 Open-Graph template built from
   tokens (engineering frame, ruled grid, brand lockup, grotesk headline), with a
   `width` prop that scales the whole card as one and a Next.js / `@vercel/og`

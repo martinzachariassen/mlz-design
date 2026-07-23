@@ -94,6 +94,8 @@ const SEMANTIC: [string, string, string][] = [
   ["accent", accents.cyan.base, accents.cyan.base],
   ["accentDeep", accents.cyan.deep, "oklch(0.66 0.12 197)"],
   ["accentForeground", colors.ink, "oklch(0.20 0.004 110)"],
+  // Logo wordmark period: deep accent on light (AA on paper), base accent on dark.
+  ["brandPeriod", accents.cyan.deep, accents.cyan.base],
   ["border", colors.line, "oklch(0.31 0.004 110)"],
   ["input", colors.line, "oklch(0.31 0.004 110)"],
   ["ring", accents.cyan.base, accents.cyan.base],

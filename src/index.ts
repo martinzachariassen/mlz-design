@@ -23,6 +23,8 @@ export {
   type BrandLockupProps,
   BrandMark,
   type BrandMarkProps,
+  BrandWordmark,
+  type BrandWordmarkProps,
 } from "./components/brand-mark";
 export { Button, type ButtonProps, buttonVariants } from "./components/button";
 export {

@@ -178,7 +178,7 @@ Every component reads only semantic tokens, so all of them re-theme with the
 
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
-| `BrandMark` · `BrandLockup` | the MLZ monogram (`tile`/`glyph`) + `horizontal`/`stacked` wordmark lockup — backs favicons; see Foundations/Logo |
+| `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Foundations/Logo |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 

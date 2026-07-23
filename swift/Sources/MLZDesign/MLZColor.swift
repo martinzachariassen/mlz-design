@@ -38,6 +38,7 @@ public enum MLZColor {
     public static let accent = dynamic(light: 0x00C4C4, dark: 0x00C4C4)
     public static let accentDeep = dynamic(light: 0x007980, dark: 0x00A8AB)
     public static let accentForeground = dynamic(light: 0x1A1A18, dark: 0x161614)
+    public static let brandPeriod = dynamic(light: 0x007980, dark: 0x00C4C4)
     public static let border = dynamic(light: 0xCBC9BE, dark: 0x30302E)
     public static let input = dynamic(light: 0xCBC9BE, dark: 0x30302E)
     public static let ring = dynamic(light: 0x00C4C4, dark: 0x00C4C4)

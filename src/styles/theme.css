@@ -105,6 +105,9 @@
   --accent:                var(--mlz-cyan);
   --accent-deep:           var(--mlz-cyan-deep);
   --accent-foreground:     var(--mlz-ink);
+  /* Logo wordmark period — the one spot of accent in the mark/wordmark system.
+     Deep on light for AA on paper; the base accent on dark (see the dark block). */
+  --brand-period:          var(--accent-deep);
 
   --border:                var(--mlz-line);
   --input:                 var(--mlz-line);
@@ -169,6 +172,7 @@
   --accent:                var(--mlz-cyan);
   --accent-deep:           oklch(0.66 0.12 197);
   --accent-foreground:     oklch(0.20 0.004 110);
+  --brand-period:          var(--accent);
 
   --border:                oklch(0.31 0.004 110);
   --input:                 oklch(0.31 0.004 110);
@@ -221,6 +225,7 @@
   --color-accent-deep:            var(--accent-deep);
   --color-accent-foreground:      var(--accent-foreground);
   --color-accent-subtle:          var(--accent-subtle);
+  --color-brand-period:           var(--brand-period);
   --color-border:                 var(--border);
   --color-input:                  var(--input);
   --color-ring:                   var(--ring);
