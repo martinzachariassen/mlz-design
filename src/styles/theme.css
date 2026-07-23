@@ -1,7 +1,7 @@
 /* =============================================================================
    MLZ Design — theme.css
-   The single source of truth for colour, type, spacing, elevation and motion,
-   distilled from mlz.no (the paper / hand-drawn engineering-notebook look).
+   The single source of truth for colour, type, spacing, elevation and motion —
+   the warm paper / hand-drawn engineering-notebook look, defined once here.
 
    Consume in any Tailwind v4 app:
 
@@ -12,7 +12,7 @@
    Three layers, deliberately separated (the pattern every serious system —
    Radix, shadcn, Material, Spectrum, Carbon — converges on):
 
-     1. Primitives   raw brand values (`--mlz-*`). Faithful to mlz.no, no drift.
+     1. Primitives   raw brand values (`--mlz-*`). The source of truth, no drift.
                      Components must never reference these directly.
      2. Semantic     role names (shadcn-standard: background, foreground, primary,
                      accent, border, ring, plus signal roles). Every surface has a
@@ -27,7 +27,7 @@
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
-   1. PRIMITIVES  — the mlz.no brand values. Neutrals keep their exact source hex
+   1. PRIMITIVES  — the canonical MLZ brand values. Neutrals keep their source hex
    (a warm paper/ink scale); everything chromatic is OKLCH so it lightens and
    mixes predictably.
    -------------------------------------------------------------------------- */
@@ -67,7 +67,7 @@
   --mlz-font-grotesk: "Space Grotesk", ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mlz-font-serif:   "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
 
-  /* Motion — the site's signature feel */
+  /* Motion — the signature MLZ feel */
   --mlz-ease-out:    cubic-bezier(.22, .61, .36, 1);
   --mlz-ease-in-out: cubic-bezier(.65, 0, .35, 1);
   --mlz-dur-fast:  .15s;
@@ -89,7 +89,7 @@
   --popover:               var(--mlz-paper);
   --popover-foreground:    var(--mlz-ink);
 
-  /* Primary = ink emphasis (the site's default button/text weight) */
+  /* Primary = ink emphasis (the default button/text weight) */
   --primary:               var(--mlz-ink);
   --primary-foreground:    var(--mlz-paper);
 
@@ -97,7 +97,9 @@
   --secondary-foreground:  var(--mlz-ink-2);
 
   --muted:                 var(--mlz-paper-2);
-  --muted-foreground:      var(--mlz-muted);
+  /* A hair darker than the --mlz-muted primitive (#6e6c64 clears only 4.05:1 on
+     paper-2); this lands ≥4.5:1 AA on every paper surface while staying muted. */
+  --muted-foreground:      #63615a;
 
   /* Accent = house cyan; focus rings & hovers reach for it */
   --accent:                var(--mlz-cyan);
@@ -143,7 +145,7 @@
 }
 
 /* Dark theme — an ink-surface inversion that keeps the accent. Opt in with
-   `<html class="dark">` or `data-theme="dark"`. mlz.no is light-only; this is
+   `<html class="dark">` or `data-theme="dark"`. The base look is light; this is
    the extra mile so downstream apps get a real, considered dark mode. */
 .dark,
 [data-theme="dark"] {
@@ -258,7 +260,7 @@
 }
 
 /* -----------------------------------------------------------------------------
-   4. MOTION  — the site's signature animations, distilled from mlz.no. Declaring
+   4. MOTION  — the signature MLZ animations. Declaring
    each as an `--animate-*` token in @theme makes it a real Tailwind utility
    (`animate-rise`, `animate-blink`…), so motion is a token like colour is. Every
    animation reuses the easing/duration tokens above, is disabled globally by

@@ -2,13 +2,13 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 
 /**
- * The mlz.no "engineering notebook" grid: a two-scale ruled background (a fine
+ * The MLZ "engineering notebook" grid: a two-scale ruled background (a fine
  * minor grid plus a 5× major grid) drawn purely from layered gradients — no image.
  * Colours are `color-mix`ed off `--foreground`, so it adapts to light/dark.
  *
  * - Static by default: a faint, always-on grid to sit behind content.
  * - `interactive`: the grid is revealed only through a soft disc that follows the
- *   pointer (the site's signature effect), optionally with an accent `glow`.
+ *   pointer (the signature MLZ effect), optionally with an accent `glow`.
  *
  * Render it as the first child of a `relative` container; it fills that box.
  */
@@ -38,8 +38,8 @@ export const GridBackground = React.forwardRef<HTMLDivElement, GridBackgroundPro
       [ref],
     );
 
-    // The layer is click-through, so track the cursor globally (like the site)
-    // rather than via element handlers that pointer-events-none would swallow.
+    // The layer is click-through, so track the cursor globally rather than via
+    // element handlers that pointer-events-none would swallow.
     React.useEffect(() => {
       if (!interactive) return;
       const move = (event: PointerEvent) => {

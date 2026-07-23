@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 
 /**
- * The mlz.no cyberpunk text effect: text is split per character and random chars
+ * The MLZ cyberpunk text effect: text is split per character and random chars
  * flicker with an RGB-split (using the `--glitch-1` / `--glitch-2` tokens). The
  * visual spans are hidden from assistive tech; the full string is exposed once via
  * a visually-hidden copy so screen readers read clean text. Honours
@@ -10,7 +10,7 @@ import { cn } from "../lib/cn";
  * `animate-glitch` becomes a no-op).
  *
  * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
- *   loop, paused when the tab is hidden — the site's resting state.
+ *   loop, paused when the tab is hidden — its resting state.
  * - `trigger="hover"`: a single burst each time the pointer enters.
  */
 export type GlitchTrigger = "ambient" | "hover";

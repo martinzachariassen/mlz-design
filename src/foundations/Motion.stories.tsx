@@ -42,7 +42,7 @@ export const Tokens: Story = {
       <div className="mx-auto max-w-4xl">
         <h1 className="font-hand text-5xl">Motion</h1>
         <p className="mt-3 max-w-2xl font-mono text-sm text-muted-foreground">
-          Five signature animations from mlz.no, each a Tailwind{" "}
+          Five signature MLZ animations, each a Tailwind{" "}
           <span className="text-foreground">animate-*</span> utility backed by an{" "}
           <span className="text-foreground">--animate-*</span> token. All respect{" "}
           <span className="text-foreground">prefers-reduced-motion</span> and can be killed on any

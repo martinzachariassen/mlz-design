@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 
 /**
- * The mlz.no signature button: a technical ghost outline that lifts on hover
+ * The signature MLZ button: a technical ghost outline that lifts on hover
  * with an offset accent shadow. `variant` and `size` are fully typed.
  */
 const buttonVariants = cva(

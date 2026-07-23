@@ -8,3 +8,8 @@ coverage/
 *storybook.log
 storecode/
 .storecode/
+
+# SwiftPM (swift/) build artifacts
+.build/
+.swiftpm/
+Package.resolved
