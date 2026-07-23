@@ -24,7 +24,8 @@ trying colour, type and components before committing them elsewhere.
 - **Tokens** — three-layer CSS variables (primitives → shadcn-standard semantic
   names → Tailwind `@theme`), authored in OKLCH, with light + dark + five accent
   families and full signal scales. `./tokens` also ships them as typed JS.
-- **Components** — `Button`, `Input`, `Card`, `Badge`, built with
+- **Components** — a broad kit (buttons, forms, cards, alerts, tabs, avatars,
+  progress…) plus brand assets (`BrandMark`, `SocialCard`), built with
   class-variance-authority + `tailwind-merge`, styled purely from the tokens.
 - **Playground** — a themed, a11y-checked Storybook, deployable to Railway.
 - **Quality** — strict TypeScript, Vitest + Testing Library, Biome, CI, CodeQL,
@@ -116,12 +117,38 @@ Accent families: `cyan` (default), `blue`, `green`, `rust`, `ink`.
 
 ## Components
 
-| Component                                          | Notes                                                |
-| -------------------------------------------------- | ---------------------------------------------------- |
-| `Button`                                           | `default` · `solid` · `accent` · `ghost` · `destructive` · `link`; sizes `sm`/`default`/`lg`/`icon`. Default variant is the mlz.no ghost that lifts on hover with an offset accent shadow. |
-| `Input`                                            | accent focus ring                                    |
-| `Badge`                                            | `default` · `accent` · `outline` · `muted` · `destructive` |
-| `Card` (+ `Header`/`Title`/`Description`/`Content`/`Footer`) | hairline-border "paper" surfaces           |
+Every component reads only semantic tokens, so all of them re-theme with the
+`class="dark"` / `data-accent` switches for free. Browse them live — with the
+composed **Foundations → Patterns** reference — in Storybook.
+
+**Forms & actions**
+
+| Component  | Notes                                                |
+| ---------- | ---------------------------------------------------- |
+| `Button`   | `default` · `solid` · `accent` · `ghost` · `sketch` · `destructive` · `link`; sizes `sm`/`default`/`lg`/`icon`. Default is the mlz.no ghost that lifts on hover with an offset accent shadow. |
+| `Input` · `Textarea` | accent focus ring, technical mono field         |
+| `Label`    | mono, uppercase field label with `peer-disabled` states |
+| `Checkbox` · `Switch` | accessible native controls with styled indicators |
+
+**Surfaces & data**
+
+| Component  | Notes                                                |
+| ---------- | ---------------------------------------------------- |
+| `Card` (+ `Header`/`Title`/`Description`/`Action`/`Content`/`Footer`) | `default` · `elevated` · `interactive` (hover-lift) · `accent` · `ghost` |
+| `Badge`    | `default` · `accent` · `outline` · `muted` · `destructive` |
+| `Alert` (+ `Title`/`Description`) | `default` · `info` · `success` · `warning` · `destructive` signal panels |
+| `Avatar` (+ `Image`/`Fallback`) | image with graceful initials fallback   |
+| `Tabs` (+ `List`/`Trigger`/`Content`) | Radix-free, keyboard-navigable  |
+| `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
+| `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
+
+**Brand & marketing**
+
+| Component  | Notes                                                |
+| ---------- | ---------------------------------------------------- |
+| `BrandMark` · `BrandLockup` | the MLZ monogram (`tile`/`glyph`) + wordmark lockup — backs favicons |
+| `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
+| `GridBackground` · `FloatingMarks` · `GlitchText` | the mlz.no signature decorative layers |
 
 `cn()` (clsx + tailwind-merge) is exported for your own composition.
 
@@ -216,8 +243,8 @@ src/
   index.ts             barrel export
   tokens.ts            typed token objects        → ./tokens
   lib/cn.ts            clsx + tailwind-merge
-  components/*.tsx      Button, Input, Card, Badge (+ .stories, .test)
-  foundations/*.tsx     Introduction, Colours, Typography stories
+  components/*.tsx      Button, Input, Card, Alert, Tabs, BrandMark… (+ .stories, .test)
+  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Brand, Social Cards
   styles/
     theme.css           the token system          → ./styles/theme.css
     fonts.css           font loading              → ./styles/fonts.css
@@ -251,7 +278,7 @@ GitHub Packages.
 
 ## Roadmap
 
-- [ ] More components (Dialog, Dropdown, Tabs) on Radix primitives
+- [ ] Overlay components (Dialog, Dropdown, Tooltip) on Radix primitives
 - [ ] Glitch + cursor-spotlight motion helpers as an opt-in module
 - [ ] Point mlz.no at this package so its colours can't drift from the system
 
