@@ -8,7 +8,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "solid", "accent", "ghost", "destructive", "link"],
+      options: ["default", "solid", "accent", "ghost", "sketch", "destructive", "link"],
     },
     size: { control: "select", options: ["sm", "default", "lg", "icon"] },
     disabled: { control: "boolean" },
@@ -29,6 +29,7 @@ export const Variants: Story = {
       <Button variant="solid">Solid</Button>
       <Button variant="accent">Accent</Button>
       <Button variant="ghost">Ghost</Button>
+      <Button variant="sketch">Sketch</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="link">Link</Button>
     </div>
