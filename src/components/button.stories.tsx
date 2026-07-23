@@ -23,10 +23,6 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 export const Variants: Story = {
-  // The `destructive` button (light text on the brand red) lands ~3.6:1 — below AA
-  // for small text. Scope the rule here, not the whole gate; the fix is a
-  // palette-level decision on the destructive signal (see the a11y CI notes).
-  parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
   render: () => (
     <div className="flex flex-wrap items-center gap-4">
       <Button variant="default">Default</Button>

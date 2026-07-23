@@ -11,10 +11,6 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Article: Story = {
-  // Prose links use --accent-deep, which lands ~4.1:1 on paper — just under AA for
-  // body text. Scope the rule here; a genuinely AA accent-for-text token is a
-  // palette decision (see the a11y CI notes).
-  parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
   render: () => (
     <Prose>
       <h1>Designing a system, not a screen</h1>

@@ -45,7 +45,7 @@
 
   /* Accent families — { base, deep }. Cyan is the house colour. */
   --mlz-cyan:       oklch(0.74 0.13 195);
-  --mlz-cyan-deep:  oklch(0.52 0.10 200);
+  --mlz-cyan-deep:  oklch(0.48 0.10 200);
   --mlz-blue:       oklch(0.62 0.15 250);
   --mlz-blue-deep:  oklch(0.46 0.13 255);
   --mlz-green:      oklch(0.70 0.13 155);
@@ -56,7 +56,7 @@
   --mlz-slate-deep: oklch(0.24 0.015 250);
 
   /* Signals — meaning-carrying hues, harmonised with the palette */
-  --mlz-danger:   oklch(0.62 0.22 18);   /* also the cyberpunk glitch red */
+  --mlz-danger:   oklch(0.53 0.22 18);   /* deep enough that paper text on it clears AA; also the glitch red */
   --mlz-success:  oklch(0.60 0.13 150);
   --mlz-warning:  oklch(0.80 0.15 78);
   --mlz-info:     oklch(0.62 0.15 250);
@@ -140,7 +140,7 @@
    automatically (Radix "step 2/3" subtle-background idea, done with color-mix). */
 :root {
   --accent-subtle:      color-mix(in oklch, var(--accent) 14%, var(--background));
-  --destructive-subtle: color-mix(in oklch, var(--destructive) 12%, var(--background));
+  --destructive-subtle: color-mix(in oklch, var(--destructive) 10%, var(--background));
   --success-subtle:     color-mix(in oklch, var(--success) 12%, var(--background));
   --warning-subtle:     color-mix(in oklch, var(--warning) 16%, var(--background));
   --info-subtle:        color-mix(in oklch, var(--info) 12%, var(--background));
@@ -178,7 +178,7 @@
   --input:                 oklch(0.31 0.004 110);
   --ring:                  var(--mlz-cyan);
 
-  --destructive:            oklch(0.66 0.21 20);
+  --destructive:            oklch(0.55 0.21 20);
   --destructive-foreground: oklch(0.96 0.004 100);
   --success:                oklch(0.70 0.13 152);
   --success-foreground:     oklch(0.18 0.02 150);

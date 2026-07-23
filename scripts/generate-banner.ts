@@ -139,7 +139,7 @@ async function build(spec: BannerSpec): Promise<string> {
 ${face("Space Grotesk", 700, grotesk)}
 ${face("Space Mono", 700, mono700)}
 ${face("Space Mono", 400, mono400)}
-:root{--bg:#ecebe4;--fg:#1a1a18;--muted:#63615a;--line:#cbc9be;--card:#f2f1ea;--accent:#00c4c4;--period:#007980;--gridc:26,26,24}
+:root{--bg:#ecebe4;--fg:#1a1a18;--muted:#63615a;--line:#cbc9be;--card:#f2f1ea;--accent:#00c4c4;--period:#006e74;--gridc:26,26,24}
 @media (prefers-color-scheme:dark){:root{--bg:#21201d;--fg:#eceae3;--muted:#a3a199;--line:#46443f;--card:#2b2a26;--accent:#00c4c4;--period:#00c4c4;--gridc:236,235,228}}
 text{font-family:'Space Mono',monospace}
 .grid{stroke:rgb(var(--gridc));stroke-opacity:.05}

@@ -374,7 +374,7 @@ export const Overview: Story = {
               <figure key={label} className="flex flex-col gap-2.5">
                 <div className="relative flex min-h-32 items-center justify-center overflow-hidden rounded-[var(--radius-lg)] border border-[color-mix(in_oklch,var(--destructive)_35%,var(--border))] bg-destructive-subtle p-6">
                   {kind === "hue" ? (
-                    <BrandMark size={52} tile="oklch(0.62 0.22 18)" glyph="var(--background)" />
+                    <BrandMark size={52} tile="oklch(0.53 0.22 18)" glyph="var(--background)" />
                   ) : kind === "font" ? (
                     <span className="font-hand text-3xl lowercase">
                       mlz<span className="text-brand-period">.</span>
@@ -426,7 +426,7 @@ letter-spacing: -0.03em;
 /* lockup: mark = 1.45 × wordmark size · gap = 0.5 × wordmark size */
 
 /* static exports (favicon.svg, PNGs 16/32/180/512, OG 1200×630) */
-tile #1a1a18 · letter #ecebe4 · period oklch(0.52 0.10 200)`}
+tile #1a1a18 · letter #ecebe4 · period oklch(0.48 0.10 200)`}
           </pre>
         </Section>
       </div>

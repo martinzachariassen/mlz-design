@@ -99,7 +99,7 @@ const SEMANTIC: [string, string, string][] = [
   ["border", colors.line, "oklch(0.31 0.004 110)"],
   ["input", colors.line, "oklch(0.31 0.004 110)"],
   ["ring", accents.cyan.base, accents.cyan.base],
-  ["destructive", signals.danger, "oklch(0.66 0.21 20)"],
+  ["destructive", signals.danger, "oklch(0.55 0.21 20)"],
   ["destructiveForeground", colors.paper, "oklch(0.96 0.004 100)"],
   ["success", signals.success, "oklch(0.70 0.13 152)"],
   ["successForeground", colors.paper, "oklch(0.18 0.02 150)"],

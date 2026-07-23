@@ -355,11 +355,10 @@ server.mjs  Dockerfile  railway.json   Railway deploy
   build **provenance** (Sigstore). See [`SECURITY.md`](SECURITY.md).
 - `main` is protected (enforced for admins) and merges require green checks.
 
-> **a11y notes.** Two small-text contrast gaps are known and scoped (not silenced)
-> in the a11y gate pending a palette decision: the brand **destructive** red lands
-> ~3.6:1 under light foreground, and **`--accent-deep`** as body text lands ~4.1:1
-> on paper — both just under the 4.5:1 AA threshold for small text. The affected
-> stories carry a per-rule `a11y` scope with a comment; everything else is enforced.
+> **a11y notes.** The palette is tuned so text clears WCAG AA (4.5:1) with no
+> per-story exceptions: **`--accent-deep`** (house cyan) was deepened to land
+> ~5.1:1 on paper, and the **destructive** signal to ~4.8:1 under its light
+> foreground in both light and dark. The gate enforces every story unscoped.
 
 ## Releasing
 

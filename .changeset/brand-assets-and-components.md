@@ -60,10 +60,13 @@ for free):
   `bun run gen:swift` converts the OKLCH tokens to sRGB and emits it from the same
   source of truth, so native apps inherit the exact palette (light/dark adaptive,
   five accent families). A Platforms/SwiftUI page documents the web→Swift mapping.
-- **Accessibility** — the light `--muted-foreground` role is nudged a hair darker
-  (`#63615a`) so muted text clears WCAG AA (4.5:1) on every paper surface (the
-  `--mlz-muted` primitive is unchanged); `Alert` titles now render in high-contrast
-  ink with the signal carried by the rail and icon. `Progress` now carries a default
-  accessible name (`aria-label`) when none is supplied, and `Prose` links use the
-  deeper accent for legibility. Every story is checked against axe (WCAG 2.1 A/AA)
-  in CI, in light and dark.
+- **Accessibility** — the palette is tuned to clear WCAG AA (4.5:1) for small text
+  with no per-story exceptions: the light `--muted-foreground` role is a hair darker
+  (`#63615a`); the house **`--mlz-cyan-deep`** (which backs `--accent-deep` and the
+  wordmark period) is deepened to `oklch(0.48 0.10 200)` so it reads ~5.1:1 on paper;
+  and the **destructive** signal is deepened in both themes (`oklch(0.53 0.22 18)`
+  light / `oklch(0.55 0.21 20)` dark) so its light foreground clears ~4.8:1. `Alert`
+  titles render in high-contrast ink with the signal carried by the rail and icon;
+  `Progress` carries a default accessible name (`aria-label`) when none is supplied;
+  `Prose` links use the deeper accent. Every story is checked against axe
+  (WCAG 2.1 A/AA) in CI — unscoped.
