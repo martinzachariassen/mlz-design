@@ -128,12 +128,18 @@ Accent families: `cyan` (default), `blue`, `green`, `rust`, `ink`.
 ## Tokens in JS
 
 ```ts
-import { tokens, accents, colors, signals, fonts } from "@martinzachariassen/design/tokens";
+import { tokens, accents, colors, signals, fonts, motion, radius } from "@martinzachariassen/design/tokens";
 
 accents.rust.base; // "oklch(0.66 0.15 45)"
 signals.warning;   // "oklch(0.80 0.15 78)"
 fonts.hand;        // '"Architects Daughter", "Comic Sans MS", cursive'
+motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
+radius.base;       // "0.25rem"
 ```
+
+These mirror `theme.css` value-for-value. One naming quirk: the signal role
+called `--destructive` in CSS is exported as `signals.danger` in JS (same
+colour).
 
 ## Token architecture
 
@@ -151,6 +157,14 @@ Three layers keep components decoupled from raw brand values
 
 Semantic names match shadcn/ui, so `npx shadcn@latest add <x>` drops in and
 inherits this palette with no extra wiring.
+
+Beyond the core roles, the semantic layer also ships **subtle tints** for every
+accent/signal (`bg-accent-subtle`, `bg-warning-subtle`, `bg-destructive-subtle`,
+`bg-success-subtle`, `bg-info-subtle` — built with `color-mix`, so they follow
+the current theme and accent), a warm-tinted **elevation scale**
+(`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl`
+off `--radius`), and `--accent-deep`, `--overlay` and `--glitch-1/2` for hovers,
+scrims and the cyberpunk glitch motion.
 
 ## Fonts
 
@@ -188,7 +202,12 @@ bun run build         # tsup → dist (ESM + d.ts), then copies styles/
 bun run typecheck     # tsc --noEmit
 bun run test          # Vitest + Testing Library
 bun run lint          # Biome (lint:fix / format to write)
+bun run preview       # static token reference page (preview/index.html) on :4321
 ```
+
+`bun run preview` serves a dependency-free HTML page that consumes the tokens
+exactly as a real app would — a quick way to eyeball the palette without the
+full Storybook.
 
 Package layout:
 
