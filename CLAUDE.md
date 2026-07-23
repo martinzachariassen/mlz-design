@@ -74,8 +74,11 @@ is exported as `signals.danger` in JS.
 - CI (`ci.yml`): lint · typecheck · test · build · build-storybook. Plus CodeQL,
   Dependency Review, Dependabot (npm / actions / docker).
 - **Releases via Changesets → GitHub Packages** (scope `@martinzachariassen`,
-  `.npmrc`). Add a changeset and merge; a "Version Packages" PR opens; merging it
-  builds and `changeset publish`es. `release.yml` runs on push to `main`.
+  `.npmrc`), driven by a **version tag** — decoupled from the push-to-`main` CI
+  build. Add a changeset, then when ready to ship: `bun run version-packages`
+  (applies the bump + CHANGELOG), commit, and push a `v*` tag
+  (`git tag vX.Y.Z && git push --follow-tags`). `release.yml` triggers on the
+  `v*` tag, builds, and `changeset publish`es.
 
 ## Hosting
 

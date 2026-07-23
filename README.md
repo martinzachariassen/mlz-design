@@ -235,14 +235,19 @@ server.mjs  Dockerfile  railway.json   Railway deploy
 
 ## Releasing
 
-Uses [Changesets](https://github.com/changesets/changesets) → GitHub Packages.
+Uses [Changesets](https://github.com/changesets/changesets) → GitHub Packages,
+driven by a version **tag** (decoupled from the push-to-`main` CI build).
 
 ```bash
-bun run changeset      # describe the change + pick a semver bump
+bun run changeset          # describe the change + pick a semver bump
+bun run version-packages   # apply the bump + CHANGELOG, consume changesets
+git commit -am "release: v<x.y.z>"
+git tag v<x.y.z>
+git push --follow-tags     # pushing the v* tag triggers release.yml
 ```
 
-Merging a PR with changesets opens a **Version Packages** PR; merging that runs
-`release.yml`, which builds and `changeset publish`es to GitHub Packages.
+Pushing a `v*` tag runs `release.yml`, which builds and `changeset publish`es to
+GitHub Packages.
 
 ## Roadmap
 
