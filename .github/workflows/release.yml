@@ -1,15 +1,17 @@
 name: Release
 
-# Changesets flow: merging a PR that contains changesets opens/updates a
-# "Version Packages" PR; merging THAT publishes to GitHub Packages.
+# Tag-driven release. Bump the version locally, then push a `v*` tag to publish:
+#   bun run changeset          # record the change
+#   bun run version-packages   # apply bumps + CHANGELOG, consume changesets
+#   git commit -am "release: v<x.y.z>"
+#   git tag v<x.y.z> && git push --follow-tags
 on:
   push:
-    branches: [main]
+    tags: ["v*"]
 
 permissions:
-  contents: write
+  contents: read
   packages: write
-  pull-requests: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -29,10 +31,6 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@martinzachariassen"
       - run: bun install --frozen-lockfile
-      - uses: changesets/action@v1
-        with:
-          version: bun run version-packages
-          publish: bun run release
+      - run: bun run release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
