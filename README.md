@@ -186,6 +186,12 @@ Every component reads only semantic tokens, so all of them re-theme with the
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
+The banner at the top of this file is `RepoBanner` (standard layout), rendered to a
+self-contained, theme-adaptive `assets/banner.svg` by `bun run gen:banner`. That
+script also emits **`assets/banner-template.svg`** — a placeholder version any repo
+can copy as its layout starting point (swap the copy, or, in a React repo, just
+render `<RepoBanner>` and screenshot it).
+
 Storybook also ships composed references — **Foundations → Patterns** (dashboard,
 forms, alerts…) and full-page **Templates → Portfolio / Blog** — showing how to
 build real UIs in the system's voice, responsive by default.

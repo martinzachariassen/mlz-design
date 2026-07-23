@@ -1,16 +1,21 @@
 /**
- * Generate the repository README banner (`assets/banner.svg`).
+ * Generate the repository README banners under `assets/`.
  *
- * A static, self-contained mirror of the `RepoBanner` **standard** layout for the
- * top of this README. Space Mono / Space Grotesk are subset to just the glyphs the
- * banner uses and embedded as base64 `@font-face`, so the SVG renders identically
- * everywhere (including GitHub's `<img>` sandbox) with no external requests. Colour
- * adapts to the viewer's GitHub theme via `prefers-color-scheme`.
+ * A static, self-contained mirror of the `RepoBanner` **standard** layout. Space
+ * Mono / Space Grotesk are subset to just the glyphs each banner uses and embedded
+ * as base64 `@font-face`, so the SVG renders identically everywhere (including
+ * GitHub's `<img>` sandbox) with no external requests. Colour adapts to the
+ * viewer's GitHub theme via `prefers-color-scheme`.
+ *
+ * Emits two files:
+ *   assets/banner.svg           — this repo's header (real copy).
+ *   assets/banner-template.svg  — a placeholder layout reference for other repos:
+ *                                 copy it, swap the copy in the SPECS block, re-run.
+ *
+ * React repos that consume this package skip the SVG entirely and render their own
+ * from the `RepoBanner` component (see Foundations/Repo Banner in Storybook).
  *
  * Run:  bun run gen:banner   (needs network — pulls the font subsets from Google)
- *
- * The copy below is this repo's; other projects render their own banner straight
- * from the `RepoBanner` component. Edit the copy here and re-run to refresh.
  */
 
 import { writeFileSync } from "node:fs";
@@ -18,15 +23,39 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const OUT = join(HERE, "..", "assets", "banner.svg");
+const ASSETS = join(HERE, "..", "assets");
 
-/* ── copy (this repo) ─────────────────────────────────────────────────────── */
-const EYEBROW = "MLZ · DESIGN SYSTEM";
-const PROJECT = "Design";
-const DESC = "One canonical source of colour, type, style and motion for every project.";
-const INSTALL = "bun add @martinzachariassen/design";
-const FOOTER = "GITHUB.COM/MARTINZACHARIASSEN/MLZ-DESIGN";
-const BADGES = ["REACT", "TAILWIND V4", "SWIFTUI", "OKLCH"];
+/* ── the banners to emit ──────────────────────────────────────────────────── */
+interface BannerSpec {
+  file: string;
+  eyebrow: string;
+  project: string;
+  description: string;
+  install: string;
+  footer: string;
+  badges: string[];
+}
+
+const SPECS: BannerSpec[] = [
+  {
+    file: "banner.svg",
+    eyebrow: "MLZ · DESIGN SYSTEM",
+    project: "Design",
+    description: "One canonical source of colour, type, style and motion for every project.",
+    install: "bun add @martinzachariassen/design",
+    footer: "GITHUB.COM/MARTINZACHARIASSEN/MLZ-DESIGN",
+    badges: ["REACT", "TAILWIND V4", "SWIFTUI", "OKLCH"],
+  },
+  {
+    file: "banner-template.svg",
+    eyebrow: "MLZ · CATEGORY",
+    project: "Project",
+    description: "What this repository is, in one clear line — replace this copy.",
+    install: "bun add @martinzachariassen/name",
+    footer: "GITHUB.COM/MARTINZACHARIASSEN/REPO",
+    badges: ["LABEL", "LABEL", "LABEL"],
+  },
+];
 
 /* ── font subsetting via Google Fonts ─────────────────────────────────────── */
 const UA =
@@ -54,27 +83,31 @@ const W = 1280;
 const H = 340;
 const PAD = 54;
 
-function buildBadges(): string {
+function buildBadges(badges: string[]): string {
   const size = 11;
   const trk = size * 0.16;
   const padX = 12;
   const h = 26;
   const gap = 8;
   const y = 62;
-  const widths = BADGES.map((b) => monoW(b, size, trk) + padX * 2);
-  const total = widths.reduce((a, b) => a + b, 0) + gap * (BADGES.length - 1);
+  const widths = badges.map((b) => monoW(b, size, trk) + padX * 2);
+  const total = widths.reduce((a, b) => a + b, 0) + gap * (badges.length - 1);
   let x = W - PAD - total;
-  return BADGES.map((b, i) => {
-    const w = widths[i];
-    const cx = x + padX;
-    const rect = `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="${h}" rx="3" class="chip"/>`;
-    const txt = `<text x="${cx.toFixed(1)}" y="${y + 17}" class="badge">${esc(b)}</text>`;
-    x += w + gap;
-    return rect + txt;
-  }).join("");
+  return badges
+    .map((b, i) => {
+      const w = widths[i];
+      const cx = x + padX;
+      const rect = `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="${h}" rx="3" class="chip"/>`;
+      const txt = `<text x="${cx.toFixed(1)}" y="${y + 17}" class="badge">${esc(b)}</text>`;
+      x += w + gap;
+      return rect + txt;
+    })
+    .join("");
 }
 
-async function build(): Promise<string> {
+async function build(spec: BannerSpec): Promise<string> {
+  const { eyebrow: EYEBROW, project: PROJECT, description: DESC, install: INSTALL } = spec;
+  const { footer: FOOTER, badges: BADGES } = spec;
   const [grotesk, mono700, mono400] = await Promise.all([
     subset("Space Grotesk:wght@700", PROJECT),
     subset("Space Mono:wght@700", "mlz."),
@@ -145,11 +178,13 @@ text{font-family:'Space Mono',monospace}
 <rect x="${sqX.toFixed(1)}" y="291" width="7" height="7" fill="var(--accent)"/>
 <text x="${W - PAD}" y="299" text-anchor="end" class="foot">${esc(FOOTER)}</text>
 
-${buildBadges()}
+${buildBadges(BADGES)}
 </svg>
 `;
 }
 
-const svg = await build();
-writeFileSync(OUT, svg);
-console.log(`  ✓ assets/banner.svg  (${(svg.length / 1024).toFixed(1)} KB)`);
+for (const spec of SPECS) {
+  const svg = await build(spec);
+  writeFileSync(join(ASSETS, spec.file), svg);
+  console.log(`  ✓ assets/${spec.file}  (${(svg.length / 1024).toFixed(1)} KB)`);
+}
