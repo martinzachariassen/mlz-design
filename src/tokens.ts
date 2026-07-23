@@ -13,12 +13,12 @@ export const colors = {
   ink2: "#4a4a45",
   muted: "#6e6c64",
   line: "#cbc9be",
-  glitchRed: "oklch(0.62 0.22 18)",
+  glitchRed: "oklch(0.53 0.22 18)",
 } as const;
 
 /** Meaning-carrying signal colours, harmonised with the palette. */
 export const signals = {
-  danger: "oklch(0.62 0.22 18)",
+  danger: "oklch(0.53 0.22 18)",
   success: "oklch(0.60 0.13 150)",
   warning: "oklch(0.80 0.15 78)",
   info: "oklch(0.62 0.15 250)",
@@ -27,7 +27,7 @@ export const signals = {
 export type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
 
 export const accents = {
-  cyan: { base: "oklch(0.74 0.13 195)", deep: "oklch(0.52 0.10 200)" },
+  cyan: { base: "oklch(0.74 0.13 195)", deep: "oklch(0.48 0.10 200)" },
   blue: { base: "oklch(0.62 0.15 250)", deep: "oklch(0.46 0.13 255)" },
   green: { base: "oklch(0.70 0.13 155)", deep: "oklch(0.48 0.11 158)" },
   rust: { base: "oklch(0.66 0.15 45)", deep: "oklch(0.48 0.13 42)" },

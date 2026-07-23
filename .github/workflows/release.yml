@@ -11,7 +11,6 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 concurrency:
   group: release-${{ github.ref }}
@@ -20,12 +19,22 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write # npm build provenance (Sigstore attestation)
     steps:
-      - uses: actions/checkout@v7
-      - uses: oven-sh/setup-bun@v2
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
-      - uses: actions/setup-node@v7
+          no-cache: true # publishing job — don't restore a poisonable cache
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 26
           registry-url: "https://npm.pkg.github.com"
@@ -34,3 +43,4 @@ jobs:
       - run: bun run release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"

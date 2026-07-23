@@ -29,7 +29,7 @@ export const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
         "[&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:font-mono [&_h4]:text-xs [&_h4]:font-bold [&_h4]:uppercase [&_h4]:tracking-[0.12em] [&_h4]:text-muted-foreground",
         // body
         "[&_p]:text-foreground/85",
-        "[&_a]:font-medium [&_a]:text-accent [&_a]:underline [&_a]:decoration-from-font [&_a]:underline-offset-[3px] hover:[&_a]:text-[var(--accent-deep)]",
+        "[&_a]:font-medium [&_a]:text-[var(--accent-deep)] [&_a]:underline [&_a]:decoration-from-font [&_a]:underline-offset-[3px] hover:[&_a]:text-accent",
         "[&_strong]:font-bold [&_strong]:text-foreground",
         "[&_em]:italic",
         // lists

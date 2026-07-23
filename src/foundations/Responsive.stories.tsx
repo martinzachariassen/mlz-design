@@ -106,7 +106,7 @@ function MobileShell() {
             key={item}
             type="button"
             className={`flex flex-col items-center gap-1 py-2.5 font-mono text-[9px] uppercase tracking-[0.1em] ${
-              i === 0 ? "text-accent" : "text-muted-foreground"
+              i === 0 ? "text-foreground" : "text-muted-foreground"
             }`}
           >
             <span className="size-4 rounded-[3px] border border-current" />
@@ -133,7 +133,7 @@ function DesktopShell() {
                   type="button"
                   className={`rounded-[var(--radius-md)] px-3 py-2 text-left font-mono text-[11px] uppercase tracking-[0.1em] ${
                     i === 0
-                      ? "bg-accent-subtle text-accent"
+                      ? "bg-accent-subtle text-foreground"
                       : "text-muted-foreground hover:bg-muted"
                   }`}
                 >

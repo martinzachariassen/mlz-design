@@ -23,6 +23,8 @@ export {
   type BrandLockupProps,
   BrandMark,
   type BrandMarkProps,
+  BrandWordmark,
+  type BrandWordmarkProps,
 } from "./components/brand-mark";
 export { Button, type ButtonProps, buttonVariants } from "./components/button";
 export {
@@ -71,6 +73,7 @@ export {
 export { indicatorVariants, Progress, type ProgressProps } from "./components/progress";
 export { ProjectCard, type ProjectCardProps } from "./components/project-card";
 export { Prose, type ProseProps } from "./components/prose";
+export { RepoBanner, type RepoBannerProps } from "./components/repo-banner";
 export { Separator, type SeparatorProps } from "./components/separator";
 export { Skeleton } from "./components/skeleton";
 export { SocialCard, type SocialCardProps } from "./components/social-card";

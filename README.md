@@ -1,12 +1,27 @@
 <div align="center">
 
-# MLZ Design
+<img src="assets/banner.svg" alt="MLZ · Design — one design system, every project" width="100%">
 
-**Martin Zachariassen's design system.**
-One canonical source of colour, type, style and motion — so every project I build
-inherits the same look and can't drift.
+<br><br>
+
+**Martin Zachariassen's design system** — one canonical source of colour, type,
+style and motion, shipped as an installable **React + Tailwind v4** package (plus a
+generated **SwiftUI** token layer) so every project I build inherits the same look
+and can't drift.
 
 `@martinzachariassen/design`
+
+[![CI](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martinzachariassen/mlz-design/badge)](https://scorecard.dev/viewer/?uri=github.com/martinzachariassen/mlz-design)
+[![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design?style=flat-square&color=1a1a18)](LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?style=flat-square&label=version&color=1a1a18)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
+
+![React 19](https://img.shields.io/badge/React-19-1a1a18?style=flat-square&logo=react)
+![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-1a1a18?style=flat-square&logo=tailwindcss)
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-1a1a18?style=flat-square&logo=typescript&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1a1a18?style=flat-square&logo=bun&logoColor=white)
+![Storybook 10](https://img.shields.io/badge/Storybook-10-1a1a18?style=flat-square&logo=storybook)
 
 </div>
 
@@ -178,9 +193,16 @@ Every component reads only semantic tokens, so all of them re-theme with the
 
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
-| `BrandMark` · `BrandLockup` | the MLZ monogram (`tile`/`glyph`) + `horizontal`/`stacked` wordmark lockup — backs favicons; see Foundations/Logo |
+| `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Foundations/Logo |
+| `RepoBanner` | the README header banner at the top of this file — `standard` · `minimal` · `terminal` · `split` layouts, sized for GitHub's README width; one structure, per-project copy |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
+
+The banner at the top of this file is `RepoBanner` (standard layout), rendered to a
+self-contained, theme-adaptive `assets/banner.svg` by `bun run gen:banner`. That
+script also emits **`assets/banner-template.svg`** — a placeholder version any repo
+can copy as its layout starting point (swap the copy, or, in a React repo, just
+render `<RepoBanner>` and screenshot it).
 
 Storybook also ships composed references — **Foundations → Patterns** (dashboard,
 forms, alerts…) and full-page **Templates → Portfolio / Blog** — showing how to
@@ -291,6 +313,7 @@ bun run typecheck     # tsc --noEmit
 bun run test          # Vitest + Testing Library
 bun run lint          # Biome (lint:fix / format to write)
 bun run gen:swift     # regenerate the SwiftUI token layer
+bun run gen:banner    # regenerate assets/banner.svg (README header, embeds font subsets)
 bun run preview       # static token reference page (preview/index.html) on :4321
 ```
 
@@ -307,7 +330,7 @@ src/
   lib/cn.ts            clsx + tailwind-merge
   components/*.tsx      Button, Input, Card, Dialog, ProjectCard, Prose… (+ .stories, .test)
   foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Responsive,
-                        Portfolio, Blog, Social Cards, SwiftUI
+                        Portfolio, Blog, Social Cards, Repo Banner, SwiftUI
   styles/
     index.css           the one-import bundle     → ./styles/index.css
     theme.css           the token system          → ./styles/theme.css
@@ -323,9 +346,19 @@ server.mjs  Dockerfile  railway.json   Railway deploy
 ## Quality & CI
 
 - **CI** (`.github/workflows/ci.yml`): lint · typecheck · test · build ·
-  build-storybook on every push/PR.
-- **CodeQL** and **Dependency Review** for security; **Dependabot** for updates.
+  build-storybook, plus a **Storybook a11y** job that runs axe (WCAG 2.1 A/AA) over
+  every story in a headless browser — a violation fails the build.
+- **Security & supply-chain**: **CodeQL** and **Dependency Review**, **OpenSSF
+  Scorecard** and **`zizmor`** (Actions static analysis) with results in the
+  Security tab, plus **Dependabot** for updates. Every workflow pins its actions to
+  a commit SHA and runs under `step-security/harden-runner`; releases publish with
+  build **provenance** (Sigstore). See [`SECURITY.md`](SECURITY.md).
 - `main` is protected (enforced for admins) and merges require green checks.
+
+> **a11y notes.** The palette is tuned so text clears WCAG AA (4.5:1) with no
+> per-story exceptions: **`--accent-deep`** (house cyan) was deepened to land
+> ~5.1:1 on paper, and the **destructive** signal to ~4.8:1 under its light
+> foreground in both light and dark. The gate enforces every story unscoped.
 
 ## Releasing
 

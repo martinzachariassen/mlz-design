@@ -20,7 +20,7 @@ public enum MLZColor {
     public static let ink = Color(srgb: 0x1A1A18)
     public static let ink2 = Color(srgb: 0x4A4A45)
     public static let line = Color(srgb: 0xCBC9BE)
-    public static let dangerRed = Color(srgb: 0xED3151)
+    public static let dangerRed = Color(srgb: 0xCC0037)
 
     // MARK: Semantic roles (light / dark adaptive)
     public static let background = dynamic(light: 0xECEBE4, dark: 0x161614)
@@ -36,12 +36,13 @@ public enum MLZColor {
     public static let muted = dynamic(light: 0xE4E2DA, dark: 0x262724)
     public static let mutedForeground = dynamic(light: 0x63615A, dark: 0x9F9F99)
     public static let accent = dynamic(light: 0x00C4C4, dark: 0x00C4C4)
-    public static let accentDeep = dynamic(light: 0x007980, dark: 0x00A8AB)
+    public static let accentDeep = dynamic(light: 0x006E74, dark: 0x00A8AB)
     public static let accentForeground = dynamic(light: 0x1A1A18, dark: 0x161614)
+    public static let brandPeriod = dynamic(light: 0x006E74, dark: 0x00C4C4)
     public static let border = dynamic(light: 0xCBC9BE, dark: 0x30302E)
     public static let input = dynamic(light: 0xCBC9BE, dark: 0x30302E)
     public static let ring = dynamic(light: 0x00C4C4, dark: 0x00C4C4)
-    public static let destructive = dynamic(light: 0xED3151, dark: 0xF8495A)
+    public static let destructive = dynamic(light: 0xCC0037, dark: 0xD0183A)
     public static let destructiveForeground = dynamic(light: 0xECEBE4, dark: 0xF2F2EF)
     public static let success = dynamic(light: 0x3B9555, dark: 0x58B575)
     public static let successForeground = dynamic(light: 0xECEBE4, dark: 0x0B140D)
@@ -66,7 +67,7 @@ public enum MLZColor {
 
     private static func hex(_ accent: Accent) -> (base: UInt32, deep: UInt32, foreground: UInt32) {
         switch accent {
-        case .cyan: return (base: 0x00C4C4, deep: 0x007980, foreground: 0x1A1A18)
+        case .cyan: return (base: 0x00C4C4, deep: 0x006E74, foreground: 0x1A1A18)
         case .blue: return (base: 0x2F8ADC, deep: 0x1B589E, foreground: 0xECEBE4)
         case .green: return (base: 0x51B67A, deep: 0x077045, foreground: 0x1A1A18)
         case .rust: return (base: 0xDB703B, deep: 0x973E16, foreground: 0xECEBE4)

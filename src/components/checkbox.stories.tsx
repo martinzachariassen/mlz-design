@@ -17,19 +17,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => <Checkbox {...args} />,
+  render: (args) => <Checkbox aria-label="Example checkbox" {...args} />,
 };
 
 export const Checked: Story = {
   args: { defaultChecked: true },
-  render: (args) => <Checkbox {...args} />,
+  render: (args) => <Checkbox aria-label="Example checkbox" {...args} />,
 };
 
 export const Disabled: Story = {
   render: () => (
     <div className="flex items-center gap-4">
-      <Checkbox disabled />
-      <Checkbox disabled defaultChecked />
+      <Checkbox disabled aria-label="Disabled checkbox" />
+      <Checkbox disabled defaultChecked aria-label="Disabled checked checkbox" />
     </div>
   ),
 };

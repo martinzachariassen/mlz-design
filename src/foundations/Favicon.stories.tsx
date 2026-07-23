@@ -11,9 +11,8 @@ type Story = StoryObj<typeof meta>;
 
 const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <rect x="1" y="1" width="30" height="30" rx="6" fill="#1a1a18"/>
-  <path d="M9 22.5 V10 L16 18.5 L23 10 V22.5" fill="none"
-        stroke="#ecebe4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="24" y="19" width="3.4" height="3.4" rx="0.6" fill="#5ec6cf"/>
+  <polygon fill="#ecebe4"
+    points="7,25 7,7 12,7 16,14.5 20,7 25,7 25,25 20.6,25 20.6,13.6 17.4,19.4 14.6,19.4 11.4,13.6 11.4,25"/>
 </svg>`;
 
 function Section({
@@ -47,10 +46,10 @@ export const Brand: Story = {
         </p>
         <h1 className="mt-3 font-hand text-5xl">Brand & Favicon</h1>
         <p className="mt-4 max-w-2xl font-mono text-sm leading-relaxed text-muted-foreground">
-          The <span className="text-foreground">MLZ monogram</span> — a geometric{" "}
-          <span className="text-foreground">M</span> with a terminal caret on a tight ink tile.
-          Built from tokens, so it inverts with the theme and adopts the active accent. Everything
-          below is the same <code className="text-foreground">&lt;BrandMark /&gt;</code> component.
+          The <span className="text-foreground">MLZ mark</span> — the solid{" "}
+          <span className="text-foreground">Block M</span> on a tight ink tile. Always monochrome
+          (ink tile, paper letter), built from tokens so it inverts with the theme. Everything below
+          is the same <code className="text-foreground">&lt;BrandMark /&gt;</code> component.
         </p>
 
         <Section
@@ -95,7 +94,7 @@ export const Brand: Story = {
 
         <Section
           title="On browser chrome"
-          hint="How it reads in a tab, dark and light — the caret survives, the M anchors."
+          hint="How it reads in a tab, dark and light — the tile carries its own contrast, the M anchors."
         >
           <div className="flex flex-wrap gap-4">
             {[

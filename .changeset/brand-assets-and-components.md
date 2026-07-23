@@ -6,15 +6,25 @@ Expand the system into a broad component kit plus brand/marketing assets, all
 styled purely from semantic tokens (so they re-theme with `dark` / `data-accent`
 for free):
 
-- **Brand assets** — `BrandMark` (the MLZ monogram: a geometric `M` with a
-  terminal caret, `tile`/`glyph` variants) and `BrandLockup` (mark + wordmark,
-  now `horizontal` or `stacked`). New Foundations/Logo page (lockups, sizing,
-  clear space, on-background treatments, misuse) and a Brand & Favicon page with
-  sizes, browser-chrome previews and an export recipe.
+- **Brand assets (the logo)** — a fixed two-part identity: `BrandMark`
+  (the solid **Block M** on an ink tile, always monochrome, `tile`/`glyph`
+  variants) and `BrandWordmark` (`mlz.` in Space Mono Bold, the accent period
+  driven by the new `--brand-period` token — deep on light for AA, base on dark),
+  paired by `BrandLockup` (`horizontal` or `stacked`, mark = 1.45× wordmark, an
+  optional 40px+ tagline). New Foundations/Logo page (system, construction,
+  lockups, colour, sizing/clear-space, applications, misuse, hand-off) and a
+  Brand & Favicon page with sizes, browser-chrome previews and an export recipe.
+  The earlier stroked-`M`-plus-caret mark is retired.
 - **`SocialCard`** — a ready-to-screenshot 1200×630 Open-Graph template built from
   tokens (engineering frame, ruled grid, brand lockup, grotesk headline), with a
   `width` prop that scales the whole card as one and a Next.js / `@vercel/og`
   generation recipe.
+- **`RepoBanner`** — the README header banner, sized for GitHub's ~896px README
+  width (1280×340), with four shared-structure layouts (`standard` · `minimal` ·
+  `terminal` · `split`) driven only by per-project copy. A Foundations/Repo Banner
+  page shows all four, light/dark capture and the `<picture>` export recipe; a
+  `bun run gen:banner` script renders this repo's `assets/banner.svg` with the brand
+  fonts subset and embedded, so it renders self-contained and theme-adaptive.
 - **New components** — `Alert` (+ `Title`/`Description`), `Avatar`
   (+ `Image`/`Fallback`), `Checkbox`, `Switch`, `Label`, `Textarea`, `Tabs`
   (Radix-free, keyboard-navigable), `Progress`, `Skeleton`, `Spinner`,
@@ -50,8 +60,13 @@ for free):
   `bun run gen:swift` converts the OKLCH tokens to sRGB and emits it from the same
   source of truth, so native apps inherit the exact palette (light/dark adaptive,
   five accent families). A Platforms/SwiftUI page documents the web→Swift mapping.
-- **Accessibility** — the light `--muted-foreground` role is nudged a hair darker
-  (`#63615a`) so muted text clears WCAG AA (4.5:1) on every paper surface (the
-  `--mlz-muted` primitive is unchanged); `Alert` titles now render in high-contrast
-  ink with the signal carried by the rail and icon. Every foundation page passes
-  axe with zero violations in light and dark.
+- **Accessibility** — the palette is tuned to clear WCAG AA (4.5:1) for small text
+  with no per-story exceptions: the light `--muted-foreground` role is a hair darker
+  (`#63615a`); the house **`--mlz-cyan-deep`** (which backs `--accent-deep` and the
+  wordmark period) is deepened to `oklch(0.48 0.10 200)` so it reads ~5.1:1 on paper;
+  and the **destructive** signal is deepened in both themes (`oklch(0.53 0.22 18)`
+  light / `oklch(0.55 0.21 20)` dark) so its light foreground clears ~4.8:1. `Alert`
+  titles render in high-contrast ink with the signal carried by the rail and icon;
+  `Progress` carries a default accessible name (`aria-label`) when none is supplied;
+  `Prose` links use the deeper accent. Every story is checked against axe
+  (WCAG 2.1 A/AA) in CI — unscoped.

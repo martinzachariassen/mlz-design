@@ -45,8 +45,10 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "serve:storybook": "node server.mjs",
+    "test-storybook": "test-storybook",
     "preview": "python3 -m http.server 4321 --directory preview",
     "gen:swift": "bun scripts/generate-swift-tokens.ts",
+    "gen:banner": "bun scripts/generate-banner.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "bun run build && changeset publish",
@@ -66,6 +68,7 @@
     "@changesets/cli": "^2.31.1",
     "@storybook/addon-a11y": "^10.5.3",
     "@storybook/react-vite": "^10.5.3",
+    "@storybook/test-runner": "^0.24.4",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^7.0.0",
@@ -73,6 +76,9 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
+    "axe-playwright": "^2.2.2",
+    "concurrently": "^10.0.3",
+    "http-server": "^14.1.1",
     "jsdom": "^29.1.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
@@ -81,7 +87,8 @@
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wait-on": "^9.1.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com",
