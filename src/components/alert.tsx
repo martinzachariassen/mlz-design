@@ -50,7 +50,10 @@ export const AlertTitle = React.forwardRef<
   <p
     ref={ref}
     data-slot="alert-title"
-    className={cn("col-start-2 font-mono text-xs font-bold uppercase tracking-[0.1em]", className)}
+    className={cn(
+      "col-start-2 font-mono text-xs font-bold uppercase tracking-[0.1em] text-foreground",
+      className,
+    )}
     {...props}
   />
 ));

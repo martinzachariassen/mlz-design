@@ -146,7 +146,7 @@ composed **Foundations → Patterns** reference — in Storybook.
 
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
-| `BrandMark` · `BrandLockup` | the MLZ monogram (`tile`/`glyph`) + wordmark lockup — backs favicons |
+| `BrandMark` · `BrandLockup` | the MLZ monogram (`tile`/`glyph`) + `horizontal`/`stacked` wordmark lockup — backs favicons; see Foundations/Logo |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the mlz.no signature decorative layers |
 
@@ -244,7 +244,7 @@ src/
   tokens.ts            typed token objects        → ./tokens
   lib/cn.ts            clsx + tailwind-merge
   components/*.tsx      Button, Input, Card, Alert, Tabs, BrandMark… (+ .stories, .test)
-  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Brand, Social Cards
+  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Social Cards
   styles/
     theme.css           the token system          → ./styles/theme.css
     fonts.css           font loading              → ./styles/fonts.css

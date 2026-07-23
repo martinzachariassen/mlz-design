@@ -97,7 +97,9 @@
   --secondary-foreground:  var(--mlz-ink-2);
 
   --muted:                 var(--mlz-paper-2);
-  --muted-foreground:      var(--mlz-muted);
+  /* A hair darker than the --mlz-muted primitive (#6e6c64 clears only 4.05:1 on
+     paper-2); this lands ≥4.5:1 AA on every paper surface while staying muted. */
+  --muted-foreground:      #63615a;
 
   /* Accent = house cyan; focus rings & hovers reach for it */
   --accent:                var(--mlz-cyan);

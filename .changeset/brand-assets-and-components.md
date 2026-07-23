@@ -7,9 +7,10 @@ styled purely from semantic tokens (so they re-theme with `dark` / `data-accent`
 for free):
 
 - **Brand assets** — `BrandMark` (the MLZ monogram: a geometric `M` with a
-  terminal caret, `tile`/`glyph` variants) and `BrandLockup` (mark + wordmark).
-  New Foundations/Brand & Favicon page with sizes, browser-chrome previews and an
-  export recipe.
+  terminal caret, `tile`/`glyph` variants) and `BrandLockup` (mark + wordmark,
+  now `horizontal` or `stacked`). New Foundations/Logo page (lockups, sizing,
+  clear space, on-background treatments, misuse) and a Brand & Favicon page with
+  sizes, browser-chrome previews and an export recipe.
 - **`SocialCard`** — a ready-to-screenshot 1200×630 Open-Graph template built from
   tokens (engineering frame, ruled grid, brand lockup, grotesk headline), with a
   `width` prop that scales the whole card as one and a Next.js / `@vercel/og`
@@ -25,3 +26,8 @@ for free):
 - **Foundations/Patterns** — a composed reference (app shell, dashboard, settings
   form, tabbed auth, alerts, activity list, empty state) documenting how to build
   UIs in the system's voice.
+- **Accessibility** — the light `--muted-foreground` role is nudged a hair darker
+  (`#63615a`) so muted text clears WCAG AA (4.5:1) on every paper surface (the
+  `--mlz-muted` primitive is unchanged); `Alert` titles now render in high-contrast
+  ink with the signal carried by the rail and icon. Every foundation page passes
+  axe with zero violations in light and dark.

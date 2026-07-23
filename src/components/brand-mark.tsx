@@ -85,36 +85,50 @@ export const BrandMark = React.forwardRef<SVGSVGElement, BrandMarkProps>(
 BrandMark.displayName = "BrandMark";
 
 /**
- * The horizontal logo lockup: the mark beside the wordmark. `mlz` sits in the
- * hand display face with a mono, wide-tracked kicker beneath — the mlz.no
- * signature pairing. Use it for app headers, docs, and the OG card.
+ * The logo lockup: the mark plus the `mlz` wordmark (hand display face) and an
+ * optional mono, wide-tracked kicker — the mlz.no signature pairing. `horizontal`
+ * (mark beside wordmark) is the primary lockup for headers and the OG card;
+ * `stacked` (mark above a centred wordmark) suits square/avatar contexts and
+ * splash screens.
  */
 export interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** The kicker line under the wordmark. */
+  /** The kicker line paired with the wordmark. Pass `""` to omit it. */
   tagline?: string;
   /** Mark size in px; the wordmark scales with it. */
   size?: number;
+  /** Lockup layout. */
+  orientation?: "horizontal" | "stacked";
 }
 
 export const BrandLockup = React.forwardRef<HTMLDivElement, BrandLockupProps>(
-  ({ tagline = "Design System", size = 40, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("inline-flex items-center gap-3 text-foreground", className)}
-      {...props}
-    >
-      <BrandMark size={size} />
-      <div className="flex flex-col leading-none">
-        <span className="font-hand lowercase leading-none" style={{ fontSize: size * 0.72 }}>
-          mlz
-        </span>
-        {tagline ? (
-          <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-            {tagline}
+  (
+    { tagline = "Design System", size = 40, orientation = "horizontal", className, ...props },
+    ref,
+  ) => {
+    const stacked = orientation === "stacked";
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "inline-flex text-foreground",
+          stacked ? "flex-col items-center gap-3 text-center" : "items-center gap-3",
+          className,
+        )}
+        {...props}
+      >
+        <BrandMark size={size} />
+        <div className={cn("flex flex-col leading-none", stacked && "items-center")}>
+          <span className="font-hand lowercase leading-none" style={{ fontSize: size * 0.72 }}>
+            mlz
           </span>
-        ) : null}
+          {tagline ? (
+            <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              {tagline}
+            </span>
+          ) : null}
+        </div>
       </div>
-    </div>
-  ),
+    );
+  },
 );
 BrandLockup.displayName = "BrandLockup";

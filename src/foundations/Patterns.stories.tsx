@@ -107,6 +107,7 @@ export const Overview: Story = {
                   <Progress
                     value={pct as number}
                     variant={variant as "accent" | "default"}
+                    aria-label={`${label} — ${pct}%`}
                     className="mt-4"
                   />
                 </CardContent>
@@ -128,18 +129,21 @@ export const Overview: Story = {
                   ["Deploy status", "When a build finishes or fails.", true],
                   ["Weekly digest", "A Monday summary of activity.", false],
                   ["Security alerts", "Critical advisories, always on.", true],
-                ].map(([title, desc, on], i) => (
-                  <div key={title as string}>
-                    {i > 0 && <Separator className="mb-5" />}
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="font-mono text-xs uppercase tracking-[0.1em]">{title}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+                ].map(([title, desc, on], i) => {
+                  const id = `setting-${i}`;
+                  return (
+                    <div key={title as string}>
+                      {i > 0 && <Separator className="mb-5" />}
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <Label htmlFor={id}>{title}</Label>
+                          <p className="mt-1 text-sm text-muted-foreground">{desc}</p>
+                        </div>
+                        <Switch id={id} defaultChecked={on as boolean} />
                       </div>
-                      <Switch defaultChecked={on as boolean} />
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
           </Panel>
