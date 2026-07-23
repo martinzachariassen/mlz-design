@@ -1,6 +1,6 @@
 {
   "name": "@martinzachariassen/design",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MLZ Design — Martin Zachariassen's design system: the single source of truth for colour, type, style and motion, packaged as React + Tailwind v4 tokens and components so every project inherits one consistent look.",
   "license": "MIT",
   "author": "Martin Zachariassen",
