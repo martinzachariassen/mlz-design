@@ -9,10 +9,13 @@ export {
   Avatar,
   AvatarFallback,
   type AvatarFallbackProps,
+  AvatarGroup,
+  type AvatarGroupProps,
   AvatarImage,
   type AvatarImageProps,
   type AvatarProps,
   avatarVariants,
+  fallbackVariants,
 } from "./components/avatar";
 export { Badge, type BadgeProps, badgeVariants } from "./components/badge";
 export {
@@ -34,6 +37,17 @@ export {
   cardVariants,
 } from "./components/card";
 export { Checkbox, type CheckboxProps } from "./components/checkbox";
+export {
+  Dialog,
+  DialogClose,
+  type DialogCloseProps,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  type DialogProps,
+  DialogTitle,
+} from "./components/dialog";
 export { FloatingMarks, type FloatingMarksProps } from "./components/floating-marks";
 export {
   GlitchText,
@@ -44,7 +58,19 @@ export { GridBackground, type GridBackgroundProps } from "./components/grid-back
 export { Input, type InputProps } from "./components/input";
 export { Kbd, type KbdProps } from "./components/kbd";
 export { Label, type LabelProps } from "./components/label";
+export {
+  Container,
+  type ContainerProps,
+  containerVariants,
+  Grid,
+  type GridProps,
+  Stack,
+  type StackProps,
+  stackVariants,
+} from "./components/layout";
 export { indicatorVariants, Progress, type ProgressProps } from "./components/progress";
+export { ProjectCard, type ProjectCardProps } from "./components/project-card";
+export { Prose, type ProseProps } from "./components/prose";
 export { Separator, type SeparatorProps } from "./components/separator";
 export { Skeleton } from "./components/skeleton";
 export { SocialCard, type SocialCardProps } from "./components/social-card";

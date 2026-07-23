@@ -45,7 +45,7 @@ export const SocialCard = React.forwardRef<HTMLDivElement, SocialCardProps>(
       title,
       eyebrow = "Martin Zachariassen",
       description,
-      footer = "mlz.no",
+      footer = "MLZ Design",
       tag,
       accent,
       width = BASE_W,

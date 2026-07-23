@@ -1,10 +1,13 @@
 # CLAUDE.md — @martinzachariassen/design
 
-MLZ Design: the shared design system (colour, type, style) distilled from
-[mlz.no](https://mlz.no), shipped as an installable **React + Tailwind v4**
-package that my other apps extend from. `README.md` has the full story; this file
-is the working brief for agents. Global defaults in `~/.config/claude/CLAUDE.md`
-still apply — this only adds repo specifics.
+MLZ Design: Martin Zachariassen's design system and **canonical source of truth**
+for colour, type, style and motion — shipped as an installable **React + Tailwind
+v4** package (plus a generated SwiftUI token layer) that every one of my other
+projects inherits, so nothing drifts. It's a public repo, but built first for
+cross-project consistency. This repo *is* the origin of the look — do not frame it
+as derived from any website. `README.md` has the full story; this file is the
+working brief for agents. Global defaults in `~/.config/claude/CLAUDE.md` still
+apply — this only adds repo specifics.
 
 ## Stack & commands
 
@@ -29,8 +32,8 @@ bun run changeset        # start a release (see below)
 
 `src/styles/theme.css` is the source of truth, authored in OKLCH:
 
-1. **Primitives** (`--mlz-*`) — the exact mlz.no brand values. **Components must
-   never reference these directly.**
+1. **Primitives** (`--mlz-*`) — the canonical MLZ brand values (the source of
+   truth). **Components must never reference these directly.**
 2. **Semantic** — shadcn-standard roles (`--background`, `--foreground`,
    `--primary`, `--accent`, `--border`, `--ring`, signals…), every surface paired
    with a `-foreground`. Light + dark (`.dark` / `data-theme`) + five accent
@@ -55,10 +58,13 @@ is exported as `signals.danger` in JS.
 - **Tailwind v4 in Storybook uses PostCSS** (`@tailwindcss/postcss` +
   `postcss.config.mjs`), NOT `@tailwindcss/vite` (open export-compat bug with
   Storybook's builder). `tsup` does not process CSS.
-- **Consumers** import `styles/theme.css` and must add
-  `@source "…/node_modules/@martinzachariassen/design/dist"` so Tailwind emits the
-  components' classes. Semantic names match shadcn/ui, so `npx shadcn add …` drops
-  in and inherits the palette.
+- **Consumers** inherit everything in two lines: `@import "tailwindcss"` then
+  `@import "@martinzachariassen/design/styles/index.css"`. That bundle pulls in
+  theme + fonts + base and self-declares `@source "../*.js"`, so the components'
+  classes emit with no manual `@source`. (The granular `theme.css`/`fonts.css`/
+  `base.css` exports still exist; those need the explicit `@source ".../dist"`.)
+  Semantic names match shadcn/ui, so `npx shadcn add …` drops in and inherits the
+  palette.
 - `*.stories.tsx` / `*.test.tsx` colocate under `src/`; they're typechecked and
   linted but never shipped (`files: ["dist"]`). Vitest runs with `globals: true`
   so Testing Library's auto-cleanup registers.

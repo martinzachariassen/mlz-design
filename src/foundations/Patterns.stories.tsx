@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Alert, AlertDescription, AlertTitle } from "../components/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/avatar";
+import { Avatar, AvatarFallback } from "../components/avatar";
 import { Badge } from "../components/badge";
 import { BrandLockup, BrandMark } from "../components/brand-mark";
 import { Button } from "../components/button";
@@ -64,9 +64,8 @@ export const Overview: Story = {
             <Kbd>⌘</Kbd>
             <Kbd>K</Kbd>
           </span>
-          <Avatar size="sm">
-            <AvatarImage src="https://avatars.githubusercontent.com/u/0" alt="" />
-            <AvatarFallback>MZ</AvatarFallback>
+          <Avatar size="sm" status="online">
+            <AvatarFallback tone="accent">MZ</AvatarFallback>
           </Avatar>
         </div>
       </header>
@@ -160,7 +159,7 @@ export const Overview: Story = {
                   <TabsContent value="signin" className="mt-5 space-y-4">
                     <div className="space-y-1.5">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="you@mlz.no" />
+                      <Input id="email" type="email" placeholder="you@example.com" />
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="password">Password</Label>

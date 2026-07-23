@@ -1,0 +1,358 @@
+/**
+ * Generate the SwiftUI token layer from the MLZ Design source of truth.
+ *
+ * The web system authors colour in OKLCH; SwiftUI's `Color` speaks sRGB, so this
+ * script converts every token to an 8-bit sRGB hex and emits a small, dependency-
+ * free Swift package (`swift/Sources/MLZDesign/*.swift`). Native iOS/macOS apps
+ * then inherit the exact same palette, type, spacing, radius and motion — the
+ * design system stays the single source of truth across platforms.
+ *
+ * Run:  bun run gen:swift
+ *
+ * Primitives + the accent families come straight from `src/tokens.ts`. The
+ * semantic light/dark maps are mirrored here from `theme.css` (the same
+ * hand-maintained-mirror discipline `tokens.ts` already uses) — when a semantic
+ * value in theme.css changes, update the matching entry below and re-run.
+ */
+
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { accents, colors, signals } from "../src/tokens";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const OUT_DIR = join(HERE, "..", "swift", "Sources", "MLZDesign");
+
+/* ── colour maths: OKLCH / hex → 8-bit sRGB hex ─────────────────────────── */
+
+function srgbGamma(x: number): number {
+  return x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055;
+}
+
+function oklchToRgb(L: number, C: number, Hdeg: number): [number, number, number] {
+  const h = (Hdeg * Math.PI) / 180;
+  const a = C * Math.cos(h);
+  const b = C * Math.sin(h);
+
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+
+  const l = l_ ** 3;
+  const m = m_ ** 3;
+  const s = s_ ** 3;
+
+  const lin = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+
+  return lin.map((v) => Math.round(Math.min(1, Math.max(0, srgbGamma(v))) * 255)) as [
+    number,
+    number,
+    number,
+  ];
+}
+
+function toHex(color: string): string {
+  const c = color.trim();
+  if (c.startsWith("#")) {
+    let hex = c.slice(1);
+    if (hex.length === 3)
+      hex = hex
+        .split("")
+        .map((ch) => ch + ch)
+        .join("");
+    return `0x${hex.toUpperCase()}`;
+  }
+  const m = c.match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/);
+  if (!m) throw new Error(`Unsupported colour format (only hex + oklch): "${color}"`);
+  const [r, g, b] = oklchToRgb(Number(m[1]), Number(m[2]), Number(m[3]));
+  return `0x${[r, g, b]
+    .map((n) => n.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase()}`;
+}
+
+/* ── the semantic layer, mirrored from theme.css (light + dark) ──────────── */
+
+/** [swiftName, lightValue, darkValue] — order is the emit order. */
+const SEMANTIC: [string, string, string][] = [
+  ["background", colors.paper, "oklch(0.20 0.004 110)"],
+  ["foreground", colors.ink, "oklch(0.93 0.006 100)"],
+  ["card", colors.paper, "oklch(0.23 0.004 110)"],
+  ["cardForeground", colors.ink, "oklch(0.93 0.006 100)"],
+  ["popover", colors.paper, "oklch(0.23 0.004 110)"],
+  ["popoverForeground", colors.ink, "oklch(0.93 0.006 100)"],
+  ["primary", colors.ink, "oklch(0.93 0.006 100)"],
+  ["primaryForeground", colors.paper, "oklch(0.20 0.004 110)"],
+  ["secondary", colors.paper2, "oklch(0.27 0.004 110)"],
+  ["secondaryForeground", colors.ink2, "oklch(0.86 0.006 100)"],
+  ["muted", colors.paper2, "oklch(0.27 0.004 110)"],
+  ["mutedForeground", "#63615a", "oklch(0.70 0.008 100)"],
+  ["accent", accents.cyan.base, accents.cyan.base],
+  ["accentDeep", accents.cyan.deep, "oklch(0.66 0.12 197)"],
+  ["accentForeground", colors.ink, "oklch(0.20 0.004 110)"],
+  ["border", colors.line, "oklch(0.31 0.004 110)"],
+  ["input", colors.line, "oklch(0.31 0.004 110)"],
+  ["ring", accents.cyan.base, accents.cyan.base],
+  ["destructive", signals.danger, "oklch(0.66 0.21 20)"],
+  ["destructiveForeground", colors.paper, "oklch(0.96 0.004 100)"],
+  ["success", signals.success, "oklch(0.70 0.13 152)"],
+  ["successForeground", colors.paper, "oklch(0.18 0.02 150)"],
+  ["warning", signals.warning, "oklch(0.83 0.15 80)"],
+  ["warningForeground", colors.ink, "oklch(0.20 0.02 80)"],
+  ["info", signals.info, "oklch(0.68 0.14 250)"],
+  ["infoForeground", colors.paper, "oklch(0.18 0.02 250)"],
+];
+
+/** Per-family readable foreground (from the `[data-accent]` rules in theme.css). */
+const ACCENT_FOREGROUND: Record<string, string> = {
+  cyan: colors.ink,
+  blue: colors.paper,
+  green: colors.ink,
+  rust: colors.paper,
+  ink: colors.paper,
+};
+
+/* ── emit ────────────────────────────────────────────────────────────────── */
+
+const HEADER = (what: string) =>
+  `// MLZ Design — ${what}
+// GENERATED by scripts/generate-swift-tokens.ts. Do not edit by hand.
+// Source of truth: src/tokens.ts + src/styles/theme.css. Run \`bun run gen:swift\`.
+`;
+
+function colorFile(): string {
+  const prims = [
+    ["paper", colors.paper],
+    ["paper2", colors.paper2],
+    ["paper3", colors.paper3],
+    ["ink", colors.ink],
+    ["ink2", colors.ink2],
+    ["line", colors.line],
+    ["dangerRed", signals.danger],
+  ]
+    .map(([name, v]) => `    public static let ${name} = Color(srgb: ${toHex(v as string)})`)
+    .join("\n");
+
+  const semantic = SEMANTIC.map(
+    ([name, light, dark]) =>
+      `    public static let ${name} = dynamic(light: ${toHex(light)}, dark: ${toHex(dark)})`,
+  ).join("\n");
+
+  const accentCases = (Object.keys(accents) as (keyof typeof accents)[])
+    .map((k) => {
+      const base = toHex(accents[k].base);
+      const deep = toHex(accents[k].deep);
+      const fg = toHex(ACCENT_FOREGROUND[k]);
+      return `        case .${k}: return (base: ${base}, deep: ${deep}, foreground: ${fg})`;
+    })
+    .join("\n");
+
+  return `${HEADER("colour tokens")}
+import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
+
+/// The MLZ palette. Brand primitives are fixed; semantic roles adapt to
+/// light/dark automatically. Swap the whole accent with \`\`MLZColor/accent(_:)\`\`.
+public enum MLZColor {
+
+    // MARK: Brand primitives (theme-independent)
+${prims}
+
+    // MARK: Semantic roles (light / dark adaptive)
+${semantic}
+
+    // MARK: Accent families
+    public enum Accent: String, CaseIterable, Sendable {
+        case cyan, blue, green, rust, ink
+    }
+
+    /// The (base, deep, foreground) triple for an accent family.
+    public static func palette(_ accent: Accent) -> (base: Color, deep: Color, foreground: Color) {
+        let hexes = hex(accent)
+        return (Color(srgb: hexes.base), Color(srgb: hexes.deep), Color(srgb: hexes.foreground))
+    }
+
+    /// The base colour of an accent family (its \`\`palette(_:)\`\` .base).
+    public static func accent(_ accent: Accent) -> Color { palette(accent).base }
+
+    private static func hex(_ accent: Accent) -> (base: UInt32, deep: UInt32, foreground: UInt32) {
+        switch accent {
+${accentCases}
+        }
+    }
+}
+
+// MARK: - sRGB / dynamic helpers
+
+extension Color {
+    /// Build a colour from a packed 0xRRGGBB sRGB value.
+    public init(srgb hex: UInt32) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8) & 0xFF) / 255,
+            blue: Double(hex & 0xFF) / 255,
+            opacity: 1
+        )
+    }
+}
+
+extension MLZColor {
+    /// A colour that resolves to \`light\` or \`dark\` from the active appearance.
+    static func dynamic(light: UInt32, dark: UInt32) -> Color {
+        #if canImport(UIKit)
+        return Color(UIColor { $0.userInterfaceStyle == .dark ? uiColor(dark) : uiColor(light) })
+        #elseif canImport(AppKit)
+        return Color(NSColor(name: nil) {
+            $0.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? nsColor(dark) : nsColor(light)
+        })
+        #else
+        return Color(srgb: light)
+        #endif
+    }
+
+    #if canImport(UIKit)
+    private static func uiColor(_ hex: UInt32) -> UIColor {
+        UIColor(
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
+        )
+    }
+    #elseif canImport(AppKit)
+    private static func nsColor(_ hex: UInt32) -> NSColor {
+        NSColor(
+            srgbRed: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
+        )
+    }
+    #endif
+}
+`;
+}
+
+function typographyFile(): string {
+  return `${HEADER("type tokens")}
+import SwiftUI
+
+/// The MLZ type families. These are the font *family* names — register the fonts
+/// in your app (bundle the .ttf + list them under \`UIAppFonts\`, or use a package
+/// resource) and these helpers resolve them. Robust: \`Font.custom\` falls back to
+/// the system face if a family is missing, so nothing renders blank.
+public enum MLZFont {
+    public static let hand    = "Architects Daughter"
+    public static let mono    = "Space Mono"
+    public static let grotesk = "Space Grotesk"
+    public static let serif   = "Instrument Serif"
+
+    /// Hand-drawn display face (headlines, the wordmark feel).
+    public static func hand(_ size: CGFloat, relativeTo style: Font.TextStyle = .largeTitle) -> Font {
+        .custom(hand, size: size, relativeTo: style)
+    }
+    /// Monospace — the technical body/label face (the system default voice).
+    public static func mono(_ size: CGFloat, relativeTo style: Font.TextStyle = .body) -> Font {
+        .custom(mono, size: size, relativeTo: style)
+    }
+    /// Grotesk — clean headlines (social cards, marketing).
+    public static func grotesk(_ size: CGFloat, relativeTo style: Font.TextStyle = .title) -> Font {
+        .custom(grotesk, size: size, relativeTo: style)
+    }
+    /// Editorial serif.
+    public static func serif(_ size: CGFloat, relativeTo style: Font.TextStyle = .title) -> Font {
+        .custom(serif, size: size, relativeTo: style)
+    }
+}
+`;
+}
+
+function spacingFile(): string {
+  return `${HEADER("spacing scale")}
+import CoreGraphics
+
+/// A 4pt spacing grid — the native mirror of the web gap scale. Use these for
+/// padding, stack spacing and insets so rhythm matches across platforms.
+public enum MLZSpacing {
+    public static let grid: CGFloat = 4
+
+    public static let xxs: CGFloat = 2
+    public static let xs:  CGFloat = 4
+    public static let sm:  CGFloat = 8
+    public static let md:  CGFloat = 12
+    public static let base: CGFloat = 16
+    public static let lg:  CGFloat = 24
+    public static let xl:  CGFloat = 32
+    public static let xxl: CGFloat = 48
+    public static let huge: CGFloat = 64
+
+    /// Arbitrary multiple of the 4pt grid: \`MLZSpacing.step(5)\` → 20.
+    public static func step(_ n: CGFloat) -> CGFloat { grid * n }
+}
+`;
+}
+
+function radiusFile(): string {
+  return `${HEADER("radius scale")}
+import CoreGraphics
+
+/// Corner radii — the brand leans sharp/technical, so corners stay tight. Mirrors
+/// the CSS \`--radius-*\` scale (base 4pt).
+public enum MLZRadius {
+    public static let sm: CGFloat = 2
+    public static let md: CGFloat = 4
+    public static let lg: CGFloat = 6
+    public static let xl: CGFloat = 10
+}
+`;
+}
+
+function motionFile(): string {
+  return `${HEADER("motion tokens")}
+import SwiftUI
+
+/// The signature easing + durations, as ready-made \`Animation\`s. \`easeOut\` is the
+/// house curve (entrances, hovers); \`easeInOut\` is the symmetric loop curve.
+public enum MLZMotion {
+    public static let durationFast: Double = 0.15
+    public static let durationBase: Double = 0.3
+    public static let durationSlow: Double = 0.9
+
+    public static func easeOut(_ duration: Double = durationBase) -> Animation {
+        .timingCurve(0.22, 0.61, 0.36, 1, duration: duration)
+    }
+    public static func easeInOut(_ duration: Double = durationBase) -> Animation {
+        .timingCurve(0.65, 0, 0.35, 1, duration: duration)
+    }
+
+    /// The default entrance/hover animation.
+    public static let standard = easeOut()
+}
+`;
+}
+
+mkdirSync(OUT_DIR, { recursive: true });
+
+const files: [string, string][] = [
+  ["MLZColor.swift", colorFile()],
+  ["MLZTypography.swift", typographyFile()],
+  ["MLZSpacing.swift", spacingFile()],
+  ["MLZRadius.swift", radiusFile()],
+  ["MLZMotion.swift", motionFile()],
+];
+
+for (const [name, contents] of files) {
+  writeFileSync(join(OUT_DIR, name), contents);
+  console.log(`  ✓ swift/Sources/MLZDesign/${name}`);
+}
+
+console.log(`\nGenerated ${files.length} Swift files → ${OUT_DIR}`);

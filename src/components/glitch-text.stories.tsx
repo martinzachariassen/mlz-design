@@ -30,7 +30,7 @@ export const InHeadline: Story = {
       <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
         Backend systems <span className="text-[var(--accent-deep)]">/</span> APIs
       </span>
-      <GlitchText text="mlz.no" className="font-hand text-6xl" />
+      <GlitchText text="mlz" className="font-hand text-6xl" />
     </div>
   ),
 };

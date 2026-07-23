@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "../lib/cn";
 
 /**
- * The mlz.no drifting "sketch marks": small CSS-drawn engineering glyphs (square,
+ * The MLZ drifting "sketch marks": small CSS-drawn engineering glyphs (square,
  * filled square, plus, line, angle) that float slowly up-screen, fading in and
  * out. A decorative background layer — `aria-hidden`, click-through, and disabled
  * by `prefers-reduced-motion` / `data-motion="off"` via the `animate-float` token.

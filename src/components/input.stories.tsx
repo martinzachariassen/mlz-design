@@ -10,7 +10,7 @@ const meta = {
     disabled: { control: "boolean" },
     type: { control: "select", options: ["text", "email", "password", "search", "number"] },
   },
-  args: { placeholder: "hi@mlz.no", type: "email" },
+  args: { placeholder: "you@example.com", type: "email" },
   parameters: { layout: "padded" },
 } satisfies Meta<typeof Input>;
 

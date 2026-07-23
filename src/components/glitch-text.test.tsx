@@ -5,8 +5,8 @@ import { GlitchText } from "./glitch-text";
 
 describe("GlitchText", () => {
   it("exposes the full text to assistive tech", () => {
-    render(<GlitchText text="mlz.no" />);
-    expect(screen.getByText("mlz.no")).toBeInTheDocument();
+    render(<GlitchText text="mlz" />);
+    expect(screen.getByText("mlz")).toBeInTheDocument();
   });
 
   it("splits into per-character spans hidden from screen readers", () => {

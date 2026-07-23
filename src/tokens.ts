@@ -68,6 +68,32 @@ export const radius = {
   base: "0.25rem",
 } as const;
 
-export const tokens = { colors, signals, accents, fonts, motion, animations, radius } as const;
+/**
+ * Breakpoint scale — mirrors Tailwind v4's defaults (min-width, mobile-first), so
+ * `sm:`/`md:`/`lg:` utilities and these JS values name the same thresholds. Use
+ * them for JS-driven layout (matchMedia, virtualisation, canvas) that has to agree
+ * with the CSS. The layout primitives (`Container`, `Stack`, `Grid`) are built on
+ * this same ladder.
+ */
+export const breakpoints = {
+  sm: "40rem",
+  md: "48rem",
+  lg: "64rem",
+  xl: "80rem",
+  "2xl": "96rem",
+} as const;
+
+export type Breakpoint = keyof typeof breakpoints;
+
+export const tokens = {
+  colors,
+  signals,
+  accents,
+  fonts,
+  motion,
+  animations,
+  radius,
+  breakpoints,
+} as const;
 
 export type Tokens = typeof tokens;

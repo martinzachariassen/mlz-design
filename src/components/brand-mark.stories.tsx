@@ -24,7 +24,7 @@ export const Lockup: StoryObj<typeof BrandLockup> = {
   render: () => (
     <div className="flex flex-col gap-6">
       <BrandLockup />
-      <BrandLockup tagline="mlz.no" size={32} />
+      <BrandLockup tagline="Martin Zachariassen" size={32} />
       <BrandLockup tagline="" size={56} />
     </div>
   ),

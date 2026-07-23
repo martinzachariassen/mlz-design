@@ -86,7 +86,7 @@ BrandMark.displayName = "BrandMark";
 
 /**
  * The logo lockup: the mark plus the `mlz` wordmark (hand display face) and an
- * optional mono, wide-tracked kicker — the mlz.no signature pairing. `horizontal`
+ * optional mono, wide-tracked kicker — the signature MLZ pairing. `horizontal`
  * (mark beside wordmark) is the primary lockup for headers and the OG card;
  * `stacked` (mark above a centred wordmark) suits square/avatar contexts and
  * splash screens.

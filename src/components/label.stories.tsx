@@ -21,7 +21,7 @@ export const WithField: Story = {
   render: () => (
     <div className="grid w-72 gap-2">
       <Label htmlFor="email">Email address</Label>
-      <Input id="email" type="email" placeholder="hi@mlz.no" />
+      <Input id="email" type="email" placeholder="you@example.com" />
       <p className="font-mono text-xs text-muted-foreground">We only use it to reply.</p>
     </div>
   ),

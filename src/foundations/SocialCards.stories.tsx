@@ -6,7 +6,7 @@ const meta = {
   component: SocialCard,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-  args: { title: "A design system, distilled from mlz.no" },
+  args: { title: "One design system, every project." },
   argTypes: {
     accent: {
       control: "inline-radio",
@@ -23,10 +23,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     eyebrow: "Martin Zachariassen",
-    title: "A design system, distilled from mlz.no",
+    title: "One design system, every project.",
     description:
       "Colour, type and motion as tokens — installable, themeable, and true to the brand.",
-    footer: "mlz.no",
+    footer: "MLZ Design",
     tag: "design",
     width: 900,
   },
@@ -96,7 +96,7 @@ export const GenerationRecipe: Story = {
 import { SocialCard } from "@martinzachariassen/design";
 
 export function GET(req: Request) {
-  const title = new URL(req.url).searchParams.get("title") ?? "mlz.no";
+  const title = new URL(req.url).searchParams.get("title") ?? "MLZ Design";
   return new ImageResponse(<SocialCard title={title} width={1200} />, {
     width: 1200,
     height: 630,
@@ -106,7 +106,7 @@ export function GET(req: Request) {
 
           <div className="rounded-[var(--radius-md)] border border-border p-4">
             <p className="mb-2 uppercase tracking-[0.14em] text-foreground">Head tags</p>
-            <pre className="overflow-x-auto whitespace-pre leading-relaxed">{`<meta property="og:image" content="https://mlz.no/og?title=Hello" />
+            <pre className="overflow-x-auto whitespace-pre leading-relaxed">{`<meta property="og:image" content="https://your-site.com/og?title=Hello" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />`}</pre>

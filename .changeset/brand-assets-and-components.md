@@ -26,6 +26,30 @@ for free):
 - **Foundations/Patterns** — a composed reference (app shell, dashboard, settings
   form, tabbed auth, alerts, activity list, empty state) documenting how to build
   UIs in the system's voice.
+- **One-import setup** — a new `styles/index.css` bundles the tokens, fonts and
+  base layer *and self-declares the package's Tailwind `@source`*, so a consuming
+  app inherits the whole system (including every component's classes) in two lines:
+  `@import "tailwindcss"` then `@import "@martinzachariassen/design/styles/index.css"`
+  — no manual `@source`, no separate imports. The granular `theme.css`/`fonts.css`/
+  `base.css` exports remain for finer control.
+- **Portfolio & long-form** — `ProjectCard` (portfolio card with an on-brand
+  grid+monogram cover, a `featured` horizontal layout, tags and a whole-card link),
+  a native-`<dialog>` `Dialog` (focus-trap, Esc and inert background for free —
+  no dependency), and `Prose` (token-styled long-form typography for blog/article
+  text). Two full-page Templates stories — Portfolio and Blog (index + reading
+  view) — each with a deliberate responsive alternate layout.
+- **Avatar** — reworked initials-first: `xs`–`xl` sizes, `circle`/`square` shapes,
+  presence `status` dots, fallback `tone`s, and an `AvatarGroup` (overlap + `+N`).
+  All stock/placeholder imagery removed from the stories and patterns.
+- **Layout & responsive** — new unstyled primitives `Container`, `Stack` and
+  `Grid` (auto-fit or fixed responsive columns), a `breakpoints` token scale
+  exported from `./tokens` (mirrors Tailwind's ladder), and a Foundations/Responsive
+  page showing the mobile→desktop app shell.
+- **SwiftUI token layer (iOS/macOS)** — a generated, dependency-free Swift package
+  under `swift/` (`MLZColor`, `MLZFont`, `MLZSpacing`, `MLZRadius`, `MLZMotion`).
+  `bun run gen:swift` converts the OKLCH tokens to sRGB and emits it from the same
+  source of truth, so native apps inherit the exact palette (light/dark adaptive,
+  five accent families). A Platforms/SwiftUI page documents the web→Swift mapping.
 - **Accessibility** — the light `--muted-foreground` role is nudged a hair darker
   (`#63615a`) so muted text clears WCAG AA (4.5:1) on every paper surface (the
   `--mlz-muted` primitive is unchanged); `Alert` titles now render in high-contrast
