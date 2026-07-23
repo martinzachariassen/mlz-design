@@ -35,15 +35,17 @@ export const accents = {
 } as const satisfies Record<AccentName, { base: string; deep: string }>;
 
 export const fonts = {
-  hand: '"Architects Daughter", cursive',
-  mono: '"Space Mono", ui-monospace, "SFMono-Regular", monospace',
-  grotesk: '"Space Grotesk", ui-sans-serif, system-ui, sans-serif',
-  serif: '"Instrument Serif", ui-serif, Georgia, serif',
+  hand: '"Architects Daughter", "Comic Sans MS", cursive',
+  mono: '"Space Mono", ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace',
+  grotesk:
+    '"Space Grotesk", ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+  serif: '"Instrument Serif", ui-serif, Georgia, "Times New Roman", serif',
 } as const;
 
 export const motion = {
   easeOut: "cubic-bezier(.22, .61, .36, 1)",
-  durationFast: "0.2s",
+  easeInOut: "cubic-bezier(.65, 0, .35, 1)",
+  durationFast: "0.15s",
   durationBase: "0.3s",
   durationSlow: "0.9s",
 } as const;
