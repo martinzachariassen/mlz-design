@@ -21,6 +21,7 @@ bun run lint / lint:fix  # Biome (JS/TS only)
 bun run storybook        # dev playground on :6006
 bun run build:storybook  # static build → storybook-static/
 bun run serve:storybook  # node server.mjs (honours $PORT) — the Railway runtime
+bun run preview          # static token reference (preview/index.html) on :4321
 bun run changeset        # start a release (see below)
 ```
 
@@ -41,6 +42,11 @@ Components (`src/components/*.tsx`) use CVA + `tailwind-merge` via `cn()`
 (`src/lib/cn.ts`) and are styled purely from semantic-token utilities
 (`bg-primary`, `border-input`, `ring-ring`…). `src/tokens.ts` mirrors the values
 as typed JS (exported at `./tokens`). `src/foundations/*` are Storybook-only.
+
+`theme.css` is the source of truth; `src/tokens.ts` is a hand-maintained JS
+mirror that must match it value-for-value — **when you touch a token value,
+update both.** One naming quirk the mirror carries: the CSS `--destructive` role
+is exported as `signals.danger` in JS.
 
 ## Conventions that bite
 
