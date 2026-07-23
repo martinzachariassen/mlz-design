@@ -258,6 +258,69 @@
 }
 
 /* -----------------------------------------------------------------------------
+   4. MOTION  — the site's signature animations, distilled from mlz.no. Declaring
+   each as an `--animate-*` token in @theme makes it a real Tailwind utility
+   (`animate-rise`, `animate-blink`…), so motion is a token like colour is. Every
+   animation reuses the easing/duration tokens above, is disabled globally by
+   `prefers-reduced-motion` (base.css) and can be killed per-tree with
+   `data-motion="off"` (below).
+
+     rise        staggered fade + lift entrance. opacity:0 lives IN the keyframe
+                 with `backwards` fill (never on the element) so the first paint
+                 isn't blank — avoids Lighthouse's NO_FCP penalty.
+     pulse-soft  slow "breathing" opacity loop (brand mark, vignettes).
+     blink       hard on/off terminal-cursor blink (steps(1,end), not a fade).
+     float       decorative marks drifting up-screen; per-mark --mk-* custom props
+                 vary drift, rotation and peak opacity.
+     glitch      one-shot per-character cyberpunk RGB-split (uses --glitch-1/2).
+   -------------------------------------------------------------------------- */
+@theme {
+  --animate-rise:       rise var(--mlz-dur-slow) var(--ease-out) backwards;
+  --animate-pulse-soft: pulse-soft 5.2s var(--ease-in-out) infinite;
+  --animate-blink:      blink 1.4s steps(1, end) infinite;
+  --animate-float:      float linear infinite;
+  --animate-glitch:     glitch 0.4s steps(1, end) both;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translate3d(0, 8px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.55; }
+  }
+
+  @keyframes blink {
+    0%, 55%   { opacity: 1; }
+    56%, 100% { opacity: 0; }
+  }
+
+  @keyframes float {
+    0%       { opacity: 0;                 transform: translate3d(0, 0, 0) rotate(0); }
+    12%, 88% { opacity: var(--mk-op, 0.18); }
+    100%     { opacity: 0;                 transform: translate3d(var(--mk-dx, 10px), -130vh, 0) rotate(var(--mk-rot, 45deg)); }
+  }
+
+  @keyframes glitch {
+    0%, 100% { transform: translate(0);        text-shadow: none;                                             opacity: 1; }
+    18%      { transform: translate(-2px, -1px); text-shadow: 2px 0 var(--glitch-1), -2px 0 var(--glitch-2); }
+    34%      { transform: translate(2px, 1px);   text-shadow: -2px 0 var(--glitch-2), 2px 0 var(--glitch-1); clip-path: inset(0 0 48% 0); }
+    50%      { transform: translate(-1px, 0);                                                                 opacity: 0.65; }
+    66%      { transform: translate(2px, -1px);  text-shadow: -2px 0 var(--glitch-1), 2px 0 var(--glitch-2); clip-path: inset(44% 0 0 0); }
+    82%      { transform: translate(-1px, 1px);  text-shadow: 1px 0 var(--glitch-1), -1px 0 var(--glitch-2); }
+  }
+}
+
+/* The motion kill-switch: `<html data-motion="off">` (or on any subtree) stops
+   every animation without touching transitions. Pairs with the toolbar knob and
+   is a superset of the OS `prefers-reduced-motion` guard in base.css. */
+[data-motion="off"],
+[data-motion="off"] * {
+  animation: none !important;
+}
+
+/* -----------------------------------------------------------------------------
    Windows High Contrast / forced-colors — don't fight the OS palette; let system
    colours through and keep focus visible.
    -------------------------------------------------------------------------- */

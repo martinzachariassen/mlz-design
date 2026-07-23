@@ -1,0 +1,65 @@
+# mise (https://mise.jdx.dev) — pinned toolchain + task runner for this repo.
+# Quickstart:  mise install   →   mise run setup   →   mise run storybook
+# List tasks:  mise tasks
+
+[tools]
+# Matches package.json "engines" (node >= 20.16 for Storybook 10, bun >= 1.1).
+node = "22"
+bun = "1.3"
+
+[env]
+# Storybook's Railway runtime server (server.mjs) honours $PORT.
+PORT = "6006"
+
+# ── Setup ────────────────────────────────────────────────────────────────────
+[tasks.setup]
+description = "Install toolchain + dependencies (first-time setup)"
+run = "bun install"
+
+# ── Develop ──────────────────────────────────────────────────────────────────
+[tasks.dev]
+description = "Watch-build the package (tsup --watch)"
+run = "bun run dev"
+
+[tasks.storybook]
+description = "Run the Storybook playground on :6006"
+run = "bun run storybook"
+
+[tasks.preview]
+description = "Serve the static token reference on :4321"
+run = "bun run preview"
+
+# ── Quality ──────────────────────────────────────────────────────────────────
+[tasks.lint]
+description = "Biome check (JS/TS)"
+run = "bun run lint"
+
+[tasks.format]
+description = "Biome check --write (auto-fix)"
+run = "bun run lint:fix"
+
+[tasks.typecheck]
+description = "tsc --noEmit (strict)"
+run = "bun run typecheck"
+
+[tasks.test]
+description = "Vitest + Testing Library"
+run = "bun run test"
+
+# ── Build ────────────────────────────────────────────────────────────────────
+[tasks.build]
+description = "Build the package to dist/ (ESM + d.ts + styles)"
+run = "bun run build"
+
+[tasks.build-storybook]
+description = "Build the static Storybook site"
+run = "bun run build:storybook"
+
+# ── Aggregates ───────────────────────────────────────────────────────────────
+[tasks.check]
+description = "Run all fast checks (lint · typecheck · test)"
+depends = ["lint", "typecheck", "test"]
+
+[tasks.ci]
+description = "Full CI pipeline (lint · typecheck · test · build · build-storybook)"
+depends = ["lint", "typecheck", "test", "build", "build-storybook"]
