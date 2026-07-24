@@ -397,12 +397,14 @@ bun run lint          # Biome (lint:fix / format to write)
 bun run gen:swift     # regenerate the SwiftUI token layer
 bun run gen:banner    # regenerate assets/banner.svg (README header, embeds font subsets)
 bun run gen:assets    # render a repo's banner + social cards + favicons (--config <path> [--out <dir>] [--check])
-bun run preview       # static token reference page (preview/index.html) on :4321
+bun run preview       # static token reference page → http://localhost:4321/preview/
 ```
 
-`bun run preview` serves a dependency-free HTML page that consumes the tokens
-exactly as a real app would — a quick way to eyeball the palette without the full
-Storybook.
+`bun run preview` serves the repo over `http://localhost:4321`; open
+[`/preview/`](http://localhost:4321/preview/) for a dependency-free HTML page that
+reads `src/styles/*.css` directly and consumes the tokens exactly as a real app
+would — a quick way to eyeball the palette without the full Storybook. (It's a
+local sanity page, not the hosted playground — that's Storybook, see below.)
 
 Package layout:
 
