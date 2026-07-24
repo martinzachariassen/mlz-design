@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!-- Capture surface for the brand-asset generator. Not shipped and not part of
+     any app: the generator (generate.ts) boots this with Vite, injects one repo's
+     config as window.__BRAND__, and screenshots #asset per ?a= value. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>MLZ · brand asset capture</title>
+    <!-- Render-blocking so it applies before the first paint. In Vite dev the
+         module CSS (capture.css) is injected by JS *after* first paint, so
+         without this the float animation runs a few frames on the cold
+         navigation before it can be paused — making the first capture drift.
+         Pausing here (the marks seed a deterministic per-index delay) freezes
+         every capture at the same frame. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: transparent;
+      }
+      *,
+      *::before,
+      *::after {
+        /* biome-ignore lint/complexity/noImportantStyles: must override the
+           token/inline animation to freeze it before the first paint */
+        animation-play-state: paused !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./capture.tsx"></script>
+  </body>
+</html>

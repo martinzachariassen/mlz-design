@@ -27,6 +27,10 @@
       "types": "./dist/tokens.d.ts",
       "import": "./dist/tokens.js"
     },
+    "./brand-assets": {
+      "types": "./dist/brand-assets.d.ts",
+      "import": "./dist/brand-assets.js"
+    },
     "./styles/index.css": "./dist/styles/index.css",
     "./styles/theme.css": "./dist/styles/theme.css",
     "./styles/fonts.css": "./dist/styles/fonts.css",
@@ -49,6 +53,7 @@
     "preview": "python3 -m http.server 4321 --directory preview",
     "gen:swift": "bun scripts/generate-swift-tokens.ts",
     "gen:banner": "bun scripts/generate-banner.ts",
+    "gen:assets": "bun scripts/brand-assets/generate.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "bun run build && changeset publish",

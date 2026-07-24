@@ -1,0 +1,13 @@
+/* Same pipeline as .storybook/app.css — Tailwind + tokens + fonts + base, with
+   Tailwind scanning ../../src so the components' classes are emitted. Keeps the
+   captured assets pixel-identical to what Storybook renders. */
+@import "tailwindcss";
+@import "../../src/styles/theme.css";
+@import "../../src/styles/fonts.css";
+@import "../../src/styles/base.css";
+
+@source "../../src";
+
+/* The page reset and the deterministic animation freeze live in a render-blocking
+   <style> in index.html — they must apply before the first paint, which Vite's
+   JS-injected module CSS can't guarantee. */
