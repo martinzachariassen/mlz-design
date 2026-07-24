@@ -4,8 +4,8 @@
  * A static, self-contained mirror of the `RepoBanner` **standard** layout. Space
  * Mono / Space Grotesk are subset to just the glyphs each banner uses and embedded
  * as base64 `@font-face`, so the SVG renders identically everywhere (including
- * GitHub's `<img>` sandbox) with no external requests. Colour adapts to the
- * viewer's GitHub theme via `prefers-color-scheme`.
+ * GitHub's `<img>` sandbox) with no external requests. The banner always renders
+ * in the light palette, regardless of the viewer's GitHub theme.
  *
  * Emits two files:
  *   assets/banner.svg           — this repo's header (real copy).
@@ -140,7 +140,6 @@ ${face("Space Grotesk", 700, grotesk)}
 ${face("Space Mono", 700, mono700)}
 ${face("Space Mono", 400, mono400)}
 :root{--bg:#ecebe4;--fg:#1a1a18;--muted:#63615a;--line:#cbc9be;--card:#f2f1ea;--accent:#00c4c4;--period:#006e74;--gridc:26,26,24}
-@media (prefers-color-scheme:dark){:root{--bg:#21201d;--fg:#eceae3;--muted:#a3a199;--line:#46443f;--card:#2b2a26;--accent:#00c4c4;--period:#00c4c4;--gridc:236,235,228}}
 text{font-family:'Space Mono',monospace}
 .grid{stroke:rgb(var(--gridc));stroke-opacity:.05}
 .frame{stroke:var(--line);stroke-opacity:.7}
