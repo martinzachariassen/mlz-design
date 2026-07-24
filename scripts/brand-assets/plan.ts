@@ -13,6 +13,7 @@ export const M_POINTS =
 
 /** The one static asset: a hand-written favicon SVG (everything else is rendered). */
 export const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <title>mlz.</title>
   <rect x="1" y="1" width="30" height="30" rx="6" fill="#1a1a18"/>
   <polygon fill="#ecebe4" points="${M_POINTS}"/>
 </svg>

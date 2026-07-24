@@ -91,6 +91,8 @@ describe("FAVICON_SVG", () => {
     const svg = doc.documentElement;
     expect(svg.tagName.toLowerCase()).toBe("svg");
     expect(svg.getAttribute("viewBox")).toBe("0 0 32 32");
+    // A non-empty <title> keeps it accessible (and lint-clean).
+    expect(doc.querySelector("title")?.textContent?.trim()).toBeTruthy();
 
     // A rounded ink tile behind a paper-coloured glyph.
     expect(doc.querySelector("rect")?.getAttribute("fill")).toBe("#1a1a18");
