@@ -26,6 +26,8 @@ export interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   description?: React.ReactNode;
   /** Footer-left meta (domain, author…). */
   footer?: string;
+  /** Mono kicker under the wordmark in the lockup (shown at the OG card's 40px+ mark). */
+  tagline?: string;
   /** Small badge in the top-right (e.g. a section or tag). */
   tag?: string;
   /** Pin the card to one accent family regardless of the ambient one. */
@@ -46,6 +48,7 @@ export const SocialCard = React.forwardRef<HTMLDivElement, SocialCardProps>(
       eyebrow = "Martin Zachariassen",
       description,
       footer = "MLZ Design",
+      tagline = "Design System",
       tag,
       accent,
       width = BASE_W,
@@ -88,7 +91,7 @@ export const SocialCard = React.forwardRef<HTMLDivElement, SocialCardProps>(
 
         <div className="relative flex h-full flex-col justify-between p-[4.5em]">
           <div className="flex items-start justify-between">
-            <BrandLockup size={3.2 * 16} tagline="Design System" />
+            <BrandLockup size={3.2 * 16} tagline={tagline} />
             {tag ? (
               <span className="rounded-[var(--radius-sm)] border border-border bg-card px-[0.9em] py-[0.4em] font-mono text-[0.72em] uppercase tracking-[0.16em] text-muted-foreground">
                 {tag}

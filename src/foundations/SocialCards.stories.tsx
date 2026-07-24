@@ -83,11 +83,34 @@ export const GenerationRecipe: Story = {
         <h1 className="mt-3 font-hand text-5xl">Social cards</h1>
         <p className="mt-4 font-mono text-sm leading-relaxed text-muted-foreground">
           <code className="text-foreground">&lt;SocialCard /&gt;</code> is a real component at the
-          canonical 1200×630. Render it in a route and snapshot it, or feed the same markup to
-          Satori / <code className="text-foreground">@vercel/og</code> to emit a PNG per page.
+          canonical 1200×630. The turnkey path is the repo generator below; or render it in a route
+          and snapshot it, or feed the same markup to Satori /{" "}
+          <code className="text-foreground">@vercel/og</code> to emit a PNG per page.
         </p>
 
-        <div className="mt-8 space-y-4 font-mono text-[12px] text-muted-foreground">
+        <div className="mt-8 rounded-[var(--radius-md)] border border-accent/40 bg-card p-4 font-mono text-[12px] text-muted-foreground">
+          <p className="mb-2 uppercase tracking-[0.14em] text-foreground">
+            One command — banner + cards + favicons
+          </p>
+          <p className="mb-3 leading-relaxed">
+            A repo keeps one typed <code className="text-foreground">brand.config.ts</code> and runs
+            the generator; it renders these real components in headless Chromium and writes the
+            whole set. <code className="text-foreground">--check</code> re-renders and fails CI on
+            drift.
+          </p>
+          <pre className="overflow-x-auto whitespace-pre leading-relaxed">{`// brand.config.ts
+import { defineBrandAssets } from "@martinzachariassen/design/brand-assets";
+
+export default defineBrandAssets({
+  banner: { project: "mlz.no", eyebrow: "MLZ · Personal Site", /* … */ },
+  social: { title: "Senior Software Developer", tagline: "Personal Site", /* … */ },
+});
+
+// then, from the design system:
+bun run gen:assets --config ../mlz-no/brand.config.ts --out ../mlz-no`}</pre>
+        </div>
+
+        <div className="mt-4 space-y-4 font-mono text-[12px] text-muted-foreground">
           <div className="rounded-[var(--radius-md)] border border-border p-4">
             <p className="mb-2 uppercase tracking-[0.14em] text-foreground">
               Next.js — app/og/route.tsx

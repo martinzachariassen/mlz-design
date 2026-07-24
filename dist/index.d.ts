@@ -448,6 +448,8 @@ interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
     description?: React.ReactNode;
     /** Footer-left meta (domain, author…). */
     footer?: string;
+    /** Mono kicker under the wordmark in the lockup (shown at the OG card's 40px+ mark). */
+    tagline?: string;
     /** Small badge in the top-right (e.g. a section or tag). */
     tag?: string;
     /** Pin the card to one accent family regardless of the ambient one. */
