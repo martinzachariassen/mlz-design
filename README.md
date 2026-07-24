@@ -14,14 +14,14 @@ and can't drift.
 [![CI](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/martinzachariassen/mlz-design/badge)](https://scorecard.dev/viewer/?uri=github.com/martinzachariassen/mlz-design)
-[![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design?style=flat-square&color=1a1a18)](LICENSE)
-[![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?style=flat-square&label=version&color=1a1a18)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
+[![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design?style=flat-square&color=00c4c4)](LICENSE)
+[![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?style=flat-square&label=version&color=00c4c4)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
 
-![React 19](https://img.shields.io/badge/React-19-1a1a18?style=flat-square&logo=react)
-![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-1a1a18?style=flat-square&logo=tailwindcss)
-![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-1a1a18?style=flat-square&logo=typescript&logoColor=white)
-![Bun](https://img.shields.io/badge/Bun-1a1a18?style=flat-square&logo=bun&logoColor=white)
-![Storybook 10](https://img.shields.io/badge/Storybook-10-1a1a18?style=flat-square&logo=storybook)
+![React 19](https://img.shields.io/badge/React-19-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-FBF0DF?style=flat-square&logo=bun&logoColor=000)
+![Storybook 10](https://img.shields.io/badge/Storybook-10-FF4785?style=flat-square&logo=storybook&logoColor=white)
 
 </div>
 
