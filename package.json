@@ -50,7 +50,7 @@
     "build:storybook": "storybook build",
     "serve:storybook": "node server.mjs",
     "test-storybook": "test-storybook",
-    "preview": "python3 -m http.server 4321 --directory preview",
+    "preview": "python3 -m http.server 4321 --bind 127.0.0.1",
     "gen:swift": "bun scripts/generate-swift-tokens.ts",
     "gen:banner": "bun scripts/generate-banner.ts",
     "gen:assets": "bun scripts/brand-assets/generate.ts",

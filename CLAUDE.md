@@ -24,7 +24,7 @@ bun run lint / lint:fix  # Biome (JS/TS only)
 bun run storybook        # dev playground on :6006
 bun run build:storybook  # static build → storybook-static/
 bun run serve:storybook  # node server.mjs (honours $PORT) — the Railway runtime
-bun run preview          # static token reference (preview/index.html) on :4321
+bun run preview          # serve repo on :4321 → open /preview/ (static token reference)
 bun run changeset        # start a release (see below)
 ```
 
