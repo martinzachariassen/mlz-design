@@ -1387,6 +1387,7 @@ var SocialCard = React7.forwardRef(
     eyebrow = "Martin Zachariassen",
     description,
     footer = "MLZ Design",
+    tagline = "Design System",
     tag,
     accent,
     width = BASE_W2,
@@ -1420,7 +1421,7 @@ var SocialCard = React7.forwardRef(
           cornerMark("bottom-[1.5em] right-[1.5em] border-b-2 border-r-2"),
           /* @__PURE__ */ jsxs("div", { className: "relative flex h-full flex-col justify-between p-[4.5em]", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-start justify-between", children: [
-              /* @__PURE__ */ jsx(BrandLockup, { size: 3.2 * 16, tagline: "Design System" }),
+              /* @__PURE__ */ jsx(BrandLockup, { size: 3.2 * 16, tagline }),
               tag ? /* @__PURE__ */ jsx("span", { className: "rounded-[var(--radius-sm)] border border-border bg-card px-[0.9em] py-[0.4em] font-mono text-[0.72em] uppercase tracking-[0.16em] text-muted-foreground", children: tag }) : null
             ] }),
             /* @__PURE__ */ jsxs("div", { className: "max-w-[85%]", children: [
