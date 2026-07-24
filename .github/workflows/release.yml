@@ -1,13 +1,15 @@
 name: Release
 
-# Tag-driven release. Bump the version locally, then push a `v*` tag to publish:
-#   bun run changeset          # record the change
-#   bun run version-packages   # apply bumps + CHANGELOG, consume changesets
-#   git commit -am "release: v<x.y.z>"
-#   git tag v<x.y.z> && git push --follow-tags
+# Automated, Changesets-driven release to GitHub Packages.
+#
+# Add a changeset to each feature PR (`bun run changeset` — describe the change
+# and pick the semver bump). When PRs merge to main, this workflow opens/updates
+# a "version packages" PR that accumulates every pending bump and its CHANGELOG.
+# Merging THAT PR runs `changeset publish`, which publishes to GitHub Packages
+# and cuts the GitHub Release + tag. No manual version bumping or tagging.
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
 
 permissions:
   contents: read
@@ -20,8 +22,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write # push the version-packages branch + cut the release/tag
+      pull-requests: write # open/update the version-packages PR
+      packages: write # publish to GitHub Packages
       id-token: write # npm build provenance (Sigstore attestation)
     steps:
       - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
@@ -30,6 +33,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+          fetch-depth: 0 # Changesets walks history to build the changelog
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
@@ -40,7 +44,16 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@martinzachariassen"
       - run: bun install --frozen-lockfile
-      - run: bun run release
+      - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
+        with:
+          version: bun run version-packages # apply bumps + CHANGELOG, consume changesets
+          publish: bun run release # build, then `changeset publish` to GitHub Packages
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+          # Commit + push the version PR via the GitHub API, so it works under
+          # `persist-credentials: false` (no git-remote token needed).
+          commitMode: github-api
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"

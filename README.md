@@ -362,19 +362,31 @@ server.mjs  Dockerfile  railway.json   Railway deploy
 
 ## Releasing
 
-Uses [Changesets](https://github.com/changesets/changesets) → GitHub Packages,
-driven by a version **tag** (decoupled from the push-to-`main` CI build).
+Automated with [Changesets](https://github.com/changesets/changesets) → GitHub
+Packages. There's no manual version bump or tag — you only ever describe changes;
+`release.yml` does the rest on merge to `main`.
+
+**1. Add a changeset to your feature PR** — one per user-facing change:
 
 ```bash
-bun run changeset          # describe the change + pick a semver bump
-bun run version-packages   # apply the bump + CHANGELOG, consume changesets
-git commit -am "release: v<x.y.z>"
-git tag v<x.y.z>
-git push --follow-tags     # pushing the v* tag triggers release.yml
+bun run changeset   # describe the change + pick the semver bump; commit the file
 ```
 
-Pushing a `v*` tag runs `release.yml`, which builds and `changeset publish`es to
-GitHub Packages.
+**2. Merge the PR.** `release.yml` sees the pending changeset and opens (or
+updates) a **"version packages"** PR that applies every accumulated bump, updates
+each `CHANGELOG`, and consumes the changesets.
+
+**3. Merge the "version packages" PR** when you're ready to ship. That merge runs
+`bun run release` (build + `changeset publish`), which publishes to GitHub Packages
+with build **provenance** and cuts the matching GitHub Release + tag.
+
+So the whole release surface is two merges: your change, then the version PR — no
+local tagging, no `publish` from a laptop.
+
+> Publishing stays on **GitHub Packages**, so consumers keep the `.npmrc` +
+> `read:packages` token from [Quickstart](#quickstart). The committed `dist/` is
+> the token-free fallback for `bun add github:martinzachariassen/mlz-design` — keep
+> it fresh (`bun run build`) in any PR that changes `src/`.
 
 ## Roadmap
 
