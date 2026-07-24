@@ -16,37 +16,16 @@
  * assets (a Chromium bump can change antialiasing).
  */
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, isAbsolute, join, resolve } from "node:path";
+import { dirname, isAbsolute, resolve } from "node:path";
 import react from "@vitejs/plugin-react";
 import { type Browser, chromium, type Page } from "playwright";
 import { createServer, type ViteDevServer } from "vite";
-import { type BrandAssetsConfig, DEFAULT_PATHS } from "../../src/brand-assets";
+import type { BrandAssetsConfig } from "../../src/brand-assets";
 import { encodeIco } from "./ico";
+import { icoPath, type Target, targets } from "./plan";
 
 const HERE = dirname(new URL(import.meta.url).pathname);
 const REPO_ROOT = resolve(HERE, "..", "..");
-
-const M_POINTS =
-  "7,25 7,7 12,7 16,14.5 20,7 25,7 25,25 20.6,25 20.6,13.6 17.4,19.4 14.6,19.4 11.4,13.6 11.4,25";
-const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect x="1" y="1" width="30" height="30" rx="6" fill="#1a1a18"/>
-  <polygon fill="#ecebe4" points="${M_POINTS}"/>
-</svg>
-`;
-
-interface Target {
-  /** Absolute output path. */
-  file: string;
-  /** Query string for the capture page (omit for the static SVG). */
-  query?: string;
-  /** Capture box in CSS px. */
-  w?: number;
-  h?: number;
-  /** Transparent background (icons with rounded corners). */
-  alpha?: boolean;
-  /** Literal contents instead of a screenshot (favicon.svg). */
-  svg?: string;
-}
 
 function parseArgs(argv: string[]) {
   const args: { config: string; out?: string; check: boolean } = {
@@ -59,38 +38,6 @@ function parseArgs(argv: string[]) {
     else if (argv[i] === "--check") args.check = true;
   }
   return args;
-}
-
-function targets(cfg: BrandAssetsConfig, root: string): Target[] {
-  const p = { ...DEFAULT_PATHS, ...cfg.paths };
-  const at = (dir: string, name: string) => join(root, dir, name);
-
-  const list: Target[] = [
-    { file: at(p.banner, "banner.png"), query: "a=banner", w: 1280, h: 340 },
-    { file: at(p.social, "og.png"), query: "a=og", w: 1200, h: 630 },
-    { file: at(p.social, "twitter-card.png"), query: "a=twitter", w: 1200, h: 630 },
-  ];
-
-  if (cfg.favicons !== false) {
-    list.push(
-      { file: at(p.icons, "favicon.svg"), svg: FAVICON_SVG },
-      { file: at(p.icons, "favicon-32.png"), query: "a=icon&size=32", w: 32, h: 32, alpha: true },
-      {
-        file: at(p.icons, "favicon-192.png"),
-        query: "a=icon&size=192",
-        w: 192,
-        h: 192,
-        alpha: true,
-      },
-      {
-        file: at(p.icons, "apple-touch-icon.png"),
-        query: "a=icon&size=180&variant=bleed&pad=3",
-        w: 180,
-        h: 180,
-      },
-    );
-  }
-  return list;
 }
 
 async function shoot(page: Page, base: string, t: Target): Promise<Buffer> {
@@ -186,8 +133,7 @@ async function main() {
           { size: 32, data: png32 },
         ]),
       );
-      const p = { ...DEFAULT_PATHS, ...cfg.paths };
-      emit(join(root, p.ico, "favicon.ico"), ico);
+      emit(icoPath(cfg, root), ico);
     }
   } finally {
     await browser?.close();
