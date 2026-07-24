@@ -23,9 +23,13 @@ and can't drift.
 ![Bun](https://img.shields.io/badge/Bun-FBF0DF?style=flat-square&logo=bun&logoColor=000)
 ![Storybook 10](https://img.shields.io/badge/Storybook-10-FF4785?style=flat-square&logo=storybook&logoColor=white)
 
+[About](#about) · [Quick start](#quick-start) · [Design system](#design-system) · [Brand assets](#brand-assets) · [Project structure](#project-structure) · [Playground](#playground)
+
 </div>
 
 ---
+
+## About
 
 MLZ Design is my **single source of truth for design**. Instead of re-deciding
 colours, spacing and components in every new app, I decide them once — here — and
@@ -58,9 +62,7 @@ properties, so anything that loads a stylesheet can use them.
 There's an **interactive Storybook** to try everything — colour, type, components,
 templates — with live theme and accent switches before you commit them elsewhere.
 
----
-
-## Quickstart
+## Quick start
 
 **1. Point the scope at GitHub Packages** — add `.npmrc` to your app repo:
 
@@ -120,9 +122,50 @@ are both available for your own markup.
 > individually, add `@source "../node_modules/@martinzachariassen/design/dist";`
 > so Tailwind still emits the component classes.
 
----
+## Tech stack
 
-## Theming at runtime
+| Layer          | Tooling                                                            |
+| -------------- | ----------------------------------------------------------------- |
+| Runtime        | **Bun** — install, scripts, test runner                           |
+| Language       | **TypeScript** (strict)                                            |
+| Build          | **tsup** → `dist` (ESM + `.d.ts`), then copies `src/styles`        |
+| Styling        | **Tailwind v4** + hand-authored **OKLCH** CSS custom properties    |
+| Components     | **React 19** with **CVA** + **tailwind-merge** via `cn()`          |
+| Native         | **SwiftUI** token layer generated into a **SwiftPM** package       |
+| Playground     | **Storybook 10** (+ a11y addon, theme/accent toolbar switches)     |
+| Tests          | **Vitest** + **Testing Library**                                   |
+| Lint / format  | **Biome** (scoped to JS/TS; CSS is hand-aligned, tool-free)        |
+| Hosting        | **Railway** via **Docker** (serves the static Storybook)          |
+| Release        | **Changesets** → **GitHub Packages** (scope `@martinzachariassen`) |
+
+## Design system
+
+The heart of the package: a three-layer token system, runtime theming, and a
+component set that reads only semantic tokens — so everything re-themes together.
+
+### Token architecture
+
+Three layers keep components decoupled from raw brand values
+(`src/styles/theme.css`):
+
+1. **Primitives** (`--mlz-*`) — the canonical MLZ brand values (paper hex, accent
+   oklch, font stacks, easings). This is the source of truth; components never
+   touch these directly.
+2. **Semantic** — shadcn/ui-standard role names, every surface paired with a
+   `-foreground`, plus signal roles (`destructive`/`success`/`warning`/`info`) each
+   with a solid, a foreground and a subtle tint. Light, dark and every
+   `data-accent` live here. **The only layer to read or override.**
+3. **`@theme inline`** — re-exports the semantic layer to Tailwind so tokens and
+   utilities are the same thing, and runtime swaps keep working.
+
+Beyond the core roles, the semantic layer also ships **subtle tints** for every
+accent/signal (`bg-accent-subtle`, `bg-warning-subtle`…, built with `color-mix`,
+so they follow the current theme and accent), a warm-tinted **elevation scale**
+(`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl` off
+`--radius`), and `--accent-deep`, `--overlay` and `--glitch-1/2` for hovers, scrims
+and the cyberpunk glitch motion.
+
+### Theming at runtime
 
 Swap by attribute on `<html>` — no rebuild:
 
@@ -135,7 +178,7 @@ Accent families: `cyan` (default), `blue`, `green`, `rust`, `ink`. Set them on t
 whole page or on any subtree — a local `<div class="dark">` becomes an inverted
 island, and `data-accent` re-tints just that branch.
 
-## Making it your own
+### Making it your own
 
 The point of the system is consistency *with room to adapt*. A consuming app never
 edits the brand primitives — it re-maps the **semantic layer** to taste, and every
@@ -152,7 +195,7 @@ component follows:
 Because names match **shadcn/ui**, `npx shadcn@latest add <component>` also drops
 straight in and inherits this palette with no extra wiring.
 
-## What's inside
+### Components
 
 Every component reads only semantic tokens, so all of them re-theme with the
 `class="dark"` / `data-accent` switches for free. Browse them live in Storybook.
@@ -198,20 +241,64 @@ Every component reads only semantic tokens, so all of them re-theme with the
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
-The banner at the top of this file is `RepoBanner` (standard layout), rendered to a
-self-contained, theme-adaptive `assets/banner.svg` by `bun run gen:banner`. That
-script also emits **`assets/banner-template.svg`** — a placeholder version any repo
-can copy as its layout starting point. For the full turnkey path — banner **plus**
-social cards and the favicon set, rendered per repo from one config — see
-[**Brand assets**](#brand-assets--one-face-across-every-repo) below.
-
 Storybook also ships composed references — **Foundations → Patterns** (dashboard,
 forms, alerts…) and full-page **Templates → Portfolio / Blog** — showing how to
-build real UIs in the system's voice, responsive by default.
+build real UIs in the system's voice, responsive by default. `cn()` (clsx +
+tailwind-merge) is exported for your own composition.
 
-`cn()` (clsx + tailwind-merge) is exported for your own composition.
+### Tokens in JS
 
-## Brand assets — one face across every repo
+For the times you need the values outside CSS (charts, canvas, email, framer-motion):
+
+```ts
+import { tokens, accents, colors, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
+
+accents.rust.base; // "oklch(0.66 0.15 45)"
+signals.warning;   // "oklch(0.80 0.15 78)"
+fonts.hand;        // '"Architects Daughter", "Comic Sans MS", cursive'
+motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
+radius.base;       // "0.25rem"
+breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia etc.
+```
+
+These mirror `theme.css` value-for-value. One naming quirk: the signal role
+called `--destructive` in CSS is exported as `signals.danger` in JS (same colour).
+
+### Fonts
+
+Space Mono (`mono`/body), Architects Daughter (`hand`/display), Space Grotesk
+(`grotesk`), Instrument Serif (`serif`). `styles/fonts.css` (bundled into
+`index.css`) loads them from Google Fonts for convenience; for production, self-host
+with Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
+file). The `--font-*` stacks carry robust system fallbacks either way.
+
+### Native (SwiftUI)
+
+The same tokens, on iOS/macOS. `swift/` is a small **generated** SwiftPM package
+(`MLZDesign`) with no dependencies — colour, type, spacing, radius and motion
+emitted from `src/tokens.ts` + `theme.css` so native apps can't drift from the web
+system either.
+
+```bash
+bun run gen:swift   # OKLCH → sRGB, writes swift/Sources/MLZDesign/*.swift
+```
+
+```swift
+import SwiftUI
+import MLZDesign
+
+Text("Ship it")
+    .font(MLZFont.hand(28))
+    .foregroundStyle(MLZColor.foreground)   // light/dark adaptive
+    .padding(MLZSpacing.lg)
+    .background(MLZColor.card)
+    .tint(MLZColor.accent(.rust))           // swap the whole accent family
+```
+
+`MLZColor` (semantic roles + brand primitives + five accent families), `MLZFont`,
+`MLZSpacing` (4pt grid), `MLZRadius`, `MLZMotion`. See [`swift/README.md`](swift/README.md).
+
+## Brand assets
 
 Every repo I build wears the same graphics — README banner, social share cards,
 and the full favicon / app-icon set — and they all come **out of the real
@@ -275,8 +362,6 @@ files) if a banner or card is out of date. No writes:
 bun run gen:assets --config ../mlz-no/brand.config.ts --out ../mlz-no --check
 ```
 
-### How it works
-
 The generator boots **Vite + headless Chromium** (Playwright), injects the config
 as `window.__BRAND__`, and screenshots the actual `<RepoBanner>` / `<SocialCard>` /
 `<BrandMark>` components at 2× DPI downsampled to canonical size — pixel-identical
@@ -292,81 +377,62 @@ consumer. What *is* exported is the config contract — `defineBrandAssets` and 
 `BrandAssetsConfig` type — at the `@martinzachariassen/design/brand-assets` subpath,
 so every repo's `brand.config.ts` is typed against the same source of truth.
 
-## Tokens in JS
+The README header banner at the top of this file is a self-contained,
+light-palette `assets/banner.svg` rendered from `RepoBanner` (standard layout) by
+`bun run gen:banner`. That script also emits **`assets/banner-template.svg`** — a
+placeholder any repo can copy as its layout starting point.
 
-For the times you need the values outside CSS (charts, canvas, email, framer-motion):
+## Project structure
 
-```ts
-import { tokens, accents, colors, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
-
-accents.rust.base; // "oklch(0.66 0.15 45)"
-signals.warning;   // "oklch(0.80 0.15 78)"
-fonts.hand;        // '"Architects Daughter", "Comic Sans MS", cursive'
-motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
-radius.base;       // "0.25rem"
-breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia etc.
+```
+src/
+  index.ts             barrel export
+  tokens.ts            typed token objects        → ./tokens
+  lib/cn.ts            clsx + tailwind-merge
+  components/*.tsx      Button, Input, Card, Dialog, ProjectCard, Prose… (+ .stories, .test)
+  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Responsive,
+                        Portfolio, Blog, Social Cards, Repo Banner, SwiftUI
+  styles/
+    index.css           the one-import bundle     → ./styles/index.css
+    theme.css           the token system          → ./styles/theme.css
+    fonts.css           font loading              → ./styles/fonts.css
+    base.css            optional base layer       → ./styles/base.css
+scripts/
+  generate-swift-tokens.ts   tokens → SwiftUI     (bun run gen:swift)
+  generate-banner.ts         README banner SVG    (bun run gen:banner)
+  brand-assets/        per-repo banner/cards/favicon generator (bun run gen:assets)
+    generate.ts          Vite + Playwright render + write / --check
+    plan.ts              pure write-list + paths (unit-tested)
+    ico.ts               PNG-in-ICO packer (unit-tested)
+    capture.tsx          the component surface screenshotted per asset
+swift/                 generated MLZDesign SwiftPM package (Package.swift + Sources/)
+.storybook/            Storybook config
+server.mjs  Dockerfile  railway.json   Railway deploy
 ```
 
-These mirror `theme.css` value-for-value. One naming quirk: the signal role
-called `--destructive` in CSS is exported as `signals.danger` in JS (same colour).
+Subpath exports mirror the layout: `.` (components), `./tokens` (typed JS values),
+`./styles/*` (the CSS bundle and its parts), and `./brand-assets` (the config
+contract). `*.stories.tsx` / `*.test.tsx` colocate with their source but never
+ship — `files: ["dist"]` keeps them out of the package.
 
-## Token architecture
+## Security & hardening
 
-Three layers keep components decoupled from raw brand values
-(`src/styles/theme.css`):
+Security and supply-chain integrity are gated in CI, with results in the repo's
+Security tab. See [`SECURITY.md`](SECURITY.md).
 
-1. **Primitives** (`--mlz-*`) — the canonical MLZ brand values (paper hex, accent
-   oklch, font stacks, easings). This is the source of truth; components never
-   touch these directly.
-2. **Semantic** — shadcn/ui-standard role names, every surface paired with a
-   `-foreground`, plus signal roles (`destructive`/`success`/`warning`/`info`) each
-   with a solid, a foreground and a subtle tint. Light, dark and every
-   `data-accent` live here. **The only layer to read or override.**
-3. **`@theme inline`** — re-exports the semantic layer to Tailwind so tokens and
-   utilities are the same thing, and runtime swaps keep working.
+| Concern                       | Defence                                                                 |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| Code vulnerabilities          | **CodeQL** static analysis on every PR                                  |
+| Vulnerable dependencies       | **Dependency Review** on PRs + **Dependabot** (npm / actions / docker)  |
+| CI / workflow integrity       | Actions **SHA-pinned**, **`step-security/harden-runner`**, **`zizmor`**  |
+| Package provenance            | **Sigstore** build provenance attached on publish                       |
+| Accessibility regressions     | **Storybook a11y** (axe, WCAG 2.1 A/AA) fails the build on any violation |
+| Unreviewed changes to `main`  | Protected branch, linear history, required green checks (admins too)    |
 
-Beyond the core roles, the semantic layer also ships **subtle tints** for every
-accent/signal (`bg-accent-subtle`, `bg-warning-subtle`…, built with `color-mix`,
-so they follow the current theme and accent), a warm-tinted **elevation scale**
-(`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl` off
-`--radius`), and `--accent-deep`, `--overlay` and `--glitch-1/2` for hovers, scrims
-and the cyberpunk glitch motion.
-
-## Native (SwiftUI)
-
-The same tokens, on iOS/macOS. `swift/` is a small **generated** SwiftPM package
-(`MLZDesign`) with no dependencies — colour, type, spacing, radius and motion
-emitted from `src/tokens.ts` + `theme.css` so native apps can't drift from the web
-system either.
-
-```bash
-bun run gen:swift   # OKLCH → sRGB, writes swift/Sources/MLZDesign/*.swift
-```
-
-```swift
-import SwiftUI
-import MLZDesign
-
-Text("Ship it")
-    .font(MLZFont.hand(28))
-    .foregroundStyle(MLZColor.foreground)   // light/dark adaptive
-    .padding(MLZSpacing.lg)
-    .background(MLZColor.card)
-    .tint(MLZColor.accent(.rust))           // swap the whole accent family
-```
-
-`MLZColor` (semantic roles + brand primitives + five accent families), `MLZFont`,
-`MLZSpacing` (4pt grid), `MLZRadius`, `MLZMotion`. See [`swift/README.md`](swift/README.md).
-
-## Fonts
-
-Space Mono (`mono`/body), Architects Daughter (`hand`/display), Space Grotesk
-(`grotesk`), Instrument Serif (`serif`). `styles/fonts.css` (bundled into
-`index.css`) loads them from Google Fonts for convenience; for production, self-host
-with Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
-file). The `--font-*` stacks carry robust system fallbacks either way.
-
----
+> **a11y notes.** The palette is tuned so text clears WCAG AA (4.5:1) with no
+> per-story exceptions: **`--accent-deep`** (house cyan) was deepened to land
+> ~5.1:1 on paper, and the **destructive** signal to ~4.8:1 under its light
+> foreground in both light and dark. The gate enforces every story unscoped.
 
 ## Playground
 
@@ -380,11 +446,27 @@ bun run build:storybook    # static build → storybook-static/
 bun run serve:storybook    # serve the static build (honours $PORT)
 ```
 
-### Deploy to Railway
+## Deployment
 
-The repo ships a `Dockerfile` (Bun install → Storybook build → tiny zero-dependency
-Node static server binding `$PORT`) and a `railway.json`. Point a Railway service
-at this repo and it builds and serves the playground with no extra config.
+The Storybook playground deploys to **Railway** from the `Dockerfile` (Bun install
+→ Storybook build → a tiny zero-dependency Node static server binding `$PORT` on
+`0.0.0.0`). `railway.json` selects the Dockerfile builder, runs `node server.mjs`,
+and health-checks `/` (restart on failure). Point a Railway service at this repo and
+it builds and serves the playground with no extra config.
+
+## Configuration
+
+The static server and runtime theming are the only knobs — there is no build config
+to consume this package.
+
+| Variable | Default | Effect                                                        |
+| -------- | ------- | ------------------------------------------------------------- |
+| `PORT`   | `8080`  | Port the playground static server binds (Railway injects it). |
+
+Visual configuration is done at runtime, not via env — set `class="dark"` /
+`data-theme` and `data-accent` on `<html>` (or any subtree) as described in
+[Theming at runtime](#theming-at-runtime); consuming apps re-map the semantic tokens
+per [Making it your own](#making-it-your-own).
 
 ## Development
 
@@ -403,52 +485,7 @@ bun run preview       # static token reference page → http://localhost:4321/pr
 `bun run preview` serves the repo over `http://localhost:4321`; open
 [`/preview/`](http://localhost:4321/preview/) for a dependency-free HTML page that
 reads `src/styles/*.css` directly and consumes the tokens exactly as a real app
-would — a quick way to eyeball the palette without the full Storybook. (It's a
-local sanity page, not the hosted playground — that's Storybook, see below.)
-
-Package layout:
-
-```
-src/
-  index.ts             barrel export
-  tokens.ts            typed token objects        → ./tokens
-  lib/cn.ts            clsx + tailwind-merge
-  components/*.tsx      Button, Input, Card, Dialog, ProjectCard, Prose… (+ .stories, .test)
-  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Responsive,
-                        Portfolio, Blog, Social Cards, Repo Banner, SwiftUI
-  styles/
-    index.css           the one-import bundle     → ./styles/index.css
-    theme.css           the token system          → ./styles/theme.css
-    fonts.css           font loading              → ./styles/fonts.css
-    base.css            optional base layer       → ./styles/base.css
-scripts/
-  generate-swift-tokens.ts   tokens → SwiftUI     (bun run gen:swift)
-  brand-assets/        per-repo banner/cards/favicon generator (bun run gen:assets)
-    generate.ts          Vite + Playwright render + write / --check
-    plan.ts              pure write-list + paths (unit-tested)
-    ico.ts               PNG-in-ICO packer (unit-tested)
-    capture.tsx          the component surface screenshotted per asset
-swift/                 generated MLZDesign SwiftPM package (Package.swift + Sources/)
-.storybook/            Storybook config
-server.mjs  Dockerfile  railway.json   Railway deploy
-```
-
-## Quality & CI
-
-- **CI** (`.github/workflows/ci.yml`): lint · typecheck · test · build ·
-  build-storybook, plus a **Storybook a11y** job that runs axe (WCAG 2.1 A/AA) over
-  every story in a headless browser — a violation fails the build.
-- **Security & supply-chain**: **CodeQL** and **Dependency Review**, **OpenSSF
-  Scorecard** and **`zizmor`** (Actions static analysis) with results in the
-  Security tab, plus **Dependabot** for updates. Every workflow pins its actions to
-  a commit SHA and runs under `step-security/harden-runner`; releases publish with
-  build **provenance** (Sigstore). See [`SECURITY.md`](SECURITY.md).
-- `main` is protected (enforced for admins) and merges require green checks.
-
-> **a11y notes.** The palette is tuned so text clears WCAG AA (4.5:1) with no
-> per-story exceptions: **`--accent-deep`** (house cyan) was deepened to land
-> ~5.1:1 on paper, and the **destructive** signal to ~4.8:1 under its light
-> foreground in both light and dark. The gate enforces every story unscoped.
+would — a quick way to eyeball the palette without the full Storybook.
 
 ## Releasing
 
@@ -474,7 +511,7 @@ So the whole release surface is two merges: your change, then the version PR —
 local tagging, no `publish` from a laptop.
 
 > Publishing stays on **GitHub Packages**, so consumers keep the `.npmrc` +
-> `read:packages` token from [Quickstart](#quickstart). The committed `dist/` is
+> `read:packages` token from [Quick start](#quick-start). The committed `dist/` is
 > the token-free fallback for `bun add github:martinzachariassen/mlz-design` — keep
 > it fresh (`bun run build`) in any PR that changes `src/`.
 
@@ -483,6 +520,10 @@ local tagging, no `publish` from a laptop.
 - [ ] Overlay components (Dropdown, Tooltip, Popover) alongside the native `Dialog`
 - [ ] Glitch + cursor-spotlight motion helpers as an opt-in module
 - [ ] Grow the SwiftUI layer beyond tokens — view modifiers and the core components
+
+## License
+
+**MIT** © Martin Zachariassen. See [`LICENSE`](LICENSE).
 
 ---
 
