@@ -41,7 +41,9 @@ bun run changeset        # start a release (see below)
 3. `@theme inline` — re-exports the semantic layer to Tailwind so tokens and
    utilities are the same thing (and runtime theme/accent swaps keep working).
 
-Components (`src/components/*.tsx`) use CVA + `tailwind-merge` via `cn()`
+Components (`src/components/<group>/*.tsx`, grouped by function — `forms`,
+`data-display`, `feedback`, `layout`, `overlay`, `brand`) use CVA +
+`tailwind-merge` via `cn()`
 (`src/lib/cn.ts`) and are styled purely from semantic-token utilities
 (`bg-primary`, `border-input`, `ring-ring`…). `src/tokens.ts` mirrors the values
 as typed JS (exported at `./tokens`). `src/foundations/*` are Storybook-only.

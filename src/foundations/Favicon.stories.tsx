@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { BrandLockup, BrandMark } from "../components/brand-mark";
+import { BrandLockup, BrandMark } from "../components/brand/brand-mark";
 
 const meta = {
   title: "Foundations/Brand & Favicon",

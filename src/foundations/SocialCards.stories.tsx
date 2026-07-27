@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SocialCard } from "../components/social-card";
+import { SocialCard } from "../components/brand/social-card";
 
 const meta = {
   title: "Foundations/Social Cards",
