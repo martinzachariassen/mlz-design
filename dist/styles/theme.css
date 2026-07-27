@@ -76,9 +76,12 @@
 }
 
 /* -----------------------------------------------------------------------------
-   2. SEMANTIC  — light theme (default). Components read only these.
+   2. SEMANTIC  — light theme (default). Components read only these. Also matched by
+   `[data-theme="light"]` so a subtree can force light even inside a `.dark`
+   ancestor (side-by-side light/dark, an always-light widget on a dark page…).
    -------------------------------------------------------------------------- */
-:root {
+:root,
+[data-theme="light"] {
   --radius: 0.25rem; /* the brand leans sharp/technical; corners stay tight */
 
   --background:            var(--mlz-paper);
@@ -135,10 +138,14 @@
   --font-serif: var(--mlz-font-serif);
 }
 
-/* Subtle tints & overlays — defined once; they resolve against whatever
-   `--background`/`--accent` are current, so they adapt to theme and accent
-   automatically (Radix "step 2/3" subtle-background idea, done with color-mix). */
-:root {
+/* Subtle tints & overlays — recomputed per theme scope. A custom property
+   substitutes its inner var()s at the element it's declared on, so a single
+   `:root` definition would freeze these to the light `--background` and never
+   adapt in dark. They therefore live in every theme block (light here, dark
+   below) so each resolves against its own `--background`/`--accent` (Radix
+   "step 2/3" subtle-background idea, done with color-mix). */
+:root,
+[data-theme="light"] {
   --accent-subtle:      color-mix(in oklch, var(--accent) 14%, var(--background));
   --destructive-subtle: color-mix(in oklch, var(--destructive) 10%, var(--background));
   --success-subtle:     color-mix(in oklch, var(--success) 12%, var(--background));
@@ -178,8 +185,8 @@
   --input:                 oklch(0.31 0.004 110);
   --ring:                  var(--mlz-cyan);
 
-  --destructive:            oklch(0.55 0.21 20);
-  --destructive-foreground: oklch(0.96 0.004 100);
+  --destructive:            oklch(0.64 0.19 20);
+  --destructive-foreground: oklch(0.18 0.02 20);
   --success:                oklch(0.70 0.13 152);
   --success-foreground:     oklch(0.18 0.02 150);
   --warning:                oklch(0.83 0.15 80);
@@ -191,6 +198,14 @@
   --glitch-2:              oklch(0.66 0.21 20);
 
   --overlay:              color-mix(in oklch, #000 70%, transparent);
+
+  /* Recomputed here so the tints resolve against the dark `--background`
+     (see the light-scope note above). */
+  --accent-subtle:      color-mix(in oklch, var(--accent) 14%, var(--background));
+  --destructive-subtle: color-mix(in oklch, var(--destructive) 10%, var(--background));
+  --success-subtle:     color-mix(in oklch, var(--success) 12%, var(--background));
+  --warning-subtle:     color-mix(in oklch, var(--warning) 16%, var(--background));
+  --info-subtle:        color-mix(in oklch, var(--info) 12%, var(--background));
 }
 
 /* -----------------------------------------------------------------------------

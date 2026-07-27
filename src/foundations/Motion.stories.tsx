@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { GlitchText } from "../components/glitch-text";
+import { GlitchText } from "../components/brand/glitch-text";
 
 const meta = {
   title: "Foundations/Motion",

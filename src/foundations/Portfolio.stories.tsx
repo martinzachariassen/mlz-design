@@ -1,8 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
-import { Badge } from "../components/badge";
-import { BrandLockup } from "../components/brand-mark";
-import { Button } from "../components/button";
+import { BrandLockup } from "../components/brand/brand-mark";
+import { ProjectCard } from "../components/brand/project-card";
+import { Badge } from "../components/data-display/badge";
+import { Button } from "../components/forms/button";
+import { Input } from "../components/forms/input";
+import { Label } from "../components/forms/label";
+import { Textarea } from "../components/forms/textarea";
+import { Container, Grid } from "../components/layout/layout";
+import { Separator } from "../components/layout/separator";
 import {
   Dialog,
   DialogContent,
@@ -10,13 +16,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../components/dialog";
-import { Input } from "../components/input";
-import { Label } from "../components/label";
-import { Container, Grid } from "../components/layout";
-import { ProjectCard } from "../components/project-card";
-import { Separator } from "../components/separator";
-import { Textarea } from "../components/textarea";
+} from "../components/overlay/dialog";
 
 const meta = {
   title: "Templates/Portfolio",

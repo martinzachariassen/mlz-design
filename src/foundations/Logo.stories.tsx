@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties } from "react";
-import { BrandLockup, BrandMark, BrandWordmark } from "../components/brand-mark";
-import { GridBackground } from "../components/grid-background";
+import { BrandLockup, BrandMark, BrandWordmark } from "../components/brand/brand-mark";
+import { GridBackground } from "../components/brand/grid-background";
 
 const meta = {
   title: "Foundations/Logo",

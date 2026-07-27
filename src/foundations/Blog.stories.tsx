@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Avatar, AvatarFallback } from "../components/avatar";
-import { Badge } from "../components/badge";
-import { BrandLockup } from "../components/brand-mark";
-import { Button } from "../components/button";
-import { Container, Grid } from "../components/layout";
-import { Prose } from "../components/prose";
-import { Separator } from "../components/separator";
+import { BrandLockup } from "../components/brand/brand-mark";
+import { Avatar, AvatarFallback } from "../components/data-display/avatar";
+import { Badge } from "../components/data-display/badge";
+import { Prose } from "../components/data-display/prose";
+import { Button } from "../components/forms/button";
+import { Container, Grid } from "../components/layout/layout";
+import { Separator } from "../components/layout/separator";
 
 const meta = {
   title: "Templates/Blog",
