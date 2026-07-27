@@ -3,7 +3,15 @@ import type { CSSProperties, ReactNode } from "react";
 
 const meta = {
   title: "Foundations/Colour Usage",
-  parameters: { layout: "fullscreen" },
+  parameters: {
+    layout: "fullscreen",
+    // This story deliberately juxtaposes passing and *failing* contrast to teach
+    // the rule — base accent as text on paper, accent-deep on ink, raw --mlz-*
+    // primitives, solid fills behind prose. Running axe's color-contrast check
+    // over intentional "don't" examples is self-defeating, so it's opted out
+    // here (only for this story). See .storybook/test-runner.ts.
+    a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } },
+  },
 } satisfies Meta;
 
 export default meta;

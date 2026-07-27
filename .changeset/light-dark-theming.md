@@ -23,3 +23,11 @@ docs so a downstream app can flip and use them correctly.
   tints, and the "read the semantic layer only" rule.
 - **Per-component `LightDark` stories** — every component now has a story that
   renders it in forced light and dark side by side, proving both themes at a glance.
+- **Dark-mode contrast fixes (surfaced by the new axe-over-every-story CI gate)** —
+  the `*-subtle` tints are now declared inside each theme scope instead of once on
+  `:root`. A custom property substitutes its inner `var()`s at its declaring element,
+  so the single `:root` definition had frozen the tints to the light `--background`,
+  leaving `foreground`/`muted-foreground` unreadable on them in dark (Alert, Card…).
+  Dark `--destructive` is also retuned (`oklch(0.64 0.19 20)` with a dark
+  `--destructive-foreground`) to match how success/warning/info already lift in dark,
+  so the outline destructive Button clears WCAG AA. Light values are unchanged.
