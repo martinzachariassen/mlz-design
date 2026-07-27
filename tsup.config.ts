@@ -7,5 +7,5 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   treeshake: true,
-  external: ["react", "react-dom"],
+  external: ["react", "react-dom", "@iconify/react", "@iconify/react/offline"],
 });

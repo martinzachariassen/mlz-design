@@ -223,6 +223,7 @@ Every component reads only semantic tokens, so all of them re-theme with the
 | `Tabs` (+ `List`/`Trigger`/`Content`) | Radix-free, keyboard-navigable  |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
+| `Icon`     | curated **Lucide** house set, shipped **offline** (no network); `currentColor`, `xs`–`xl` sizes, decorative by default / `label` for AT. Bring-your-own glyphs via `addCollection`. |
 
 **Layout & responsive**
 

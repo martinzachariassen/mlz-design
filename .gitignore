@@ -9,6 +9,12 @@ coverage/
 storecode/
 .storecode/
 
+# Generated but committed: the offline house icon set is bundled source data
+# (built by `bun run gen:icons`). A global macOS `Icon?` ignore matches the
+# `icons/` dir case-insensitively, so re-include the directory before the file.
+!src/icons/
+!src/icons/generated.ts
+
 # SwiftPM (swift/) build artifacts
 .build/
 .swiftpm/

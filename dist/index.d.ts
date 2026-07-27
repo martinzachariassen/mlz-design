@@ -1,3 +1,5 @@
+import { IconProps as IconProps$1, IconifyIcon } from '@iconify/react/offline';
+export { IconifyIcon, addCollection, addIcon } from '@iconify/react/offline';
 import * as class_variance_authority_types from 'class-variance-authority/types';
 import { VariantProps } from 'class-variance-authority';
 import * as React from 'react';
@@ -276,6 +278,434 @@ declare const badgeVariants: (props?: ({
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
 }
 declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.Element;
+
+/**
+ * The MLZ Design house icon set — inline Lucide data, offline and deterministic.
+ * Prefer the typed `<Icon name="…" />` component over reading this directly.
+ */
+declare const houseIcons: {
+    "arrow-down": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "arrow-left": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "arrow-right": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "arrow-up": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "arrow-up-right": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    bell: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    bookmark: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    calendar: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    check: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "check-check": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "chevron-down": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "chevron-left": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "chevron-right": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "chevron-up": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "chevrons-up-down": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    circle: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "circle-alert": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "circle-check": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "circle-help": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "circle-x": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    clipboard: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    clock: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    code: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "code-xml": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    command: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    copy: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    dot: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    download: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    ellipsis: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "ellipsis-vertical": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "external-link": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    eye: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "eye-off": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    file: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "file-text": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    filter: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    folder: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    github: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    heart: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    house: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    image: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    info: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "layout-grid": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    link: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "loader-circle": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    lock: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "lock-open": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "log-in": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "log-out": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    mail: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    menu: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    minus: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    moon: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "panel-left": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    pause: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    pencil: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    play: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    plus: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "refresh-cw": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "rotate-cw": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    save: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    search: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    send: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    settings: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "share-2": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    sparkles: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    star: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    sun: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    terminal: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "trash-2": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    "triangle-alert": {
+        body: string;
+        width: number;
+        height: number;
+    };
+    upload: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    user: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    users: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    x: {
+        body: string;
+        width: number;
+        height: number;
+    };
+    zap: {
+        body: string;
+        width: number;
+        height: number;
+    };
+};
+/** Union of every curated house icon name. */
+type IconName = keyof typeof houseIcons;
+/** Sorted list of every house icon name (handy for galleries / stories). */
+declare const iconNames: IconName[];
+
+/**
+ * Icon sizing. Glyphs inherit `currentColor` (colour them with `text-*`
+ * utilities), so these variants only set the box. Pass a Tailwind `size-*`
+ * class to override with an arbitrary size.
+ */
+declare const iconVariants: (props?: ({
+    size?: "default" | "xs" | "sm" | "lg" | "xl" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface IconProps extends Omit<IconProps$1, "icon" | "color">, VariantProps<typeof iconVariants> {
+    /** A curated house-set icon name (autocompletes). Mutually exclusive with `icon`. */
+    name?: IconName;
+    /**
+     * Raw Iconify icon data for a bring-your-own glyph — e.g. a name imported from
+     * an `@iconify-json/*` set. Mutually exclusive with `name`.
+     */
+    icon?: IconifyIcon;
+    /**
+     * Accessible label. When set, the icon is exposed to assistive tech as an
+     * image; when omitted (the default) it's decorative and hidden from AT.
+     */
+    label?: string;
+}
+/**
+ * The MLZ house icon. Renders a curated Lucide glyph fully offline (no network),
+ * inheriting `currentColor` and sized from the `size` scale. Decorative by
+ * default — pass `label` to make it meaningful to assistive tech.
+ *
+ * ```tsx
+ * <Icon name="settings" />                       // decorative
+ * <Icon name="trash-2" label="Delete" size="sm" className="text-destructive" />
+ * ```
+ */
+declare function Icon({ name, icon, label, size, className, ...props }: IconProps): React.JSX.Element | null;
+declare namespace Icon {
+    var displayName: string;
+}
 
 type KbdProps = React.HTMLAttributes<HTMLElement>;
 /** An inline keyboard key: mono, hairline-bordered, muted chip. */
@@ -568,4 +998,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
+export { AccentName, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Icon, type IconName, type IconProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
