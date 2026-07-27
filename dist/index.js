@@ -1817,7 +1817,7 @@ function themeInitScript(options = {}) {
     defaultAccent = "cyan",
     attribute = "class"
   } = options;
-  const s = JSON.stringify;
+  const s = (value) => JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
   const write = attribute === "class" ? `d.classList.toggle("dark",r==="dark");` : `d.setAttribute("data-theme",r);`;
   return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
 }

@@ -189,7 +189,18 @@ export function themeInitScript(options: ThemeInitScriptOptions = {}): string {
     defaultAccent = "cyan",
     attribute = "class",
   } = options;
-  const s = JSON.stringify;
+  // This string is inlined into an HTML <script>. JSON.stringify escapes JS
+  // string content but NOT the HTML-significant `<`, so a value containing
+  // "</script>" (or "<!--") could break out of the tag. Escape it to its unicode
+  // form — it decodes back to the identical runtime string, but can no longer
+  // terminate the script context (also handles the U+2028/U+2029 JS line breaks).
+  const s = (value: string): string =>
+    JSON.stringify(value)
+      .replace(/</g, "\\u003c")
+      .replace(/>/g, "\\u003e")
+      .replace(/&/g, "\\u0026")
+      .replace(/\u2028/g, "\\u2028")
+      .replace(/\u2029/g, "\\u2029");
   const write =
     attribute === "class"
       ? `d.classList.toggle("dark",r==="dark");`

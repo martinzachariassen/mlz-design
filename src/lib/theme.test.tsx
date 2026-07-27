@@ -140,4 +140,17 @@ describe("themeInitScript", () => {
     expect(script).toContain("setAttribute");
     expect(script).not.toContain("classList.toggle");
   });
+
+  it("escapes values so they cannot break out of the inline <script> tag", () => {
+    const evil = "</script><script>alert(1)</script>";
+    const script = themeInitScript({ storageKey: evil, accentStorageKey: "a b c" });
+    // No raw sequence can terminate the surrounding <script> or inject a new one.
+    expect(script).not.toContain("</script>");
+    expect(script).not.toContain("<script");
+    expect(script).not.toContain(" ");
+    expect(script).not.toContain(" ");
+    // …but the escaped value still decodes to the original at runtime.
+    const key = script.match(/getItem\(("(?:[^"\\]|\\.)*")\)/)?.[1];
+    expect(key && JSON.parse(key)).toBe(evil);
+  });
 });
