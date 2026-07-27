@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { BrandLockup, BrandMark, BrandWordmark } from "./brand-mark";
 
 const meta = {
@@ -38,5 +39,18 @@ export const Lockup: StoryObj<typeof BrandLockup> = {
       <BrandLockup size={44} tagline="Martin Zachariassen" />
       <BrandLockup orientation="stacked" size={52} />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex flex-col items-center gap-6">
+        <BrandMark variant="tile" size={72} />
+        <BrandWordmark size={36} />
+        <BrandLockup size={44} tagline="Martin Zachariassen" />
+      </div>
+    </ThemeSplit>
   ),
 };

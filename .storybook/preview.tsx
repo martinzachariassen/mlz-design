@@ -29,7 +29,7 @@ const preview: Preview = {
         order: [
           "Introduction",
           "Foundations",
-          ["Colours", "Typography", "Motion"],
+          ["Colours", "Colour Usage", "Typography", "Motion"],
           "Templates",
           "Platforms",
           "Components",

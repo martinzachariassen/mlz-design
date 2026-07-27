@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Skeleton } from "./skeleton";
 
 const meta = {
@@ -42,5 +43,19 @@ export const Card: Story = {
         <Skeleton className="h-3 w-3/5" />
       </div>
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-3 w-64" />
+        <Skeleton className="h-3 w-52" />
+        <Skeleton className="h-3 w-40" />
+        <Skeleton className="size-12 rounded-full" />
+      </div>
+    </ThemeSplit>
   ),
 };

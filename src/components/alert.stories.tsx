@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 
 const meta = {
@@ -71,5 +72,27 @@ export const WithIcon: Story = {
         classes.
       </AlertDescription>
     </Alert>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-full max-w-md flex-col gap-4">
+        <Alert variant="default">
+          <AlertTitle>Heads up</AlertTitle>
+          <AlertDescription>A neutral, card-like notice.</AlertDescription>
+        </Alert>
+        <Alert variant="success">
+          <AlertTitle>Deployed</AlertTitle>
+          <AlertDescription>Release v0.1.0 shipped to production.</AlertDescription>
+        </Alert>
+        <Alert variant="destructive">
+          <AlertTitle>Build failed</AlertTitle>
+          <AlertDescription>Typecheck reported 3 errors in dist.</AlertDescription>
+        </Alert>
+      </div>
+    </ThemeSplit>
   ),
 };

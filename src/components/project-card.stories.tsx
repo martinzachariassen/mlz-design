@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Grid } from "./layout";
 import { ProjectCard } from "./project-card";
 
@@ -73,5 +74,16 @@ export const CustomCover: Story = {
         }
       />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="w-full max-w-sm">
+        <ProjectCard {...PROJECTS[0]} />
+      </div>
+    </ThemeSplit>
   ),
 };

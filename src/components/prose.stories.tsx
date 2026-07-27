@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Prose } from "./prose";
 
 const meta = {
@@ -43,5 +44,23 @@ export const Article: Story = {
         moves with it.
       </p>
     </Prose>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <Prose>
+        <h2>Tokens first</h2>
+        <p>
+          Components read only the <em>semantic</em> layer, so a single change ripples everywhere.
+          Wrap a colour in a <code>--token</code> and the whole system moves with it.
+        </p>
+        <p>
+          The <a href="#tokens">token reference</a> has the full map.
+        </p>
+      </Prose>
+    </ThemeSplit>
   ),
 };

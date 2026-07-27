@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Badge } from "./badge";
 
 const meta = {
@@ -29,5 +30,20 @@ export const Variants: Story = {
       <Badge variant="muted">Muted</Badge>
       <Badge variant="destructive">Destructive</Badge>
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex flex-wrap items-center gap-3">
+        <Badge variant="default">Default</Badge>
+        <Badge variant="accent">Accent</Badge>
+        <Badge variant="outline">Outline</Badge>
+        <Badge variant="muted">Muted</Badge>
+        <Badge variant="destructive">Destructive</Badge>
+      </div>
+    </ThemeSplit>
   ),
 };

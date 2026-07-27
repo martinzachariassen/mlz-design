@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Input } from "./input";
 
 const meta = {
@@ -31,5 +32,17 @@ export const Disabled: Story = {
     <div className="w-72">
       <Input {...args} />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-72 flex-col gap-4">
+        <Input type="email" placeholder="you@example.com" />
+        <Input disabled placeholder="Unavailable" />
+      </div>
+    </ThemeSplit>
   ),
 };

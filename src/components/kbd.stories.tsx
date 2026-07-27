@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Kbd } from "./kbd";
 
 const meta = {
@@ -33,5 +34,20 @@ export const Combination: Story = {
       <span>+</span>
       <Kbd>K</Kbd>
     </p>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex flex-wrap items-center gap-2">
+        <Kbd>Esc</Kbd>
+        <Kbd>Tab</Kbd>
+        <Kbd>⏎</Kbd>
+        <Kbd>⌘</Kbd>
+        <Kbd>K</Kbd>
+      </div>
+    </ThemeSplit>
   ),
 };

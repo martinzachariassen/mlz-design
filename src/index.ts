@@ -90,5 +90,14 @@ export {
 } from "./components/tabs";
 export { Textarea, type TextareaProps } from "./components/textarea";
 export { cn } from "./lib/cn";
+export {
+  type ResolvedTheme,
+  type Theme,
+  type ThemeInitScriptOptions,
+  ThemeProvider,
+  type ThemeProviderProps,
+  themeInitScript,
+  useTheme,
+} from "./lib/theme";
 
 export * from "./tokens";

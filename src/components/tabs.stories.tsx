@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 const meta = {
@@ -42,5 +43,27 @@ export const TwoTabs: Story = {
       <TabsContent value="preview">The rendered component.</TabsContent>
       <TabsContent value="code">The source that produced it.</TabsContent>
     </Tabs>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <Tabs defaultValue="overview" className="w-72">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="activity">Activity</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview">
+          A distilled snapshot of the project — status, owners, and the last deploy.
+        </TabsContent>
+        <TabsContent value="activity">Recent commits, reviews, and releases.</TabsContent>
+        <TabsContent value="settings">
+          Visibility, integrations, and danger-zone controls.
+        </TabsContent>
+      </Tabs>
+    </ThemeSplit>
   ),
 };

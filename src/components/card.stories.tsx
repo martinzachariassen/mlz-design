@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Badge } from "./badge";
 import { BrandMark } from "./brand-mark";
 import { Button } from "./button";
@@ -196,5 +197,37 @@ export const Pricing: Story = {
         </Button>
       </CardFooter>
     </Card>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      {(["default", "elevated", "accent"] as const).map((variant) => (
+        <Card key={variant} variant={variant} className="w-64">
+          <CardHeader>
+            <CardTitle>{variant}</CardTitle>
+            <CardDescription>
+              The {variant} surface, styled purely from semantic tokens.
+            </CardDescription>
+            <CardAction>
+              <Badge variant="accent">ready</Badge>
+            </CardAction>
+          </CardHeader>
+          <CardContent>
+            <div className="h-16 rounded-[var(--radius-md)] border border-dashed border-border" />
+          </CardContent>
+          <CardFooter className="gap-3">
+            <Button variant="solid" size="sm">
+              Ship it
+            </Button>
+            <Button variant="ghost" size="sm">
+              Preview
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
+    </ThemeSplit>
   ),
 };

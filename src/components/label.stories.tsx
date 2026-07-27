@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Input } from "./input";
 import { Label } from "./label";
 
@@ -24,5 +25,18 @@ export const WithField: Story = {
       <Input id="email" type="email" placeholder="you@example.com" />
       <p className="font-mono text-xs text-muted-foreground">We only use it to reply.</p>
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="grid w-72 gap-2">
+        <Label htmlFor="email-ld">Email address</Label>
+        <Input id="email-ld" type="email" placeholder="you@example.com" />
+        <p className="font-mono text-xs text-muted-foreground">We only use it to reply.</p>
+      </div>
+    </ThemeSplit>
   ),
 };

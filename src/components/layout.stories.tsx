@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Container, Grid, Stack } from "./layout";
 
 const meta = {
@@ -66,5 +67,33 @@ export const GridFixedCols: Story = {
         <Box key={n}>{i + 1}</Box>
       ))}
     </Grid>
+  ),
+};
+
+function Plate({ children }: { children?: React.ReactNode }) {
+  return (
+    <div className="flex min-h-12 items-center justify-center rounded-[var(--radius-md)] border border-border bg-secondary px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+      {children}
+    </div>
+  );
+}
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <Container size="sm" gutter="none" className="flex flex-col gap-4">
+        <Stack direction="responsive" gap="md">
+          <Plate>First</Plate>
+          <Plate>Second</Plate>
+          <Plate>Third</Plate>
+        </Stack>
+        <Grid cols={3} gap="md">
+          {["a", "b", "c", "d", "e", "f"].map((n, i) => (
+            <Plate key={n}>Cell {i + 1}</Plate>
+          ))}
+        </Grid>
+      </Container>
+    </ThemeSplit>
   ),
 };

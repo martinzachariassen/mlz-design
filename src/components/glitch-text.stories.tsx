@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { GlitchText } from "./glitch-text";
 
 const meta = {
@@ -32,5 +33,18 @@ export const InHeadline: Story = {
       </span>
       <GlitchText text="mlz" className="font-hand text-6xl" />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <GlitchText
+        text="HOVER ME"
+        trigger="hover"
+        className="font-mono text-3xl uppercase tracking-[0.18em]"
+      />
+    </ThemeSplit>
   ),
 };

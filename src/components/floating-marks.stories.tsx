@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { FloatingMarks } from "./floating-marks";
 
 const meta = {
@@ -26,4 +27,18 @@ export const Default: Story = {};
 
 export const Dense: Story = {
   args: { count: 28 },
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="relative h-40 w-full overflow-hidden rounded-[var(--radius-md)] border border-border">
+        <FloatingMarks count={14} />
+        <div className="relative flex h-full items-center justify-center">
+          <span className="font-hand text-2xl text-foreground">Drifting marks</span>
+        </div>
+      </div>
+    </ThemeSplit>
+  ),
 };

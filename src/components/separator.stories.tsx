@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Separator } from "./separator";
 
 const meta = {
@@ -45,5 +46,20 @@ export const WithLabel: Story = {
     <div className="w-80">
       <Separator {...args} />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="w-64 font-mono text-sm text-muted-foreground">
+        <p>Primitives</p>
+        <Separator className="my-4" />
+        <p>Semantic tokens</p>
+        <Separator label="or" className="my-4" />
+        <p>Tailwind utilities</p>
+      </div>
+    </ThemeSplit>
   ),
 };

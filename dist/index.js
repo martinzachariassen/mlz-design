@@ -1607,7 +1607,108 @@ var Textarea = React7.forwardRef(
   )
 );
 Textarea.displayName = "Textarea";
+var THEMES = ["light", "dark", "system"];
+var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
+var ThemeContext = React7.createContext(null);
+var isBrowser = typeof window !== "undefined";
+function prefersDark() {
+  return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function readStored(key, fallback, allowed) {
+  if (!isBrowser) return fallback;
+  try {
+    const value = window.localStorage.getItem(key);
+    return value && allowed.includes(value) ? value : fallback;
+  } catch {
+    return fallback;
+  }
+}
+function writeStored(key, value) {
+  if (!isBrowser) return;
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+  }
+}
+function applyToDocument(resolved, accent, attribute) {
+  if (!isBrowser) return;
+  const root = document.documentElement;
+  if (attribute === "class") {
+    root.classList.toggle("dark", resolved === "dark");
+  } else {
+    root.setAttribute("data-theme", resolved);
+  }
+  root.setAttribute("data-accent", accent);
+}
+function ThemeProvider({
+  children,
+  defaultTheme = "system",
+  defaultAccent = "cyan",
+  storageKey = "mlz-theme",
+  accentStorageKey = "mlz-accent",
+  enableSystem = true,
+  attribute = "class"
+}) {
+  const [theme, setThemeState] = React7.useState(
+    () => readStored(storageKey, defaultTheme, THEMES)
+  );
+  const [accent, setAccentState] = React7.useState(
+    () => readStored(accentStorageKey, defaultAccent, ACCENTS)
+  );
+  const [systemDark, setSystemDark] = React7.useState(() => prefersDark());
+  const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
+  const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
+  React7.useEffect(() => {
+    if (!isBrowser || !enableSystem) return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => setSystemDark(mql.matches);
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [enableSystem]);
+  React7.useEffect(() => {
+    applyToDocument(resolvedTheme, accent, attribute);
+  }, [resolvedTheme, accent, attribute]);
+  const setTheme = React7.useCallback(
+    (next) => {
+      setThemeState(next);
+      writeStored(storageKey, next);
+    },
+    [storageKey]
+  );
+  const setAccent = React7.useCallback(
+    (next) => {
+      setAccentState(next);
+      writeStored(accentStorageKey, next);
+    },
+    [accentStorageKey]
+  );
+  const value = React7.useMemo(
+    () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
+    [theme, setTheme, resolvedTheme, accent, setAccent]
+  );
+  return /* @__PURE__ */ jsx(ThemeContext.Provider, { value, children });
+}
+function useTheme() {
+  const ctx = React7.useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error("useTheme must be used within a <ThemeProvider>.");
+  }
+  return ctx;
+}
+function themeInitScript(options = {}) {
+  const {
+    storageKey = "mlz-theme",
+    accentStorageKey = "mlz-accent",
+    defaultTheme = "system",
+    defaultAccent = "cyan",
+    attribute = "class"
+  } = options;
+  const s = JSON.stringify;
+  const write = attribute === "class" ? `d.classList.toggle("dark",r==="dark");` : `d.setAttribute("data-theme",r);`;
+  return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
+}
 
-export { Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, FloatingMarks, GlitchText, Grid, GridBackground, Input, Kbd, Label, Progress, ProjectCard, Prose, RepoBanner, Separator, Skeleton, SocialCard, Spinner, Stack, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Textarea, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants };
+export { Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, FloatingMarks, GlitchText, Grid, GridBackground, Input, Kbd, Label, Progress, ProjectCard, Prose, RepoBanner, Separator, Skeleton, SocialCard, Spinner, Stack, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Textarea, ThemeProvider, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Label } from "./label";
 import { Textarea } from "./textarea";
 
@@ -42,5 +43,17 @@ export const WithField: Story = {
       <Textarea id="brief" rows={4} placeholder="Tell me about the project…" />
       <p className="font-mono text-xs text-muted-foreground">Markdown is welcome.</p>
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="grid w-64 gap-2">
+        <Label htmlFor="brief-split">Project brief</Label>
+        <Textarea id="brief-split" rows={4} placeholder="Tell me about the project…" />
+      </div>
+    </ThemeSplit>
   ),
 };

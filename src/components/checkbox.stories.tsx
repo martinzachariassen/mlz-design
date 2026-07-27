@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Checkbox } from "./checkbox";
 import { Label } from "./label";
 
@@ -45,5 +46,19 @@ export const WithLabel: Story = {
         <p className="font-mono text-xs text-muted-foreground">Deploy to production on merge.</p>
       </div>
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex items-center gap-4">
+        <Checkbox aria-label="Unchecked" />
+        <Checkbox defaultChecked aria-label="Checked" />
+        <Checkbox disabled aria-label="Disabled" />
+        <Checkbox disabled defaultChecked aria-label="Disabled checked" />
+      </div>
+    </ThemeSplit>
   ),
 };

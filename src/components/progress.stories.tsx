@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Progress } from "./progress";
 
 const meta = {
@@ -52,5 +53,17 @@ export const Steps: Story = {
         <Progress key={value} value={value} />
       ))}
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-72 flex-col gap-4">
+        <Progress value={60} variant="default" />
+        <Progress value={40} variant="accent" />
+      </div>
+    </ThemeSplit>
   ),
 };

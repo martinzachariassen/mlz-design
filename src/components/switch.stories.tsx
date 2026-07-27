@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Label } from "./label";
 import { Switch } from "./switch";
 
@@ -45,5 +46,19 @@ export const WithLabel: Story = {
       </div>
       <Switch id="motion" defaultChecked />
     </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex items-center gap-4">
+        <Switch aria-label="Off switch" />
+        <Switch defaultChecked aria-label="On switch" />
+        <Switch disabled aria-label="Disabled switch" />
+        <Switch disabled defaultChecked aria-label="Disabled checked switch" />
+      </div>
+    </ThemeSplit>
   ),
 };

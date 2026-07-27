@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "./avatar";
 
 const meta = {
@@ -97,5 +98,29 @@ export const Group: Story = {
         </Avatar>
       ))}
     </AvatarGroup>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <Avatar size="lg" status="online">
+        <AvatarFallback>MZ</AvatarFallback>
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarFallback tone="accent">AC</AvatarFallback>
+      </Avatar>
+      <Avatar size="lg">
+        <AvatarFallback tone="muted">MU</AvatarFallback>
+      </Avatar>
+      <AvatarGroup max={3}>
+        {["MZ", "AL", "JR", "KP", "TS"].map((initials, i) => (
+          <Avatar key={initials}>
+            <AvatarFallback tone={i === 0 ? "accent" : "default"}>{initials}</AvatarFallback>
+          </Avatar>
+        ))}
+      </AvatarGroup>
+    </ThemeSplit>
   ),
 };

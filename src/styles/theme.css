@@ -76,9 +76,12 @@
 }
 
 /* -----------------------------------------------------------------------------
-   2. SEMANTIC  — light theme (default). Components read only these.
+   2. SEMANTIC  — light theme (default). Components read only these. Also matched by
+   `[data-theme="light"]` so a subtree can force light even inside a `.dark`
+   ancestor (side-by-side light/dark, an always-light widget on a dark page…).
    -------------------------------------------------------------------------- */
-:root {
+:root,
+[data-theme="light"] {
   --radius: 0.25rem; /* the brand leans sharp/technical; corners stay tight */
 
   --background:            var(--mlz-paper);

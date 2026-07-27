@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Spinner } from "./spinner";
 
 const meta = {
@@ -33,5 +34,16 @@ export const Inline: Story = {
       <Spinner size="sm" />
       Building package
     </p>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <Spinner size="sm" />
+      <Spinner size="default" />
+      <Spinner size="lg" />
+    </ThemeSplit>
   ),
 };

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Button } from "./button";
 
 const meta = {
@@ -48,4 +49,19 @@ export const Sizes: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex flex-wrap items-center gap-4">
+        <Button variant="default">Default</Button>
+        <Button variant="solid">Solid</Button>
+        <Button variant="accent">Accent</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="destructive">Destructive</Button>
+      </div>
+    </ThemeSplit>
+  ),
 };

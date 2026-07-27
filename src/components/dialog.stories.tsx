@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { ThemeSplit } from "../foundations/theme-split";
 import { Button } from "./button";
 import {
   Dialog,
@@ -54,6 +55,35 @@ export const Default: Story = {
       </>
     );
   },
+};
+
+/**
+ * The trigger and dialog surface across both themes. The content is rendered
+ * inline (not as a live modal) so both panes show the card styling at a glance.
+ */
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <Button variant="solid">New project</Button>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New project</DialogTitle>
+            <DialogDescription>Give it a name — you can change everything later.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-1.5">
+            <Label htmlFor="ld-project-name">Name</Label>
+            <Input id="ld-project-name" placeholder="aurora" />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="solid">Create</Button>
+          </DialogFooter>
+        </DialogContent>
+      </div>
+    </ThemeSplit>
+  ),
 };
 
 export const Destructive: Story = {

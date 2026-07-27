@@ -502,4 +502,70 @@ declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.Re
  */
 declare function cn(...inputs: ClassValue[]): string;
 
-export { AccentName, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Textarea, type TextareaProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants };
+/**
+ * MLZ Design — theme runtime.
+ *
+ * The tokens in `styles/theme.css` already carry a full light + dark palette and
+ * five `data-accent` families; all a consuming app needs is something to flip the
+ * `.dark` class (and `data-accent`) on `<html>`, remember the choice, and follow
+ * the OS when asked. That's this file — a tiny, zero-dependency, framework-agnostic
+ * provider (next-themes-shaped) so downstream apps get real light/dark + accent
+ * switching without hand-rolling it.
+ *
+ * Pair `<ThemeProvider>` with {@link themeInitScript} inlined in `<head>` to set
+ * the class before first paint (no flash of the wrong theme on load / SSR).
+ */
+type Theme = "light" | "dark" | "system";
+type ResolvedTheme = "light" | "dark";
+interface ThemeProviderProps {
+    children: React.ReactNode;
+    /** Initial theme when nothing is stored. Default `"system"`. */
+    defaultTheme?: Theme;
+    /** Initial accent family when nothing is stored. Default `"cyan"`. */
+    defaultAccent?: AccentName;
+    /** localStorage key for the theme. Default `"mlz-theme"`. */
+    storageKey?: string;
+    /** localStorage key for the accent. Default `"mlz-accent"`. */
+    accentStorageKey?: string;
+    /** Whether `"system"` is honoured (follows `prefers-color-scheme`). Default `true`. */
+    enableSystem?: boolean;
+    /**
+     * How the resolved theme is written to `<html>`. `"class"` toggles the `.dark`
+     * class (matches theme.css and the Storybook toolbar); `"data-theme"` sets
+     * `data-theme="light|dark"`. Default `"class"`.
+     */
+    attribute?: "class" | "data-theme";
+}
+interface ThemeContextValue {
+    /** The chosen theme, including `"system"`. */
+    theme: Theme;
+    setTheme: (theme: Theme) => void;
+    /** The concrete theme actually applied (`"system"` resolved to light/dark). */
+    resolvedTheme: ResolvedTheme;
+    accent: AccentName;
+    setAccent: (accent: AccentName) => void;
+}
+declare function ThemeProvider({ children, defaultTheme, defaultAccent, storageKey, accentStorageKey, enableSystem, attribute, }: ThemeProviderProps): React.JSX.Element;
+/** Read + control the current theme and accent. Must be used under `<ThemeProvider>`. */
+declare function useTheme(): ThemeContextValue;
+interface ThemeInitScriptOptions {
+    storageKey?: string;
+    accentStorageKey?: string;
+    defaultTheme?: Theme;
+    defaultAccent?: AccentName;
+    attribute?: "class" | "data-theme";
+}
+/**
+ * A blocking `<script>` body that applies the stored (or default) theme + accent
+ * to `<html>` *before first paint*, so there's no flash of the wrong theme on
+ * load. Inline the returned string in `<head>`, ahead of your styles:
+ *
+ * ```tsx
+ * <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
+ * ```
+ *
+ * Keep the options identical to the matching `<ThemeProvider>` props.
+ */
+declare function themeInitScript(options?: ThemeInitScriptOptions): string;
+
+export { AccentName, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
