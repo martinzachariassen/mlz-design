@@ -70,7 +70,9 @@
   /* Motion — the signature MLZ feel */
   --mlz-ease-out:    cubic-bezier(.22, .61, .36, 1);
   --mlz-ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --mlz-ease-glide:  cubic-bezier(.2, .7, .2, 1);   /* interactive lift — even, calm settle (not front-loaded) */
   --mlz-dur-fast:  .15s;
+  --mlz-dur-hover: .26s;                             /* hover/focus lift — deliberate, never snappy */
   --mlz-dur-base:  .3s;
   --mlz-dur-slow:  .9s;
 }
@@ -277,6 +279,8 @@
 
   --ease-out:    var(--mlz-ease-out);
   --ease-in-out: var(--mlz-ease-in-out);
+  --ease-glide:  var(--mlz-ease-glide);
+  --dur-hover:   var(--mlz-dur-hover);
 }
 
 /* -----------------------------------------------------------------------------

@@ -1,0 +1,65 @@
+/* =============================================================================
+   MLZ Design — fonts-self-hosted.css
+   The self-hosted, privacy-first, CSP-safe alternative to fonts.css. Ships the
+   WOFF2 files inside the package (under ./fonts/) and declares @font-face with
+   RELATIVE urls, so a consumer's bundler (Vite, etc.) fingerprints and serves
+   them same-origin — no Google Fonts CDN, no cross-origin round-trip, no visitor
+   IP leak. Ideal for apps with a strict `font-src 'self'` / `style-src 'self'`
+   Content-Security-Policy.
+
+       @import "@martinzachariassen/design/styles/fonts-self-hosted.css";
+
+   Currently ships the two workhorse UI families:
+     Space Mono    (400, 700)            → mono / sans  (body & default UI text)
+     Space Grotesk (400, 500, 600, 700)  → grotesk      (alt display / prose)
+
+   The display families (Architects Daughter → hand, Instrument Serif → serif)
+   are not bundled here yet; use fonts.css or self-host them separately if needed.
+   The `--font-*` stacks in theme.css carry robust system fallbacks regardless.
+   ============================================================================= */
+
+/* Space Mono — the technical default (maps to --font-mono and --font-sans). */
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/space-mono-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/space-mono-700.woff2") format("woff2");
+}
+
+/* Space Grotesk — the alt display / prose family (maps to --font-grotesk). */
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/space-grotesk-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/space-grotesk-500.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/space-grotesk-600.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/space-grotesk-700.woff2") format("woff2");
+}

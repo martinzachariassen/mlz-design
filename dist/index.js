@@ -1,4 +1,4 @@
-export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './chunk-WDGGZ5QK.js';
+export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './chunk-AMCCIDMK.js';
 import { Icon as Icon$1 } from '@iconify/react/offline';
 export { addCollection, addIcon } from '@iconify/react/offline';
 import { cva } from 'class-variance-authority';
@@ -6,6 +6,7 @@ import * as React25 from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
+import { createPortal } from 'react-dom';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -815,6 +816,38 @@ var AvatarGroup = React25.forwardRef(
   }
 );
 AvatarGroup.displayName = "AvatarGroup";
+var DataList = React25.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("dl", { ref, "data-slot": "data-list", className: cn("flex flex-col", className), ...props })
+);
+DataList.displayName = "DataList";
+var DataRow = React25.forwardRef(
+  ({ label, mono, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+    "div",
+    {
+      ref,
+      "data-slot": "data-row",
+      className: cn(
+        "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-b border-dashed border-border py-1.5 last:border-b-0",
+        className
+      ),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx("dt", { className: "text-sm text-muted-foreground", children: label }),
+        /* @__PURE__ */ jsx(
+          "dd",
+          {
+            className: cn(
+              "m-0 max-w-[64%] break-words text-right text-sm text-foreground",
+              mono && "font-mono text-[0.9em]"
+            ),
+            children
+          }
+        )
+      ]
+    }
+  )
+);
+DataRow.displayName = "DataRow";
 
 // src/icons/generated.ts
 var houseIcons = {
@@ -982,6 +1015,72 @@ var Prose = React25.forwardRef(
   )
 );
 Prose.displayName = "Prose";
+var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
+  variants: {
+    variant: {
+      success: "text-success",
+      warning: "text-warning",
+      destructive: "text-destructive",
+      info: "text-info",
+      accent: "text-accent",
+      muted: "text-muted-foreground"
+    }
+  },
+  defaultVariants: { variant: "muted" }
+});
+var StatusDot = React25.forwardRef(
+  ({ variant, pulse, label, className, ...props }, ref) => {
+    const a11y = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
+    return /* @__PURE__ */ jsxs(
+      "span",
+      {
+        ref,
+        "data-slot": "status-dot",
+        className: cn(statusDotVariants({ variant }), className),
+        ...a11y,
+        ...props,
+        children: [
+          pulse ? /* @__PURE__ */ jsx("span", { className: "absolute inline-flex size-full animate-ping rounded-full bg-current opacity-60 motion-reduce:hidden" }) : null,
+          /* @__PURE__ */ jsx("span", { className: "relative inline-flex size-full rounded-full bg-current" })
+        ]
+      }
+    );
+  }
+);
+StatusDot.displayName = "StatusDot";
+var textVariants = cva("", {
+  variants: {
+    variant: {
+      body: "text-sm text-foreground",
+      lead: "text-sm leading-relaxed text-muted-foreground",
+      muted: "text-muted-foreground",
+      mono: "font-mono text-[0.9em] text-foreground",
+      eyebrow: "font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+    },
+    size: {
+      xs: "text-xs",
+      sm: "text-sm",
+      base: "text-base",
+      lg: "text-lg"
+    }
+  },
+  defaultVariants: { variant: "body" }
+});
+var Text = React25.forwardRef(
+  ({ as, variant, size, className, ...props }, ref) => {
+    const Component = as ?? "span";
+    return /* @__PURE__ */ jsx(
+      Component,
+      {
+        ref,
+        "data-slot": "text",
+        className: cn(textVariants({ variant, size }), className),
+        ...props
+      }
+    );
+  }
+);
+Text.displayName = "Text";
 var alertVariants = cva(
   "relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--radius-md)] border border-l-2 px-4 py-3 text-sm transition-colors has-[>svg]:grid-cols-[1rem_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
@@ -1033,6 +1132,39 @@ var AlertDescription = React25.forwardRef(({ className, ...props }, ref) => /* @
   }
 ));
 AlertDescription.displayName = "AlertDescription";
+var calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
+  variants: {
+    variant: {
+      success: "",
+      warning: "",
+      destructive: "",
+      info: "",
+      accent: "",
+      muted: ""
+    }
+  },
+  defaultVariants: { variant: "muted" }
+});
+var Callout = React25.forwardRef(
+  ({ variant, title, description, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+    "div",
+    {
+      ref,
+      "data-slot": "callout",
+      className: cn(calloutVariants({ variant }), className),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx(StatusDot, { variant, pulse, className: "mt-1" }),
+        /* @__PURE__ */ jsxs("div", { className: "min-w-0", children: [
+          /* @__PURE__ */ jsx("p", { className: "font-medium text-foreground", children: title }),
+          description ? /* @__PURE__ */ jsx("p", { className: "mt-0.5 text-[0.92em] text-muted-foreground", children: description }) : null,
+          children
+        ] })
+      ]
+    }
+  )
+);
+Callout.displayName = "Callout";
 var indicatorVariants = cva(
   "h-full rounded-full transition-[width] duration-500 ease-[var(--ease-out)]",
   {
@@ -1104,7 +1236,7 @@ var Spinner = React25.forwardRef(
 );
 Spinner.displayName = "Spinner";
 var buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-200 ease-[var(--ease-out)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-200 [&_svg]:ease-[var(--ease-out)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-[var(--dur-hover)] ease-[var(--ease-glide)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-[var(--dur-hover)] [&_svg]:ease-[var(--ease-glide)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
   {
     variants: {
       variant: {
@@ -1239,6 +1371,193 @@ var Textarea = React25.forwardRef(
   )
 );
 Textarea.displayName = "Textarea";
+var AccordionContext = React25.createContext(null);
+function useAccordionContext(component) {
+  const context = React25.useContext(AccordionContext);
+  if (!context) throw new Error(`<${component}> must be used within <Accordion>`);
+  return context;
+}
+var ItemContext = React25.createContext(null);
+function useItemContext(component) {
+  const context = React25.useContext(ItemContext);
+  if (!context) throw new Error(`<${component}> must be used within <AccordionItem>`);
+  return context;
+}
+function toArray(value) {
+  if (value === void 0) return [];
+  return Array.isArray(value) ? value : [value];
+}
+var Accordion = React25.forwardRef(
+  ({
+    type = "single",
+    value,
+    defaultValue,
+    onValueChange,
+    collapsible = false,
+    className,
+    children,
+    ...props
+  }, ref) => {
+    const [uncontrolled, setUncontrolled] = React25.useState(() => toArray(defaultValue));
+    const isControlled = value !== void 0;
+    const open = isControlled ? toArray(value) : uncontrolled;
+    const order = React25.useRef([]);
+    const commit = React25.useCallback(
+      (next) => {
+        if (!isControlled) setUncontrolled(next);
+        onValueChange?.(type === "single" ? next[0] ?? "" : next);
+      },
+      [isControlled, onValueChange, type]
+    );
+    const toggle = React25.useCallback(
+      (item) => {
+        const isItemOpen = open.includes(item);
+        if (type === "single") {
+          commit(isItemOpen ? collapsible ? [] : open : [item]);
+        } else {
+          commit(isItemOpen ? open.filter((v) => v !== item) : [...open, item]);
+        }
+      },
+      [open, type, collapsible, commit]
+    );
+    const isOpen = React25.useCallback((item) => open.includes(item), [open]);
+    const register = React25.useCallback((item) => {
+      if (!order.current.includes(item)) order.current.push(item);
+    }, []);
+    const focusRelative = React25.useCallback(
+      (from, direction) => {
+        const items = order.current;
+        if (items.length === 0) return;
+        let nextValue;
+        if (direction === "first") nextValue = items[0];
+        else if (direction === "last") nextValue = items[items.length - 1];
+        else {
+          const index = items.indexOf(from);
+          if (index === -1) return;
+          nextValue = items[(index + direction + items.length) % items.length];
+        }
+        if (nextValue == null) return;
+        document.querySelector(
+          `[data-slot="accordion-trigger"][data-value="${nextValue}"]`
+        )?.focus();
+      },
+      []
+    );
+    const context = React25.useMemo(
+      () => ({ isOpen, toggle, register, focusRelative }),
+      [isOpen, toggle, register, focusRelative]
+    );
+    return /* @__PURE__ */ jsx(AccordionContext.Provider, { value: context, children: /* @__PURE__ */ jsx("div", { ref, "data-slot": "accordion", className: cn("flex flex-col", className), ...props, children }) });
+  }
+);
+Accordion.displayName = "Accordion";
+var AccordionItem = React25.forwardRef(
+  ({ value, className, children, ...props }, ref) => {
+    const { isOpen } = useAccordionContext("AccordionItem");
+    const reactId = React25.useId();
+    const open = isOpen(value);
+    const item = React25.useMemo(
+      () => ({
+        value,
+        open,
+        triggerId: `${reactId}-trigger`,
+        contentId: `${reactId}-content`
+      }),
+      [value, open, reactId]
+    );
+    return /* @__PURE__ */ jsx(ItemContext.Provider, { value: item, children: /* @__PURE__ */ jsx(
+      "div",
+      {
+        ref,
+        "data-slot": "accordion-item",
+        "data-state": open ? "open" : "closed",
+        className: cn("border-b border-border", className),
+        ...props,
+        children
+      }
+    ) });
+  }
+);
+AccordionItem.displayName = "AccordionItem";
+var AccordionTrigger = React25.forwardRef(
+  ({ className, children, hideIndicator, onKeyDown, ...props }, ref) => {
+    const { toggle, register, focusRelative } = useAccordionContext("AccordionTrigger");
+    const { value, open, triggerId, contentId } = useItemContext("AccordionTrigger");
+    React25.useEffect(() => register(value), [register, value]);
+    return /* @__PURE__ */ jsx("h3", { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
+      "button",
+      {
+        ref,
+        type: "button",
+        id: triggerId,
+        "data-slot": "accordion-trigger",
+        "data-value": value,
+        "data-state": open ? "open" : "closed",
+        "aria-expanded": open,
+        "aria-controls": contentId,
+        onClick: () => toggle(value),
+        onKeyDown: (event) => {
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            focusRelative(value, 1);
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            focusRelative(value, -1);
+          } else if (event.key === "Home") {
+            event.preventDefault();
+            focusRelative(value, "first");
+          } else if (event.key === "End") {
+            event.preventDefault();
+            focusRelative(value, "last");
+          }
+          onKeyDown?.(event);
+        },
+        className: cn(
+          "flex w-full items-center gap-3 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          className
+        ),
+        ...props,
+        children: [
+          children,
+          hideIndicator ? null : /* @__PURE__ */ jsx(
+            Icon,
+            {
+              name: "chevron-down",
+              size: "sm",
+              className: cn(
+                "ml-auto shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
+                open && "rotate-180 text-accent"
+              )
+            }
+          )
+        ]
+      }
+    ) });
+  }
+);
+AccordionTrigger.displayName = "AccordionTrigger";
+var AccordionContent = React25.forwardRef(({ className, children, ...props }, ref) => {
+  const { open, triggerId, contentId } = useItemContext("AccordionContent");
+  return (
+    // A `<section>` with an accessible name is an implicit `region` landmark.
+    /* @__PURE__ */ jsx(
+      "section",
+      {
+        id: contentId,
+        "aria-labelledby": triggerId,
+        "data-slot": "accordion-content",
+        "data-state": open ? "open" : "closed",
+        "aria-hidden": !open,
+        className: cn(
+          "grid transition-[grid-template-rows] duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        ),
+        children: /* @__PURE__ */ jsx("div", { className: "min-h-0 overflow-hidden", children: /* @__PURE__ */ jsx("div", { ref, className: cn("pb-4 text-sm text-muted-foreground", className), ...props, children }) })
+      }
+    )
+  );
+});
+AccordionContent.displayName = "AccordionContent";
 var cardVariants = cva(
   "rounded-[var(--radius-lg)] text-card-foreground transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out)]",
   {
@@ -1720,6 +2039,156 @@ var DialogClose = React25.forwardRef(
   }
 );
 DialogClose.displayName = "DialogClose";
+var GAP = 8;
+var MARGIN = 8;
+function InfoTip({
+  label,
+  title,
+  children,
+  icon = "info",
+  side = "auto",
+  open: controlledOpen,
+  onOpenChange,
+  className,
+  contentClassName
+}) {
+  const [uncontrolledOpen, setUncontrolledOpen] = React25.useState(false);
+  const isControlled = controlledOpen !== void 0;
+  const open = isControlled ? controlledOpen : uncontrolledOpen;
+  const [mounted, setMounted] = React25.useState(false);
+  const [position, setPosition] = React25.useState({
+    top: 0,
+    left: 0,
+    placement: "bottom",
+    ready: false
+  });
+  const triggerRef = React25.useRef(null);
+  const panelRef = React25.useRef(null);
+  const reactId = React25.useId();
+  const titleId = `${reactId}-title`;
+  const setOpen = React25.useCallback(
+    (next) => {
+      if (!isControlled) setUncontrolledOpen(next);
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange]
+  );
+  React25.useEffect(() => setMounted(true), []);
+  const reposition = React25.useCallback(() => {
+    const trigger = triggerRef.current;
+    const panel = panelRef.current;
+    if (!trigger || !panel) return;
+    const t = trigger.getBoundingClientRect();
+    const p = panel.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const spaceBelow = vh - t.bottom;
+    const spaceAbove = t.top;
+    const fitsBelow = spaceBelow >= p.height + GAP + MARGIN;
+    const placement = side === "top" ? "top" : side === "bottom" ? "bottom" : fitsBelow || spaceBelow >= spaceAbove ? "bottom" : "top";
+    const top = placement === "bottom" ? t.bottom + GAP : Math.max(MARGIN, t.top - p.height - GAP);
+    const centred = t.left + t.width / 2 - p.width / 2;
+    const left = Math.min(Math.max(MARGIN, centred), Math.max(MARGIN, vw - p.width - MARGIN));
+    setPosition({ top, left, placement, ready: true });
+  }, [side]);
+  React25.useLayoutEffect(() => {
+    if (!open) {
+      setPosition((prev) => prev.ready ? { ...prev, ready: false } : prev);
+      return;
+    }
+    reposition();
+    const onScroll = () => reposition();
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [open, reposition]);
+  React25.useEffect(() => {
+    if (!open) return;
+    panelRef.current?.focus();
+  }, [open]);
+  React25.useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    const onPointerDown = (event) => {
+      const target = event.target;
+      if (triggerRef.current?.contains(target) || panelRef.current?.contains(target)) return;
+      setOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("pointerdown", onPointerDown, true);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true);
+      document.removeEventListener("pointerdown", onPointerDown, true);
+    };
+  }, [open, setOpen]);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(
+      "button",
+      {
+        ref: triggerRef,
+        type: "button",
+        "data-slot": "info-tip-trigger",
+        "aria-label": label,
+        "aria-expanded": open,
+        "aria-haspopup": "dialog",
+        onClick: () => setOpen(!open),
+        className: cn(
+          "inline-flex size-[1.15em] shrink-0 cursor-help items-center justify-center rounded-full align-[-0.15em] text-muted-foreground transition-colors",
+          "hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          open && "text-accent",
+          className
+        ),
+        children: /* @__PURE__ */ jsx(Icon, { name: icon, "aria-hidden": true, className: "size-[0.95em]" })
+      }
+    ),
+    mounted && open ? createPortal(
+      /* @__PURE__ */ jsxs(
+        "div",
+        {
+          ref: panelRef,
+          tabIndex: -1,
+          role: "dialog",
+          "aria-labelledby": title ? titleId : void 0,
+          "aria-label": title ? void 0 : label,
+          "data-slot": "info-tip-content",
+          "data-placement": position.placement,
+          style: {
+            position: "fixed",
+            top: position.top,
+            left: position.left,
+            opacity: position.ready ? 1 : 0
+          },
+          className: cn(
+            "z-50 w-[min(20rem,calc(100vw-1rem))] rounded-[var(--radius-lg)] border border-border bg-popover p-3.5 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
+            contentClassName
+          ),
+          children: [
+            title ? /* @__PURE__ */ jsx(
+              "p",
+              {
+                id: titleId,
+                className: "mb-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-foreground",
+                children: title
+              }
+            ) : null,
+            /* @__PURE__ */ jsx("div", { className: "text-[13px] leading-relaxed text-muted-foreground", children })
+          ]
+        }
+      ),
+      document.body
+    ) : null
+  ] });
+}
+InfoTip.displayName = "InfoTip";
 var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
 var ThemeContext = React25.createContext(null);
@@ -1822,6 +2291,6 @@ function themeInitScript(options = {}) {
   return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
 }
 
-export { Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, FloatingMarks, GlitchText, Grid, GridBackground, Icon, Input, Kbd, Label, Progress, ProjectCard, Prose, RepoBanner, Separator, Skeleton, SocialCard, Spinner, Stack, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Textarea, ThemeProvider, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, FloatingMarks, GlitchText, Grid, GridBackground, Icon, InfoTip, Input, Kbd, Label, Progress, ProjectCard, Prose, RepoBanner, Separator, Skeleton, SocialCard, Spinner, Stack, StatusDot, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

@@ -94,6 +94,13 @@ emitted automatically. No manual `@source`, no separate imports. (Tailwind v4
 auto-scans your own files; the package just adds the one thing it can't see — the
 utility classes compiled into `node_modules`.)
 
+> **Strict CSP / privacy-first?** Use the self-hosted bundle instead —
+> `@import "@martinzachariassen/design/styles/index-self-hosted.css";`. It's
+> identical to `index.css` but loads the fonts from bundled WOFF2 files (Space Mono
+> + Space Grotesk) with relative urls, so your bundler serves them same-origin —
+> no Google Fonts CDN. Works under `font-src 'self'` / `style-src 'self'` and never
+> leaks a visitor IP to a third party.
+
 **4. Use it:**
 
 ```tsx
