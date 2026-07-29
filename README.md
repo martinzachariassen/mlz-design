@@ -123,6 +123,15 @@ Utilities (`bg-background`, `text-muted-foreground`, `border-border`, `font-hand
 `ring-ring`, `rounded-md`…) and raw variables (`var(--accent)`, `var(--ease-out)`…)
 are both available for your own markup.
 
+> **Typography in one rule: sans for reading, mono for data.** `font-sans` (Space
+> Grotesk) is the body/UI/prose reading face and the default; `font-mono` (Space
+> Mono) is for IPs, hashes, code, and tracked-out eyebrows — not long prose.
+> `font-serif` (editorial accent) and `font-hand` (the wordmark / one personality
+> moment) are opt-in, never body copy. Text tones `text-foreground` →
+> `text-muted-foreground` → `text-muted-foreground-2` step down in emphasis while
+> all clearing WCAG AA. See the **Foundations → Typography** story for the full
+> role map and do's & don'ts.
+
 > **Want finer control?** Skip `index.css` and import the pieces yourself:
 > `styles/theme.css` (tokens, required), `styles/fonts.css` (or self-host — see its
 > header) and `styles/base.css` (optional body defaults). If you import them
@@ -274,11 +283,15 @@ called `--destructive` in CSS is exported as `signals.danger` in JS (same colour
 
 ### Fonts
 
-Space Mono (`mono`/body), Architects Daughter (`hand`/display), Space Grotesk
-(`grotesk`), Instrument Serif (`serif`). `styles/fonts.css` (bundled into
-`index.css`) loads them from Google Fonts for convenience; for production, self-host
-with Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
-file). The `--font-*` stacks carry robust system fallbacks either way.
+Space Grotesk (`sans`/`grotesk`, the body/UI/prose **reading face** — the default
+mapped to `--font-sans`), Space Mono (`mono`, data/code/IDs & tracked eyebrows),
+Instrument Serif (`serif`, editorial accent) and Architects Daughter (`hand`,
+wordmark / one personality moment). `styles/fonts.css` (bundled into `index.css`)
+loads them from Google Fonts for convenience; for production, self-host with
+Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
+file). The `--font-*` stacks carry robust system fallbacks either way. For the
+role map, do's & don'ts and the legibility/a11y rules (sizing, line-height,
+measure, spacing), see the **Foundations → Typography** story.
 
 ### Native (SwiftUI)
 

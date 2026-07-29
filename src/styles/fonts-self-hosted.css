@@ -10,15 +10,19 @@
        @import "@martinzachariassen/design/styles/fonts-self-hosted.css";
 
    Currently ships the two workhorse UI families:
-     Space Mono    (400, 700)            → mono / sans  (body & default UI text)
-     Space Grotesk (400, 500, 600, 700)  → grotesk      (alt display / prose)
+     Space Grotesk (400, 500, 600, 700)  → sans / grotesk (body, UI & prose — the
+                                            reading face and the default; maps to
+                                            --font-sans and --font-grotesk)
+     Space Mono    (400, 700)            → mono           (data, code, IDs &
+                                            tracked eyebrows — never long prose;
+                                            maps to --font-mono)
 
    The display families (Architects Daughter → hand, Instrument Serif → serif)
    are not bundled here yet; use fonts.css or self-host them separately if needed.
    The `--font-*` stacks in theme.css carry robust system fallbacks regardless.
    ============================================================================= */
 
-/* Space Mono — the technical default (maps to --font-mono and --font-sans). */
+/* Space Mono — data / code / IDs & tracked eyebrows (maps to --font-mono). */
 @font-face {
   font-family: "Space Mono";
   font-style: normal;
@@ -34,7 +38,8 @@
   src: url("./fonts/space-mono-700.woff2") format("woff2");
 }
 
-/* Space Grotesk — the alt display / prose family (maps to --font-grotesk). */
+/* Space Grotesk — the body/UI/prose reading face and the default (maps to
+   --font-sans and --font-grotesk). */
 @font-face {
   font-family: "Space Grotesk";
   font-style: normal;
