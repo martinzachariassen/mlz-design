@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
-import { Icon } from "../data-display/icon";
 
 /**
  * A Radix-free, context-driven accordion. The root owns the open set (controlled
@@ -234,14 +233,21 @@ export const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTri
         >
           {children}
           {hideIndicator ? null : (
-            <Icon
-              name="chevron-down"
-              size="sm"
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className={cn(
-                "ml-auto shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
+                "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
                 open && "rotate-180 text-accent",
               )}
-            />
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
           )}
         </button>
       </h3>

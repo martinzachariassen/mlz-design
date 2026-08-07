@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 const meta = {
   title: "Foundations/Colours",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

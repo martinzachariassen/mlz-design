@@ -20,6 +20,7 @@ import {
 
 const meta = {
   title: "Templates/Portfolio",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 
@@ -31,8 +32,8 @@ const PROJECTS = [
     title: "MLZ Design",
     meta: "2026 · Design system",
     description:
-      "A token-driven React + Tailwind design system — colour, type and components every app inherits, now with a generated SwiftUI layer.",
-    tags: ["React", "Tailwind", "SwiftUI"],
+      "A token-driven React + Tailwind design system — colour, type and components every app inherits.",
+    tags: ["React", "Tailwind", "OKLCH"],
     href: "#",
   },
   {

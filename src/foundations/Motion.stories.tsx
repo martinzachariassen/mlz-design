@@ -3,6 +3,7 @@ import { GlitchText } from "../components/brand/glitch-text";
 
 const meta = {
   title: "Foundations/Motion",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

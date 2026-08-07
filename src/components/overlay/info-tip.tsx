@@ -1,8 +1,6 @@
 import * as React from "react";
 import { createPortal } from "react-dom";
-import type { IconName } from "../../icons/generated";
 import { cn } from "../../lib/cn";
-import { Icon } from "../data-display/icon";
 
 /**
  * An inline "info tip": a small icon button that sits in the flow of text and,
@@ -38,8 +36,6 @@ export interface InfoTipProps {
   title?: React.ReactNode;
   /** The explanation. Plain text or rich content (a link, `<code>`, …). */
   children: React.ReactNode;
-  /** House icon for the trigger. Defaults to `info`; `circle-help` is the other natural pick. */
-  icon?: IconName;
   /** Preferred side to open on. `auto` (default) flips to wherever there's room. */
   side?: "top" | "bottom" | "auto";
   /** Controlled open state. Provide `onOpenChange` alongside it. */
@@ -66,7 +62,6 @@ export function InfoTip({
   label,
   title,
   children,
-  icon = "info",
   side = "auto",
   open: controlledOpen,
   onOpenChange,
@@ -196,7 +191,20 @@ export function InfoTip({
           className,
         )}
       >
-        <Icon name={icon} aria-hidden className="size-[0.95em]" />
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="size-[0.95em]"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
       </button>
       {mounted && open
         ? createPortal(

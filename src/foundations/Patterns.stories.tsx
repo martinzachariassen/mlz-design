@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/layout/t
 
 const meta = {
   title: "Foundations/Patterns",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

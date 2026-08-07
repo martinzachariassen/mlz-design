@@ -21,10 +21,6 @@ run = "bun run dev"
 description = "Run the Storybook playground on :6006"
 run = "bun run storybook"
 
-[tasks.preview]
-description = "Serve the static token reference on :4321"
-run = "bun run preview"
-
 # ── Quality ──────────────────────────────────────────────────────────────────
 [tasks.lint]
 description = "Biome check (JS/TS)"

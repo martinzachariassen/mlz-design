@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 const meta = {
   title: "Foundations/Colour Usage",
+  tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
     // This story deliberately juxtaposes passing and *failing* contrast to teach

@@ -18,31 +18,46 @@ Beyond the core roles, the semantic layer also ships **subtle tints** for every 
 
 ```
 src/
-  index.ts             barrel export
-  tokens.ts            typed token objects        → ./tokens
-  lib/cn.ts            clsx + tailwind-merge
-  components/*.tsx      Button, Input, Card, Dialog, ProjectCard, Prose… (+ .stories, .test)
-  foundations/*.tsx     Introduction, Colours, Typography, Patterns, Logo, Responsive,
-                        Portfolio, Blog, Social Cards, Repo Banner, SwiftUI
+  index.ts              barrel export                        → .
+  tokens.ts             typed token objects                  → ./tokens
+  lib/
+    cn.ts               clsx + tailwind-merge
+    theme.tsx           ThemeProvider / useTheme / init script
+  components/           grouped by function, kebab-case files
+    brand/              BrandMark, GlitchText, ProjectCard, RepoBanner, SocialCard…
+    data-display/       Badge, Avatar, DataList, Prose, StatusDot, Text, Kbd
+    feedback/           Alert, Callout, Progress, Skeleton, Spinner
+    forms/              Button, Input, Label, Checkbox, Switch, Textarea
+    layout/             Card, Container/Stack/Grid, Accordion, Tabs, Separator
+    overlay/            Dialog, InfoTip
+  foundations/          Storybook-only: Introduction, Colours, Typography, Motion,
+                        Patterns, Logo, Responsive, Templates… + theme-split.tsx
   styles/
-    index.css           the one-import bundle     → ./styles/index.css
-    theme.css           the token system          → ./styles/theme.css
-    fonts.css           font loading              → ./styles/fonts.css
-    base.css            optional base layer       → ./styles/base.css
-scripts/
-  generate-swift-tokens.ts   tokens → SwiftUI     (bun run gen:swift)
-  generate-banner.ts         README banner SVG    (bun run gen:banner)
-  brand-assets/        per-repo banner/cards/favicon generator (bun run gen:assets)
-    generate.ts          Vite + Playwright render + write / --check
-    plan.ts              pure write-list + paths (unit-tested)
-    ico.ts               PNG-in-ICO packer (unit-tested)
-    capture.tsx          the component surface screenshotted per asset
-swift/                 generated MLZDesign SwiftPM package (Package.swift + Sources/)
-.storybook/            Storybook config
+    index.css           the one-import bundle                → ./styles/index.css
+    index-self-hosted.css  same, with bundled WOFF2 fonts    → ./styles/index-self-hosted.css
+    theme.css           the token system                     → ./styles/theme.css
+    fonts.css           font loading                         → ./styles/fonts.css
+    base.css            optional base layer                  → ./styles/base.css
+    fonts/              bundled WOFF2 (self-hosted bundle)
+docs/                   architecture, design system, contributing, security
+.storybook/             main.ts · preview.tsx · app.css · test-runner.ts
+.github/workflows/      ci · deploy · release · codeql · dependency-review · scorecard · zizmor
 wrangler.jsonc          Cloudflare Workers deploy config (static assets + custom domain)
+mise.toml               pinned toolchain + task aliases for the bun scripts
 ```
 
-Subpath exports mirror the layout: `.` (components), `./tokens` (typed JS values), `./styles/*` (the CSS bundle and its parts), and `./brand-assets` (the config contract). `*.stories.tsx` / `*.test.tsx` colocate with their source but never ship — `files: ["dist"]` keeps them out of the package.
+Subpath exports mirror the layout: `.` (components), `./tokens` (typed JS values), and `./styles/*` (the CSS bundle and its parts). `*.stories.tsx` / `*.test.tsx` colocate with their source but never ship — `files: ["dist"]` keeps them out of the package.
+
+## Storybook
+
+`.storybook/` is the playground and the reference doc site in one:
+
+- **`main.ts`** — story globs, the a11y and docs addons, and `react-docgen-typescript` with a `propFilter` that drops inherited React HTML attributes, so a props table shows only the component's own API.
+- **`preview.tsx`** — two independent toolbar dimensions (**Theme** light/dark, **Accent** across all five families) applied to the preview `<html>`, so every token in `theme.css` re-resolves live exactly as it would in a consuming app. Also sets the sidebar order and turns on `autodocs` globally.
+- **`app.css`** — imports Tailwind plus `theme.css` / `fonts.css` / `base.css` from `src/`, and `@source "../src"` so classes used only by stories still emit.
+- **`test-runner.ts`** — runs axe (WCAG 2.1 A/AA) against every story in a real browser; wired into CI as the `Storybook a11y` job.
+
+Autodocs is on for every story by default. Story files without a `component` (foundations, templates, multi-component compositions) opt out with `tags: ["!autodocs"]` so the sidebar doesn't fill with empty docs pages.
 
 ## Components
 

@@ -24,6 +24,7 @@ const preview: Preview = {
       expanded: true,
     },
     a11y: { test: "todo" },
+    docs: { toc: true },
     options: {
       storySort: {
         order: [
@@ -31,12 +32,13 @@ const preview: Preview = {
           "Foundations",
           ["Colours", "Colour Usage", "Typography", "Motion"],
           "Templates",
-          "Platforms",
           "Components",
         ],
       },
     },
   },
+  // Every component story gets a generated docs page (props table + variants).
+  tags: ["autodocs"],
   globalTypes: {
     theme: {
       description: "Colour theme",

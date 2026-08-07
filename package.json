@@ -27,10 +27,6 @@
       "types": "./dist/tokens.d.ts",
       "import": "./dist/tokens.js"
     },
-    "./brand-assets": {
-      "types": "./dist/brand-assets.d.ts",
-      "import": "./dist/brand-assets.js"
-    },
     "./styles/index.css": "./dist/styles/index.css",
     "./styles/index-self-hosted.css": "./dist/styles/index-self-hosted.css",
     "./styles/theme.css": "./dist/styles/theme.css",
@@ -51,11 +47,6 @@
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "preview": "python3 -m http.server 4321 --bind 127.0.0.1",
-    "gen:icons": "bun scripts/generate-icons.ts",
-    "gen:swift": "bun scripts/generate-swift-tokens.ts",
-    "gen:banner": "bun scripts/generate-banner.ts",
-    "gen:assets": "bun scripts/brand-assets/generate.ts",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "bun run build && changeset publish",
@@ -66,7 +57,6 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@iconify/react": "^6.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0"
@@ -74,10 +64,9 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
     "@changesets/cli": "^2.31.1",
-    "@iconify-json/lucide": "^1.2.120",
-    "@iconify/utils": "^3.1.4",
-    "@storybook/addon-a11y": "^10.5.3",
-    "@storybook/react-vite": "^10.5.3",
+    "@storybook/addon-a11y": "~10.5.7",
+    "@storybook/addon-docs": "~10.5.7",
+    "@storybook/react-vite": "~10.5.7",
     "@storybook/test-runner": "^0.24.4",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/dom": "^10.4.1",
@@ -92,7 +81,7 @@
     "jsdom": "^30.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "storybook": "^10.5.3",
+    "storybook": "~10.5.7",
     "tailwindcss": "^4.3.3",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",

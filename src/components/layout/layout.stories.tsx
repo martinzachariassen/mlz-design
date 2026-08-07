@@ -4,6 +4,7 @@ import { Container, Grid, Stack } from "./layout";
 
 const meta = {
   title: "Components/Layout/Layout",
+  component: Container,
   parameters: { layout: "padded" },
 } satisfies Meta;
 

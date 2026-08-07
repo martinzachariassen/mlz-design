@@ -1,5 +1,8 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  // wrangler isn't a devDependency — the deploy runs via cloudflare/wrangler-action,
+  // so the schema is referenced by URL rather than a node_modules path that
+  // resolves to nothing locally.
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
   "name": "mlz-design",
   "compatibility_date": "2026-08-07",
   "account_id": "1524bafd76d520ef1ce36c47a3f3bce1",

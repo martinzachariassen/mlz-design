@@ -9,6 +9,7 @@ import { breakpoints } from "../tokens";
 
 const meta = {
   title: "Foundations/Responsive",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

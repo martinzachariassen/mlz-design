@@ -2,8 +2,8 @@
 
 MLZ Design: Martin Zachariassen's design system and **canonical source of truth**
 for colour, type, style and motion — shipped as an installable **React + Tailwind
-v4** package (plus a generated SwiftUI token layer) that every one of my other
-projects inherits, so nothing drifts. It's a public repo, but built first for
+v4** package that every one of my other projects inherits, so nothing drifts. It's
+a public repo, but built first for
 cross-project consistency. This repo *is* the origin of the look — do not frame it
 as derived from any website. `README.md` has the full story; this file is the
 working brief for agents. Global defaults in `~/.config/claude/CLAUDE.md` still
@@ -23,9 +23,15 @@ bun run test             # Vitest + Testing Library
 bun run lint / lint:fix  # Biome (JS/TS only)
 bun run storybook        # dev playground on :6006
 bun run build:storybook  # static build → storybook-static/
-bun run preview          # serve repo on :4321 → open /preview/ (static token reference)
+bun run test-storybook   # axe over every story (needs a built + served Storybook)
 bun run changeset        # start a release (see below)
 ```
+
+`mise.toml` mirrors these as tasks (`mise run check` = lint · typecheck · test).
+Docs live in `docs/` — [architecture](docs/architecture.md),
+[design system](docs/design-system.md), [contributing](docs/CONTRIBUTING.md),
+[security](docs/SECURITY.md). Only `README.md`, `CHANGELOG.md` (Changesets writes
+it next to `package.json`) and this file stay at the root.
 
 ## Architecture — three-layer tokens
 
@@ -68,7 +74,16 @@ is exported as `signals.danger` in JS.
   palette.
 - `*.stories.tsx` / `*.test.tsx` colocate under `src/`; they're typechecked and
   linted but never shipped (`files: ["dist"]`). Vitest runs with `globals: true`
-  so Testing Library's auto-cleanup registers.
+  so Testing Library's auto-cleanup registers. `tsconfig.json` also covers
+  `.storybook/` and the root `*.config.ts`, so those are typechecked too.
+- **Autodocs is on globally** (`tags: ["autodocs"]` in `.storybook/preview.tsx`).
+  A story file with no `component` in its meta — foundations, templates, or a
+  multi-component composition — **must** opt out with `tags: ["!autodocs"]`, or it
+  adds an empty docs page to the sidebar. Setting `component` on a meta makes
+  Storybook infer required `args`, so don't add it to render-only stories.
+- Storybook's props tables come from `react-docgen-typescript` with a `propFilter`
+  that drops anything declared in `node_modules` — that's what keeps inherited
+  React HTML attributes out of the table.
 - When adding a token, keep light + dark + every `data-accent` in sync, and honour
   `prefers-reduced-motion` / `forced-colors`.
 
@@ -78,8 +93,11 @@ is exported as `signals.danger` in JS.
   squash or rebase merge**, required checks `verify` + `dependency-review`. No
   direct pushes to `main`.
 - **Conventional Commits** for commits and PR titles.
-- CI (`ci.yml`): lint · typecheck · test · build · build-storybook. Plus CodeQL,
-  Dependency Review, Dependabot (npm / actions).
+- CI (`ci.yml`): the `verify` job runs lint · typecheck · test · build ·
+  build-storybook, then **fails if committed `dist/` is stale**; it uploads
+  `storybook-static` as an artifact that the `Storybook a11y` job (axe, WCAG 2.1
+  A/AA via `test-runner.ts`) consumes, so Storybook is built once per run. Plus
+  CodeQL, Dependency Review, Scorecard, zizmor, Dependabot (npm / actions).
 - **Releases via Changesets → GitHub Packages** (scope `@martinzachariassen`,
   `.npmrc`), **fully automated** by the Changesets action — no manual version
   bump, no `v*` tag, no local `publish`. `release.yml` runs on **push to `main`**;

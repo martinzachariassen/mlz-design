@@ -2,7 +2,7 @@
 
 The heart of the package: a three-layer token system, runtime theming, and a component set that reads only semantic tokens — so everything re-themes together. Browse it all live in [Storybook](https://github.com/martinzachariassen/mlz-design#playground).
 
-See [ARCHITECTURE.md](../ARCHITECTURE.md) for the token layering and repo layout.
+See [architecture.md](architecture.md) for the token layering and repo layout.
 
 ## Theming at runtime
 
@@ -62,7 +62,6 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Tabs` (+ `List`/`Trigger`/`Content`) | Radix-free, keyboard-navigable  |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
-| `Icon`     | curated **Lucide** house set, shipped **offline** (no network); `currentColor`, `xs`–`xl` sizes, decorative by default / `label` for AT. Bring-your-own glyphs via `addCollection`. |
 
 ### Layout & responsive
 
@@ -107,25 +106,3 @@ Space Grotesk (`sans`/`grotesk`, the body/UI/prose **reading face** — the defa
 Typography in one rule: **sans for reading, mono for data.** `font-serif` and `font-hand` are opt-in, never body copy. Text tones step down `text-foreground` → `text-muted-foreground` → `text-muted-foreground-2` while all clearing WCAG AA.
 
 `styles/fonts.css` (bundled into `index.css`) loads fonts from Google Fonts for convenience; for production, self-host with Fontsource + Fontaine metric-matched fallbacks (see the header comment in that file), or use the `index-self-hosted.css` bundle. The `--font-*` stacks carry robust system fallbacks either way. For the full role map, do's & don'ts and the legibility/a11y rules, see the **Foundations → Typography** story.
-
-## Native (SwiftUI)
-
-The same tokens, on iOS/macOS. `swift/` is a small **generated** SwiftPM package (`MLZDesign`) with no dependencies — colour, type, spacing, radius and motion emitted from `src/tokens.ts` + `theme.css` so native apps can't drift from the web system either.
-
-```bash
-bun run gen:swift   # OKLCH → sRGB, writes swift/Sources/MLZDesign/*.swift
-```
-
-```swift
-import SwiftUI
-import MLZDesign
-
-Text("Ship it")
-    .font(MLZFont.hand(28))
-    .foregroundStyle(MLZColor.foreground)   // light/dark adaptive
-    .padding(MLZSpacing.lg)
-    .background(MLZColor.card)
-    .tint(MLZColor.accent(.rust))           // swap the whole accent family
-```
-
-`MLZColor` (semantic roles + brand primitives + five accent families), `MLZFont`, `MLZSpacing` (4pt grid), `MLZRadius`, `MLZMotion`. See [`swift/README.md`](../swift/README.md).

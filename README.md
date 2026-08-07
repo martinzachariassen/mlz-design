@@ -8,15 +8,13 @@ Martin Zachariassen's design system — colour, type, style and motion as an ins
 
 **Status:** Stable, actively maintained · Published as `@martinzachariassen/design` on GitHub Packages · Requires React 19
 
-![MLZ Design — one design system, every project](assets/banner.svg)
-
 ## What it does
 
 MLZ Design is my **single source of truth for design**. Instead of re-deciding colours, spacing and components in every new app, I decide them once — here — and every project installs this package and inherits them. Change a token, cut a release, and every consuming app moves with the system. No per-project drift, no copy-pasted palettes.
 
 - **Inherit in two lines.** One `@import` pulls in the tokens, fonts, base layer and every component's styles — the package declares its own Tailwind source, so there's nothing else to wire up.
 - **Restyle once, everywhere.** Components read only *semantic* tokens (`--primary`, `--accent`, `--border`…). Override them in a consuming app to make it your own; change them here to move every app.
-- **One system, every surface.** React components and layout primitives for the web, brand assets and page templates, and a generated **SwiftUI** token layer so native iOS/macOS apps share the exact same palette.
+- **One system, every surface.** React components, layout primitives and full page templates, all reading the same token layer.
 - **Not a component library to depend on blindly.** It's *my* house style — a warm paper/ink palette, house cyan accent, an engineering-notebook character with a cyberpunk edge. Fork it or re-map the semantic layer if you want a different look; for a neutral, unopinionated kit use [shadcn/ui](https://ui.shadcn.com) directly (the token names match, so it drops in).
 
 The repo is **public** on purpose — browse it, learn from it, lift pieces — but built first for me. Try everything in the [interactive Storybook](#playground): colour, type, components, templates, with live theme and accent switches.
@@ -86,7 +84,7 @@ motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
 breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia etc.
 ```
 
-The full component catalogue, token architecture, runtime theming, fonts and the SwiftUI layer are documented in **[docs/design-system.md](docs/design-system.md)** — or browse them live in the [playground](#playground).
+The full component catalogue, token architecture, runtime theming and fonts are documented in **[docs/design-system.md](docs/design-system.md)** — or browse them live in the [playground](#playground).
 
 ## Configuration
 
@@ -101,16 +99,12 @@ Consuming apps re-map the **semantic tokens** to make the system their own — s
 
 ## Playground
 
-An interactive Storybook — components, live foundations (colour, type, motion, responsive), full-page templates, the a11y addon, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Cloudflare Workers at **[design.mlz.no](https://design.mlz.no)**.
+An interactive Storybook — components with generated props tables, live foundations (colour, type, motion, responsive), full-page templates, an a11y checker on every story, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Cloudflare Workers at **[design.mlz.no](https://design.mlz.no)**.
 
 ```bash
 bun run storybook          # dev server at http://localhost:6006
 bun run build:storybook    # static build → storybook-static/
 ```
-
-## Brand assets
-
-Every repo I build wears the same graphics — README banner, social share cards, and the full favicon / app-icon set — rendered **out of the real design-system components**, not redrawn per project. A consuming repo supplies only the copy in a `brand.config.ts`; one command (`bun run gen:assets`) renders the whole set, and a `--check` mode fails CI the moment a committed asset drifts. See **[docs/brand-assets.md](docs/brand-assets.md)**.
 
 ## Development
 
@@ -122,11 +116,11 @@ bun run test          # Vitest + Testing Library
 bun run lint          # Biome (lint:fix / format to write)
 ```
 
-Architecture, the three-layer token system and repo layout are in [ARCHITECTURE.md](ARCHITECTURE.md); development, release and deployment details are in [CONTRIBUTING.md](CONTRIBUTING.md).
+All documentation lives in **[docs/](docs/)**: the [design system](docs/design-system.md) (components, theming, tokens), the [architecture](docs/architecture.md) (token layering, repo layout, Storybook setup), and [contributing](docs/CONTRIBUTING.md) (development, release, deployment).
 
 ## Contributing
 
-Issues and PRs welcome. Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR, and add a changeset (`bun run changeset`) for user-facing changes. See [CONTRIBUTING.md](CONTRIBUTING.md); report vulnerabilities per [SECURITY.md](SECURITY.md). Planned work lives in [Issues](https://github.com/martinzachariassen/mlz-design/issues).
+Issues and PRs welcome. Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR, and add a changeset (`bun run changeset`) for user-facing changes. See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md); report vulnerabilities per [docs/SECURITY.md](docs/SECURITY.md). Planned work lives in [Issues](https://github.com/martinzachariassen/mlz-design/issues).
 
 ## License
 

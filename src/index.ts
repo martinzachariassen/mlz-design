@@ -1,6 +1,3 @@
-// The curated house icon set, plus Iconify offline helpers so consumers can
-// register their own glyphs (`addCollection`/`addIcon`) without any network.
-export { addCollection, addIcon, type IconifyIcon } from "@iconify/react/offline";
 export {
   BrandLockup,
   type BrandLockupProps,
@@ -39,7 +36,6 @@ export {
   DataRow,
   type DataRowProps,
 } from "./components/data-display/data-list";
-export { Icon, type IconProps, iconVariants } from "./components/data-display/icon";
 export { Kbd, type KbdProps } from "./components/data-display/kbd";
 export { Prose, type ProseProps } from "./components/data-display/prose";
 export {
@@ -121,7 +117,6 @@ export {
   DialogTitle,
 } from "./components/overlay/dialog";
 export { InfoTip, type InfoTipProps } from "./components/overlay/info-tip";
-export { houseIcons, type IconName, iconNames } from "./icons/generated";
 export { cn } from "./lib/cn";
 export {
   type ResolvedTheme,
