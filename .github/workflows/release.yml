@@ -25,7 +25,6 @@ jobs:
       contents: write # push the version-packages branch + cut the release/tag
       pull-requests: write # open/update the version-packages PR
       packages: write # publish to GitHub Packages
-      id-token: write # npm build provenance (Sigstore attestation)
     steps:
       - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
         with:
@@ -56,4 +55,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_CONFIG_PROVENANCE: "true"

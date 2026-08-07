@@ -92,8 +92,9 @@ is exported as `signals.danger` in JS.
      every bump + CHANGELOG and consumes the changesets).
   3. Merge that version PR. `release.yml` now finds no pending changesets and runs
      the publish path (`bun run release` = `bun run build && changeset publish`) —
-     publishes to GitHub Packages **with Sigstore provenance** and cuts the GitHub
-     Release + tag.
+     publishes to GitHub Packages and cuts the GitHub Release + tag. (No npm
+     provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing /
+     Sigstore attestation — that's a `registry.npmjs.org` feature.)
   Committed `dist/` is the token-free fallback for
   `bun add github:martinzachariassen/mlz-design`; refresh it (`bun run build`) in
   any PR touching `src/`.
