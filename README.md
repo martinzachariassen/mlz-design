@@ -97,20 +97,15 @@ There's no build config to consume this package. Visual configuration is done **
 | `class="dark"`       | Ink-surface dark mode (`data-theme="dark"` also works)   |
 | `data-accent="rust"` | Accent + ring + glitch → another family (`cyan` default; also `blue`, `green`, `ink`) |
 
-Consuming apps re-map the **semantic tokens** to make the system their own — see [Making it your own](docs/design-system.md#making-it-your-own). The only env knob is the playground's static server:
-
-| Variable | Default | Effect                                                        |
-| -------- | ------- | ------------------------------------------------------------- |
-| `PORT`   | `8080`  | Port the playground static server binds (Railway injects it). |
+Consuming apps re-map the **semantic tokens** to make the system their own — see [Making it your own](docs/design-system.md#making-it-your-own).
 
 ## Playground
 
-An interactive Storybook — components, live foundations (colour, type, motion, responsive), full-page templates, the a11y addon, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Railway.
+An interactive Storybook — components, live foundations (colour, type, motion, responsive), full-page templates, the a11y addon, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Cloudflare Workers at **[design.mlz.no](https://design.mlz.no)**.
 
 ```bash
 bun run storybook          # dev server at http://localhost:6006
 bun run build:storybook    # static build → storybook-static/
-bun run serve:storybook    # serve the static build (honours $PORT)
 ```
 
 ## Brand assets

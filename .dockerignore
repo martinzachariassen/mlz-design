@@ -1,9 +1,0 @@
-node_modules
-dist
-storybook-static
-coverage
-.git
-.github
-.changeset
-*.log
-.DS_Store

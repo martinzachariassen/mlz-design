@@ -206,7 +206,7 @@ export const Overview: Story = {
             </Alert>
             <Alert variant="success">
               <AlertTitle>Deployed</AlertTitle>
-              <AlertDescription>v0.2.0 is live on Railway. All checks green.</AlertDescription>
+              <AlertDescription>v0.2.0 is live on Cloudflare. All checks green.</AlertDescription>
             </Alert>
             <Alert variant="warning">
               <AlertTitle>Approaching limit</AlertTitle>

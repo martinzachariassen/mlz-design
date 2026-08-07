@@ -7,10 +7,6 @@
 node = "26"
 bun = "1.3"
 
-[env]
-# Storybook's Railway runtime server (server.mjs) honours $PORT.
-PORT = "6006"
-
 # ── Setup ────────────────────────────────────────────────────────────────────
 [tasks.setup]
 description = "Install toolchain + dependencies (first-time setup)"

@@ -36,8 +36,8 @@ export const Default: Story = {
       <CardHeader>
         <CardTitle>Deploy</CardTitle>
         <CardDescription>
-          Ship the design system playground to Railway. Elevation is a hairline border, never a drop
-          shadow — true to the paper look.
+          Ship the design system playground to Cloudflare. Elevation is a hairline border, never a
+          drop shadow — true to the paper look.
         </CardDescription>
         <CardAction>
           <Badge variant="accent">ready</Badge>

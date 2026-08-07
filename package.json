@@ -50,7 +50,6 @@
     "format": "biome format --write .",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
-    "serve:storybook": "node server.mjs",
     "test-storybook": "test-storybook",
     "preview": "python3 -m http.server 4321 --bind 127.0.0.1",
     "gen:icons": "bun scripts/generate-icons.ts",
