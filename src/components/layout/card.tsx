@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
@@ -22,7 +23,13 @@ const cardVariants = cva(
 
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {}
+    VariantProps<typeof cardVariants> {
+  /**
+   * Render the single child instead of a `<div>`. Handy for a whole-card link or
+   * an `<article>`/`<section>` that should carry the card's surface styling.
+   */
+  asChild?: boolean;
+}
 
 /**
  * Paper-look surfaces: elevation is a hairline border, never a heavy drop shadow.
@@ -40,14 +47,17 @@ export interface CardProps
  * - **ghost** — no border or background, for nesting inside another surface.
  */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="card"
-      className={cn(cardVariants({ variant }), className)}
-      {...props}
-    />
-  ),
+  ({ className, variant, asChild, ...props }, ref) => {
+    const Comp = asChild ? Slot : "div";
+    return (
+      <Comp
+        ref={ref}
+        data-slot="card"
+        className={cn(cardVariants({ variant }), className)}
+        {...props}
+      />
+    );
+  },
 );
 Card.displayName = "Card";
 

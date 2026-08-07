@@ -1,3 +1,4 @@
+import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
@@ -62,7 +63,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
       className={cn(avatarVariants({ size, shape }), className)}
       {...props}
     >
-      <span
+      <AvatarPrimitive.Root
         data-slot="avatar-frame"
         className={cn(
           "flex size-full items-center justify-center overflow-hidden border border-border bg-secondary",
@@ -70,7 +71,7 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
         )}
       >
         {children}
-      </span>
+      </AvatarPrimitive.Root>
       {status ? (
         <span
           className={cn(
@@ -85,32 +86,24 @@ export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
 );
 Avatar.displayName = "Avatar";
 
-export type AvatarImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+export type AvatarImageProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>;
 
 /**
- * The avatar's photo. It unmounts itself on the first `error` event, so whatever
- * `AvatarFallback` you put beside it takes over — no broken-image icon, no state
- * to manage. Always pass an `alt`.
+ * The avatar's photo. It renders only once the image has actually loaded, so a
+ * slow or broken `src` shows the `AvatarFallback` beside it instead — no
+ * broken-image icon, no state to manage. Always pass an `alt`.
  */
-export const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
-  ({ className, onError, ...props }, ref) => {
-    const [errored, setErrored] = React.useState(false);
-    if (errored) return null;
-    return (
-      // biome-ignore lint/a11y/useAltText: alt is forwarded via props
-      <img
-        ref={ref}
-        data-slot="avatar-image"
-        className={cn("size-full object-cover", className)}
-        onError={(event) => {
-          setErrored(true);
-          onError?.(event);
-        }}
-        {...props}
-      />
-    );
-  },
-);
+export const AvatarImage = React.forwardRef<
+  React.ComponentRef<typeof AvatarPrimitive.Image>,
+  AvatarImageProps
+>(({ className, ...props }, ref) => (
+  <AvatarPrimitive.Image
+    ref={ref}
+    data-slot="avatar-image"
+    className={cn("size-full object-cover", className)}
+    {...props}
+  />
+));
 AvatarImage.displayName = "AvatarImage";
 
 const fallbackVariants = cva(
@@ -128,23 +121,26 @@ const fallbackVariants = cva(
 );
 
 export interface AvatarFallbackProps
-  extends React.HTMLAttributes<HTMLSpanElement>,
+  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>,
     VariantProps<typeof fallbackVariants> {}
 
 /**
- * What fills the frame when there's no image — initials, in tracked-out mono.
- * `tone` picks the chip colour; use `accent` sparingly to mark "you".
+ * What fills the frame while there's no loaded image — initials, in tracked-out
+ * mono. `tone` picks the chip colour; use `accent` sparingly to mark "you". Pass
+ * `delayMs` to hold it back briefly, so a fast-loading image doesn't flash the
+ * initials first.
  */
-export const AvatarFallback = React.forwardRef<HTMLSpanElement, AvatarFallbackProps>(
-  ({ className, tone, ...props }, ref) => (
-    <span
-      ref={ref}
-      data-slot="avatar-fallback"
-      className={cn(fallbackVariants({ tone }), className)}
-      {...props}
-    />
-  ),
-);
+export const AvatarFallback = React.forwardRef<
+  React.ComponentRef<typeof AvatarPrimitive.Fallback>,
+  AvatarFallbackProps
+>(({ className, tone, ...props }, ref) => (
+  <AvatarPrimitive.Fallback
+    ref={ref}
+    data-slot="avatar-fallback"
+    className={cn(fallbackVariants({ tone }), className)}
+    {...props}
+  />
+));
 AvatarFallback.displayName = "AvatarFallback";
 
 export interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> {

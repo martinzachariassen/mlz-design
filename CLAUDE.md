@@ -58,6 +58,31 @@ mirror that must match it value-for-value — **when you touch a token value,
 update both.** One naming quirk the mirror carries: the CSS `--destructive` role
 is exported as `signals.danger` in JS.
 
+## Behaviour: Radix backbone, MLZ styling
+
+Interaction behaviour comes from **Radix primitives**; we only style them. Same
+backbone as shadcn/ui, so anything `npx shadcn add …` drops in behaves like ours.
+Three tiers — know which one you're touching before adding a dependency:
+
+- **Radix** — `Tabs`, `Accordion`, `InfoTip` (popover), `Avatar`, `Progress`,
+  `Separator`, `Label`, plus `Slot` behind `asChild`.
+- **Platform** — do *not* migrate these; Radix would add JS for what the browser
+  already does. `Dialog` is the native `<dialog>` + `showModal()` (focus-trap,
+  Esc, inerting and top layer for free); `Checkbox`/`Switch` are native inputs
+  styled with `peer-checked:`, zero JS. `Button`/`Input`/`Textarea` are plain
+  elements — **Radix has no Button primitive**.
+- **Presentational** — no behaviour at all, nothing to adopt.
+
+Radix is depended on **granularly** (`@radix-ui/react-tabs`, …), never via the
+unified `radix-ui` meta-package: this ships as a library, and the meta-package
+would force every consumer to install ~40 primitives to use one.
+
+**No icon library, deliberately.** Icons are inline SVG (`accordion` chevron,
+`checkbox` tick, `info-tip` glyph). shadcn's generated components import from
+`lucide-react` — strip those imports when porting one, or the CLI adds the
+dependency by the back door. `rg -n "lucide-react" src/` must stay empty.
+`asChild` is available on `Button`, `Badge`, `Card` and `DialogClose`.
+
 ## Conventions that bite
 
 - **Biome is scoped to JS/TS.** CSS formatting/linting is disabled on purpose —
@@ -77,7 +102,7 @@ is exported as `signals.danger` in JS.
   so Testing Library's auto-cleanup registers. `tsconfig.json` also covers
   `.storybook/` and the root `*.config.ts`, so those are typechecked too.
 - **Autodocs is on globally** (`tags: ["autodocs"]` in `.storybook/preview.tsx`).
-  A story file with no `component` in its meta — foundations, templates, or a
+  A story file with no `component` in its meta — foundations or a
   multi-component composition — **must** opt out with `tags: ["!autodocs"]`, or it
   adds an empty docs page to the sidebar. Setting `component` on a meta makes
   Storybook infer required `args`, so don't add it to render-only stories.

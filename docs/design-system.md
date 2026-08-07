@@ -37,7 +37,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
-| `Button`   | `default` · `solid` · `accent` · `ghost` · `sketch` · `destructive` · `link`; sizes `sm`/`default`/`lg`/`icon`. The signature ghost that lifts on hover with an offset accent shadow. |
+| `Button`   | `default` · `solid` · `accent` · `ghost` · `sketch` · `destructive` · `link`; sizes `sm`/`default`/`lg`/`icon`. The signature ghost that lifts on hover with an offset accent shadow. `asChild` renders a link (or anything else) with the button's styling. |
 | `Input` · `Textarea` | accent focus ring, technical mono field         |
 | `Label`    | mono, uppercase field label with `peer-disabled` states |
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
@@ -54,12 +54,12 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Avatar` (+ `Image`/`Fallback`/`Group`) | initials-first; `xs`–`xl`, circle/square, presence `status`, overlap group with `+N` |
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
-| `InfoTip`  | accessible inline help popover (glossary/hints) — click or hover, keyboard + Esc, no dependency |
+| `InfoTip`  | accessible inline help popover (glossary/hints) — Radix-positioned, keyboard + Esc, collision-aware |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
 | `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
-| `Accordion` (+ `Item`/`Trigger`/`Content`) | Radix-free disclosure — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
-| `Tabs` (+ `List`/`Trigger`/`Content`) | Radix-free, keyboard-navigable  |
+| `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
+| `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
 
@@ -80,7 +80,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
-Storybook also ships composed references — **Foundations → Patterns** (dashboard, forms, alerts…) and full-page **Templates → Portfolio / Blog** — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
+Storybook also ships composed references — **Foundations → Patterns** (dashboard, forms, alerts…) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
 
 ## Tokens in JS
 

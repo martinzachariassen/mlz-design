@@ -31,7 +31,7 @@ src/
     layout/             Card, Container/Stack/Grid, Accordion, Tabs, Separator
     overlay/            Dialog, InfoTip
   foundations/          Storybook-only: Introduction, Colours, Typography, Motion,
-                        Patterns, Logo, Responsive, Templates… + theme-split.tsx
+                        Patterns, Logo, Responsive… + theme-split.tsx
   styles/
     index.css           the one-import bundle                → ./styles/index.css
     index-self-hosted.css  same, with bundled WOFF2 fonts    → ./styles/index-self-hosted.css
@@ -57,11 +57,27 @@ Subpath exports mirror the layout: `.` (components), `./tokens` (typed JS values
 - **`app.css`** — imports Tailwind plus `theme.css` / `fonts.css` / `base.css` from `src/`, and `@source "../src"` so classes used only by stories still emit.
 - **`test-runner.ts`** — runs axe (WCAG 2.1 A/AA) against every story in a real browser; wired into CI as the `Storybook a11y` job.
 
-Autodocs is on for every story by default. Story files without a `component` (foundations, templates, multi-component compositions) opt out with `tags: ["!autodocs"]` so the sidebar doesn't fill with empty docs pages.
+Autodocs is on for every story by default. Story files without a `component` (foundations or multi-component compositions) opt out with `tags: ["!autodocs"]` so the sidebar doesn't fill with empty docs pages.
 
 ## Components
 
 Components (`src/components/*.tsx`) use CVA + `tailwind-merge` via `cn()` (`src/lib/cn.ts`) and are styled purely from semantic-token utilities (`bg-primary`, `border-input`, `ring-ring`…). Because they read only the semantic layer, every component re-themes with the `class="dark"` / `data-accent` switches for free. `src/foundations/*` are Storybook-only.
+
+### Behaviour comes from Radix, styling is ours
+
+Anything with real interaction behaviour is a **Radix primitive** wrapped in MLZ styling — the same backbone shadcn/ui uses, so `npx shadcn add …` components behave identically to these. Radix supplies the WAI-ARIA keyboard patterns, focus management, collision-aware positioning and controlled/uncontrolled state; we supply the variants.
+
+Which layer owns what:
+
+| Layer | Components |
+| ----- | ---------- |
+| **Radix primitive** | `Tabs` · `Accordion` · `InfoTip` (popover) · `Avatar` · `Progress` · `Separator` · `Label`, plus `Slot` for `asChild` |
+| **Platform element** — Radix would add JS for what the browser already does | `Dialog` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
+| **Presentational only** — no behaviour to own | everything else: `Badge`, `Card`, `Text`, `Prose`, `Kbd`, `Callout`, `Alert`, `Skeleton`, `Spinner`, `StatusDot`, `DataList`, the layout primitives, all of `brand/` |
+
+Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not via the unified `radix-ui` meta-package: this ships as a library, and the meta-package would make every consumer install ~40 primitives to use one.
+
+`asChild` (via `@radix-ui/react-slot`) is available on `Button`, `Badge`, `Card` and `DialogClose` — render a link or any other element while keeping the component's styling and props.
 
 ## Conventions that bite
 

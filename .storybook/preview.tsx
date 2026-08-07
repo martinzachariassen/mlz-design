@@ -31,7 +31,6 @@ const preview: Preview = {
           "Introduction",
           "Foundations",
           ["Colours", "Colour Usage", "Typography", "Motion"],
-          "Templates",
           "Components",
         ],
       },

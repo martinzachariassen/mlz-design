@@ -1,13 +1,24 @@
+import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-const DialogContext = React.createContext<{ close: () => void } | null>(null);
+interface DialogContextValue {
+  close: () => void;
+  titleId: string;
+  descriptionId: string;
+  setHasTitle: (present: boolean) => void;
+  setHasDescription: (present: boolean) => void;
+}
+
+const DialogContext = React.createContext<DialogContextValue | null>(null);
 
 export interface DialogProps {
-  /** Whether the dialog is showing. Controlled — you own this state. */
-  open: boolean;
+  /** Whether the dialog is showing. Pass it to control the dialog yourself. */
+  open?: boolean;
+  /** Initial open state when uncontrolled. Ignored if `open` is provided. */
+  defaultOpen?: boolean;
   /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
-  onOpenChange: (open: boolean) => void;
+  onOpenChange?: (open: boolean) => void;
   /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
   children: React.ReactNode;
 }
@@ -15,9 +26,13 @@ export interface DialogProps {
 /**
  * A modal dialog built on the native `<dialog>` element — so focus-trapping, the
  * Esc key, background inerting and the top layer come from the platform, with no
- * dependency. Controlled: drive `open` / `onOpenChange` yourself. Children only
- * mount while it's open, so a form inside starts fresh each time. Clicking the
- * backdrop dismisses it.
+ * dependency. Works controlled (`open` / `onOpenChange`) or uncontrolled
+ * (`defaultOpen`). Children only mount while it's open, so a form inside starts
+ * fresh each time. Clicking the backdrop dismisses it.
+ *
+ * A `DialogTitle` and `DialogDescription` name and describe the dialog
+ * automatically — they're wired to it via `aria-labelledby` / `aria-describedby`,
+ * so screen readers announce them on open.
  *
  * ```tsx
  * <Dialog open={open} onOpenChange={setOpen}>
@@ -34,8 +49,26 @@ export interface DialogProps {
  * </Dialog>
  * ```
  */
-export function Dialog({ open, onOpenChange, children }: DialogProps) {
+export function Dialog({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  children,
+}: DialogProps) {
   const ref = React.useRef<HTMLDialogElement>(null);
+  const pressStartedOnBackdrop = React.useRef(false);
+  const reactId = React.useId();
+  const titleId = `${reactId}-title`;
+  const descriptionId = `${reactId}-description`;
+
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
+  const isControlled = openProp !== undefined;
+  const open = isControlled ? openProp : uncontrolledOpen;
+
+  // Only advertise the label/description once the matching part actually renders,
+  // so a dialog without a title doesn't point `aria-labelledby` at nothing.
+  const [hasTitle, setHasTitle] = React.useState(false);
+  const [hasDescription, setHasDescription] = React.useState(false);
 
   React.useEffect(() => {
     const el = ref.current;
@@ -44,16 +77,31 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
     else if (!open && el.open) el.close();
   }, [open]);
 
-  const close = React.useCallback(() => onOpenChange(false), [onOpenChange]);
-  const ctx = React.useMemo(() => ({ close }), [close]);
+  const close = React.useCallback(() => {
+    if (!isControlled) setUncontrolledOpen(false);
+    onOpenChange?.(false);
+  }, [isControlled, onOpenChange]);
+
+  const ctx = React.useMemo<DialogContextValue>(
+    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
+    [close, titleId, descriptionId],
+  );
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
     <dialog
       ref={ref}
+      aria-labelledby={hasTitle ? titleId : undefined}
+      aria-describedby={hasDescription ? descriptionId : undefined}
       onClose={close}
+      // Require the press to both start and end on the backdrop, so releasing a
+      // text selection that began inside the dialog doesn't dismiss it.
+      onMouseDown={(event) => {
+        pressStartedOnBackdrop.current = event.target === ref.current;
+      }}
       onClick={(event) => {
-        if (event.target === ref.current) close();
+        if (event.target === ref.current && pressStartedOnBackdrop.current) close();
+        pressStartedOnBackdrop.current = false;
       }}
       className="m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
     >
@@ -109,35 +157,53 @@ export const DialogHeader = React.forwardRef<HTMLDivElement, React.HTMLAttribute
 );
 DialogHeader.displayName = "DialogHeader";
 
-/** The dialog's `<h2>` heading, in tracked-out mono. */
+/** The dialog's `<h2>` heading, in tracked-out mono. Names the dialog for AT. */
 export const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h2
-    ref={ref}
-    data-slot="dialog-title"
-    className={cn(
-      "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const ctx = React.useContext(DialogContext);
+  const setHasTitle = ctx?.setHasTitle;
+  React.useEffect(() => {
+    setHasTitle?.(true);
+    return () => setHasTitle?.(false);
+  }, [setHasTitle]);
+  return (
+    <h2
+      ref={ref}
+      id={ctx?.titleId}
+      data-slot="dialog-title"
+      className={cn(
+        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 DialogTitle.displayName = "DialogTitle";
 
 /** The muted sentence under the title — say what's about to happen. */
 export const DialogDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="dialog-description"
-    className={cn("text-sm leading-relaxed text-muted-foreground", className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const ctx = React.useContext(DialogContext);
+  const setHasDescription = ctx?.setHasDescription;
+  React.useEffect(() => {
+    setHasDescription?.(true);
+    return () => setHasDescription?.(false);
+  }, [setHasDescription]);
+  return (
+    <p
+      ref={ref}
+      id={ctx?.descriptionId}
+      data-slot="dialog-description"
+      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+      {...props}
+    />
+  );
+});
 DialogDescription.displayName = "DialogDescription";
 
 /**
@@ -167,25 +233,19 @@ export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonE
 
 /** Closes the dialog. Wrap your own control with `asChild`. */
 export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ asChild, onClick, children, ...props }, ref) => {
+  ({ asChild, onClick, type, ...props }, ref) => {
     const ctx = React.useContext(DialogContext);
-    const handle = (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (!event.defaultPrevented) ctx?.close();
-    };
-    if (asChild && React.isValidElement(children)) {
-      const child = children as React.ReactElement<{ onClick?: React.MouseEventHandler }>;
-      return React.cloneElement(child, {
-        onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
-          child.props.onClick?.(event);
-          handle(event);
-        },
-      });
-    }
+    const Comp = asChild ? Slot : "button";
     return (
-      <button ref={ref} type="button" onClick={handle} {...props}>
-        {children}
-      </button>
+      <Comp
+        ref={ref}
+        type={asChild ? type : (type ?? "button")}
+        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+          onClick?.(event);
+          if (!event.defaultPrevented) ctx?.close();
+        }}
+        {...props}
+      />
     );
   },
 );
