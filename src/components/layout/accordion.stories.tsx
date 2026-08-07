@@ -71,7 +71,7 @@ export const Numbered: Story = {
               <span className="text-xs text-muted-foreground">{sub}</span>
             </span>
             {badge ? (
-              <span className="ml-2 rounded-full border border-warning/40 px-2 py-0.5 font-mono text-[10px] text-warning">
+              <span className="ml-2 rounded-full bg-warning px-2 py-0.5 font-mono text-[10px] text-warning-foreground">
                 {badge}
               </span>
             ) : null}

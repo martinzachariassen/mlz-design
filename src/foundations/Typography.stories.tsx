@@ -151,6 +151,11 @@ function DoDont({
 
 export const Usage: Story = {
   name: "Usage — how & where",
+  // This story deliberately renders one sub-AA "Don't" sample (the ad-hoc 40%
+  // foreground mix below) to teach the contrast rule, so axe's color-contrast
+  // check is turned off for this story only — every other tone shown here uses a
+  // token that clears AA and is contrast-checked in the other stories.
+  parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } },
   render: () => (
     <div className="min-h-screen bg-background px-8 py-14 text-foreground">
       <div className="mx-auto max-w-4xl">
