@@ -33,7 +33,9 @@ export {
 } from "./components/data-display/avatar";
 export { Badge, type BadgeProps, badgeVariants } from "./components/data-display/badge";
 export {
+  type DataLayout,
   DataList,
+  type DataListProps,
   DataRow,
   type DataRowProps,
 } from "./components/data-display/data-list";

@@ -816,36 +816,62 @@ var AvatarGroup = React25.forwardRef(
   }
 );
 AvatarGroup.displayName = "AvatarGroup";
+var DataListContext = React25.createContext("justify");
 var DataList = React25.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx("dl", { ref, "data-slot": "data-list", className: cn("flex flex-col", className), ...props })
+  ({ layout = "justify", className, ...props }, ref) => /* @__PURE__ */ jsx(DataListContext.Provider, { value: layout, children: /* @__PURE__ */ jsx(
+    "dl",
+    {
+      ref,
+      "data-slot": "data-list",
+      "data-layout": layout,
+      className: cn("flex flex-col", className),
+      ...props
+    }
+  ) })
 );
 DataList.displayName = "DataList";
 var DataRow = React25.forwardRef(
-  ({ label, mono, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
-    "div",
-    {
-      ref,
-      "data-slot": "data-row",
-      className: cn(
-        "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-b border-dashed border-border py-1.5 last:border-b-0",
-        className
-      ),
-      ...props,
-      children: [
-        /* @__PURE__ */ jsx("dt", { className: "text-sm text-muted-foreground", children: label }),
-        /* @__PURE__ */ jsx(
-          "dd",
-          {
-            className: cn(
-              "m-0 max-w-[64%] break-words text-right text-sm text-foreground",
-              mono && "font-mono text-[0.9em]"
-            ),
-            children
-          }
-        )
-      ]
-    }
-  )
+  ({ label, mono, layout, className, children, ...props }, ref) => {
+    const inherited = React25.useContext(DataListContext);
+    const resolved = layout ?? inherited;
+    const grid = resolved === "grid";
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        ref,
+        "data-slot": "data-row",
+        "data-layout": resolved,
+        className: cn(
+          "border-b border-border py-1.5 last:border-b-0",
+          grid ? "grid grid-cols-[var(--mlz-data-label,8rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-1 max-[560px]:grid-cols-1 max-[560px]:gap-y-0.5" : "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-dashed",
+          className
+        ),
+        ...props,
+        children: [
+          /* @__PURE__ */ jsx(
+            "dt",
+            {
+              className: cn(
+                grid ? "font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground" : "text-sm text-muted-foreground"
+              ),
+              children: label
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            "dd",
+            {
+              className: cn(
+                "m-0 break-words text-sm text-foreground",
+                grid ? "min-w-0" : "max-w-[64%] text-right",
+                mono && "font-mono text-[0.9em]"
+              ),
+              children
+            }
+          )
+        ]
+      }
+    );
+  }
 );
 DataRow.displayName = "DataRow";
 

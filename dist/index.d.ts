@@ -279,9 +279,22 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps
 }
 declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.Element;
 
+/** How a `DataRow` lays out its term/description pair. */
+type DataLayout = "justify" | "grid";
+interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
+    /**
+     * How child rows lay out, cascaded to every `DataRow` (each row can still
+     * override its own `layout`):
+     * - `"justify"` (default) — term left, value right-aligned, dashed row rule.
+     *   Best for compact fact pairs where the value is short-to-medium.
+     * - `"grid"` — a fixed eyebrow label column + value, collapsing to a single
+     *   column on narrow screens. Best for a scannable field list. Set the label
+     *   column width with the `--mlz-data-label` CSS var (default `8rem`).
+     */
+    layout?: DataLayout;
+}
 /**
- * A definition list for key/value facts. Rows are separated by hairline dashed
- * rules (the last row's rule is dropped). Renders a real `<dl>`; each `DataRow`
+ * A definition list for key/value facts. Renders a real `<dl>`; each `DataRow`
  * is a `<div>` grouping a `<dt>`/`<dd>` pair (valid HTML5), so it's accessible
  * and copy-pastable.
  *
@@ -290,14 +303,20 @@ declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.
  *   <DataRow label="Location">Oslo, Norway</DataRow>
  *   <DataRow label="IP" mono>203.0.113.7</DataRow>
  * </DataList>
+ *
+ * <DataList layout="grid">
+ *   <DataRow label="User agent" mono>Mozilla/5.0 …</DataRow>
+ * </DataList>
  * ```
  */
-declare const DataList: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDListElement> & React.RefAttributes<HTMLDListElement>>;
+declare const DataList: React.ForwardRefExoticComponent<DataListProps & React.RefAttributes<HTMLDListElement>>;
 interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
     /** The row's key/term. */
     label: React.ReactNode;
     /** Render the value in the mono type family (for IPs, hashes, headers…). */
     mono?: boolean;
+    /** Override the layout inherited from the parent `DataList`. */
+    layout?: DataLayout;
 }
 declare const DataRow: React.ForwardRefExoticComponent<DataRowProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -1179,4 +1198,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, DataList, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Icon, type IconName, type IconProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
+export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Icon, type IconName, type IconProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };

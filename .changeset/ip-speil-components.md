@@ -25,8 +25,13 @@ semantic token layer, so nothing app-specific leaks into the system.
 - **`<StatusDot />`** — a semantic status dot (success/warning/destructive/info/
   accent/muted) with an optional pulsing ring; `bg-current` so the ring tracks the
   colour.
-- **`<DataList />` / `<DataRow />`** — a definition list for key/value facts with
-  hairline dashed row rules and an optional `mono` value.
+- **`<DataList />` / `<DataRow />`** — a definition list for key/value facts. The
+  default `layout="justify"` gives hairline dashed row rules with a right-aligned,
+  optionally `mono` value; `layout="grid"` (cascaded from the list, overridable
+  per row) switches to a fixed eyebrow-label column plus a left-aligned value that
+  collapses to one column below 560px — a scannable field list for longer values.
+  The label column width is set via the `--mlz-data-label` CSS var (default
+  `8rem`).
 - **`<Callout />`** — a compact, dot-led inline note (lighter than `Alert`) for
   dense lists of findings/checks.
 - **`<Text />`** — an inline typography primitive (body/lead/muted/mono/eyebrow)

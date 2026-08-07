@@ -35,4 +35,45 @@ describe("DataList", () => {
     );
     expect(container.querySelector("dd")?.className).toContain("font-mono");
   });
+
+  it("defaults to the justify layout", () => {
+    const { container } = render(
+      <DataList>
+        <DataRow label="k">v</DataRow>
+      </DataList>,
+    );
+    expect(container.querySelector('[data-slot="data-list"]')).toHaveAttribute(
+      "data-layout",
+      "justify",
+    );
+    expect(container.querySelector('[data-slot="data-row"]')).toHaveAttribute(
+      "data-layout",
+      "justify",
+    );
+  });
+
+  it("cascades the grid layout from the list to its rows", () => {
+    const { container } = render(
+      <DataList layout="grid">
+        <DataRow label="k">v</DataRow>
+      </DataList>,
+    );
+    const row = container.querySelector('[data-slot="data-row"]');
+    expect(row).toHaveAttribute("data-layout", "grid");
+    expect(row?.className).toContain("grid");
+  });
+
+  it("lets a row override the inherited layout", () => {
+    const { container } = render(
+      <DataList layout="grid">
+        <DataRow label="k" layout="justify">
+          v
+        </DataRow>
+      </DataList>,
+    );
+    expect(container.querySelector('[data-slot="data-row"]')).toHaveAttribute(
+      "data-layout",
+      "justify",
+    );
+  });
 });
