@@ -5,6 +5,7 @@ import { InfoTip } from "./info-tip";
 
 const meta = {
   title: "Components/Overlay/InfoTip",
+  tags: ["autodocs"],
   component: InfoTip,
   parameters: { layout: "centered" },
   argTypes: {

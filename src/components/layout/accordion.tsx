@@ -38,6 +38,14 @@ export type AccordionProps = SingleProps | MultipleProps;
  *   </AccordionItem>
  * </Accordion>
  * ```
+ *
+ * **Use an accordion** for independent sections a reader dips into — FAQs, long
+ * forms broken into steps, dense reference material — especially when the labels
+ * are full sentences or the content is long. **Reach for `Tabs`** instead when
+ * the sections are alternative views of one subject and exactly one is relevant
+ * at a time. **Don't** hide anything a reader needs in order to act: an
+ * accordion is for progressive disclosure, not for tidying away required
+ * information.
  */
 export const Accordion = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Root>,

@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Kbd } from "./kbd";
 
 const meta = {
-  title: "Components/Data Display/Kbd",
+  title: "Components/Data display/Kbd",
   component: Kbd,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

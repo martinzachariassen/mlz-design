@@ -4,7 +4,8 @@ import { Grid } from "../layout/layout";
 import { ProjectCard } from "./project-card";
 
 const meta = {
-  title: "Components/Brand/Project Card",
+  title: "Brand/ProjectCard",
+  tags: ["autodocs"],
   component: ProjectCard,
   parameters: { layout: "padded" },
   argTypes: {

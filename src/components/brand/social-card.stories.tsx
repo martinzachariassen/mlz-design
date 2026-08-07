@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { SocialCard } from "../components/brand/social-card";
+import { SocialCard } from "./social-card";
 
 const meta = {
-  title: "Foundations/Social Cards",
+  title: "Brand/SocialCard",
+  tags: ["autodocs"],
   component: SocialCard,
   parameters: { layout: "fullscreen" },
   args: { title: "One design system, every project." },

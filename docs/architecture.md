@@ -88,3 +88,26 @@ Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not
 ## Distribution
 
 `tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`. The committed `dist/` is the token-free fallback for `bun add github:martinzachariassen/mlz-design` — refresh it (`bun run build`) in any PR that changes `src/`. Primary distribution is **GitHub Packages** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+
+### Known blocker: Storybook manager theming
+
+The Storybook **manager chrome is unbranded** (stock light theme, default logo)
+and that's deliberate for now, not an oversight. On Storybook **10.5.7**, adding
+a `.storybook/manager.ts` at all crashes the manager: it renders a blank page
+and throws `PolishedError #5` from `parseToRgb` inside
+`sb-manager/globals-runtime.js`.
+
+This was bisected to the file itself, not its contents — a `manager.ts`
+containing only `export {}` reproduces it, as does one calling
+`addons.setConfig({})` with no theme. So it is not the MLZ token values.
+
+Two things to know when picking this back up:
+
+- The favicon is set through `managerHead` in `main.ts`, which works
+  independently of `manager.ts`.
+- MLZ accents are authored in **OKLCH**, and Storybook pipes theme colours
+  through `polished`, which parses only hex/rgb/hsl. Any future manager theme
+  must convert them first, or it will fail with the same `PolishedError` for a
+  genuinely different reason.
+
+Retry after a Storybook upgrade.

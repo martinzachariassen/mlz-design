@@ -3,7 +3,8 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { GridBackground } from "./grid-background";
 
 const meta = {
-  title: "Components/Brand/Grid Background",
+  title: "Brand/GridBackground",
+  tags: ["autodocs"],
   component: GridBackground,
   parameters: { layout: "fullscreen" },
   argTypes: {

@@ -6,6 +6,14 @@ const config: StorybookConfig = {
   framework: { name: "@storybook/react-vite", options: {} },
   core: { disableTelemetry: true },
   docs: { defaultName: "Docs" },
+  staticDirs: ["./public"],
+  // Brand the browser tab. Full manager chrome theming (`.storybook/manager.ts`)
+  // is blocked — see the note in docs/architecture.md; on Storybook 10.5.7 the
+  // mere presence of that file crashes the manager, even when it is empty.
+  managerHead: (head) => `
+    ${head}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  `,
   typescript: {
     reactDocgen: "react-docgen-typescript",
     reactDocgenTypescriptOptions: {

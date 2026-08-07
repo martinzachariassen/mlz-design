@@ -3,8 +3,9 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarImage } from "./avatar";
 
 const meta = {
-  title: "Components/Data Display/Avatar",
+  title: "Components/Data display/Avatar",
   component: Avatar,
+  subcomponents: { AvatarImage, AvatarFallback, AvatarGroup },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

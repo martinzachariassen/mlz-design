@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Text } from "./text";
 
 const meta = {
-  title: "Components/Data Display/Text",
+  title: "Components/Data display/Text",
   component: Text,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

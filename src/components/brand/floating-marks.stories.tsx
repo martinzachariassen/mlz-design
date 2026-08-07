@@ -3,7 +3,8 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { FloatingMarks } from "./floating-marks";
 
 const meta = {
-  title: "Components/Brand/Floating Marks",
+  title: "Brand/FloatingMarks",
+  tags: ["autodocs"],
   component: FloatingMarks,
   parameters: { layout: "fullscreen" },
   argTypes: {

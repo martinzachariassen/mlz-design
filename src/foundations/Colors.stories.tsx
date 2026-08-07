@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { CSSProperties, ReactNode } from "react";
 
 const meta = {
-  title: "Foundations/Colours",
+  title: "Foundations/Colour",
   tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;

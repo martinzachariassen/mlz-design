@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 const meta = {
   title: "Components/Layout/Tabs",
   component: Tabs,
+  subcomponents: { TabsList, TabsTrigger, TabsContent },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

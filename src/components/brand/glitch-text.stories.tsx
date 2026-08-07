@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { GlitchText } from "./glitch-text";
 
 const meta = {
-  title: "Components/Brand/Glitch Text",
+  title: "Brand/GlitchText",
   component: GlitchText,
   tags: ["autodocs"],
   argTypes: {

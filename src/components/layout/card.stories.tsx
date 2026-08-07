@@ -16,6 +16,14 @@ import {
 const meta = {
   title: "Components/Layout/Card",
   component: Card,
+  subcomponents: {
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardAction,
+    CardContent,
+    CardFooter,
+  },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

@@ -75,12 +75,12 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
-| `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Foundations/Logo |
+| `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Brand → Logo |
 | `RepoBanner` | the README header banner — `standard` · `minimal` · `terminal` · `split` layouts, sized for GitHub's README width; one structure, per-project copy |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
-Storybook also ships composed references — **Foundations → Patterns** (dashboard, forms, alerts…) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
+Storybook also ships composed references — the top-level **Patterns** section (dashboard, forms, alerts…) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
 
 ## Tokens in JS
 

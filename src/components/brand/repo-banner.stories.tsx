@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RepoBanner } from "../components/brand/repo-banner";
+import { RepoBanner } from "./repo-banner";
 
 const meta = {
-  title: "Foundations/Repo Banner",
+  title: "Brand/RepoBanner",
+  tags: ["autodocs"],
   component: RepoBanner,
   parameters: { layout: "fullscreen" },
   args: {

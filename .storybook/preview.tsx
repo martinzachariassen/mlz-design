@@ -26,12 +26,29 @@ const preview: Preview = {
     a11y: { test: "todo" },
     docs: { toc: true },
     options: {
+      // Enumerate every level: anything unlisted falls through to definition
+      // order, which reads as random once a section grows.
       storySort: {
         order: [
-          "Introduction",
+          "Get started",
+          ["Introduction", "Installation", "Theming"],
           "Foundations",
-          ["Colours", "Colour Usage", "Typography", "Motion"],
+          ["Colour", "Colour usage", "Typography", "Motion", "Responsive"],
+          "Brand",
+          [
+            "Logo",
+            "Favicon",
+            "BrandMark",
+            "GlitchText",
+            "GridBackground",
+            "FloatingMarks",
+            "ProjectCard",
+            "RepoBanner",
+            "SocialCard",
+          ],
           "Components",
+          ["Actions", "Forms", "Data display", "Feedback", "Layout", "Overlay"],
+          "Patterns",
         ],
       },
     },

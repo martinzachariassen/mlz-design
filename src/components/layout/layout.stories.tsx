@@ -3,9 +3,27 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Container, Grid, Stack } from "./layout";
 
 const meta = {
-  title: "Components/Layout/Layout",
+  title: "Components/Layout/Container",
   component: Container,
-  parameters: { layout: "padded" },
+  subcomponents: { Stack, Grid },
+  tags: ["autodocs"],
+  parameters: {
+    layout: "padded",
+    docs: {
+      description: {
+        component:
+          "The three layout primitives, in the order you reach for them: `Container` frames the page, " +
+          "`Stack` flows one axis, `Grid` lays out two.\n\n" +
+          "**Use `Container`** for the outer page frame — it centres content at a max width and handles the " +
+          "responsive gutters. **Use `Stack`** for a row or column of siblings with one token gap; " +
+          '`direction="responsive"` stacks on mobile and flows to a row at `sm`, which covers most ' +
+          "toolbars and button rows. **Use `Grid`** when items should wrap into columns — `min` auto-fits " +
+          "as many as fit, `cols` pins a responsive 1–6 column count.\n\n" +
+          "**Don't** nest a `Container` inside another; the gutters compound. And don't reach for `Grid` " +
+          "for a single row — `Stack` says what you mean.",
+      },
+    },
+  },
 } satisfies Meta;
 
 export default meta;

@@ -42,6 +42,12 @@ const MARGIN = 8; // min distance from the viewport edge
  * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
  * it's dropped into.
  *
+ * **Use it** for optional context a reader can ignore — defining jargon, or
+ * explaining why a field is asked for. **Reach for `Dialog`** when the content
+ * needs a decision or its own actions, and just write the sentence inline when
+ * it's short enough: an info tip that everyone has to open is a sign the text
+ * belonged on the page. Never hide *required* instructions behind one.
+ *
  * ```tsx
  * <p>
  *   Your ASN
