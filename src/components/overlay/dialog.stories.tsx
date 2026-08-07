@@ -16,12 +16,28 @@ import {
 
 const meta = {
   title: "Components/Overlay/Dialog",
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A modal dialog built on the native `<dialog>` element — focus trapping, the Esc key, " +
+          "background inerting and the top layer all come from the platform, with no dependency. " +
+          "It is controlled: drive `open` / `onOpenChange` yourself, and clicking the backdrop " +
+          "closes it.\n\n" +
+          "Compose it from `DialogContent` (the card surface and the ✕ button), `DialogHeader` " +
+          "with `DialogTitle` + `DialogDescription`, and `DialogFooter` for actions. `DialogClose` " +
+          "with `asChild` turns any control into a dismiss button. Children only mount while the " +
+          "dialog is open, so a form inside starts fresh every time.",
+      },
+    },
+  },
 } satisfies Meta;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The everyday form dialog. `autoFocus` on the first field is what the native `<dialog>` focus trap picks up. */
 export const Default: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false);
@@ -86,6 +102,7 @@ export const LightDark: Story = {
   ),
 };
 
+/** A confirm step. Say what will be destroyed in the description, and keep Cancel first in the source — the footer reverses on mobile so the confirm lands on top. */
 export const Destructive: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false);

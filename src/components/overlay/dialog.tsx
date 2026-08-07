@@ -1,32 +1,39 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A modal dialog built on the native `<dialog>` element — so focus-trapping, the
- * Esc key, background inerting and the top layer come from the platform, with no
- * dependency. Controlled: drive `open` / `onOpenChange` yourself.
- *
- *   <Dialog open={open} onOpenChange={setOpen}>
- *     <DialogContent>
- *       <DialogHeader>
- *         <DialogTitle>Delete project</DialogTitle>
- *         <DialogDescription>This can't be undone.</DialogDescription>
- *       </DialogHeader>
- *       <DialogFooter>
- *         <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
- *         <Button variant="destructive">Delete</Button>
- *       </DialogFooter>
- *     </DialogContent>
- *   </Dialog>
- */
 const DialogContext = React.createContext<{ close: () => void } | null>(null);
 
 export interface DialogProps {
+  /** Whether the dialog is showing. Controlled — you own this state. */
   open: boolean;
+  /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
   onOpenChange: (open: boolean) => void;
+  /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
   children: React.ReactNode;
 }
 
+/**
+ * A modal dialog built on the native `<dialog>` element — so focus-trapping, the
+ * Esc key, background inerting and the top layer come from the platform, with no
+ * dependency. Controlled: drive `open` / `onOpenChange` yourself. Children only
+ * mount while it's open, so a form inside starts fresh each time. Clicking the
+ * backdrop dismisses it.
+ *
+ * ```tsx
+ * <Dialog open={open} onOpenChange={setOpen}>
+ *   <DialogContent>
+ *     <DialogHeader>
+ *       <DialogTitle>Delete project</DialogTitle>
+ *       <DialogDescription>This can't be undone.</DialogDescription>
+ *     </DialogHeader>
+ *     <DialogFooter>
+ *       <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+ *       <Button variant="destructive">Delete</Button>
+ *     </DialogFooter>
+ *   </DialogContent>
+ * </Dialog>
+ * ```
+ */
 export function Dialog({ open, onOpenChange, children }: DialogProps) {
   const ref = React.useRef<HTMLDialogElement>(null);
 
@@ -55,6 +62,10 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
   );
 }
 
+/**
+ * The card surface inside the dialog, and where the ✕ close button lives. Caps at
+ * 85% of the viewport height and scrolls its own overflow.
+ */
 export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
     const ctx = React.useContext(DialogContext);
@@ -85,6 +96,7 @@ export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttribut
 );
 DialogContent.displayName = "DialogContent";
 
+/** Title + description block, inset on the right to clear the close button. */
 export const DialogHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
@@ -97,6 +109,7 @@ export const DialogHeader = React.forwardRef<HTMLDivElement, React.HTMLAttribute
 );
 DialogHeader.displayName = "DialogHeader";
 
+/** The dialog's `<h2>` heading, in tracked-out mono. */
 export const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
@@ -113,6 +126,7 @@ export const DialogTitle = React.forwardRef<
 ));
 DialogTitle.displayName = "DialogTitle";
 
+/** The muted sentence under the title — say what's about to happen. */
 export const DialogDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -126,6 +140,11 @@ export const DialogDescription = React.forwardRef<
 ));
 DialogDescription.displayName = "DialogDescription";
 
+/**
+ * The action row. Write the buttons in reading order (cancel first, confirm
+ * last): it reverses to a full-width column on mobile so the confirm lands on
+ * top, then flows right-aligned from `sm` up.
+ */
 export const DialogFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div

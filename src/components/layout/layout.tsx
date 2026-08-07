@@ -2,19 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * Layout primitives — the structural spine for responsive, mobile-first web UIs.
- * They carry no brand paint (no colour, no border); they only lay things out on
- * the token breakpoint ladder so pages read the same from a 360px phone to a wide
- * desktop. Compose the painted components (Card, Button…) inside them.
- *
- *   Container  a centred, max-width column with responsive gutters — the page frame.
- *   Stack      a flex row/column with a token gap; `responsive` stacks on mobile,
- *              flows to a row at `sm`.
- *   Grid       a responsive grid — either an auto-fitting track (`min`) that needs
- *              no breakpoints, or a fixed `cols` count that steps up with width.
- */
-
 const containerVariants = cva("mx-auto w-full", {
   variants: {
     /** Max content width. `prose` is measure-optimised for reading. */
@@ -41,6 +28,15 @@ export interface ContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof containerVariants> {}
 
+/**
+ * The page frame — a centred, max-width column with responsive side gutters.
+ *
+ * One of three layout primitives (with `Stack` and `Grid`) that form the
+ * structural spine for responsive, mobile-first UIs. They carry no brand paint —
+ * no colour, no border — and only lay things out on the token breakpoint ladder,
+ * so pages read the same from a 360px phone to a wide desktop. Compose the
+ * painted components (Card, Button…) inside them.
+ */
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   ({ className, size, gutter, ...props }, ref) => (
     <div
@@ -95,6 +91,10 @@ export interface StackProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof stackVariants> {}
 
+/**
+ * A flex row or column with a token gap. `direction="responsive"` is the common
+ * card→row flip: a column on mobile, a row from `sm` up.
+ */
 export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
   ({ className, direction, gap, align, justify, wrap, ...props }, ref) => (
     <div
@@ -135,9 +135,16 @@ export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
   min?: string | number;
   /** Fixed responsive column count (1–6) that steps up at `sm`/`lg`. */
   cols?: keyof typeof colsMap;
+  /** Gutter between cells, from the spacing token ladder. */
   gap?: keyof typeof gapMap;
 }
 
+/**
+ * A responsive grid, in two modes. Pass `min` for an auto-fitting track that
+ * reflows with the container and needs no breakpoints at all — the better default
+ * for card lists. Pass `cols` when the column count itself is the design, and it
+ * steps up at `sm`/`lg`. `min` wins if you set both.
+ */
 export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
   ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
     const auto = min != null;

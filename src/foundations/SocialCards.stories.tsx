@@ -7,11 +7,22 @@ const meta = {
   parameters: { layout: "fullscreen" },
   args: { title: "One design system, every project." },
   argTypes: {
+    title: { description: "Headline — the one thing the card is about.", control: "text" },
+    eyebrow: { description: "Mono kicker above the headline.", control: "text" },
+    description: { description: "Supporting line under the headline.", control: "text" },
+    footer: { description: "Footer-left meta: a domain or author.", control: "text" },
+    tagline: { description: "Mono kicker under the wordmark in the lockup.", control: "text" },
+    tag: { description: "Small badge in the top-right — a section or category.", control: "text" },
     accent: {
+      description: "Pin the card to one accent family regardless of the ambient one.",
       control: "inline-radio",
       options: [undefined, "cyan", "blue", "green", "rust", "ink"],
     },
-    width: { control: { type: "range", min: 480, max: 1200, step: 20 } },
+    width: {
+      description: "Rendered width in px. Height follows the canonical 1200×630 OG ratio.",
+      control: { type: "range", min: 480, max: 1200, step: 20 },
+    },
+    marks: { description: "Show the drifting sketch marks behind the frame.", control: "boolean" },
   },
 } satisfies Meta<typeof SocialCard>;
 

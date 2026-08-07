@@ -8,9 +8,12 @@ const meta = {
   component: Textarea,
   tags: ["autodocs"],
   argTypes: {
-    placeholder: { control: "text" },
-    disabled: { control: "boolean" },
-    rows: { control: "number" },
+    placeholder: { description: "Hint text shown while the field is empty.", control: "text" },
+    disabled: { description: "Dim the field and block interaction.", control: "boolean" },
+    rows: {
+      description: "Starting height in lines. The user can still drag it taller.",
+      control: "number",
+    },
   },
   args: { placeholder: "Tell me about the project…" },
   parameters: { layout: "centered" },
@@ -19,6 +22,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The default six-line box. The bottom-right grip resizes it vertically only — horizontal resize would break the layout. */
 export const Default: Story = {
   render: (args) => (
     <div className="w-80">
@@ -27,6 +31,7 @@ export const Default: Story = {
   ),
 };
 
+/** Disabled dims the field and blocks the resize grip. */
 export const Disabled: Story = {
   args: { disabled: true, placeholder: "Unavailable" },
   render: (args) => (
@@ -36,6 +41,7 @@ export const Disabled: Story = {
   ),
 };
 
+/** Label, textarea and hint as one unit, with `rows` setting the starting height. */
 export const WithField: Story = {
   render: () => (
     <div className="grid w-80 gap-2">
@@ -46,6 +52,7 @@ export const WithField: Story = {
   ),
 };
 
+/** The field unit in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

@@ -3,6 +3,11 @@ import { cn } from "../../lib/cn";
 
 export type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 
+/**
+ * An on/off toggle for settings that apply immediately — no Save button. Like
+ * `Checkbox` it's a real `<input type="checkbox">` styled through a `peer` label,
+ * so it submits with the form and is reachable by keyboard for free.
+ */
 export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
   ({ className, id, ...props }, ref) => {
     const generatedId = React.useId();

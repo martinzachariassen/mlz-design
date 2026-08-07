@@ -8,8 +8,11 @@ const meta = {
   component: Checkbox,
   tags: ["autodocs"],
   argTypes: {
-    checked: { control: "boolean" },
-    disabled: { control: "boolean" },
+    checked: {
+      description: "Controlled checked state. Use `defaultChecked` to leave it uncontrolled.",
+      control: "boolean",
+    },
+    disabled: { description: "Dim the box and block interaction.", control: "boolean" },
   },
   parameters: { layout: "centered" },
 } satisfies Meta<typeof Checkbox>;
@@ -17,15 +20,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The resting, unchecked box. A bare checkbox needs an `aria-label` when no visible `Label` names it. */
 export const Default: Story = {
   render: (args) => <Checkbox aria-label="Example checkbox" {...args} />,
 };
 
+/** Checked fills the box with `--primary` and scales the tick in over 200ms. */
 export const Checked: Story = {
   args: { defaultChecked: true },
   render: (args) => <Checkbox aria-label="Example checkbox" {...args} />,
 };
 
+/** Disabled in both states — dimmed, with a not-allowed cursor. */
 export const Disabled: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -35,6 +41,7 @@ export const Disabled: Story = {
   ),
 };
 
+/** The usual pairing: `id` on the checkbox, `htmlFor` on the `Label`, and a muted hint underneath. Clicking either toggles it. */
 export const WithLabel: Story = {
   render: () => (
     <div className="flex items-start gap-3">
@@ -49,6 +56,7 @@ export const WithLabel: Story = {
   ),
 };
 
+/** All four states across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

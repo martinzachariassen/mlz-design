@@ -1,24 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A Radix-free, context-driven accordion. The root owns the open set (controlled
- * via `value`/`onValueChange` or uncontrolled via `defaultValue`) and shares it
- * through context; triggers register so the Up/Down/Home/End keys roam between
- * them (WAI-ARIA accordion pattern). Content animates open/closed with the
- * `grid-template-rows: 0fr → 1fr` technique, so height is fluid with no JS
- * measuring and no fixed max-height.
- *
- * ```tsx
- * <Accordion type="single" collapsible>
- *   <AccordionItem value="a">
- *     <AccordionTrigger>Section A</AccordionTrigger>
- *     <AccordionContent>…</AccordionContent>
- *   </AccordionItem>
- * </Accordion>
- * ```
- */
-
 type AccordionType = "single" | "multiple";
 
 interface AccordionContextValue {
@@ -63,11 +45,29 @@ export interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement
   value?: string | string[];
   /** Uncontrolled initial open value(s). */
   defaultValue?: string | string[];
+  /** Fired with the new open value(s) — a string for `single`, an array for `multiple`. */
   onValueChange?: (value: string | string[]) => void;
   /** For `type="single"`, allow closing the open item by clicking it again. */
   collapsible?: boolean;
 }
 
+/**
+ * A Radix-free, context-driven accordion. The root owns the open set (controlled
+ * via `value`/`onValueChange` or uncontrolled via `defaultValue`) and shares it
+ * through context; triggers register so the Up/Down/Home/End keys roam between
+ * them (WAI-ARIA accordion pattern). Content animates open/closed with the
+ * `grid-template-rows: 0fr → 1fr` technique, so height is fluid with no JS
+ * measuring and no fixed max-height.
+ *
+ * ```tsx
+ * <Accordion type="single" collapsible>
+ *   <AccordionItem value="a">
+ *     <AccordionTrigger>Section A</AccordionTrigger>
+ *     <AccordionContent>…</AccordionContent>
+ *   </AccordionItem>
+ * </Accordion>
+ * ```
+ */
 export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
   (
     {
@@ -152,9 +152,15 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
 Accordion.displayName = "Accordion";
 
 export interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Identifies this item to the root. Unique within the `Accordion`. */
   value: string;
 }
 
+/**
+ * One section of the accordion — a trigger plus its content, rule-separated from
+ * the next. Its `value` is the identity the root opens and closes by, so it must
+ * be unique within the accordion.
+ */
 export const AccordionItem = React.forwardRef<HTMLDivElement, AccordionItemProps>(
   ({ value, className, children, ...props }, ref) => {
     const { isOpen } = useAccordionContext("AccordionItem");
@@ -191,6 +197,12 @@ export interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLBu
   hideIndicator?: boolean;
 }
 
+/**
+ * The clickable header of an `AccordionItem`. Renders a real `<button>` inside an
+ * `<h3>` with `aria-expanded`/`aria-controls` wired up, and handles the arrow-key
+ * roving itself. Children are laid out in a flex row, so a trigger can carry a
+ * number, a subtitle and a badge as easily as a single line of text.
+ */
 export const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTriggerProps>(
   ({ className, children, hideIndicator, onKeyDown, ...props }, ref) => {
     const { toggle, register, focusRelative } = useAccordionContext("AccordionTrigger");
@@ -256,6 +268,11 @@ export const AccordionTrigger = React.forwardRef<HTMLButtonElement, AccordionTri
 );
 AccordionTrigger.displayName = "AccordionTrigger";
 
+/**
+ * The panel an `AccordionTrigger` reveals. It's a `<section>` named by its
+ * trigger — an implicit `region` landmark — that animates its height via the
+ * `0fr → 1fr` grid-row trick.
+ */
 export const AccordionContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>

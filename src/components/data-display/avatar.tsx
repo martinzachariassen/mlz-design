@@ -2,15 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * Identity, the mlz way: initials first. The frame is a hairline-bordered chip
- * (circle or square); an image drops in when there is one and falls back to the
- * initials the moment it fails. Compose `<Avatar><AvatarImage/><AvatarFallback/>`;
- * add a `status` dot, or stack several in an `AvatarGroup`.
- *
- * The root is an un-clipped wrapper so the status dot can sit on the edge; the
- * inner `avatar-frame` does the rounding/clipping (and is what `AvatarGroup` rings).
- */
 const avatarVariants = cva("relative inline-flex shrink-0", {
   variants: {
     size: {
@@ -47,6 +38,22 @@ export interface AvatarProps
   status?: keyof typeof statusColor;
 }
 
+/**
+ * Identity, the mlz way: initials first. The frame is a hairline-bordered chip
+ * (circle or square); an image drops in when there is one and falls back to the
+ * initials the moment it fails. Compose `<Avatar><AvatarImage/><AvatarFallback/>`;
+ * add a `status` dot, or stack several in an `AvatarGroup`.
+ *
+ * The root is an un-clipped wrapper so the status dot can sit on the edge; the
+ * inner `avatar-frame` does the rounding/clipping (and is what `AvatarGroup` rings).
+ *
+ * ```tsx
+ * <Avatar size="lg" status="online">
+ *   <AvatarImage src={user.avatar} alt={user.name} />
+ *   <AvatarFallback>MZ</AvatarFallback>
+ * </Avatar>
+ * ```
+ */
 export const Avatar = React.forwardRef<HTMLSpanElement, AvatarProps>(
   ({ className, size, shape = "circle", status, children, ...props }, ref) => (
     <span
@@ -80,6 +87,11 @@ Avatar.displayName = "Avatar";
 
 export type AvatarImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
 
+/**
+ * The avatar's photo. It unmounts itself on the first `error` event, so whatever
+ * `AvatarFallback` you put beside it takes over — no broken-image icon, no state
+ * to manage. Always pass an `alt`.
+ */
 export const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
   ({ className, onError, ...props }, ref) => {
     const [errored, setErrored] = React.useState(false);
@@ -119,6 +131,10 @@ export interface AvatarFallbackProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof fallbackVariants> {}
 
+/**
+ * What fills the frame when there's no image — initials, in tracked-out mono.
+ * `tone` picks the chip colour; use `accent` sparingly to mark "you".
+ */
 export const AvatarFallback = React.forwardRef<HTMLSpanElement, AvatarFallbackProps>(
   ({ className, tone, ...props }, ref) => (
     <span

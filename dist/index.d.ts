@@ -5,17 +5,6 @@ import { AccentName } from './tokens.js';
 export { Breakpoint, Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './tokens.js';
 import { ClassValue } from 'clsx';
 
-/**
- * The MLZ **mark** — the Block M on a tight ink tile, the icon half of the
- * identity (favicon, avatar, app icon, stamp). Pure SVG, so it stays crisp from a
- * 16px favicon up to a 1200px OG image.
- *
- * The mark is always monochrome — ink tile, paper letter, never the accent. It
- * reads from semantic tokens by default (`--foreground` tile, `--background`
- * letter), so it inverts with the theme for free. For a *static* asset (a favicon
- * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
- * Foundations → Brand & Favicon story for the export recipe.
- */
 declare const brandMarkVariants: (props?: ({
     variant?: "tile" | "glyph" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
@@ -27,7 +16,24 @@ interface BrandMarkProps extends Omit<React.SVGProps<SVGSVGElement>, "opacity">,
     /** Letter colour. Defaults to the theme's paper surface (tile) / currentColor (glyph). */
     glyph?: string;
 }
+/**
+ * The MLZ **mark** — the Block M on a tight ink tile, the icon half of the
+ * identity (favicon, avatar, app icon, stamp). Pure SVG, so it stays crisp from a
+ * 16px favicon up to a 1200px OG image.
+ *
+ * The mark is always monochrome — ink tile, paper letter, never the accent. It
+ * reads from semantic tokens by default (`--foreground` tile, `--background`
+ * letter), so it inverts with the theme for free. For a *static* asset (a favicon
+ * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
+ * Foundations → Brand & Favicon story for the export recipe.
+ */
 declare const BrandMark: React.ForwardRefExoticComponent<Omit<BrandMarkProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+interface BrandWordmarkProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+    /** Font size in px. */
+    size?: number;
+    /** Period colour override (static exports). Defaults to the `--brand-period` token. */
+    period?: string;
+}
 /**
  * The MLZ **wordmark** — `mlz.` set in Space Mono Bold, lowercase, tracked
  * −0.03em, the type half of the identity (header, footer, signature, title). The
@@ -36,20 +42,7 @@ declare const BrandMark: React.ForwardRefExoticComponent<Omit<BrandMarkProps, "r
  * base accent on dark) and is never omitted. Pass `period` to override it for a
  * static export. Minimum size 14px; below that, use the mark alone.
  */
-interface BrandWordmarkProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
-    /** Font size in px. */
-    size?: number;
-    /** Period colour override (static exports). Defaults to the `--brand-period` token. */
-    period?: string;
-}
 declare const BrandWordmark: React.ForwardRefExoticComponent<BrandWordmarkProps & React.RefAttributes<HTMLSpanElement>>;
-/**
- * The **lockup** — the mark paired with the wordmark, the signature MLZ pairing.
- * Proportions are fixed: mark height = 1.45 × wordmark size, gap = 0.5 × wordmark
- * size. `horizontal` (mark beside wordmark) is primary for headers and the OG
- * card; `stacked` (mark above a centred wordmark) suits square/avatar contexts.
- * The mono, wide-tracked `tagline` joins only at 40px+ marks (guideline minimum).
- */
 interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Kicker line under the wordmark. Shown only when set and the mark is ≥ 40px. */
     tagline?: string;
@@ -58,8 +51,19 @@ interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Lockup layout. */
     orientation?: "horizontal" | "stacked";
 }
+/**
+ * The **lockup** — the mark paired with the wordmark, the signature MLZ pairing.
+ * Proportions are fixed: mark height = 1.45 × wordmark size, gap = 0.5 × wordmark
+ * size. `horizontal` (mark beside wordmark) is primary for headers and the OG
+ * card; `stacked` (mark above a centred wordmark) suits square/avatar contexts.
+ * The mono, wide-tracked `tagline` joins only at 40px+ marks (guideline minimum).
+ */
 declare const BrandLockup: React.ForwardRefExoticComponent<BrandLockupProps & React.RefAttributes<HTMLDivElement>>;
 
+interface FloatingMarksProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** How many marks to scatter. */
+    count?: number;
+}
 /**
  * The MLZ drifting "sketch marks": small CSS-drawn engineering glyphs (square,
  * filled square, plus, line, angle) that float slowly up-screen, fading in and
@@ -70,12 +74,17 @@ declare const BrandLockup: React.ForwardRefExoticComponent<BrandLockupProps & Re
  * from each mark's index (no `Math.random`), so it's SSR-safe and stable across
  * renders. Render inside a `relative` container; it fills that box.
  */
-interface FloatingMarksProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** How many marks to scatter. */
-    count?: number;
-}
 declare const FloatingMarks: React.ForwardRefExoticComponent<FloatingMarksProps & React.RefAttributes<HTMLDivElement>>;
 
+type GlitchTrigger = "ambient" | "hover";
+interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+    /** The text to render and glitch. */
+    text: string;
+    /** What drives the effect. */
+    trigger?: GlitchTrigger;
+    /** Ambient burst cadence, `[minMs, maxMs]`. */
+    interval?: readonly [number, number];
+}
 /**
  * The MLZ cyberpunk text effect: text is split per character and random chars
  * flicker with an RGB-split (using the `--glitch-1` / `--glitch-2` tokens). The
@@ -87,18 +96,22 @@ declare const FloatingMarks: React.ForwardRefExoticComponent<FloatingMarksProps 
  * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
  *   loop, paused when the tab is hidden — its resting state.
  * - `trigger="hover"`: a single burst each time the pointer enters.
+ *
+ * Styling lives on the wrapper — pass a `className` with the type family, size
+ * and tracking you want.
  */
-type GlitchTrigger = "ambient" | "hover";
-interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
-    /** The text to render and glitch. */
-    text: string;
-    /** What drives the effect. */
-    trigger?: GlitchTrigger;
-    /** Ambient burst cadence, `[minMs, maxMs]`. */
-    interval?: readonly [number, number];
-}
 declare const GlitchText: React.ForwardRefExoticComponent<GlitchTextProps & React.RefAttributes<HTMLSpanElement>>;
 
+interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Minor grid cell size in px (major grid is 5×). */
+    cell?: number;
+    /** Reveal the grid through a pointer-following spotlight instead of showing all. */
+    interactive?: boolean;
+    /** Pool accent light under the spotlight (only meaningful with `interactive`). */
+    glow?: boolean;
+    /** Spotlight diameter in px. */
+    spotlight?: number;
+}
 /**
  * The MLZ "engineering notebook" grid: a two-scale ruled background (a fine
  * minor grid plus a 5× major grid) drawn purely from layered gradients — no image.
@@ -110,37 +123,18 @@ declare const GlitchText: React.ForwardRefExoticComponent<GlitchTextProps & Reac
  *
  * Render it as the first child of a `relative` container; it fills that box.
  */
-interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Minor grid cell size in px (major grid is 5×). */
-    cell?: number;
-    /** Reveal the grid through a pointer-following spotlight instead of showing all. */
-    interactive?: boolean;
-    /** Pool accent light under the spotlight (only meaningful with `interactive`). */
-    glow?: boolean;
-    /** Spotlight diameter in px. */
-    spotlight?: number;
-}
 declare const GridBackground: React.ForwardRefExoticComponent<GridBackgroundProps & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * A portfolio project card — the mlz signature applied to work: a hairline surface
- * that lifts on hover with an offset accent shadow, a cover band, a grotesk title,
- * mono metadata and tag chips. Pass a `cover` (image, canvas, anything) or let it
- * fall back to the on-brand ruled-grid + monogram placeholder — no stock imagery.
- *
- *   default   vertical: cover on top, body below — drops into a `Grid`.
- *   featured   horizontal from `md` up (cover beside the body), larger — for the
- *              hero project at the top of a portfolio. Stacks on mobile.
- *
- * With `href`, the whole card becomes one link (the title anchor stretches over it).
- */
 interface ProjectCardProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
+    /** The project name — the card's heading. */
     title: React.ReactNode;
+    /** One or two sentences on the work. Clamped to three lines unless `featured`. */
     description?: React.ReactNode;
     /** Short tag chips (stack, role, category). */
     tags?: readonly string[];
     /** A mono eyebrow line — e.g. "2024 · Design system". */
     meta?: string;
+    /** Makes the whole card one link, with the title anchor stretched over it. */
     href?: string;
     /** Cover visual. Defaults to the brand grid + monogram placeholder. */
     cover?: React.ReactNode;
@@ -149,25 +143,20 @@ interface ProjectCardProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
     /** Link label. */
     cta?: string;
 }
+/**
+ * A portfolio project card — the mlz signature applied to work: a hairline surface
+ * that lifts on hover with an offset accent shadow, a cover band, a grotesk title,
+ * mono metadata and tag chips. Pass a `cover` (image, canvas, anything) or let it
+ * fall back to the on-brand ruled-grid + monogram placeholder — no stock imagery.
+ *
+ * - **default** — vertical: cover on top, body below. Drops into a `Grid`.
+ * - **featured** — horizontal from `md` up (cover beside the body) and larger,
+ *   for the hero project at the top of a portfolio. Stacks on mobile.
+ *
+ * With `href`, the whole card becomes one link (the title anchor stretches over it).
+ */
 declare const ProjectCard: React.ForwardRefExoticComponent<ProjectCardProps & React.RefAttributes<HTMLElement>>;
 
-/**
- * A repository README banner — the wide, short header image that tops every MLZ
- * project's `README.md`. Built entirely from tokens so every repo wears the same
- * face; only the copy (project name, description, stack, install) changes per
- * project. Locked to a **3.76:1** ratio (1280×340) that reads well at GitHub's
- * ~896px rendered README width; `width` scales the whole banner as one.
- *
- * Four layouts share the same engineering-notebook frame:
- * - `standard` — left-weighted lockup + statement + stack; the default.
- * - `minimal` — centred, symmetric; good for libraries and small repos.
- * - `terminal` — a mono command-prompt, the install line front and centre.
- * - `split` — an ink brand panel beside a paper content panel.
- *
- * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
- * it at the top of the README. For light + dark, capture once plain and once
- * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
- */
 interface RepoBannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
     /** The project name — the headline, paired with the `mlz.` wordmark. */
     project: React.ReactNode;
@@ -190,20 +179,25 @@ interface RepoBannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
     /** Show the drifting sketch marks. */
     marks?: boolean;
 }
+/**
+ * A repository README banner — the wide, short header image that tops every MLZ
+ * project's `README.md`. Built entirely from tokens so every repo wears the same
+ * face; only the copy (project name, description, stack, install) changes per
+ * project. Locked to a **3.76:1** ratio (1280×340) that reads well at GitHub's
+ * ~896px rendered README width; `width` scales the whole banner as one.
+ *
+ * Four layouts share the same engineering-notebook frame:
+ * - `standard` — left-weighted lockup + statement + stack; the default.
+ * - `minimal` — centred, symmetric; good for libraries and small repos.
+ * - `terminal` — a mono command-prompt, the install line front and centre.
+ * - `split` — an ink brand panel beside a paper content panel.
+ *
+ * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
+ * it at the top of the README. For light + dark, capture once plain and once
+ * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
+ */
 declare const RepoBanner: React.ForwardRefExoticComponent<RepoBannerProps & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * A ready-to-screenshot social / Open-Graph card at the canonical 1200×630, built
- * entirely from tokens so every app renders shares in the same voice. Compose it
- * in a route (or a Satori / `@vercel/og` template) and snapshot at 2× for retina.
- *
- * Layout: an engineering-notebook frame — hairline inset border, corner
- * registration marks, a faint ruled grid and drifting marks behind a left brand
- * lockup, a large grotesk headline, and a footer rule carrying the domain.
- *
- * `width` scales the whole card proportionally (height is locked to the 1.91:1
- * OG ratio) so it previews at any size without breaking the internal rhythm.
- */
 interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
     /** Headline — the one thing the card is about. */
     title: React.ReactNode;
@@ -224,17 +218,20 @@ interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
     /** Show the drifting sketch marks. */
     marks?: boolean;
 }
+/**
+ * A ready-to-screenshot social / Open-Graph card at the canonical 1200×630, built
+ * entirely from tokens so every app renders shares in the same voice. Compose it
+ * in a route (or a Satori / `@vercel/og` template) and snapshot at 2× for retina.
+ *
+ * Layout: an engineering-notebook frame — hairline inset border, corner
+ * registration marks, a faint ruled grid and drifting marks behind a left brand
+ * lockup, a large grotesk headline, and a footer rule carrying the domain.
+ *
+ * `width` scales the whole card proportionally (height is locked to the 1.91:1
+ * OG ratio) so it previews at any size without breaking the internal rhythm.
+ */
 declare const SocialCard: React.ForwardRefExoticComponent<SocialCardProps & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * Identity, the mlz way: initials first. The frame is a hairline-bordered chip
- * (circle or square); an image drops in when there is one and falls back to the
- * initials the moment it fails. Compose `<Avatar><AvatarImage/><AvatarFallback/>`;
- * add a `status` dot, or stack several in an `AvatarGroup`.
- *
- * The root is an un-clipped wrapper so the status dot can sit on the edge; the
- * inner `avatar-frame` does the rounding/clipping (and is what `AvatarGroup` rings).
- */
 declare const avatarVariants: (props?: ({
     size?: "default" | "xs" | "sm" | "lg" | "xl" | null | undefined;
     shape?: "square" | "circle" | null | undefined;
@@ -249,14 +246,39 @@ interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProp
     /** Presence dot on the lower-right edge. */
     status?: keyof typeof statusColor;
 }
+/**
+ * Identity, the mlz way: initials first. The frame is a hairline-bordered chip
+ * (circle or square); an image drops in when there is one and falls back to the
+ * initials the moment it fails. Compose `<Avatar><AvatarImage/><AvatarFallback/>`;
+ * add a `status` dot, or stack several in an `AvatarGroup`.
+ *
+ * The root is an un-clipped wrapper so the status dot can sit on the edge; the
+ * inner `avatar-frame` does the rounding/clipping (and is what `AvatarGroup` rings).
+ *
+ * ```tsx
+ * <Avatar size="lg" status="online">
+ *   <AvatarImage src={user.avatar} alt={user.name} />
+ *   <AvatarFallback>MZ</AvatarFallback>
+ * </Avatar>
+ * ```
+ */
 declare const Avatar: React.ForwardRefExoticComponent<AvatarProps & React.RefAttributes<HTMLSpanElement>>;
 type AvatarImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+/**
+ * The avatar's photo. It unmounts itself on the first `error` event, so whatever
+ * `AvatarFallback` you put beside it takes over — no broken-image icon, no state
+ * to manage. Always pass an `alt`.
+ */
 declare const AvatarImage: React.ForwardRefExoticComponent<AvatarImageProps & React.RefAttributes<HTMLImageElement>>;
 declare const fallbackVariants: (props?: ({
     tone?: "default" | "accent" | "muted" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof fallbackVariants> {
 }
+/**
+ * What fills the frame when there's no image — initials, in tracked-out mono.
+ * `tone` picks the chip colour; use `accent` sparingly to mark "you".
+ */
 declare const AvatarFallback: React.ForwardRefExoticComponent<AvatarFallbackProps & React.RefAttributes<HTMLSpanElement>>;
 interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Show at most this many; the rest collapse into a `+N` chip. */
@@ -275,6 +297,11 @@ declare const badgeVariants: (props?: ({
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
 }
+/**
+ * A small mono chip for status, versions and categories — the tracked-out
+ * uppercase label that sits next to a title. It's a plain `<span>` with no
+ * semantics of its own, so put the meaning in the text, not the colour alone.
+ */
 declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.Element;
 
 /** How a `DataRow` lays out its term/description pair. */
@@ -322,6 +349,7 @@ type KbdProps = React.HTMLAttributes<HTMLElement>;
 /** An inline keyboard key: mono, hairline-bordered, muted chip. */
 declare const Kbd: React.ForwardRefExoticComponent<KbdProps & React.RefAttributes<HTMLElement>>;
 
+type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 /**
  * Long-form typography — the "blog with a lot of text" surface. Wrap raw article
  * markup (a CMS/MDX render, or plain elements) and every child is styled in the
@@ -332,20 +360,8 @@ declare const Kbd: React.ForwardRefExoticComponent<KbdProps & React.RefAttribute
  * It's a descendant-styled container (the `@tailwindcss/typography` idea, done
  * with tokens), so it needs no plugin and re-themes with light/dark and accent.
  */
-type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 declare const Prose: React.ForwardRefExoticComponent<ProseProps & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * A small status dot — a filled circle that carries a semantic colour and, when
- * `pulse` is set, a soft breathing ring in the same colour (via `animate-ping`
- * on a matched overlay). The fill uses `bg-current` so the colour is set once by
- * the variant's `text-*` and the ring tracks it automatically.
- *
- * ```tsx
- * <StatusDot variant="success" />
- * <StatusDot variant="destructive" pulse />
- * ```
- */
 declare const statusDotVariants: (props?: ({
     variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
@@ -355,20 +371,23 @@ interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantP
     /** Accessible label. When set, the dot is exposed to assistive tech. */
     label?: string;
 }
-declare const StatusDot: React.ForwardRefExoticComponent<StatusDotProps & React.RefAttributes<HTMLSpanElement>>;
-
 /**
- * Inline/text typography primitive — the small, everyday type roles that don't
- * warrant a full `Prose` block: mono values, muted asides, and the tracked-out
- * mono eyebrow used above sections. `variant` sets the whole look; `size`
- * optionally overrides just the font-size (tailwind-merge keeps the later win).
+ * A small status dot — a filled circle that carries a semantic colour and, when
+ * `pulse` is set, a soft breathing ring in the same colour (via `animate-ping`
+ * on a matched overlay). The fill uses `bg-current` so the colour is set once by
+ * the variant's `text-*` and the ring tracks it automatically.
+ *
+ * Decorative by default (`aria-hidden`) — colour alone never carries meaning, so
+ * pair it with text. When the dot *is* the whole message, give it a `label` and
+ * it becomes a named `role="img"`.
  *
  * ```tsx
- * <Text variant="eyebrow" as="div">Connection details</Text>
- * <Text variant="mono">203.0.113.7</Text>
- * <Text variant="lead">What sites can infer about your connection.</Text>
+ * <StatusDot variant="success" />
+ * <StatusDot variant="destructive" pulse />
  * ```
  */
+declare const StatusDot: React.ForwardRefExoticComponent<StatusDotProps & React.RefAttributes<HTMLSpanElement>>;
+
 declare const textVariants: (props?: ({
     variant?: "body" | "muted" | "eyebrow" | "mono" | "lead" | null | undefined;
     size?: "base" | "xs" | "sm" | "lg" | null | undefined;
@@ -377,22 +396,61 @@ interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<type
     /** The element to render. Defaults to `<span>`. */
     as?: React.ElementType;
 }
+/**
+ * Inline/text typography primitive — the small, everyday type roles that don't
+ * warrant a full `Prose` block: mono values, muted asides, and the tracked-out
+ * mono eyebrow used above sections. `variant` sets the whole look; `size`
+ * optionally overrides just the font-size (tailwind-merge keeps the later win).
+ *
+ * Renders a `<span>` unless you point `as` at something else — reach for that
+ * whenever the content is really a paragraph or a heading.
+ *
+ * ```tsx
+ * <Text variant="eyebrow" as="div">Connection details</Text>
+ * <Text variant="mono">203.0.113.7</Text>
+ * <Text variant="lead">What sites can infer about your connection.</Text>
+ * ```
+ */
 declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
 
-/**
- * A signal panel: a subtle-tinted fill, a left accent rail and a colour-matched
- * title. Drop an svg as the first child and it slots into the icon column
- * (shadcn grid idiom); text flows in the second column.
- */
 declare const alertVariants: (props?: ({
     variant?: "default" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
 }
+/**
+ * A signal panel: a subtle-tinted fill, a left accent rail and a colour-matched
+ * title. Drop an svg as the first child and it slots into the icon column
+ * (shadcn grid idiom); text flows in the second column.
+ *
+ * Compose it with `AlertTitle` + `AlertDescription`. It carries `role="alert"`,
+ * so reserve it for things worth interrupting a screen-reader user for — for a
+ * dense list of findings reach for `Callout` instead.
+ *
+ * ```tsx
+ * <Alert variant="warning">
+ *   <AlertTitle>Token drift</AlertTitle>
+ *   <AlertDescription>tokens.ts no longer matches theme.css.</AlertDescription>
+ * </Alert>
+ * ```
+ */
 declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.RefAttributes<HTMLDivElement>>;
+/** The alert's headline — mono, uppercase, in the full-strength foreground. */
 declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+/** The supporting sentence under the title, set in muted body type. */
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
+declare const calloutVariants: (props?: ({
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
+    /** The headline — the finding itself, in full-strength foreground. */
+    title: React.ReactNode;
+    /** Optional muted line under the title with the detail. */
+    description?: React.ReactNode;
+    /** Add a pulsing ring to the leading dot. */
+    pulse?: boolean;
+}
 /**
  * A compact, dot-led inline note — lighter than `Alert`. A leading `StatusDot`
  * carries the severity colour, followed by a bold title and an optional muted
@@ -404,15 +462,6 @@ declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttrib
  * <Callout variant="warning" title="VPN likely" description="Hosting ASN in use." />
  * ```
  */
-declare const calloutVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
-} & class_variance_authority_types.ClassProp) | undefined) => string;
-interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
-    title: React.ReactNode;
-    description?: React.ReactNode;
-    /** Add a pulsing ring to the leading dot. */
-    pulse?: boolean;
-}
 declare const Callout: React.ForwardRefExoticComponent<CalloutProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const indicatorVariants: (props?: ({
@@ -422,6 +471,13 @@ interface ProgressProps extends React.HTMLAttributes<HTMLDivElement>, VariantPro
     /** Completion as a percentage, clamped to 0–100. */
     value?: number;
 }
+/**
+ * A determinate progress bar: a muted track with a fill that eases to its new
+ * width over 500ms. `value` is a percentage and is clamped to 0–100, so a stray
+ * `120` can't overflow the track. It renders as a `role="progressbar"` with the
+ * ARIA value attributes wired up — pass `aria-label` (or `aria-labelledby`) when
+ * you have a real label, otherwise it falls back to a generic "Progress".
+ */
 declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.RefAttributes<HTMLDivElement>>;
 
 /**
@@ -430,46 +486,87 @@ declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.Re
  */
 declare const Skeleton: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * A rotating ring built from a bordered circle with a transparent top segment.
- * Inherits `currentColor` (accent by default); stops spinning under
- * `prefers-reduced-motion`.
- */
 declare const spinnerVariants: (props?: ({
     size?: "default" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof spinnerVariants> {
+    /** Accessible name announced by screen readers. */
     label?: string;
 }
+/**
+ * An indeterminate loading ring — a bordered circle with a transparent top
+ * segment, spun with `animate-spin`. Inherits `currentColor` (accent by default)
+ * so it recolours by dropping a `text-*` class on it, and stops spinning under
+ * `prefers-reduced-motion`. It's a live `role="status"`; reach for `Progress`
+ * instead when you know how far along the work is.
+ */
 declare const Spinner: React.ForwardRefExoticComponent<SpinnerProps & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * The signature MLZ button: a technical ghost outline that lifts on hover
- * with an offset accent shadow. `variant` and `size` are fully typed.
- */
 declare const buttonVariants: (props?: ({
     variant?: "link" | "solid" | "default" | "accent" | "destructive" | "ghost" | "sketch" | null | undefined;
     size?: "default" | "icon" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
 }
+/**
+ * The signature MLZ button: a technical ghost outline that lifts up and to the
+ * left on hover, dropping an offset accent shadow behind it.
+ */
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
 type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
+/**
+ * A checkbox with a real `<input type="checkbox">` underneath — the box you see
+ * is a `peer`-styled label, so keyboard focus, form submission and validation are
+ * the platform's. Pass an `id` to pair it with a `Label`, or let it generate one.
+ */
 declare const Checkbox: React.ForwardRefExoticComponent<CheckboxProps & React.RefAttributes<HTMLInputElement>>;
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+/**
+ * A single-line text field. Mono type, a 1.5px `--input` border that turns to the
+ * ring colour on focus with a soft `ring/30` halo. Takes every native `<input>`
+ * attribute, so `type`, `required` and the rest behave exactly as you expect.
+ */
 declare const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
 
 type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
+/**
+ * A field label in the mlz eyebrow voice — mono, uppercase, wide-tracked. Wire it
+ * to its control with `htmlFor`; when the control is a `peer`, the label dims
+ * along with it as the field goes disabled.
+ */
 declare const Label: React.ForwardRefExoticComponent<LabelProps & React.RefAttributes<HTMLLabelElement>>;
 
 type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
+/**
+ * An on/off toggle for settings that apply immediately — no Save button. Like
+ * `Checkbox` it's a real `<input type="checkbox">` styled through a `peer` label,
+ * so it submits with the form and is reachable by keyboard for free.
+ */
 declare const Switch: React.ForwardRefExoticComponent<SwitchProps & React.RefAttributes<HTMLInputElement>>;
 
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+/**
+ * A multi-line text field — `Input`'s longer sibling, sharing its border, focus
+ * ring and mono type. Starts at six lines' worth of height and resizes
+ * vertically; set `rows` for a different starting height.
+ */
 declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.RefAttributes<HTMLTextAreaElement>>;
 
+type AccordionType = "single" | "multiple";
+interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+    /** `single` allows one open item at a time; `multiple` allows many. */
+    type?: AccordionType;
+    /** Controlled open value(s). Use `onValueChange` alongside it. */
+    value?: string | string[];
+    /** Uncontrolled initial open value(s). */
+    defaultValue?: string | string[];
+    /** Fired with the new open value(s) — a string for `single`, an array for `multiple`. */
+    onValueChange?: (value: string | string[]) => void;
+    /** For `type="single"`, allow closing the open item by clicking it again. */
+    collapsible?: boolean;
+}
 /**
  * A Radix-free, context-driven accordion. The root owns the open set (controlled
  * via `value`/`onValueChange` or uncontrolled via `defaultValue`) and shares it
@@ -487,76 +584,90 @@ declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.Re
  * </Accordion>
  * ```
  */
-type AccordionType = "single" | "multiple";
-interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-    /** `single` allows one open item at a time; `multiple` allows many. */
-    type?: AccordionType;
-    /** Controlled open value(s). Use `onValueChange` alongside it. */
-    value?: string | string[];
-    /** Uncontrolled initial open value(s). */
-    defaultValue?: string | string[];
-    onValueChange?: (value: string | string[]) => void;
-    /** For `type="single"`, allow closing the open item by clicking it again. */
-    collapsible?: boolean;
-}
 declare const Accordion: React.ForwardRefExoticComponent<AccordionProps & React.RefAttributes<HTMLDivElement>>;
 interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Identifies this item to the root. Unique within the `Accordion`. */
     value: string;
 }
+/**
+ * One section of the accordion — a trigger plus its content, rule-separated from
+ * the next. Its `value` is the identity the root opens and closes by, so it must
+ * be unique within the accordion.
+ */
 declare const AccordionItem: React.ForwardRefExoticComponent<AccordionItemProps & React.RefAttributes<HTMLDivElement>>;
 interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Hide the default rotating chevron indicator. */
     hideIndicator?: boolean;
 }
+/**
+ * The clickable header of an `AccordionItem`. Renders a real `<button>` inside an
+ * `<h3>` with `aria-expanded`/`aria-controls` wired up, and handles the arrow-key
+ * roving itself. Children are laid out in a flex row, so a trigger can carry a
+ * number, a subtitle and a badge as easily as a single line of text.
+ */
 declare const AccordionTrigger: React.ForwardRefExoticComponent<AccordionTriggerProps & React.RefAttributes<HTMLButtonElement>>;
+/**
+ * The panel an `AccordionTrigger` reveals. It's a `<section>` named by its
+ * trigger — an implicit `region` landmark — that animates its height via the
+ * `0fr → 1fr` grid-row trick.
+ */
 declare const AccordionContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
+declare const cardVariants: (props?: ({
+    variant?: "default" | "interactive" | "accent" | "ghost" | "elevated" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface CardProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {
+}
 /**
  * Paper-look surfaces: elevation is a hairline border, never a heavy drop shadow.
  * Composed the shadcn way — Card + Header/Title/Description/Action/Content/Footer,
  * each tagged with a `data-slot` so consumers can target parts.
  *
  * `variant` covers the common surfaces:
- *   default      hairline border on card paper — the workhorse.
- *   elevated     adds the soft, warm-tinted shadow token (a hint, not a lift).
- *   interactive  the mlz signature: lifts on hover with an offset accent shadow.
- *                Use for whole-card links/buttons (pass `asChild`-style wrappers
- *                or an inner <a> that stretches with `after:absolute after:inset-0`).
- *   accent       an accent-subtle wash inside an accent-tinted border — callouts.
- *   ghost        no border/background — for nesting inside another surface.
+ *
+ * - **default** — hairline border on card paper; the workhorse.
+ * - **elevated** — adds the soft, warm-tinted shadow token (a hint, not a lift).
+ * - **interactive** — the mlz signature: lifts on hover with an offset accent
+ *   shadow. Use for whole-card links/buttons, with an inner `<a>` that stretches
+ *   over the card via `after:absolute after:inset-0`.
+ * - **accent** — an accent-subtle wash inside an accent-tinted border, for callouts.
+ * - **ghost** — no border or background, for nesting inside another surface.
  */
-declare const cardVariants: (props?: ({
-    variant?: "default" | "interactive" | "accent" | "ghost" | "elevated" | null | undefined;
-} & class_variance_authority_types.ClassProp) | undefined) => string;
-interface CardProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {
-}
 declare const Card: React.ForwardRefExoticComponent<CardProps & React.RefAttributes<HTMLDivElement>>;
+/**
+ * The card's top block — title, description, and an optional `CardAction`. It's a
+ * grid that grows a second column the moment a `CardAction` is present.
+ */
 declare const CardHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/**
+ * The card's heading in tracked-out mono. It's an unopinionated `<div>` — wrap it
+ * in (or render it as) the right heading level for the page's outline.
+ */
 declare const CardTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** The muted supporting paragraph under `CardTitle`. */
 declare const CardDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 /** Top-right slot in the header (menu button, badge, switch…). */
 declare const CardAction: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** The card's body — padded to match the header, with the top padding removed. */
 declare const CardContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** The bottom row, for actions. A flex row — set your own `gap`. */
 declare const CardFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
-/**
- * Layout primitives — the structural spine for responsive, mobile-first web UIs.
- * They carry no brand paint (no colour, no border); they only lay things out on
- * the token breakpoint ladder so pages read the same from a 360px phone to a wide
- * desktop. Compose the painted components (Card, Button…) inside them.
- *
- *   Container  a centred, max-width column with responsive gutters — the page frame.
- *   Stack      a flex row/column with a token gap; `responsive` stacks on mobile,
- *              flows to a row at `sm`.
- *   Grid       a responsive grid — either an auto-fitting track (`min`) that needs
- *              no breakpoints, or a fixed `cols` count that steps up with width.
- */
 declare const containerVariants: (props?: ({
     size?: "sm" | "lg" | "xl" | "prose" | "md" | "full" | null | undefined;
     gutter?: "none" | "sm" | "lg" | "md" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof containerVariants> {
 }
+/**
+ * The page frame — a centred, max-width column with responsive side gutters.
+ *
+ * One of three layout primitives (with `Stack` and `Grid`) that form the
+ * structural spine for responsive, mobile-first UIs. They carry no brand paint —
+ * no colour, no border — and only lay things out on the token breakpoint ladder,
+ * so pages read the same from a 360px phone to a wide desktop. Compose the
+ * painted components (Card, Button…) inside them.
+ */
 declare const Container: React.ForwardRefExoticComponent<ContainerProps & React.RefAttributes<HTMLDivElement>>;
 declare const stackVariants: (props?: ({
     direction?: "row" | "col" | "responsive" | null | undefined;
@@ -567,6 +678,10 @@ declare const stackVariants: (props?: ({
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StackProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof stackVariants> {
 }
+/**
+ * A flex row or column with a token gap. `direction="responsive"` is the common
+ * card→row flip: a column on mobile, a row from `sm` up.
+ */
 declare const Stack: React.ForwardRefExoticComponent<StackProps & React.RefAttributes<HTMLDivElement>>;
 /** Fixed column counts that step up with viewport width (mobile-first). */
 declare const colsMap: {
@@ -594,13 +709,23 @@ interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
     min?: string | number;
     /** Fixed responsive column count (1–6) that steps up at `sm`/`lg`. */
     cols?: keyof typeof colsMap;
+    /** Gutter between cells, from the spacing token ladder. */
     gap?: keyof typeof gapMap;
 }
+/**
+ * A responsive grid, in two modes. Pass `min` for an auto-fitting track that
+ * reflows with the container and needs no breakpoints at all — the better default
+ * for card lists. Pass `cols` when the column count itself is the design, and it
+ * steps up at `sm`/`lg`. `min` wins if you set both.
+ */
 declare const Grid: React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>>;
 
 interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Horizontal fills its container's width; vertical fills its height (give the parent one). */
     orientation?: "horizontal" | "vertical";
+    /** `true` (default) hides the rule from assistive tech. Set `false` when it genuinely divides sections. */
     decorative?: boolean;
+    /** Optional mono label that splits a horizontal rule down the middle. */
     label?: React.ReactNode;
 }
 /**
@@ -611,31 +736,100 @@ interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
 declare const Separator: React.ForwardRefExoticComponent<SeparatorProps & React.RefAttributes<HTMLDivElement>>;
 
 interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+    /** Controlled active tab. Use `onValueChange` alongside it. */
     value?: string;
+    /** Uncontrolled initial tab. */
     defaultValue?: string;
+    /** Fired with the newly selected tab's value. */
     onValueChange?: (value: string) => void;
 }
+/**
+ * A tiny Radix-free tabs implementation: the root owns the active value (either
+ * controlled via `value`/`onValueChange` or uncontrolled via `defaultValue`)
+ * and shares it through context. Triggers register themselves so arrow keys can
+ * roam between them.
+ *
+ * ```tsx
+ * <Tabs defaultValue="overview">
+ *   <TabsList>
+ *     <TabsTrigger value="overview">Overview</TabsTrigger>
+ *     <TabsTrigger value="activity">Activity</TabsTrigger>
+ *   </TabsList>
+ *   <TabsContent value="overview">…</TabsContent>
+ *   <TabsContent value="activity">…</TabsContent>
+ * </Tabs>
+ * ```
+ */
 declare const Tabs: React.ForwardRefExoticComponent<TabsProps & React.RefAttributes<HTMLDivElement>>;
+/** The `role="tablist"` rail the triggers sit on, ruled off from the panel below. */
 declare const TabsList: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Identifies this tab and the `TabsContent` it reveals. Unique within the `Tabs`. */
     value: string;
 }
+/**
+ * One tab. Its `value` selects the matching `TabsContent`. Only the selected tab
+ * is in the tab order — arrow keys move between the rest, per the WAI-ARIA tabs
+ * pattern — and the active one is marked by an accent underline.
+ */
 declare const TabsTrigger: React.ForwardRefExoticComponent<TabsTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** The `TabsTrigger` value this panel belongs to. */
     value: string;
 }
+/**
+ * The panel for one tab. Inactive panels unmount rather than hide, so keep any
+ * state you need to survive a tab switch in the parent.
+ */
 declare const TabsContent: React.ForwardRefExoticComponent<TabsContentProps & React.RefAttributes<HTMLDivElement>>;
 
 interface DialogProps {
+    /** Whether the dialog is showing. Controlled — you own this state. */
     open: boolean;
+    /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
     onOpenChange: (open: boolean) => void;
+    /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
     children: React.ReactNode;
 }
+/**
+ * A modal dialog built on the native `<dialog>` element — so focus-trapping, the
+ * Esc key, background inerting and the top layer come from the platform, with no
+ * dependency. Controlled: drive `open` / `onOpenChange` yourself. Children only
+ * mount while it's open, so a form inside starts fresh each time. Clicking the
+ * backdrop dismisses it.
+ *
+ * ```tsx
+ * <Dialog open={open} onOpenChange={setOpen}>
+ *   <DialogContent>
+ *     <DialogHeader>
+ *       <DialogTitle>Delete project</DialogTitle>
+ *       <DialogDescription>This can't be undone.</DialogDescription>
+ *     </DialogHeader>
+ *     <DialogFooter>
+ *       <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+ *       <Button variant="destructive">Delete</Button>
+ *     </DialogFooter>
+ *   </DialogContent>
+ * </Dialog>
+ * ```
+ */
 declare function Dialog({ open, onOpenChange, children }: DialogProps): React.JSX.Element;
+/**
+ * The card surface inside the dialog, and where the ✕ close button lives. Caps at
+ * 85% of the viewport height and scrolls its own overflow.
+ */
 declare const DialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** Title + description block, inset on the right to clear the close button. */
 declare const DialogHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** The dialog's `<h2>` heading, in tracked-out mono. */
 declare const DialogTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>>;
+/** The muted sentence under the title — say what's about to happen. */
 declare const DialogDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+/**
+ * The action row. Write the buttons in reading order (cancel first, confirm
+ * last): it reverses to a full-width column on mobile so the confirm lands on
+ * top, then flows right-aligned from `sm` up.
+ */
 declare const DialogFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Render the single child as the trigger (forwarding the close handler) instead of a <button>. */
@@ -644,6 +838,27 @@ interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 /** Closes the dialog. Wrap your own control with `asChild`. */
 declare const DialogClose: React.ForwardRefExoticComponent<DialogCloseProps & React.RefAttributes<HTMLButtonElement>>;
 
+interface InfoTipProps {
+    /**
+     * Accessible name for the trigger button and, when no `title` is given, the
+     * popover's label. Required — a bare icon button is meaningless to AT.
+     */
+    label: string;
+    /** Optional bold heading shown at the top of the popover. */
+    title?: React.ReactNode;
+    /** The explanation. Plain text or rich content (a link, `<code>`, …). */
+    children: React.ReactNode;
+    /** Preferred side to open on. `auto` (default) flips to wherever there's room. */
+    side?: "top" | "bottom" | "auto";
+    /** Controlled open state. Provide `onOpenChange` alongside it. */
+    open?: boolean;
+    /** Notified whenever the open state should change (controlled or not). */
+    onOpenChange?: (open: boolean) => void;
+    /** Extra classes for the trigger button. */
+    className?: string;
+    /** Extra classes for the popover panel. */
+    contentClassName?: string;
+}
 /**
  * An inline "info tip": a small icon button that sits in the flow of text and,
  * on click, opens a little popover explaining a term. Built for glossary-style
@@ -668,27 +883,6 @@ declare const DialogClose: React.ForwardRefExoticComponent<DialogCloseProps & Re
  * </p>
  * ```
  */
-interface InfoTipProps {
-    /**
-     * Accessible name for the trigger button and, when no `title` is given, the
-     * popover's label. Required — a bare icon button is meaningless to AT.
-     */
-    label: string;
-    /** Optional bold heading shown at the top of the popover. */
-    title?: React.ReactNode;
-    /** The explanation. Plain text or rich content (a link, `<code>`, …). */
-    children: React.ReactNode;
-    /** Preferred side to open on. `auto` (default) flips to wherever there's room. */
-    side?: "top" | "bottom" | "auto";
-    /** Controlled open state. Provide `onOpenChange` alongside it. */
-    open?: boolean;
-    /** Notified whenever the open state should change (controlled or not). */
-    onOpenChange?: (open: boolean) => void;
-    /** Extra classes for the trigger button. */
-    className?: string;
-    /** Extra classes for the popover panel. */
-    contentClassName?: string;
-}
 declare function InfoTip({ label, title, children, side, open: controlledOpen, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
 declare namespace InfoTip {
     var displayName: string;

@@ -8,11 +8,28 @@ const meta = {
   component: Accordion,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  argTypes: {
+    type: {
+      description: "`single` keeps one item open at a time; `multiple` lets several stay open.",
+      control: "inline-radio",
+      options: ["single", "multiple"],
+    },
+    collapsible: {
+      description: "In `single` mode, allow clicking the open item to close it.",
+      control: "boolean",
+    },
+    defaultValue: {
+      description:
+        "Uncontrolled initial open value(s). Pair `value` with `onValueChange` for controlled use.",
+      control: false,
+    },
+  },
 } satisfies Meta<typeof Accordion>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The default: one open item at a time, `collapsible` so the last one can close. Try Up/Down/Home/End on a focused trigger. */
 export const Playground: Story = {
   render: () => (
     <Accordion type="single" collapsible defaultValue="a" className="max-w-lg">
@@ -36,6 +53,7 @@ export const Playground: Story = {
   ),
 };
 
+/** `type="multiple"` — items open and close independently, and `defaultValue` takes an array. */
 export const Multiple: Story = {
   render: () => (
     <Accordion type="multiple" defaultValue={["a", "b"]} className="max-w-lg">
@@ -51,8 +69,11 @@ export const Multiple: Story = {
   ),
 };
 
-// The numbered "deeper look" pattern: a custom trigger layout with an eyebrow
-// number, title, subtitle and an optional badge.
+/**
+ * The numbered "deeper look" pattern. The trigger is a flex row, so it takes an
+ * eyebrow number, a title, a subtitle and a badge as easily as a single string —
+ * no separate component needed.
+ */
 export const Numbered: Story = {
   render: () => (
     <Accordion type="single" collapsible className="max-w-lg">
@@ -83,6 +104,7 @@ export const Numbered: Story = {
   ),
 };
 
+/** Rules, triggers and the accent chevron across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

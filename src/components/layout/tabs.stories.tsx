@@ -7,11 +7,20 @@ const meta = {
   component: Tabs,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    defaultValue: {
+      description:
+        "Uncontrolled initial tab. Pair `value` with `onValueChange` for controlled use.",
+      control: "text",
+    },
+    onValueChange: { description: "Fired with the newly selected tab's value." },
+  },
 } satisfies Meta<typeof Tabs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Three tabs. Click one, then use the arrow keys — only the selected tab is in the tab order, per the WAI-ARIA pattern. */
 export const Playground: Story = {
   render: () => (
     <Tabs defaultValue="overview" className="w-80">
@@ -33,6 +42,7 @@ export const Playground: Story = {
   ),
 };
 
+/** The preview/code pairing. Inactive panels unmount, so keep anything that must survive a switch in the parent. */
 export const TwoTabs: Story = {
   render: () => (
     <Tabs defaultValue="preview" className="w-80">
@@ -46,6 +56,7 @@ export const TwoTabs: Story = {
   ),
 };
 
+/** The active tab is marked by an accent underline, which re-reads the accent token per theme. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

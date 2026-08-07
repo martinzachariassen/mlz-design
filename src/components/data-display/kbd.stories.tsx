@@ -7,14 +7,22 @@ const meta = {
   component: Kbd,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    children: {
+      description: "The key legend — a letter, a word like `Esc`, or a glyph.",
+      control: "text",
+    },
+  },
   args: { children: "K" },
 } satisfies Meta<typeof Kbd>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A single key. Renders a real `<kbd>`, so assistive tech announces it as keyboard input. */
 export const Playground: Story = {};
 
+/** Words and glyphs alike — `min-w-6` keeps narrow keys from collapsing into slivers. */
 export const Keys: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-2">
@@ -27,6 +35,7 @@ export const Keys: Story = {
   ),
 };
 
+/** A shortcut written out. One `Kbd` per key with a literal `+` between them reads better than cramming `⌘K` into one chip. */
 export const Combination: Story = {
   render: () => (
     <p className="flex items-center gap-1.5 font-mono text-sm text-muted-foreground">
@@ -37,6 +46,7 @@ export const Combination: Story = {
   ),
 };
 
+/** The chip sits on `--muted` inside a `--border` hairline, so it stays a step off the page in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

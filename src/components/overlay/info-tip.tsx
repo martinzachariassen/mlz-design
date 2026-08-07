@@ -2,30 +2,6 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../lib/cn";
 
-/**
- * An inline "info tip": a small icon button that sits in the flow of text and,
- * on click, opens a little popover explaining a term. Built for glossary-style
- * help — pair a piece of jargon with a plain-language "what / why".
- *
- * It's Radix-free and leans on the platform where it can: the panel renders in a
- * portal (so no ancestor `overflow: hidden` can clip it) as a non-modal
- * `role="dialog"`, positions itself with `getBoundingClientRect` (flipping above
- * the trigger when there's no room below and clamping to the viewport), and light-
- * dismisses on outside-click, Esc, or a second click on the trigger. Focus moves
- * into the panel on open and returns to the trigger on close.
- *
- * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
- * it's dropped into.
- *
- * ```tsx
- * <p>
- *   Your ASN
- *   <InfoTip label="What is an ASN?" title="ASN — Autonomous System Number">
- *     The network (usually an ISP or host) that announces your IP to the internet.
- *   </InfoTip>
- * </p>
- * ```
- */
 export interface InfoTipProps {
   /**
    * Accessible name for the trigger button and, when no `title` is given, the
@@ -58,6 +34,30 @@ interface Position {
   ready: boolean;
 }
 
+/**
+ * An inline "info tip": a small icon button that sits in the flow of text and,
+ * on click, opens a little popover explaining a term. Built for glossary-style
+ * help — pair a piece of jargon with a plain-language "what / why".
+ *
+ * It's Radix-free and leans on the platform where it can: the panel renders in a
+ * portal (so no ancestor `overflow: hidden` can clip it) as a non-modal
+ * `role="dialog"`, positions itself with `getBoundingClientRect` (flipping above
+ * the trigger when there's no room below and clamping to the viewport), and light-
+ * dismisses on outside-click, Esc, or a second click on the trigger. Focus moves
+ * into the panel on open and returns to the trigger on close.
+ *
+ * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
+ * it's dropped into.
+ *
+ * ```tsx
+ * <p>
+ *   Your ASN
+ *   <InfoTip label="What is an ASN?" title="ASN — Autonomous System Number">
+ *     The network (usually an ISP or host) that announces your IP to the internet.
+ *   </InfoTip>
+ * </p>
+ * ```
+ */
 export function InfoTip({
   label,
   title,

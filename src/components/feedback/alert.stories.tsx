@@ -9,6 +9,8 @@ const meta = {
   parameters: { layout: "centered" },
   argTypes: {
     variant: {
+      description:
+        "Which signal the panel carries. `default` is a neutral card notice; the rest tint the fill, the left rail and the title with their semantic colour.",
       control: "select",
       options: ["default", "info", "success", "warning", "destructive"],
     },
@@ -26,6 +28,7 @@ const InfoIcon = () => (
   </svg>
 );
 
+/** Title plus description in the neutral variant — switch `variant` in the controls to see each signal. */
 export const Playground: Story = {
   render: (args) => (
     <Alert {...args} className="max-w-md">
@@ -35,6 +38,7 @@ export const Playground: Story = {
   ),
 };
 
+/** All five signals stacked. Pick by meaning, not by colour: `warning` for something to look at, `destructive` for something that failed. */
 export const Variants: Story = {
   render: () => (
     <div className="flex w-full max-w-md flex-col gap-4">
@@ -62,6 +66,7 @@ export const Variants: Story = {
   ),
 };
 
+/** An `<svg>` as the *first* child opens the icon column — the grid switches to `1rem 1fr` and the text keeps its own column. */
 export const WithIcon: Story = {
   render: () => (
     <Alert variant="info" className="max-w-md">
@@ -75,6 +80,7 @@ export const WithIcon: Story = {
   ),
 };
 
+/** The tinted `*-subtle` fills are token pairs, so each signal keeps its contrast in dark mode. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

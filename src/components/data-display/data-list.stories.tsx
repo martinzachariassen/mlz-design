@@ -8,11 +8,20 @@ const meta = {
   component: DataList,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    layout: {
+      description:
+        "Cascaded to every `DataRow`. `justify` right-aligns short values against a dashed rule; `grid` gives each row a fixed eyebrow-label column.",
+      control: "inline-radio",
+      options: ["justify", "grid"],
+    },
+  },
 } satisfies Meta<typeof DataList>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The default `justify` layout — term left, value right, one dashed rule per row. Best when values are short. */
 export const Playground: Story = {
   render: () => (
     <DataList className="w-80">
@@ -73,6 +82,7 @@ export const GridWideLabels: Story = {
   ),
 };
 
+/** Rules and muted terms in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

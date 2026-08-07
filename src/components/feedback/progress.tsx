@@ -22,6 +22,13 @@ export interface ProgressProps
   value?: number;
 }
 
+/**
+ * A determinate progress bar: a muted track with a fill that eases to its new
+ * width over 500ms. `value` is a percentage and is clamped to 0–100, so a stray
+ * `120` can't overflow the track. It renders as a `role="progressbar"` with the
+ * ARIA value attributes wired up — pass `aria-label` (or `aria-labelledby`) when
+ * you have a real label, otherwise it falls back to a generic "Progress".
+ */
 export const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
   ({ className, value = 0, variant, ...props }, ref) => {
     const pct = Math.min(100, Math.max(0, value));

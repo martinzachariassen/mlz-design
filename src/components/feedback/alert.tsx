@@ -2,11 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A signal panel: a subtle-tinted fill, a left accent rail and a colour-matched
- * title. Drop an svg as the first child and it slots into the icon column
- * (shadcn grid idiom); text flows in the second column.
- */
 const alertVariants = cva(
   "relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--radius-md)] border border-l-2 px-4 py-3 text-sm transition-colors has-[>svg]:grid-cols-[1rem_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
@@ -30,6 +25,22 @@ export interface AlertProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {}
 
+/**
+ * A signal panel: a subtle-tinted fill, a left accent rail and a colour-matched
+ * title. Drop an svg as the first child and it slots into the icon column
+ * (shadcn grid idiom); text flows in the second column.
+ *
+ * Compose it with `AlertTitle` + `AlertDescription`. It carries `role="alert"`,
+ * so reserve it for things worth interrupting a screen-reader user for — for a
+ * dense list of findings reach for `Callout` instead.
+ *
+ * ```tsx
+ * <Alert variant="warning">
+ *   <AlertTitle>Token drift</AlertTitle>
+ *   <AlertDescription>tokens.ts no longer matches theme.css.</AlertDescription>
+ * </Alert>
+ * ```
+ */
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
   ({ className, variant, ...props }, ref) => (
     <div
@@ -43,6 +54,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
 );
 Alert.displayName = "Alert";
 
+/** The alert's headline — mono, uppercase, in the full-strength foreground. */
 export const AlertTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -59,6 +71,7 @@ export const AlertTitle = React.forwardRef<
 ));
 AlertTitle.displayName = "AlertTitle";
 
+/** The supporting sentence under the title, set in muted body type. */
 export const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>

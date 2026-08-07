@@ -3,17 +3,6 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { StatusDot, type StatusDotProps } from "../data-display/status-dot";
 
-/**
- * A compact, dot-led inline note — lighter than `Alert`. A leading `StatusDot`
- * carries the severity colour, followed by a bold title and an optional muted
- * description. Ideal for dense lists of findings/checks where a full bordered
- * `Alert` panel per row would be too heavy.
- *
- * ```tsx
- * <Callout variant="success" title="No DNS leak detected" />
- * <Callout variant="warning" title="VPN likely" description="Hosting ASN in use." />
- * ```
- */
 const calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
   variants: {
     variant: {
@@ -31,12 +20,25 @@ const calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
 export interface CalloutProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
     VariantProps<typeof calloutVariants> {
+  /** The headline — the finding itself, in full-strength foreground. */
   title: React.ReactNode;
+  /** Optional muted line under the title with the detail. */
   description?: React.ReactNode;
   /** Add a pulsing ring to the leading dot. */
   pulse?: boolean;
 }
 
+/**
+ * A compact, dot-led inline note — lighter than `Alert`. A leading `StatusDot`
+ * carries the severity colour, followed by a bold title and an optional muted
+ * description. Ideal for dense lists of findings/checks where a full bordered
+ * `Alert` panel per row would be too heavy.
+ *
+ * ```tsx
+ * <Callout variant="success" title="No DNS leak detected" />
+ * <Callout variant="warning" title="VPN likely" description="Hosting ASN in use." />
+ * ```
+ */
 export const Callout = React.forwardRef<HTMLDivElement, CalloutProps>(
   ({ variant, title, description, pulse, className, children, ...props }, ref) => (
     <div

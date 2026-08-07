@@ -5,8 +5,35 @@ import { ProjectCard } from "./project-card";
 
 const meta = {
   title: "Components/Brand/Project Card",
+  component: ProjectCard,
   parameters: { layout: "padded" },
-} satisfies Meta;
+  argTypes: {
+    title: { description: "The project name — the card's heading.", control: "text" },
+    description: {
+      description: "One or two sentences on the work. Clamped to three lines unless `featured`.",
+      control: "text",
+    },
+    meta: {
+      description: 'Mono eyebrow above the title — e.g. `"2024 · Design system"`.',
+      control: "text",
+    },
+    tags: { description: "Short chips for stack, role or category.", control: "object" },
+    href: {
+      description: "Makes the whole card one link, with the title anchor stretched over it.",
+      control: "text",
+    },
+    cover: {
+      description: "Cover visual. Defaults to the brand grid + monogram placeholder.",
+      control: false,
+    },
+    featured: {
+      description: "Horizontal, larger layout from `md` up — for the hero project.",
+      control: "boolean",
+    },
+    cta: { description: "Label on the link affordance under the body.", control: "text" },
+  },
+  args: { title: "MLZ Design" },
+} satisfies Meta<typeof ProjectCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -36,6 +63,7 @@ const PROJECTS = [
   },
 ] as const;
 
+/** The standard vertical card, with the on-brand placeholder cover — no stock imagery anywhere in the system. */
 export const Default: Story = {
   render: () => (
     <div className="max-w-sm">
@@ -44,10 +72,12 @@ export const Default: Story = {
   ),
 };
 
+/** `featured` turns the card horizontal from `md` up and lets the description breathe. Reserve it for the one project at the top. */
 export const Featured: Story = {
   render: () => <ProjectCard {...PROJECTS[0]} featured />,
 };
 
+/** What the card is built for: dropped into an auto-fitting `Grid`, three cards reflow to one column on a phone with no breakpoints. */
 export const PortfolioGrid: Story = {
   render: () => (
     <Grid min="18rem" gap="lg">
@@ -58,6 +88,7 @@ export const PortfolioGrid: Story = {
   ),
 };
 
+/** Pass anything as `cover` — an image, a canvas, or here a flat accent panel with a hand-set monogram. */
 export const CustomCover: Story = {
   render: () => (
     <div className="max-w-sm">
@@ -77,6 +108,7 @@ export const CustomCover: Story = {
   ),
 };
 
+/** Surface, border and the hover accent shadow across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

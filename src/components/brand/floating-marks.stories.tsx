@@ -7,7 +7,11 @@ const meta = {
   component: FloatingMarks,
   parameters: { layout: "fullscreen" },
   argTypes: {
-    count: { control: { type: "range", min: 4, max: 40, step: 2 } },
+    count: {
+      description:
+        "How many marks to scatter. Every mark's position, drift and timing is derived from its index, so the layout is stable across renders.",
+      control: { type: "range", min: 4, max: 40, step: 2 },
+    },
   },
   args: { count: 14 },
   render: (args) => (
@@ -23,12 +27,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The default scatter behind a headline. It's `aria-hidden` and click-through, so it never gets in the content's way. */
 export const Default: Story = {};
 
+/** Twice the marks. Past ~30 the layer stops reading as texture and starts competing with the copy. */
 export const Dense: Story = {
   args: { count: 28 },
 };
 
+/** The marks are muted-foreground with every fourth in the accent, so the layer tracks both the theme and the accent family. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

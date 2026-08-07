@@ -8,10 +8,12 @@ const meta = {
   tags: ["autodocs"],
   argTypes: {
     variant: {
+      description:
+        "Chip colour. `default` is the ink chip; `outline` and `muted` recede into a dense row; `destructive` is reserved for real failures.",
       control: "select",
       options: ["default", "accent", "outline", "muted", "destructive"],
     },
-    children: { control: "text" },
+    children: { description: "The label. Keep it to a word or two.", control: "text" },
   },
   args: { children: "v0.1.0", variant: "default" },
 } satisfies Meta<typeof Badge>;
@@ -19,8 +21,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A version chip — the everyday use. */
 export const Playground: Story = {};
 
+/** All five chips. They carry no semantics of their own, so the word has to say what the colour implies. */
 export const Variants: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
@@ -33,6 +37,7 @@ export const Variants: Story = {
   ),
 };
 
+/** Each variant is a token pair (`bg-*` + its `-foreground`), so contrast survives the theme flip. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

@@ -7,6 +7,24 @@ const meta = {
   title: "Components/Overlay/InfoTip",
   component: InfoTip,
   parameters: { layout: "centered" },
+  argTypes: {
+    label: {
+      description:
+        "Accessible name for the icon button — required, since the trigger has no visible text.",
+      control: "text",
+    },
+    title: { description: "Optional bold heading at the top of the popover.", control: "text" },
+    children: { description: "The explanation. Plain text or rich content.", control: "text" },
+    side: {
+      description: "Preferred side. `auto` flips to wherever there is room.",
+      control: "inline-radio",
+      options: ["auto", "top", "bottom"],
+    },
+    open: {
+      description: "Controlled open state. Provide `onOpenChange` alongside it.",
+      control: false,
+    },
+  },
   args: {
     label: "What is an ASN?",
     title: "ASN — Autonomous System Number",
@@ -45,6 +63,7 @@ export const NoTitle: Story = {
   ),
 };
 
+/** The trigger in both themes. Click it to see the popover — it portals to `document.body`, so no ancestor can clip it. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: (args) => (

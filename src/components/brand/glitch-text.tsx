@@ -1,18 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * The MLZ cyberpunk text effect: text is split per character and random chars
- * flicker with an RGB-split (using the `--glitch-1` / `--glitch-2` tokens). The
- * visual spans are hidden from assistive tech; the full string is exposed once via
- * a visually-hidden copy so screen readers read clean text. Honours
- * `prefers-reduced-motion` and the `data-motion="off"` kill-switch (the CSS
- * `animate-glitch` becomes a no-op).
- *
- * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
- *   loop, paused when the tab is hidden — its resting state.
- * - `trigger="hover"`: a single burst each time the pointer enters.
- */
 export type GlitchTrigger = "ambient" | "hover";
 
 export interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
@@ -32,6 +20,21 @@ function prefersReducedMotion(): boolean {
   );
 }
 
+/**
+ * The MLZ cyberpunk text effect: text is split per character and random chars
+ * flicker with an RGB-split (using the `--glitch-1` / `--glitch-2` tokens). The
+ * visual spans are hidden from assistive tech; the full string is exposed once via
+ * a visually-hidden copy so screen readers read clean text. Honours
+ * `prefers-reduced-motion` and the `data-motion="off"` kill-switch (the CSS
+ * `animate-glitch` becomes a no-op).
+ *
+ * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
+ *   loop, paused when the tab is hidden — its resting state.
+ * - `trigger="hover"`: a single burst each time the pointer enters.
+ *
+ * Styling lives on the wrapper — pass a `className` with the type family, size
+ * and tracking you want.
+ */
 export const GlitchText = React.forwardRef<HTMLSpanElement, GlitchTextProps>(
   ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
     const containerRef = React.useRef<HTMLSpanElement | null>(null);

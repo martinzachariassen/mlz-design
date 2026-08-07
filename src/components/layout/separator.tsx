@@ -2,8 +2,11 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 
 export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Horizontal fills its container's width; vertical fills its height (give the parent one). */
   orientation?: "horizontal" | "vertical";
+  /** `true` (default) hides the rule from assistive tech. Set `false` when it genuinely divides sections. */
   decorative?: boolean;
+  /** Optional mono label that splits a horizontal rule down the middle. */
   label?: React.ReactNode;
 }
 

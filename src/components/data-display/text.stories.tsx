@@ -7,15 +7,30 @@ const meta = {
   component: Text,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    variant: {
+      description:
+        "The type role. `body` for everyday copy, `lead` for a muted intro, `mono` for values, `eyebrow` for the tracked-out label above a section.",
+      control: "select",
+      options: ["body", "lead", "muted", "mono", "eyebrow"],
+    },
+    size: {
+      description: "Overrides just the font-size, leaving the rest of the variant intact.",
+      control: "select",
+      options: [undefined, "xs", "sm", "base", "lg"],
+    },
+  },
 } satisfies Meta<typeof Text>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** One span, one variant. Switch `variant` in the controls to hear each voice. */
 export const Playground: Story = {
   args: { variant: "body", children: "The quick brown fox." },
 };
 
+/** All five roles together. Note the `as` prop on the block-level ones — a lead is a paragraph, not a span. */
 export const Variants: Story = {
   render: () => (
     <div className="flex max-w-sm flex-col gap-3">
@@ -34,6 +49,7 @@ export const Variants: Story = {
   ),
 };
 
+/** Foreground and muted-foreground pairs across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

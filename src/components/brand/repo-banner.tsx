@@ -5,23 +5,6 @@ import { BrandMark, BrandWordmark } from "./brand-mark";
 import { FloatingMarks } from "./floating-marks";
 import { GridBackground } from "./grid-background";
 
-/**
- * A repository README banner — the wide, short header image that tops every MLZ
- * project's `README.md`. Built entirely from tokens so every repo wears the same
- * face; only the copy (project name, description, stack, install) changes per
- * project. Locked to a **3.76:1** ratio (1280×340) that reads well at GitHub's
- * ~896px rendered README width; `width` scales the whole banner as one.
- *
- * Four layouts share the same engineering-notebook frame:
- * - `standard` — left-weighted lockup + statement + stack; the default.
- * - `minimal` — centred, symmetric; good for libraries and small repos.
- * - `terminal` — a mono command-prompt, the install line front and centre.
- * - `split` — an ink brand panel beside a paper content panel.
- *
- * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
- * it at the top of the README. For light + dark, capture once plain and once
- * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
- */
 export interface RepoBannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** The project name — the headline, paired with the `mlz.` wordmark. */
   project: React.ReactNode;
@@ -66,6 +49,23 @@ function Lockup({ size }: { size: number }) {
   );
 }
 
+/**
+ * A repository README banner — the wide, short header image that tops every MLZ
+ * project's `README.md`. Built entirely from tokens so every repo wears the same
+ * face; only the copy (project name, description, stack, install) changes per
+ * project. Locked to a **3.76:1** ratio (1280×340) that reads well at GitHub's
+ * ~896px rendered README width; `width` scales the whole banner as one.
+ *
+ * Four layouts share the same engineering-notebook frame:
+ * - `standard` — left-weighted lockup + statement + stack; the default.
+ * - `minimal` — centred, symmetric; good for libraries and small repos.
+ * - `terminal` — a mono command-prompt, the install line front and centre.
+ * - `split` — an ink brand panel beside a paper content panel.
+ *
+ * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
+ * it at the top of the README. For light + dark, capture once plain and once
+ * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
+ */
 export const RepoBanner = React.forwardRef<HTMLDivElement, RepoBannerProps>(
   (
     {
