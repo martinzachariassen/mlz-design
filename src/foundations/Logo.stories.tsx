@@ -5,6 +5,7 @@ import { GridBackground } from "../components/brand/grid-background";
 
 const meta = {
   title: "Foundations/Logo",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

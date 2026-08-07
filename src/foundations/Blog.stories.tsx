@@ -9,6 +9,7 @@ import { Separator } from "../components/layout/separator";
 
 const meta = {
   title: "Templates/Blog",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 
@@ -32,9 +33,10 @@ const POSTS = [
     read: "8 min",
   },
   {
-    title: "One source of truth, two platforms",
-    excerpt: "Generating a SwiftUI token layer from the same tokens the web uses — no drift.",
-    category: "Native",
+    title: "Semantic tokens, and why components never see a brand value",
+    excerpt:
+      "One indirection layer is what lets a whole product restyle without touching a component.",
+    category: "Systems",
     date: "May 2026",
     read: "5 min",
   },

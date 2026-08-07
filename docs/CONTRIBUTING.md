@@ -10,15 +10,12 @@ bun run build         # tsup → dist (ESM + d.ts), then copies styles/
 bun run typecheck     # tsc --noEmit
 bun run test          # Vitest + Testing Library
 bun run lint          # Biome (lint:fix / format to write)
-bun run gen:swift     # regenerate the SwiftUI token layer
-bun run gen:banner    # regenerate assets/banner.svg (README header, embeds font subsets)
-bun run gen:assets    # render a repo's banner + social cards + favicons (--config <path> [--out <dir>] [--check])
-bun run preview       # static token reference page → http://localhost:4321/preview/
+bun run storybook     # the playground on :6006 — the fastest way to eyeball a change
 ```
 
-`bun run preview` serves the repo over `http://localhost:4321`; open [`/preview/`](http://localhost:4321/preview/) for a dependency-free HTML page that reads `src/styles/*.css` directly and consumes the tokens exactly as a real app would — a quick way to eyeball the palette without the full Storybook.
+If you use [mise](https://mise.jdx.dev), `mise install && mise run setup` pins the toolchain and `mise run check` runs lint · typecheck · test in one go; `mise tasks` lists the rest.
 
-Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR. Any PR that touches `src/` should refresh the committed `dist/` (`bun run build`) — it's the token-free fallback for `bun add github:...`. See [ARCHITECTURE.md](ARCHITECTURE.md) for the token layering and repo layout.
+Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR. Any PR that touches `src/` **must** refresh the committed `dist/` (`bun run build`) — it's the token-free fallback for `bun add github:...`, and CI fails the `verify` job if it's stale. See [architecture.md](architecture.md) for the token layering and repo layout.
 
 ## Releasing
 

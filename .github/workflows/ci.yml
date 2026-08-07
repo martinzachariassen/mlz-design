@@ -8,11 +8,17 @@ on:
 permissions:
   contents: read
 
+# Superseded PR pushes are cancelled; main always runs to completion.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2
         with:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -29,13 +35,30 @@ jobs:
       - run: bun run typecheck
       - run: bun run test
       - run: bun run build
+      # dist/ is committed as the fallback for `bun add github:...`, so a PR that
+      # changes src/ without rebuilding would ship stale code to those consumers.
+      - name: Committed dist/ is up to date
+        run: |
+          if [ -n "$(git status --porcelain -- dist)" ]; then
+            echo "::error::dist/ is stale — run 'bun run build' and commit the result."
+            git status --porcelain -- dist
+            exit 1
+          fi
       - run: bun run build:storybook
+      # Handed to the a11y job so the (slow) Storybook build happens exactly once.
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: storybook-static
+          path: storybook-static
+          retention-days: 1
 
   a11y:
     name: Storybook a11y
+    needs: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
-      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2
         with:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -48,7 +71,10 @@ jobs:
         with:
           bun-version: latest
       - run: bun install --frozen-lockfile
-      - run: bun run build:storybook
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: storybook-static
+          path: storybook-static
       - run: bunx playwright install --with-deps chromium
       - name: Run axe over every story
         run: |

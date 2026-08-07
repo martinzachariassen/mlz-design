@@ -1,11 +1,11 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts", "src/tokens.ts", "src/brand-assets.ts"],
+  entry: ["src/index.ts", "src/tokens.ts"],
   format: ["esm"],
   dts: true,
   clean: true,
   sourcemap: true,
   treeshake: true,
-  external: ["react", "react-dom", "@iconify/react", "@iconify/react/offline"],
+  external: ["react", "react-dom"],
 });

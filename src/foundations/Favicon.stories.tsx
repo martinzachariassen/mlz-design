@@ -3,6 +3,7 @@ import { BrandLockup, BrandMark } from "../components/brand/brand-mark";
 
 const meta = {
   title: "Foundations/Brand & Favicon",
+  tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;
 

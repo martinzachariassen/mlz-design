@@ -16,6 +16,6 @@
     "noEmit": true,
     "ignoreDeprecations": "6.0"
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src", ".storybook", "*.config.ts"],
+  "exclude": ["node_modules", "dist", "storybook-static"]
 }

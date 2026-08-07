@@ -45,16 +45,6 @@ export const NoTitle: Story = {
   ),
 };
 
-/** The `circle-help` glyph reads more like a classic "help" affordance. */
-export const HelpIcon: Story = {
-  args: { icon: "circle-help" },
-  render: (args) => (
-    <span className="text-sm text-foreground">
-      Entropy <InfoTip {...args} />
-    </span>
-  ),
-};
-
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: (args) => (

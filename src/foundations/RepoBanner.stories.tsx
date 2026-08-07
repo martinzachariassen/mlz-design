@@ -4,13 +4,12 @@ import { RepoBanner } from "../components/brand/repo-banner";
 const meta = {
   title: "Foundations/Repo Banner",
   component: RepoBanner,
-  tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
     project: "Design",
     eyebrow: "MLZ · Design System",
     description: "One canonical source of colour, type, style and motion for every project.",
-    badges: ["React", "Tailwind v4", "SwiftUI", "OKLCH"],
+    badges: ["React", "Tailwind v4", "OKLCH"],
     install: "bun add @martinzachariassen/design",
     footer: "github.com/martinzachariassen/mlz-design",
   },
@@ -168,22 +167,10 @@ export const Layouts: Story = {
         <h2 className="mt-16 mb-1 font-mono text-xs uppercase tracking-[0.24em] text-muted-foreground">
           Export recipe
         </h2>
-        <p className="mb-4 max-w-2xl font-mono text-[13px] leading-relaxed text-muted-foreground">
-          <span className="text-foreground">This repo</span> ships a self-contained, theme-adaptive
-          SVG — <code>bun run gen:banner</code> renders the standard layout with the brand fonts
-          subset + embedded, so one file covers light and dark with no external requests. It also
-          emits <code>assets/banner-template.svg</code>: a placeholder layout reference — copy it
-          into any repo (even non-React ones) and swap the copy. Then top the README with a single
-          tag:
-        </p>
-        <pre className="mb-4 overflow-x-auto rounded-[var(--radius-lg)] border border-border bg-card p-5 font-mono text-[12px] leading-relaxed text-foreground">
-          {`<img alt="MLZ · Design" src="assets/banner.svg" width="100%" />`}
-        </pre>
         <p className="max-w-2xl font-mono text-[13px] leading-relaxed text-muted-foreground">
-          <span className="text-foreground">React repos</span> that consume the package skip the SVG
-          and render this component directly — snapshot at 2× via Satori / <code>@vercel/og</code>,
-          or serve light + dark PNGs behind a <code>&lt;picture&gt;</code>{" "}
-          <code>prefers-color-scheme</code> switch.
+          <span className="text-foreground">React repos</span> that consume the package render this
+          component directly — snapshot at 2× via Satori / <code>@vercel/og</code>, or serve light +
+          dark PNGs behind a <code>&lt;picture&gt;</code> <code>prefers-color-scheme</code> switch.
         </p>
       </div>
     </div>
