@@ -20,7 +20,7 @@ once a fix is available.
 
 - CodeQL, OpenSSF Scorecard, and `zizmor` (Actions static analysis) run in CI, with
   results in the repository Security tab.
-- Dependency Review gates pull requests; Dependabot keeps npm, Actions and Docker
+- Dependency Review gates pull requests; Dependabot keeps npm and Actions
   dependencies current.
 - Every GitHub Actions workflow pins its actions to a full commit SHA and runs
   under `step-security/harden-runner`.

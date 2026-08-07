@@ -39,7 +39,7 @@ scripts/
     capture.tsx          the component surface screenshotted per asset
 swift/                 generated MLZDesign SwiftPM package (Package.swift + Sources/)
 .storybook/            Storybook config
-server.mjs  Dockerfile  railway.json   Railway deploy
+wrangler.jsonc          Cloudflare Workers deploy config (static assets + custom domain)
 ```
 
 Subpath exports mirror the layout: `.` (components), `./tokens` (typed JS values), `./styles/*` (the CSS bundle and its parts), and `./brand-assets` (the config contract). `*.stories.tsx` / `*.test.tsx` colocate with their source but never ship — `files: ["dist"]` keeps them out of the package.

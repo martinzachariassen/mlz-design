@@ -38,12 +38,8 @@ So the whole release surface is two merges: your change, then the version PR —
 
 ## Deployment (playground)
 
-The Storybook playground deploys to **Railway** from the `Dockerfile` (Bun install → Storybook build → a tiny zero-dependency Node static server binding `$PORT` on `0.0.0.0`). `railway.json` selects the Dockerfile builder, runs `node server.mjs`, and health-checks `/` (restart on failure). Node ≥ 20.16 (Storybook 10). Point a Railway service at this repo and it builds and serves the playground with no extra config.
-
-| Variable | Default | Effect                                                        |
-| -------- | ------- | ------------------------------------------------------------- |
-| `PORT`   | `8080`  | Port the playground static server binds (Railway injects it). |
+The Storybook playground deploys to **Cloudflare Workers** (static assets, no server code) at [design.mlz.no](https://design.mlz.no). `wrangler.jsonc` configures the assets directory (`storybook-static`) and the custom domain route; `.github/workflows/deploy.yml` runs `bun run build:storybook` then `wrangler deploy` on every push to `main`, authenticated with the `CLOUDFLARE_API_TOKEN` repo secret. No manual steps — push to `main` and it ships.
 
 ## Security
 
-Security and supply-chain integrity are gated in CI, with results in the repo's Security tab: **CodeQL** on every PR, **Dependency Review** + **Dependabot** (npm / actions / docker), SHA-pinned Actions with **`step-security/harden-runner`** and **`zizmor`**, and **Storybook a11y** (axe, WCAG 2.1 A/AA) failing the build on any violation. Report vulnerabilities per [SECURITY.md](SECURITY.md).
+Security and supply-chain integrity are gated in CI, with results in the repo's Security tab: **CodeQL** on every PR, **Dependency Review** + **Dependabot** (npm / actions), SHA-pinned Actions with **`step-security/harden-runner`** and **`zizmor`**, and **Storybook a11y** (axe, WCAG 2.1 A/AA) failing the build on any violation. Report vulnerabilities per [SECURITY.md](SECURITY.md).

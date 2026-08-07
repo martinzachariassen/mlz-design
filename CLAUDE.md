@@ -23,7 +23,6 @@ bun run test             # Vitest + Testing Library
 bun run lint / lint:fix  # Biome (JS/TS only)
 bun run storybook        # dev playground on :6006
 bun run build:storybook  # static build → storybook-static/
-bun run serve:storybook  # node server.mjs (honours $PORT) — the Railway runtime
 bun run preview          # serve repo on :4321 → open /preview/ (static token reference)
 bun run changeset        # start a release (see below)
 ```
@@ -80,7 +79,7 @@ is exported as `signals.danger` in JS.
   direct pushes to `main`.
 - **Conventional Commits** for commits and PR titles.
 - CI (`ci.yml`): lint · typecheck · test · build · build-storybook. Plus CodeQL,
-  Dependency Review, Dependabot (npm / actions / docker).
+  Dependency Review, Dependabot (npm / actions).
 - **Releases via Changesets → GitHub Packages** (scope `@martinzachariassen`,
   `.npmrc`), **fully automated** by the Changesets action — no manual version
   bump, no `v*` tag, no local `publish`. `release.yml` runs on **push to `main`**;
@@ -101,15 +100,19 @@ is exported as `signals.danger` in JS.
 
 ## Hosting
 
-The Storybook playground deploys to **Cloudflare Workers** (static assets, no
-server code) at **design.mlz.no**. `wrangler.jsonc` points `assets.directory` at
-`storybook-static` and pins the custom domain via `routes`; `.github/workflows/
-deploy.yml` runs `bun run build:storybook` then `wrangler deploy` on every push
-to `main`, authenticated with the `CLOUDFLARE_API_TOKEN` repo secret (needs
-Workers Scripts:Edit). Account: Cloudflare "MLZ"
-(`1524bafd76d520ef1ce36c47a3f3bce1`).
+The Storybook playground is hosted **only on Cloudflare Workers** (static
+assets, no server code) at **design.mlz.no**. `wrangler.jsonc` points
+`assets.directory` at `storybook-static`, disables HTML clean-URL redirects
+(`html_handling: "none"` — Storybook's manager requests `iframe.html` by exact
+filename, so the default rewrite breaks it), sets `not_found_handling:
+"single-page-application"` (serves `index.html` for any unmatched path,
+including `/`, since `html_handling: "none"` also disables Cloudflare's
+automatic `/` → `/index.html` mapping), and pins the custom domain via
+`routes`. `.github/workflows/deploy.yml` runs `bun run build:storybook` then
+`wrangler deploy` on every push to `main`, authenticated with the
+`CLOUDFLARE_API_TOKEN` repo secret (needs Workers Scripts:Edit). Account:
+Cloudflare "MLZ" (`1524bafd76d520ef1ce36c47a3f3bce1`).
 
-A parallel deploy still exists on **Railway** via the `Dockerfile` (Bun install →
-Storybook build → `server.mjs` zero-dependency static server binding `$PORT`) and
-`railway.json` (healthcheck). Node ≥ 20.16 (Storybook 10). Not yet decided
-whether to retire it now that Cloudflare covers hosting.
+Previously also deployed to Railway (`Dockerfile` + `railway.json` +
+`server.mjs`); that path was retired once Cloudflare took over — those files
+are gone, don't re-add them without a reason.
