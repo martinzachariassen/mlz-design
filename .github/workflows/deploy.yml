@@ -26,6 +26,7 @@ jobs:
       - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
         with:
           bun-version: latest
+          no-cache: true # publishing job — don't restore a poisonable cache
       - run: bun install --frozen-lockfile
       - run: bun run build:storybook
       - uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
