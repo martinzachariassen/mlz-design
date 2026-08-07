@@ -6,9 +6,13 @@ export { Breakpoint, Tokens, accents, animations, breakpoints, colors, fonts, mo
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
 import * as LabelPrimitive from '@radix-ui/react-label';
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
+import * as SelectPrimitive from '@radix-ui/react-select';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { ClassValue } from 'clsx';
 
 declare const brandMarkVariants: (props?: ({
@@ -594,6 +598,95 @@ type LabelProps = React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
  */
 declare const Label: React.ForwardRefExoticComponent<Omit<LabelPrimitive.LabelProps & React.RefAttributes<HTMLLabelElement>, "ref"> & React.RefAttributes<HTMLLabelElement>>;
 
+interface RadioGroupProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {
+}
+/**
+ * A set of mutually exclusive choices, all visible at once.
+ *
+ * **Use it for two to five options** where seeing them side by side helps the
+ * reader decide — and where exactly one must be chosen. Past about six, the list
+ * costs more space than it earns: switch to `Select`. If the choices aren't
+ * exclusive, that's a `Checkbox` each; if it's a single on/off that applies
+ * immediately, that's a `Switch`.
+ *
+ * There's no "none" state once a choice is made, so include an explicit "None"
+ * or "Any" option if the reader must be able to back out.
+ *
+ * Radix owns the roving focus: Tab moves *into* the group, then the arrow keys
+ * move between options — so the whole group is one tab stop, as the WAI-ARIA
+ * pattern requires. Wrap it in a `<fieldset>` with a `<legend>`, or give it an
+ * `aria-labelledby`, so the group itself is named.
+ *
+ * ```tsx
+ * <RadioGroup defaultValue="cyan" onValueChange={setAccent}>
+ *   <div className="flex items-center gap-2">
+ *     <RadioGroupItem value="cyan" id="a-cyan" />
+ *     <Label htmlFor="a-cyan">Cyan</Label>
+ *   </div>
+ * </RadioGroup>
+ * ```
+ */
+declare const RadioGroup: React.ForwardRefExoticComponent<RadioGroupProps & React.RefAttributes<HTMLDivElement>>;
+interface RadioGroupItemProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
+}
+/**
+ * One choice. Give it an `id` and point a `Label`'s `htmlFor` at it — the dot
+ * alone is a 16px target, and the label makes the whole phrase clickable.
+ */
+declare const RadioGroupItem: React.ForwardRefExoticComponent<RadioGroupItemProps & React.RefAttributes<HTMLButtonElement>>;
+
+type SelectProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>;
+/**
+ * A field for choosing **one value from many** — the form control, not a menu of
+ * actions.
+ *
+ * Reach for it from about **six options upward**; below that a `RadioGroup`
+ * shows every choice at once and costs one click instead of two. Above roughly
+ * fifteen, a select becomes a scroll hunt — that wants a searchable combobox,
+ * which this system doesn't ship yet. For *actions* rather than values, use
+ * `DropdownMenu`.
+ *
+ * It renders a custom listbox rather than a native `<select>`, which buys
+ * consistent styling and grouping but means it does **not** post a value with a
+ * plain HTML form — pass `name` to get a hidden input, or read `onValueChange`.
+ * Always give it a visible `Label`.
+ *
+ * ```tsx
+ * <Select defaultValue="oslo" onValueChange={setCity}>
+ *   <SelectTrigger><SelectValue placeholder="Pick a city" /></SelectTrigger>
+ *   <SelectContent>
+ *     <SelectItem value="oslo">Oslo</SelectItem>
+ *     <SelectItem value="bergen">Bergen</SelectItem>
+ *   </SelectContent>
+ * </Select>
+ * ```
+ */
+declare function Select(props: SelectProps): React.JSX.Element;
+declare namespace Select {
+    var displayName: string;
+}
+/** The chosen value, or the `placeholder` while nothing is chosen. */
+declare const SelectValue: React.ForwardRefExoticComponent<SelectPrimitive.SelectValueProps & React.RefAttributes<HTMLSpanElement>>;
+/** Groups related options. Pair with a `SelectLabel`. */
+declare const SelectGroup: React.ForwardRefExoticComponent<SelectPrimitive.SelectGroupProps & React.RefAttributes<HTMLDivElement>>;
+interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+}
+/** The closed field. Wears the same border, height and focus ring as `Input`. */
+declare const SelectTrigger: React.ForwardRefExoticComponent<SelectTriggerProps & React.RefAttributes<HTMLButtonElement>>;
+interface SelectContentProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {
+}
+/**
+ * The listbox. Defaults to `position="popper"` under the trigger and matches its
+ * width, so the open list lines up with the closed field.
+ */
+declare const SelectContent: React.ForwardRefExoticComponent<SelectContentProps & React.RefAttributes<HTMLDivElement>>;
+/** One option. `value` must be unique and non-empty within the select. */
+declare const SelectItem: React.ForwardRefExoticComponent<Omit<SelectPrimitive.SelectItemProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+/** A group heading in the mlz eyebrow voice. Not selectable. */
+declare const SelectLabel: React.ForwardRefExoticComponent<Omit<SelectPrimitive.SelectLabelProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+/** A hairline rule between groups of options. */
+declare const SelectSeparator: React.ForwardRefExoticComponent<Omit<SelectPrimitive.SelectSeparatorProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+
 type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 /**
  * An on/off toggle for settings that apply immediately — no Save button. Like
@@ -926,6 +1019,82 @@ interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 /** Closes the dialog. Wrap your own control with `asChild`. */
 declare const DialogClose: React.ForwardRefExoticComponent<DialogCloseProps & React.RefAttributes<HTMLButtonElement>>;
 
+type DropdownMenuProps = React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Root>;
+/**
+ * A menu of **actions** hanging off a button — row actions, an overflow "…"
+ * menu, an account menu.
+ *
+ * **It's for verbs, not values.** If the user is picking a value that stays
+ * chosen and belongs to a form, that's `Select`; if they're choosing one of a
+ * few visible options, that's `RadioGroup`. The checkbox and radio items here
+ * are for view state you toggle *from* a menu (which columns to show, how to
+ * sort), not for form fields.
+ *
+ * If a menu grows past roughly a dozen rows, or its items need descriptions, it
+ * has outgrown the pattern — use a page or a dialog.
+ *
+ * ```tsx
+ * <DropdownMenu>
+ *   <DropdownMenuTrigger asChild>
+ *     <Button variant="ghost">Actions</Button>
+ *   </DropdownMenuTrigger>
+ *   <DropdownMenuContent>
+ *     <DropdownMenuLabel>Deployment</DropdownMenuLabel>
+ *     <DropdownMenuItem onSelect={redeploy}>Redeploy</DropdownMenuItem>
+ *     <DropdownMenuSeparator />
+ *     <DropdownMenuItem variant="destructive" onSelect={remove}>Delete</DropdownMenuItem>
+ *   </DropdownMenuContent>
+ * </DropdownMenu>
+ * ```
+ */
+declare function DropdownMenu(props: DropdownMenuProps): React.JSX.Element;
+declare namespace DropdownMenu {
+    var displayName: string;
+}
+/** The control that opens the menu. Pass `asChild` to use a `Button`. */
+declare const DropdownMenuTrigger: React.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuTriggerProps & React.RefAttributes<HTMLButtonElement>>;
+/** Groups related rows. Pair with a `DropdownMenuLabel` to name the group. */
+declare const DropdownMenuGroup: React.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuGroupProps & React.RefAttributes<HTMLDivElement>>;
+/** Wraps `DropdownMenuRadioItem`s and owns the chosen `value`. */
+declare const DropdownMenuRadioGroup: React.ForwardRefExoticComponent<DropdownMenuPrimitive.DropdownMenuRadioGroupProps & React.RefAttributes<HTMLDivElement>>;
+interface DropdownMenuContentProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> {
+}
+/** The menu surface. Portalled, so no ancestor `overflow: hidden` can clip it. */
+declare const DropdownMenuContent: React.ForwardRefExoticComponent<DropdownMenuContentProps & React.RefAttributes<HTMLDivElement>>;
+interface DropdownMenuItemProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> {
+    /** `destructive` tints the row for actions that lose data. */
+    variant?: "default" | "destructive";
+    /** Indent to line up with rows that carry a tick or a dot. */
+    inset?: boolean;
+}
+/** One action. Use `onSelect`, not `onClick` — it fires for Enter and Space too. */
+declare const DropdownMenuItem: React.ForwardRefExoticComponent<DropdownMenuItemProps & React.RefAttributes<HTMLDivElement>>;
+/** A row that toggles. The tick occupies a reserved column, so rows stay aligned. */
+declare const DropdownMenuCheckboxItem: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuCheckboxItemProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+/** One choice within a `DropdownMenuRadioGroup`. */
+declare const DropdownMenuRadioItem: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuRadioItemProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+interface DropdownMenuLabelProps extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> {
+    /** Indent to line up with rows that carry a tick or a dot. */
+    inset?: boolean;
+}
+/** A section heading in the mlz eyebrow voice. Not selectable. */
+declare const DropdownMenuLabel: React.ForwardRefExoticComponent<DropdownMenuLabelProps & React.RefAttributes<HTMLDivElement>>;
+/** A hairline rule between groups of rows. */
+declare const DropdownMenuSeparator: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuSeparatorProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+/**
+ * The keyboard hint pushed to the right of a row — purely decorative, so it's
+ * hidden from assistive tech. It labels the shortcut, it doesn't bind it.
+ */
+declare function DropdownMenuShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>): React.JSX.Element;
+/** Wraps a submenu — a `DropdownMenuSubTrigger` plus a `DropdownMenuSubContent`. */
+declare const DropdownMenuSub: React.FC<DropdownMenuPrimitive.DropdownMenuSubProps>;
+/** The row that opens a submenu. Carries its own caret. */
+declare const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuSubTriggerProps & React.RefAttributes<HTMLDivElement>, "ref"> & {
+    inset?: boolean;
+} & React.RefAttributes<HTMLDivElement>>;
+/** The submenu surface. */
+declare const DropdownMenuSubContent: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuSubContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+
 interface InfoTipProps {
     /**
      * Accessible name for the trigger button and, when no `title` is given, the
@@ -981,6 +1150,56 @@ declare function InfoTip({ label, title, children, side, open, onOpenChange, cla
 declare namespace InfoTip {
     var displayName: string;
 }
+
+/**
+ * Wraps the part of the app that uses tooltips and shares their open/close
+ * timing, so moving between neighbouring triggers doesn't re-run the delay.
+ * Mount it once, high up. `Tooltip` falls back to its own provider if you
+ * forget, but then each tooltip times independently.
+ */
+declare const TooltipProvider: React.FC<TooltipPrimitive.TooltipProviderProps>;
+type TooltipProps = React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>;
+/**
+ * A small label that appears on hover or keyboard focus — the name of an icon
+ * button, or a truncated value in full.
+ *
+ * **A tooltip is a hint, never content.** It can't be reached on touch and
+ * vanishes on the way to it, so anything a reader *needs* belongs on the page.
+ * Never put a control inside one. **Reach for `InfoTip`** when the explanation
+ * is a sentence the reader should be able to click into and keep open, and for
+ * `Dialog` when it needs actions.
+ *
+ * It attaches as the trigger's **description** (`aria-describedby`), not its
+ * name — so an icon-only button still needs its own `aria-label`. A tooltip
+ * alone leaves it unnamed.
+ *
+ * The trigger must also be focusable. A disabled `<button>` isn't, so wrap it in
+ * a focusable span if a disabled control needs an explanation.
+ *
+ * ```tsx
+ * <TooltipProvider>
+ *   <Tooltip>
+ *     <TooltipTrigger asChild>
+ *       <Button size="icon" aria-label="Redeploy">↻</Button>
+ *     </TooltipTrigger>
+ *     <TooltipContent>Redeploy</TooltipContent>
+ *   </Tooltip>
+ * </TooltipProvider>
+ * ```
+ */
+declare function Tooltip(props: TooltipProps): React.JSX.Element;
+declare namespace Tooltip {
+    var displayName: string;
+}
+/** The element the tooltip describes. Pass `asChild` to use your own control. */
+declare const TooltipTrigger: React.ForwardRefExoticComponent<TooltipPrimitive.TooltipTriggerProps & React.RefAttributes<HTMLButtonElement>>;
+interface TooltipContentProps extends React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content> {
+}
+/**
+ * The label panel — ink-on-paper inverted, mono and tracked out, so it reads as
+ * chrome rather than as page content. Keep it to a few words.
+ */
+declare const TooltipContent: React.ForwardRefExoticComponent<TooltipContentProps & React.RefAttributes<HTMLDivElement>>;
 
 /**
  * Merge class names with Tailwind conflict resolution.
@@ -1054,4 +1273,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
+export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };

@@ -77,10 +77,12 @@ Radix is depended on **granularly** (`@radix-ui/react-tabs`, …), never via the
 unified `radix-ui` meta-package: this ships as a library, and the meta-package
 would force every consumer to install ~40 primitives to use one.
 
-**No icon library, deliberately.** Icons are inline SVG (`accordion` chevron,
-`checkbox` tick, `info-tip` glyph). shadcn's generated components import from
-`lucide-react` — strip those imports when porting one, or the CLI adds the
-dependency by the back door. `rg -n "lucide-react" src/` must stay empty.
+**No icon library, deliberately.** The few glyphs the components need to draw
+themselves live in `src/lib/icons.tsx` — internal, **never exported**, kept
+minimal. Everything else is inline SVG in the component that needs it.
+Consumers install `lucide-react` themselves. shadcn's generated components
+import from `lucide-react`, so strip those when porting one or the CLI adds the
+dependency by the back door: `rg -n 'from "lucide-react"' src/` must stay empty.
 `asChild` is available on `Button`, `Badge`, `Card` and `DialogClose`.
 
 ## Conventions that bite

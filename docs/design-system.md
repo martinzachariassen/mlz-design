@@ -41,6 +41,8 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Input` · `Textarea` | accent focus ring, technical mono field         |
 | `Label`    | mono, uppercase field label with `peer-disabled` states |
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
+| `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
+| `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
 
 ### Surfaces & data
 
@@ -55,6 +57,8 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
 | `InfoTip`  | accessible inline help popover (glossary/hints) — Radix-positioned, keyboard + Esc, collision-aware |
+| `Tooltip` (+ `Provider`/`Trigger`/`Content`) | short hover/focus hint. Attaches as the trigger's *description*, so an icon button still needs its own `aria-label` |
+| `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
 | `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
