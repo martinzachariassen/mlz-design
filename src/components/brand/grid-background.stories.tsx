@@ -7,10 +7,23 @@ const meta = {
   component: GridBackground,
   parameters: { layout: "fullscreen" },
   argTypes: {
-    cell: { control: { type: "range", min: 12, max: 60, step: 2 } },
-    interactive: { control: "boolean" },
-    glow: { control: "boolean" },
-    spotlight: { control: { type: "range", min: 160, max: 600, step: 20 } },
+    cell: {
+      description: "Minor grid cell size in px. The major grid is always 5× this.",
+      control: { type: "range", min: 12, max: 60, step: 2 },
+    },
+    interactive: {
+      description:
+        "Reveal the grid only through a pointer-following spotlight instead of showing all of it.",
+      control: "boolean",
+    },
+    glow: {
+      description: "Pool accent light under the spotlight. Only meaningful with `interactive`.",
+      control: "boolean",
+    },
+    spotlight: {
+      description: "Spotlight diameter in px.",
+      control: { type: "range", min: 160, max: 600, step: 20 },
+    },
   },
   args: { cell: 30, interactive: true, glow: true, spotlight: 340 },
   render: (args) => (
@@ -29,12 +42,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The signature effect — move the cursor and the grid is revealed through a soft disc, with accent light pooled under it. */
 export const CursorSpotlight: Story = {};
 
+/** `interactive={false}` — a faint, always-on grid to sit behind content. This is the version to use in print-like contexts and exports. */
 export const Static: Story = {
   args: { interactive: false },
 };
 
+/** Both rulings are `color-mix`ed off `--foreground`, so the grid stays a whisper on either paper. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

@@ -4,25 +4,16 @@ import { Badge } from "../data-display/badge";
 import { BrandMark } from "./brand-mark";
 import { GridBackground } from "./grid-background";
 
-/**
- * A portfolio project card — the mlz signature applied to work: a hairline surface
- * that lifts on hover with an offset accent shadow, a cover band, a grotesk title,
- * mono metadata and tag chips. Pass a `cover` (image, canvas, anything) or let it
- * fall back to the on-brand ruled-grid + monogram placeholder — no stock imagery.
- *
- *   default   vertical: cover on top, body below — drops into a `Grid`.
- *   featured   horizontal from `md` up (cover beside the body), larger — for the
- *              hero project at the top of a portfolio. Stacks on mobile.
- *
- * With `href`, the whole card becomes one link (the title anchor stretches over it).
- */
 export interface ProjectCardProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
+  /** The project name — the card's heading. */
   title: React.ReactNode;
+  /** One or two sentences on the work. Clamped to three lines unless `featured`. */
   description?: React.ReactNode;
   /** Short tag chips (stack, role, category). */
   tags?: readonly string[];
   /** A mono eyebrow line — e.g. "2024 · Design system". */
   meta?: string;
+  /** Makes the whole card one link, with the title anchor stretched over it. */
   href?: string;
   /** Cover visual. Defaults to the brand grid + monogram placeholder. */
   cover?: React.ReactNode;
@@ -45,6 +36,18 @@ function DefaultCover() {
   );
 }
 
+/**
+ * A portfolio project card — the mlz signature applied to work: a hairline surface
+ * that lifts on hover with an offset accent shadow, a cover band, a grotesk title,
+ * mono metadata and tag chips. Pass a `cover` (image, canvas, anything) or let it
+ * fall back to the on-brand ruled-grid + monogram placeholder — no stock imagery.
+ *
+ * - **default** — vertical: cover on top, body below. Drops into a `Grid`.
+ * - **featured** — horizontal from `md` up (cover beside the body) and larger,
+ *   for the hero project at the top of a portfolio. Stacks on mobile.
+ *
+ * With `href`, the whole card becomes one link (the title anchor stretches over it).
+ */
 export const ProjectCard = React.forwardRef<HTMLElement, ProjectCardProps>(
   (
     {

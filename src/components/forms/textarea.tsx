@@ -3,6 +3,11 @@ import { cn } from "../../lib/cn";
 
 export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+/**
+ * A multi-line text field — `Input`'s longer sibling, sharing its border, focus
+ * ring and mono type. Starts at six lines' worth of height and resizes
+ * vertically; set `rows` for a different starting height.
+ */
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => (
     <textarea

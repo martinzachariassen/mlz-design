@@ -2,17 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A small status dot — a filled circle that carries a semantic colour and, when
- * `pulse` is set, a soft breathing ring in the same colour (via `animate-ping`
- * on a matched overlay). The fill uses `bg-current` so the colour is set once by
- * the variant's `text-*` and the ring tracks it automatically.
- *
- * ```tsx
- * <StatusDot variant="success" />
- * <StatusDot variant="destructive" pulse />
- * ```
- */
 const statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   variants: {
     variant: {
@@ -36,6 +25,21 @@ export interface StatusDotProps
   label?: string;
 }
 
+/**
+ * A small status dot — a filled circle that carries a semantic colour and, when
+ * `pulse` is set, a soft breathing ring in the same colour (via `animate-ping`
+ * on a matched overlay). The fill uses `bg-current` so the colour is set once by
+ * the variant's `text-*` and the ring tracks it automatically.
+ *
+ * Decorative by default (`aria-hidden`) — colour alone never carries meaning, so
+ * pair it with text. When the dot *is* the whole message, give it a `label` and
+ * it becomes a named `role="img"`.
+ *
+ * ```tsx
+ * <StatusDot variant="success" />
+ * <StatusDot variant="destructive" pulse />
+ * ```
+ */
 export const StatusDot = React.forwardRef<HTMLSpanElement, StatusDotProps>(
   ({ variant, pulse, label, className, ...props }, ref) => {
     const a11y = label

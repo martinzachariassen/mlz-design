@@ -12,10 +12,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A skeleton has no size of its own — you give it one with utility classes. */
 export const Playground: Story = {
   render: () => <Skeleton className="h-4 w-48" />,
 };
 
+/** Lines and a circle from the same component: vary width, height and `rounded-*` per placeholder. */
 export const Shapes: Story = {
   render: () => (
     <div className="flex flex-col gap-3">
@@ -27,6 +29,7 @@ export const Shapes: Story = {
   ),
 };
 
+/** The real use: mirror the shape of the content that's coming, so nothing jumps when it lands. */
 export const Card: Story = {
   render: () => (
     <div className="w-72 rounded-[var(--radius-lg)] border border-border bg-card p-5">
@@ -46,6 +49,7 @@ export const Card: Story = {
   ),
 };
 
+/** The placeholder rides on `--muted`, so it sits a step off the page in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

@@ -8,9 +8,21 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
-    orientation: { control: "inline-radio", options: ["horizontal", "vertical"] },
-    decorative: { control: "boolean" },
-    label: { control: "text" },
+    orientation: {
+      description:
+        "Horizontal fills its container's width; vertical fills its height (give the parent one).",
+      control: "inline-radio",
+      options: ["horizontal", "vertical"],
+    },
+    decorative: {
+      description:
+        "`true` (default) hides the rule from assistive tech. Set `false` when the rule genuinely divides content into sections.",
+      control: "boolean",
+    },
+    label: {
+      description: "Optional mono label that splits a horizontal rule down the middle.",
+      control: "text",
+    },
   },
   args: { orientation: "horizontal", decorative: true },
 } satisfies Meta<typeof Separator>;
@@ -18,6 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A hairline rule between two blocks. */
 export const Horizontal: Story = {
   render: (args) => (
     <div className="w-80 font-mono text-sm text-muted-foreground">
@@ -28,6 +41,7 @@ export const Horizontal: Story = {
   ),
 };
 
+/** Vertical rules between inline items. They fill their parent's height, so give the row one — here `h-6`. */
 export const Vertical: Story = {
   render: () => (
     <div className="flex h-6 items-center gap-4 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
@@ -40,6 +54,7 @@ export const Vertical: Story = {
   ),
 };
 
+/** A labelled rule — the "or" divider between two paths. Only horizontal rules take a label. */
 export const WithLabel: Story = {
   args: { label: "or" },
   render: (args) => (
@@ -49,6 +64,7 @@ export const WithLabel: Story = {
   ),
 };
 
+/** The rule is `--border` in both themes, never a fixed grey. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

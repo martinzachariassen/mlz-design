@@ -7,6 +7,14 @@ const meta = {
   component: Callout,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
+  argTypes: {
+    variant: {
+      description: "Severity — it colours the leading `StatusDot`, nothing else.",
+      control: "select",
+      options: ["success", "warning", "destructive", "info", "accent", "muted"],
+    },
+    pulse: { description: "Give the leading dot a soft breathing ring.", control: "boolean" },
+  },
   args: {
     variant: "warning",
     title: "VPN likely",
@@ -17,8 +25,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A single callout — a dot, a bold title, and an optional muted line under it. */
 export const Playground: Story = {};
 
+/** What `Callout` is for: a run of checks where an `Alert` panel per row would drown the page. The `description` is optional per row. */
 export const Stack: Story = {
   render: () => (
     <div className="flex max-w-md flex-col gap-3">
@@ -38,6 +48,7 @@ export const Stack: Story = {
   ),
 };
 
+/** The dot colours come from the semantic signal tokens, so they hold up on both papers. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

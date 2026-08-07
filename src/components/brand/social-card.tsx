@@ -5,18 +5,6 @@ import { BrandLockup } from "./brand-mark";
 import { FloatingMarks } from "./floating-marks";
 import { GridBackground } from "./grid-background";
 
-/**
- * A ready-to-screenshot social / Open-Graph card at the canonical 1200×630, built
- * entirely from tokens so every app renders shares in the same voice. Compose it
- * in a route (or a Satori / `@vercel/og` template) and snapshot at 2× for retina.
- *
- * Layout: an engineering-notebook frame — hairline inset border, corner
- * registration marks, a faint ruled grid and drifting marks behind a left brand
- * lockup, a large grotesk headline, and a footer rule carrying the domain.
- *
- * `width` scales the whole card proportionally (height is locked to the 1.91:1
- * OG ratio) so it previews at any size without breaking the internal rhythm.
- */
 export interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** Headline — the one thing the card is about. */
   title: React.ReactNode;
@@ -41,6 +29,18 @@ export interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 const BASE_W = 1200;
 const BASE_H = 630;
 
+/**
+ * A ready-to-screenshot social / Open-Graph card at the canonical 1200×630, built
+ * entirely from tokens so every app renders shares in the same voice. Compose it
+ * in a route (or a Satori / `@vercel/og` template) and snapshot at 2× for retina.
+ *
+ * Layout: an engineering-notebook frame — hairline inset border, corner
+ * registration marks, a faint ruled grid and drifting marks behind a left brand
+ * lockup, a large grotesk headline, and a footer rule carrying the domain.
+ *
+ * `width` scales the whole card proportionally (height is locked to the 1.91:1
+ * OG ratio) so it previews at any size without breaking the internal rhythm.
+ */
 export const SocialCard = React.forwardRef<HTMLDivElement, SocialCardProps>(
   (
     {

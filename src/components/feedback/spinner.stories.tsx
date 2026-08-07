@@ -8,7 +8,15 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
-    size: { control: "select", options: ["sm", "default", "lg"] },
+    size: {
+      description: "Diameter and ring thickness.",
+      control: "select",
+      options: ["sm", "default", "lg"],
+    },
+    label: {
+      description: 'Accessible name announced by screen readers. Defaults to "Loading".',
+      control: "text",
+    },
   },
   args: { size: "default" },
 } satisfies Meta<typeof Spinner>;
@@ -16,8 +24,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The default ring, in the accent colour. */
 export const Playground: Story = {};
 
+/** Three sizes; the border scales with them so the ring never looks thin at `lg`. */
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-6">
@@ -28,6 +38,7 @@ export const Sizes: Story = {
   ),
 };
 
+/** Paired with a mono label — `sm` sits on the baseline of small text without pushing the line height. */
 export const Inline: Story = {
   render: () => (
     <p className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
@@ -37,6 +48,7 @@ export const Inline: Story = {
   ),
 };
 
+/** The ring inherits `currentColor`, so it re-reads the accent token in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

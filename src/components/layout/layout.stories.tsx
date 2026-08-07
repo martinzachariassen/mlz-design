@@ -19,6 +19,7 @@ function Box({ children }: { children?: React.ReactNode }) {
   );
 }
 
+/** The four content widths against a tinted page. `prose` is measure-optimised for reading; the rest step up for app layouts. */
 export const ContainerSizes: Story = {
   render: () => (
     <div className="space-y-3 rounded-[var(--radius-lg)] bg-secondary/40 py-4">
@@ -31,6 +32,7 @@ export const ContainerSizes: Story = {
   ),
 };
 
+/** `direction="responsive"` — a column on mobile that flows to a row at `sm`. Narrow the viewport to see it flip. */
 export const StackResponsive: Story = {
   render: () => (
     <Stack direction="responsive" gap="md">
@@ -41,6 +43,7 @@ export const StackResponsive: Story = {
   ),
 };
 
+/** The default column direction, with the `sm` gap token. */
 export const StackVertical: Story = {
   render: () => (
     <Stack gap="sm" className="max-w-xs">
@@ -51,6 +54,7 @@ export const StackVertical: Story = {
   ),
 };
 
+/** `min` sets a minimum track width and lets the browser decide the column count — responsive with no breakpoints at all. */
 export const GridAutoFit: Story = {
   render: () => (
     <Grid min="12rem" gap="md">
@@ -61,6 +65,7 @@ export const GridAutoFit: Story = {
   ),
 };
 
+/** `cols` when the column count is the design. Each step already carries its own `sm`/`lg` ladder down to one column on mobile. */
 export const GridFixedCols: Story = {
   render: () => (
     <Grid cols={4} gap="md">
@@ -79,6 +84,7 @@ function Plate({ children }: { children?: React.ReactNode }) {
   );
 }
 
+/** The primitives carry no paint of their own — only the plates inside them change with the theme. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

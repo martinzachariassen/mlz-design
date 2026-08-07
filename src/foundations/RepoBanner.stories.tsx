@@ -14,13 +14,39 @@ const meta = {
     footer: "github.com/martinzachariassen/mlz-design",
   },
   argTypes: {
-    layout: { control: "inline-radio", options: ["standard", "minimal", "terminal", "split"] },
+    project: {
+      description: "The project name — the headline, paired with the `mlz.` wordmark.",
+      control: "text",
+    },
+    eyebrow: { description: "Small mono kicker above the name.", control: "text" },
+    description: { description: "One-line statement under the name.", control: "text" },
+    badges: {
+      description: "Stack / tag chips, top-right in the `standard` layout.",
+      control: "object",
+    },
+    install: {
+      description: "Install or run command, shown mono — the hero of the `terminal` layout.",
+      control: "text",
+    },
+    footer: { description: "Footer-right meta: a repo path or domain.", control: "text" },
+    layout: {
+      description:
+        "Which preset to render. `standard` is left-weighted, `minimal` centred, `terminal` leads with the install line, `split` puts an ink brand panel beside the content.",
+      control: "inline-radio",
+      options: ["standard", "minimal", "terminal", "split"],
+    },
     accent: {
+      description:
+        "Pin to one accent family regardless of the ambient one — useful for a per-repo colour.",
       control: "inline-radio",
       options: [undefined, "cyan", "blue", "green", "rust", "ink"],
     },
-    width: { control: { type: "range", min: 640, max: 1280, step: 20 } },
-    marks: { control: "boolean" },
+    width: {
+      description:
+        "Rendered width in px. Height and every inner size follow the locked 1280×340 ratio.",
+      control: { type: "range", min: 640, max: 1280, step: 20 },
+    },
+    marks: { description: "Show the drifting sketch marks behind the frame.", control: "boolean" },
   },
 } satisfies Meta<typeof RepoBanner>;
 

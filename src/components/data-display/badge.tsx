@@ -22,6 +22,11 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
+/**
+ * A small mono chip for status, versions and categories — the tracked-out
+ * uppercase label that sits next to a title. It's a plain `<span>` with no
+ * semantics of its own, so put the meaning in the text, not the colour alone.
+ */
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
 }

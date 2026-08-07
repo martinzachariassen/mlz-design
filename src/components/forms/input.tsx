@@ -3,6 +3,11 @@ import { cn } from "../../lib/cn";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * A single-line text field. Mono type, a 1.5px `--input` border that turns to the
+ * ring colour on focus with a soft `ring/30` halo. Takes every native `<input>`
+ * attribute, so `type`, `required` and the rest behave exactly as you expect.
+ */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => (
     <input

@@ -1,12 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A tiny Radix-free tabs implementation: the root owns the active value (either
- * controlled via `value`/`onValueChange` or uncontrolled via `defaultValue`)
- * and shares it through context. Triggers register themselves so arrow keys can
- * roam between them.
- */
 interface TabsContextValue {
   value: string | undefined;
   setValue: (value: string) => void;
@@ -25,11 +19,31 @@ function useTabsContext(component: string) {
 }
 
 export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  /** Controlled active tab. Use `onValueChange` alongside it. */
   value?: string;
+  /** Uncontrolled initial tab. */
   defaultValue?: string;
+  /** Fired with the newly selected tab's value. */
   onValueChange?: (value: string) => void;
 }
 
+/**
+ * A tiny Radix-free tabs implementation: the root owns the active value (either
+ * controlled via `value`/`onValueChange` or uncontrolled via `defaultValue`)
+ * and shares it through context. Triggers register themselves so arrow keys can
+ * roam between them.
+ *
+ * ```tsx
+ * <Tabs defaultValue="overview">
+ *   <TabsList>
+ *     <TabsTrigger value="overview">Overview</TabsTrigger>
+ *     <TabsTrigger value="activity">Activity</TabsTrigger>
+ *   </TabsList>
+ *   <TabsContent value="overview">…</TabsContent>
+ *   <TabsContent value="activity">…</TabsContent>
+ * </Tabs>
+ * ```
+ */
 export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
   ({ className, value, defaultValue, onValueChange, children, ...props }, ref) => {
     const [uncontrolled, setUncontrolled] = React.useState(defaultValue);
@@ -73,6 +87,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
 );
 Tabs.displayName = "Tabs";
 
+/** The `role="tablist"` rail the triggers sit on, ruled off from the panel below. */
 export const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
@@ -86,9 +101,15 @@ export const TabsList = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
 TabsList.displayName = "TabsList";
 
 export interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Identifies this tab and the `TabsContent` it reveals. Unique within the `Tabs`. */
   value: string;
 }
 
+/**
+ * One tab. Its `value` selects the matching `TabsContent`. Only the selected tab
+ * is in the tab order — arrow keys move between the rest, per the WAI-ARIA tabs
+ * pattern — and the active one is marked by an accent underline.
+ */
 export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>(
   ({ className, value, onKeyDown, ...props }, ref) => {
     const { value: active, setValue, register, focusRelative } = useTabsContext("TabsTrigger");
@@ -126,9 +147,14 @@ export const TabsTrigger = React.forwardRef<HTMLButtonElement, TabsTriggerProps>
 TabsTrigger.displayName = "TabsTrigger";
 
 export interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** The `TabsTrigger` value this panel belongs to. */
   value: string;
 }
 
+/**
+ * The panel for one tab. Inactive panels unmount rather than hide, so keep any
+ * state you need to survive a tab switch in the parent.
+ */
 export const TabsContent = React.forwardRef<HTMLDivElement, TabsContentProps>(
   ({ className, value, ...props }, ref) => {
     const { value: active } = useTabsContext("TabsContent");

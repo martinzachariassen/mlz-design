@@ -1,16 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * The MLZ drifting "sketch marks": small CSS-drawn engineering glyphs (square,
- * filled square, plus, line, angle) that float slowly up-screen, fading in and
- * out. A decorative background layer — `aria-hidden`, click-through, and disabled
- * by `prefers-reduced-motion` / `data-motion="off"` via the `animate-float` token.
- *
- * Positions, drift, rotation, timing and opacity are derived deterministically
- * from each mark's index (no `Math.random`), so it's SSR-safe and stable across
- * renders. Render inside a `relative` container; it fills that box.
- */
 export interface FloatingMarksProps extends React.HTMLAttributes<HTMLDivElement> {
   /** How many marks to scatter. */
   count?: number;
@@ -52,6 +42,16 @@ function Mark({ shape, size }: { shape: Shape; size: number }) {
   }
 }
 
+/**
+ * The MLZ drifting "sketch marks": small CSS-drawn engineering glyphs (square,
+ * filled square, plus, line, angle) that float slowly up-screen, fading in and
+ * out. A decorative background layer — `aria-hidden`, click-through, and disabled
+ * by `prefers-reduced-motion` / `data-motion="off"` via the `animate-float` token.
+ *
+ * Positions, drift, rotation, timing and opacity are derived deterministically
+ * from each mark's index (no `Math.random`), so it's SSR-safe and stable across
+ * renders. Render inside a `relative` container; it fills that box.
+ */
 export const FloatingMarks = React.forwardRef<HTMLDivElement, FloatingMarksProps>(
   ({ count = 14, className, ...props }, ref) => {
     const marks = React.useMemo(

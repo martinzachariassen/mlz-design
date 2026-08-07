@@ -8,8 +8,15 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
-    value: { control: { type: "range", min: 0, max: 100, step: 1 } },
-    variant: { control: "select", options: ["default", "accent"] },
+    value: {
+      description: "Completion percentage. Values outside 0–100 are clamped.",
+      control: { type: "range", min: 0, max: 100, step: 1 },
+    },
+    variant: {
+      description: "Fill colour — `default` is ink, `accent` the active accent family.",
+      control: "select",
+      options: ["default", "accent"],
+    },
   },
   args: { value: 60, variant: "default" },
 } satisfies Meta<typeof Progress>;
@@ -17,6 +24,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Drag `value` and watch the fill ease to its new width over 500ms. */
 export const Playground: Story = {
   render: (args) => (
     <div className="w-72">
@@ -25,6 +33,7 @@ export const Playground: Story = {
   ),
 };
 
+/** The two fills at the same value. Reach for `accent` when the bar is the thing the page is about. */
 export const Variants: Story = {
   render: () => (
     <div className="flex w-72 flex-col gap-4">
@@ -34,6 +43,7 @@ export const Variants: Story = {
   ),
 };
 
+/** The recommended pairing: a mono eyebrow and a percentage above the bar. Give the bar an `aria-label` too, or point `aria-labelledby` at that text. */
 export const Labelled: Story = {
   render: () => (
     <div className="flex w-72 flex-col gap-2">
@@ -46,6 +56,7 @@ export const Labelled: Story = {
   ),
 };
 
+/** 0 through 100 — the empty and full ends both keep the track's rounded cap. */
 export const Steps: Story = {
   render: () => (
     <div className="flex w-72 flex-col gap-4">
@@ -56,6 +67,7 @@ export const Steps: Story = {
   ),
 };
 
+/** Track and fill in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

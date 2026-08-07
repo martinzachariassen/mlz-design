@@ -11,6 +11,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** A full article: headings, lead paragraph, blockquote, list, code block and rule — all unstyled markup, all in the mlz voice. */
 export const Article: Story = {
   render: () => (
     <Prose>
@@ -47,6 +48,7 @@ export const Article: Story = {
   ),
 };
 
+/** Body, links and inline code re-theme with the page — nothing here is a fixed colour. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

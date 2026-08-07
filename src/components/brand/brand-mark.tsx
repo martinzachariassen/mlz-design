@@ -8,17 +8,6 @@ import { cn } from "../../lib/cn";
 const M_POINTS =
   "7,25 7,7 12,7 16,14.5 20,7 25,7 25,25 20.6,25 20.6,13.6 17.4,19.4 14.6,19.4 11.4,13.6 11.4,25";
 
-/**
- * The MLZ **mark** — the Block M on a tight ink tile, the icon half of the
- * identity (favicon, avatar, app icon, stamp). Pure SVG, so it stays crisp from a
- * 16px favicon up to a 1200px OG image.
- *
- * The mark is always monochrome — ink tile, paper letter, never the accent. It
- * reads from semantic tokens by default (`--foreground` tile, `--background`
- * letter), so it inverts with the theme for free. For a *static* asset (a favicon
- * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
- * Foundations → Brand & Favicon story for the export recipe.
- */
 const brandMarkVariants = cva("inline-block shrink-0 align-middle", {
   variants: {
     variant: {
@@ -42,6 +31,17 @@ export interface BrandMarkProps
   glyph?: string;
 }
 
+/**
+ * The MLZ **mark** — the Block M on a tight ink tile, the icon half of the
+ * identity (favicon, avatar, app icon, stamp). Pure SVG, so it stays crisp from a
+ * 16px favicon up to a 1200px OG image.
+ *
+ * The mark is always monochrome — ink tile, paper letter, never the accent. It
+ * reads from semantic tokens by default (`--foreground` tile, `--background`
+ * letter), so it inverts with the theme for free. For a *static* asset (a favicon
+ * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
+ * Foundations → Brand & Favicon story for the export recipe.
+ */
 export const BrandMark = React.forwardRef<SVGSVGElement, BrandMarkProps>(
   (
     { variant = "tile", size = 32, tile = "var(--foreground)", glyph, className, ...props },
@@ -70,14 +70,6 @@ export const BrandMark = React.forwardRef<SVGSVGElement, BrandMarkProps>(
 );
 BrandMark.displayName = "BrandMark";
 
-/**
- * The MLZ **wordmark** — `mlz.` set in Space Mono Bold, lowercase, tracked
- * −0.03em, the type half of the identity (header, footer, signature, title). The
- * period is the one spot of colour in the whole system: it follows the active
- * accent family via `--brand-period` (accent-deep on light for AA on paper, the
- * base accent on dark) and is never omitted. Pass `period` to override it for a
- * static export. Minimum size 14px; below that, use the mark alone.
- */
 export interface BrandWordmarkProps
   extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   /** Font size in px. */
@@ -86,6 +78,14 @@ export interface BrandWordmarkProps
   period?: string;
 }
 
+/**
+ * The MLZ **wordmark** — `mlz.` set in Space Mono Bold, lowercase, tracked
+ * −0.03em, the type half of the identity (header, footer, signature, title). The
+ * period is the one spot of colour in the whole system: it follows the active
+ * accent family via `--brand-period` (accent-deep on light for AA on paper, the
+ * base accent on dark) and is never omitted. Pass `period` to override it for a
+ * static export. Minimum size 14px; below that, use the mark alone.
+ */
 export const BrandWordmark = React.forwardRef<HTMLSpanElement, BrandWordmarkProps>(
   ({ size = 24, period, className, style, ...props }, ref) => (
     <span
@@ -106,13 +106,6 @@ export const BrandWordmark = React.forwardRef<HTMLSpanElement, BrandWordmarkProp
 );
 BrandWordmark.displayName = "BrandWordmark";
 
-/**
- * The **lockup** — the mark paired with the wordmark, the signature MLZ pairing.
- * Proportions are fixed: mark height = 1.45 × wordmark size, gap = 0.5 × wordmark
- * size. `horizontal` (mark beside wordmark) is primary for headers and the OG
- * card; `stacked` (mark above a centred wordmark) suits square/avatar contexts.
- * The mono, wide-tracked `tagline` joins only at 40px+ marks (guideline minimum).
- */
 export interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Kicker line under the wordmark. Shown only when set and the mark is ≥ 40px. */
   tagline?: string;
@@ -122,6 +115,13 @@ export interface BrandLockupProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: "horizontal" | "stacked";
 }
 
+/**
+ * The **lockup** — the mark paired with the wordmark, the signature MLZ pairing.
+ * Proportions are fixed: mark height = 1.45 × wordmark size, gap = 0.5 × wordmark
+ * size. `horizontal` (mark beside wordmark) is primary for headers and the OG
+ * card; `stacked` (mark above a centred wordmark) suits square/avatar contexts.
+ * The mono, wide-tracked `tagline` joins only at 40px+ marks (guideline minimum).
+ */
 export const BrandLockup = React.forwardRef<HTMLDivElement, BrandLockupProps>(
   ({ tagline = "", size = 40, orientation = "horizontal", className, ...props }, ref) => {
     const stacked = orientation === "stacked";

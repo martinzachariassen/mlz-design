@@ -8,8 +8,11 @@ const meta = {
   component: Switch,
   tags: ["autodocs"],
   argTypes: {
-    checked: { control: "boolean" },
-    disabled: { control: "boolean" },
+    checked: {
+      description: "Controlled on/off state. Use `defaultChecked` to leave it uncontrolled.",
+      control: "boolean",
+    },
+    disabled: { description: "Dim the switch and block interaction.", control: "boolean" },
   },
   parameters: { layout: "centered" },
 } satisfies Meta<typeof Switch>;
@@ -17,15 +20,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Off. The track uses `--input`; the thumb is a `--background` disc that slides 16px on toggle. */
 export const Default: Story = {
   render: (args) => <Switch aria-label="Example switch" {...args} />,
 };
 
+/** On — the track fills with `--primary` and the thumb travels right. */
 export const Checked: Story = {
   args: { defaultChecked: true },
   render: (args) => <Switch aria-label="Example switch" {...args} />,
 };
 
+/** Disabled in both positions. */
 export const Disabled: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -35,6 +41,7 @@ export const Disabled: Story = {
   ),
 };
 
+/** A settings row: label and hint on the left, switch on the right. Use a switch when the change applies immediately; use a checkbox when it needs a Save. */
 export const WithLabel: Story = {
   render: () => (
     <div className="flex items-center justify-between gap-6">
@@ -49,6 +56,7 @@ export const WithLabel: Story = {
   ),
 };
 
+/** Every state across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

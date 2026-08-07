@@ -8,9 +8,21 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
-    size: { control: "select", options: ["xs", "sm", "default", "lg", "xl"] },
-    shape: { control: "inline-radio", options: ["circle", "square"] },
-    status: { control: "select", options: [undefined, "online", "away", "busy", "offline"] },
+    size: {
+      description: "Frame size. The initials scale with it.",
+      control: "select",
+      options: ["xs", "sm", "default", "lg", "xl"],
+    },
+    shape: {
+      description: "Circle for people, square for orgs and projects.",
+      control: "inline-radio",
+      options: ["circle", "square"],
+    },
+    status: {
+      description: "Presence dot on the lower-right edge. Decorative — name the state in text too.",
+      control: "select",
+      options: [undefined, "online", "away", "busy", "offline"],
+    },
   },
   args: { size: "default", shape: "circle" },
 } satisfies Meta<typeof Avatar>;
@@ -18,6 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Initials only — the resting state of every avatar in the system. */
 export const Playground: Story = {
   render: (args) => (
     <Avatar {...args}>
@@ -36,6 +49,7 @@ export const ImageWithFallback: Story = {
   ),
 };
 
+/** `xs` through `xl`. Below `default` the initials get tight — prefer two characters. */
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -48,6 +62,7 @@ export const Sizes: Story = {
   ),
 };
 
+/** The frame rounds fully or to `--radius-md`; the clipping happens on the inner frame, not the root. */
 export const Shapes: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -61,6 +76,7 @@ export const Shapes: Story = {
   ),
 };
 
+/** `tone` colours the fallback chip. Use `accent` to mark one avatar out of a set — the current user, say. */
 export const Tones: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -77,6 +93,7 @@ export const Tones: Story = {
   ),
 };
 
+/** The presence dot sits outside the clipped frame and rings itself in `--background` so it reads on any surface. */
 export const Status: Story = {
   render: () => (
     <div className="flex items-center gap-4">
@@ -89,6 +106,7 @@ export const Status: Story = {
   ),
 };
 
+/** `AvatarGroup` overlaps its children and rings each frame. Past `max`, the remainder collapses into a `+N` chip. */
 export const Group: Story = {
   render: () => (
     <AvatarGroup max={4}>
@@ -101,6 +119,7 @@ export const Group: Story = {
   ),
 };
 
+/** Frames, tones and the group ring across both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

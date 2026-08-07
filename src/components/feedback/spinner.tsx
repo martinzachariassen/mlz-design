@@ -2,11 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * A rotating ring built from a bordered circle with a transparent top segment.
- * Inherits `currentColor` (accent by default); stops spinning under
- * `prefers-reduced-motion`.
- */
 const spinnerVariants = cva(
   "inline-block animate-spin rounded-full border-current border-t-transparent text-accent motion-reduce:animate-none",
   {
@@ -24,9 +19,17 @@ const spinnerVariants = cva(
 export interface SpinnerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof spinnerVariants> {
+  /** Accessible name announced by screen readers. */
   label?: string;
 }
 
+/**
+ * An indeterminate loading ring — a bordered circle with a transparent top
+ * segment, spun with `animate-spin`. Inherits `currentColor` (accent by default)
+ * so it recolours by dropping a `text-*` class on it, and stops spinning under
+ * `prefers-reduced-motion`. It's a live `role="status"`; reach for `Progress`
+ * instead when you know how far along the work is.
+ */
 export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
   ({ className, size, label = "Loading", ...props }, ref) => (
     <div

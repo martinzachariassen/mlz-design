@@ -1,6 +1,8 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
+export type ProseProps = React.HTMLAttributes<HTMLDivElement>;
+
 /**
  * Long-form typography — the "blog with a lot of text" surface. Wrap raw article
  * markup (a CMS/MDX render, or plain elements) and every child is styled in the
@@ -11,8 +13,6 @@ import { cn } from "../../lib/cn";
  * It's a descendant-styled container (the `@tailwindcss/typography` idea, done
  * with tokens), so it needs no plugin and re-themes with light/dark and accent.
  */
-export type ProseProps = React.HTMLAttributes<HTMLDivElement>;
-
 export const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
   ({ className, ...props }, ref) => (
     <div

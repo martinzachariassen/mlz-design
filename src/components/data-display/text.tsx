@@ -2,18 +2,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * Inline/text typography primitive — the small, everyday type roles that don't
- * warrant a full `Prose` block: mono values, muted asides, and the tracked-out
- * mono eyebrow used above sections. `variant` sets the whole look; `size`
- * optionally overrides just the font-size (tailwind-merge keeps the later win).
- *
- * ```tsx
- * <Text variant="eyebrow" as="div">Connection details</Text>
- * <Text variant="mono">203.0.113.7</Text>
- * <Text variant="lead">What sites can infer about your connection.</Text>
- * ```
- */
 const textVariants = cva("", {
   variants: {
     variant: {
@@ -40,6 +28,21 @@ export interface TextProps
   as?: React.ElementType;
 }
 
+/**
+ * Inline/text typography primitive — the small, everyday type roles that don't
+ * warrant a full `Prose` block: mono values, muted asides, and the tracked-out
+ * mono eyebrow used above sections. `variant` sets the whole look; `size`
+ * optionally overrides just the font-size (tailwind-merge keeps the later win).
+ *
+ * Renders a `<span>` unless you point `as` at something else — reach for that
+ * whenever the content is really a paragraph or a heading.
+ *
+ * ```tsx
+ * <Text variant="eyebrow" as="div">Connection details</Text>
+ * <Text variant="mono">203.0.113.7</Text>
+ * <Text variant="lead">What sites can infer about your connection.</Text>
+ * ```
+ */
 export const Text = React.forwardRef<HTMLElement, TextProps>(
   ({ as, variant, size, className, ...props }, ref) => {
     const Component = as ?? "span";

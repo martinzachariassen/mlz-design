@@ -20,6 +20,8 @@ const meta = {
   parameters: { layout: "centered" },
   argTypes: {
     variant: {
+      description:
+        "The surface. `default` is the workhorse; `elevated` adds the soft shadow token; `interactive` lifts on hover for whole-card links; `accent` washes the fill for callouts; `ghost` strips both border and background for nesting.",
       control: "inline-radio",
       options: ["default", "elevated", "interactive", "accent", "ghost"],
     },
@@ -29,6 +31,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The full anatomy — header with title, description and action, a body, and a footer of buttons. */
 export const Default: Story = {
   args: { variant: "default" },
   render: (args) => (
@@ -200,6 +203,7 @@ export const Pricing: Story = {
   ),
 };
 
+/** Three surfaces in both themes. Elevation is a hairline border, so nothing muddies on dark paper. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (

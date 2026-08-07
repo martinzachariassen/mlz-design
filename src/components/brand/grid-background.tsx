@@ -1,17 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 
-/**
- * The MLZ "engineering notebook" grid: a two-scale ruled background (a fine
- * minor grid plus a 5× major grid) drawn purely from layered gradients — no image.
- * Colours are `color-mix`ed off `--foreground`, so it adapts to light/dark.
- *
- * - Static by default: a faint, always-on grid to sit behind content.
- * - `interactive`: the grid is revealed only through a soft disc that follows the
- *   pointer (the signature MLZ effect), optionally with an accent `glow`.
- *
- * Render it as the first child of a `relative` container; it fills that box.
- */
 export interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Minor grid cell size in px (major grid is 5×). */
   cell?: number;
@@ -23,6 +12,17 @@ export interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement
   spotlight?: number;
 }
 
+/**
+ * The MLZ "engineering notebook" grid: a two-scale ruled background (a fine
+ * minor grid plus a 5× major grid) drawn purely from layered gradients — no image.
+ * Colours are `color-mix`ed off `--foreground`, so it adapts to light/dark.
+ *
+ * - Static by default: a faint, always-on grid to sit behind content.
+ * - `interactive`: the grid is revealed only through a soft disc that follows the
+ *   pointer (the signature MLZ effect), optionally with an accent `glow`.
+ *
+ * Render it as the first child of a `relative` container; it fills that box.
+ */
 export const GridBackground = React.forwardRef<HTMLDivElement, GridBackgroundProps>(
   (
     { cell = 30, interactive = false, glow = true, spotlight = 340, className, style, ...props },

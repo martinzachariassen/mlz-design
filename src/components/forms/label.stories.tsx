@@ -14,10 +14,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** The label on its own: mono, uppercase, tracked to 0.1em — the same eyebrow voice used across the system. */
 export const Default: Story = {
   render: (args) => <Label {...args} />,
 };
 
+/** The full field unit — label, control, hint. `htmlFor` is what makes the label click-to-focus and readable by AT. */
 export const WithField: Story = {
   render: () => (
     <div className="grid w-72 gap-2">
@@ -28,6 +30,7 @@ export const WithField: Story = {
   ),
 };
 
+/** The field unit in both themes. */
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (
