@@ -101,6 +101,15 @@ is exported as `signals.danger` in JS.
 
 ## Hosting
 
-The Storybook playground deploys to Railway via the `Dockerfile` (Bun install →
+The Storybook playground deploys to **Cloudflare Workers** (static assets, no
+server code) at **design.mlz.no**. `wrangler.jsonc` points `assets.directory` at
+`storybook-static` and pins the custom domain via `routes`; `.github/workflows/
+deploy.yml` runs `bun run build:storybook` then `wrangler deploy` on every push
+to `main`, authenticated with the `CLOUDFLARE_API_TOKEN` repo secret (needs
+Workers Scripts:Edit). Account: Cloudflare "MLZ"
+(`1524bafd76d520ef1ce36c47a3f3bce1`).
+
+A parallel deploy still exists on **Railway** via the `Dockerfile` (Bun install →
 Storybook build → `server.mjs` zero-dependency static server binding `$PORT`) and
-`railway.json` (healthcheck). Node ≥ 20.16 (Storybook 10).
+`railway.json` (healthcheck). Node ≥ 20.16 (Storybook 10). Not yet decided
+whether to retire it now that Cloudflare covers hosting.

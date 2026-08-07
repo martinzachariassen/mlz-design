@@ -1,5 +1,6 @@
 node_modules/
 storybook-static/
+.wrangler/
 dist/**/*.map
 coverage/
 .DS_Store
