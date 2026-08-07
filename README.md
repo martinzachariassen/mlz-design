@@ -452,7 +452,7 @@ Security tab. See [`SECURITY.md`](SECURITY.md).
 | Code vulnerabilities          | **CodeQL** static analysis on every PR                                  |
 | Vulnerable dependencies       | **Dependency Review** on PRs + **Dependabot** (npm / actions / docker)  |
 | CI / workflow integrity       | Actions **SHA-pinned**, **`step-security/harden-runner`**, **`zizmor`**  |
-| Package provenance            | **Sigstore** build provenance attached on publish                       |
+| Package integrity             | Published only from CI on `main` via **`GITHUB_TOKEN`** (no long-lived token) |
 | Accessibility regressions     | **Storybook a11y** (axe, WCAG 2.1 A/AA) fails the build on any violation |
 | Unreviewed changes to `main`  | Protected branch, linear history, required green checks (admins too)    |
 
@@ -532,7 +532,7 @@ each `CHANGELOG`, and consumes the changesets.
 
 **3. Merge the "version packages" PR** when you're ready to ship. That merge runs
 `bun run release` (build + `changeset publish`), which publishes to GitHub Packages
-with build **provenance** and cuts the matching GitHub Release + tag.
+and cuts the matching GitHub Release + tag.
 
 So the whole release surface is two merges: your change, then the version PR — no
 local tagging, no `publish` from a laptop.
