@@ -32,8 +32,10 @@
       "import": "./dist/brand-assets.js"
     },
     "./styles/index.css": "./dist/styles/index.css",
+    "./styles/index-self-hosted.css": "./dist/styles/index-self-hosted.css",
     "./styles/theme.css": "./dist/styles/theme.css",
     "./styles/fonts.css": "./dist/styles/fonts.css",
+    "./styles/fonts-self-hosted.css": "./dist/styles/fonts-self-hosted.css",
     "./styles/base.css": "./dist/styles/base.css",
     "./package.json": "./package.json"
   },
