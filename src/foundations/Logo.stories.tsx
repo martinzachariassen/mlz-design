@@ -4,7 +4,7 @@ import { BrandLockup, BrandMark, BrandWordmark } from "../components/brand/brand
 import { GridBackground } from "../components/brand/grid-background";
 
 const meta = {
-  title: "Foundations/Logo",
+  title: "Brand/Logo",
   tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;

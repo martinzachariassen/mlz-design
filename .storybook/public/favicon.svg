@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="MLZ">
+  <!--
+    The canonical Block-M on its ink tile — the same geometry as <BrandMark />
+    in src/components/brand/brand-mark.tsx. Fixed brand colours, because a
+    favicon can't read CSS custom properties. The media query flips the tile so
+    the mark keeps its contrast against a dark browser chrome.
+  -->
+  <style>
+    .tile { fill: #1a1a18; }
+    .glyph { fill: #ecebe4; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #ecebe4; }
+      .glyph { fill: #1a1a18; }
+    }
+  </style>
+  <rect class="tile" x="1" y="1" width="30" height="30" rx="6" />
+  <polygon class="glyph" points="7,25 7,7 12,7 16,14.5 20,7 25,7 25,25 20.6,25 20.6,13.6 17.4,19.4 14.6,19.4 11.4,13.6 11.4,25" />
+</svg>

@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Badge } from "./badge";
 
 const meta = {
-  title: "Components/Data Display/Badge",
+  title: "Components/Data display/Badge",
   component: Badge,
   tags: ["autodocs"],
   argTypes: {

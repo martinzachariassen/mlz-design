@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "./alert";
 const meta = {
   title: "Components/Feedback/Alert",
   component: Alert,
+  subcomponents: { AlertTitle, AlertDescription },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

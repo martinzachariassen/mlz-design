@@ -31,7 +31,7 @@ interface BrandMarkProps extends Omit<React.SVGProps<SVGSVGElement>, "opacity">,
  * reads from semantic tokens by default (`--foreground` tile, `--background`
  * letter), so it inverts with the theme for free. For a *static* asset (a favicon
  * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
- * Foundations → Brand & Favicon story for the export recipe.
+ * Brand → Favicon story for the export recipe.
  */
 declare const BrandMark: React.ForwardRefExoticComponent<Omit<BrandMarkProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
 interface BrandWordmarkProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
@@ -311,6 +311,11 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps
  * A small mono chip for status, versions and categories — the tracked-out
  * uppercase label that sits next to a title. It's a plain `<span>` with no
  * semantics of its own, so put the meaning in the text, not the colour alone.
+ *
+ * **Use a badge** for a stable attribute of the thing beside it — a category, a
+ * version, a tag. **Reach for `StatusDot`** when the value is live and changes
+ * (online/offline, build state), and for `Callout` or `Alert` when it's
+ * something the reader has to act on. A badge is a label, not a notification.
  */
 declare function Badge({ className, variant, asChild, ...props }: BadgeProps): React.JSX.Element;
 
@@ -332,6 +337,11 @@ interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
  * A definition list for key/value facts. Renders a real `<dl>`; each `DataRow`
  * is a `<div>` grouping a `<dt>`/`<dd>` pair (valid HTML5), so it's accessible
  * and copy-pastable.
+ *
+ * **Use it** for the facts *about one thing* — a spec panel, a metadata block, a
+ * receipt. **Reach for a `<table>`** the moment you have the same fields across
+ * several rows: a definition list has no column headers and no row semantics, so
+ * it can't express a grid of data accessibly.
  *
  * ```tsx
  * <DataList>
@@ -494,6 +504,17 @@ declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.Re
 /**
  * Placeholder shimmer for loading states. The `animate-pulse-soft` token is
  * already `prefers-reduced-motion` guarded, so motion needs no extra handling.
+ *
+ * Three components cover loading; pick by what you know:
+ *
+ * - **`Skeleton`** — you know the *shape* of what's coming. Mirror the real
+ *   layout so nothing jumps when content lands. Best for first page loads.
+ * - **`Spinner`** — you know neither shape nor duration. Best inside a button
+ *   or a small region after a user action.
+ * - **`Progress`** — you know how far along it is. Anything else is a spinner
+ *   wearing a bar.
+ *
+ * **Don't** animate a skeleton for sub-200ms waits; the flash reads as a glitch.
  */
 declare const Skeleton: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
@@ -528,6 +549,15 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
 /**
  * The signature MLZ button: a technical ghost outline that lifts up and to the
  * left on hover, dropping an offset accent shadow behind it.
+ *
+ * **A button does something; a link goes somewhere.** If it navigates, render an
+ * anchor — `<Button asChild><a href="…">…</a></Button>` keeps the styling while
+ * giving the user a real link they can middle-click, copy and open in a new tab.
+ * The `link` variant is the reverse case: an anchor that should *look* like text.
+ *
+ * At most one `accent` or `solid` button per view — the emphasis only reads if
+ * it's scarce. Everything secondary is `default` or `ghost`, and `destructive`
+ * is reserved for actions that lose data.
  */
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
@@ -536,6 +566,11 @@ type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
  * A checkbox with a real `<input type="checkbox">` underneath — the box you see
  * is a `peer`-styled label, so keyboard focus, form submission and validation are
  * the platform's. Pass an `id` to pair it with a `Label`, or let it generate one.
+ *
+ * **Use a checkbox** when the change is *staged* — it takes effect on submit,
+ * and several may be selected together. **Reach for `Switch`** when the change
+ * applies the moment it's flipped, with no Save button. If the options are
+ * mutually exclusive, neither is right — that's a radio group.
  */
 declare const Checkbox: React.ForwardRefExoticComponent<CheckboxProps & React.RefAttributes<HTMLInputElement>>;
 
@@ -606,6 +641,14 @@ type AccordionProps = SingleProps | MultipleProps;
  *   </AccordionItem>
  * </Accordion>
  * ```
+ *
+ * **Use an accordion** for independent sections a reader dips into — FAQs, long
+ * forms broken into steps, dense reference material — especially when the labels
+ * are full sentences or the content is long. **Reach for `Tabs`** instead when
+ * the sections are alternative views of one subject and exactly one is relevant
+ * at a time. **Don't** hide anything a reader needs in order to act: an
+ * accordion is for progressive disclosure, not for tidying away required
+ * information.
  */
 declare const Accordion: React.ForwardRefExoticComponent<AccordionProps & React.RefAttributes<HTMLDivElement>>;
 interface AccordionItemProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {
@@ -784,6 +827,14 @@ interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.
  *   <TabsContent value="activity">…</TabsContent>
  * </Tabs>
  * ```
+ *
+ * **Use tabs** for alternative views of the *same* subject, where exactly one is
+ * relevant at a time and the labels are short enough to sit on one line —
+ * Overview / Activity / Settings. **Reach for `Accordion`** instead when the
+ * sections are independent, when a reader might want several open at once, or
+ * when the labels are full sentences: tabs collapse badly on narrow screens,
+ * accordions don't. Inactive panels unmount, so don't put unsaved form state in
+ * one without lifting it to the parent.
  */
 declare const Tabs: React.ForwardRefExoticComponent<TabsProps & React.RefAttributes<HTMLDivElement>>;
 /** The `role="tablist"` rail the triggers sit on, ruled off from the panel beside it. */
@@ -828,6 +879,12 @@ interface DialogProps {
  * A `DialogTitle` and `DialogDescription` name and describe the dialog
  * automatically — they're wired to it via `aria-labelledby` / `aria-describedby`,
  * so screen readers announce them on open.
+ *
+ * **Use a dialog** when the task genuinely blocks — a confirmation before
+ * something irreversible, or a short focused form. It takes over the screen and
+ * traps focus, so the cost is high: **reach for `InfoTip`** for optional
+ * explanation, and put anything longer than a couple of fields on its own page.
+ * Always give it a `DialogTitle`, or it reaches assistive tech unnamed.
  *
  * ```tsx
  * <Dialog open={open} onOpenChange={setOpen}>
@@ -904,6 +961,12 @@ interface InfoTipProps {
  *
  * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
  * it's dropped into.
+ *
+ * **Use it** for optional context a reader can ignore — defining jargon, or
+ * explaining why a field is asked for. **Reach for `Dialog`** when the content
+ * needs a decision or its own actions, and just write the sentence inline when
+ * it's short enough: an info tip that everyone has to open is a sign the text
+ * belonged on the page. Never hide *required* instructions behind one.
  *
  * ```tsx
  * <p>

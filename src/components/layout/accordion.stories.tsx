@@ -6,6 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 const meta = {
   title: "Components/Layout/Accordion",
   component: Accordion,
+  subcomponents: { AccordionItem, AccordionTrigger, AccordionContent },
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   argTypes: {

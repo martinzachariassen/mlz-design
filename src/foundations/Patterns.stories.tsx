@@ -21,7 +21,7 @@ import { Separator } from "../components/layout/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/layout/tabs";
 
 const meta = {
-  title: "Foundations/Patterns",
+  title: "Patterns/Overview",
   tags: ["!autodocs"],
   parameters: { layout: "fullscreen" },
 } satisfies Meta;

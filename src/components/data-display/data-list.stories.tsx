@@ -4,8 +4,9 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { DataList, DataRow } from "./data-list";
 
 const meta = {
-  title: "Components/Data Display/DataList",
+  title: "Components/Data display/DataList",
   component: DataList,
+  subcomponents: { DataRow },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

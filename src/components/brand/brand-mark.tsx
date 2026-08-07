@@ -40,7 +40,7 @@ export interface BrandMarkProps
  * reads from semantic tokens by default (`--foreground` tile, `--background`
  * letter), so it inverts with the theme for free. For a *static* asset (a favicon
  * file, an email) pass fixed brand colours via `tile` / `glyph` — see the
- * Foundations → Brand & Favicon story for the export recipe.
+ * Brand → Favicon story for the export recipe.
  */
 export const BrandMark = React.forwardRef<SVGSVGElement, BrandMarkProps>(
   (

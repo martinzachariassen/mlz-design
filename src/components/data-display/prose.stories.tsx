@@ -3,7 +3,8 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Prose } from "./prose";
 
 const meta = {
-  title: "Components/Data Display/Prose",
+  title: "Components/Data display/Prose",
+  tags: ["autodocs"],
   component: Prose,
   parameters: { layout: "padded" },
 } satisfies Meta<typeof Prose>;

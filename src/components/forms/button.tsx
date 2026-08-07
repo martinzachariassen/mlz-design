@@ -46,6 +46,15 @@ export interface ButtonProps
 /**
  * The signature MLZ button: a technical ghost outline that lifts up and to the
  * left on hover, dropping an offset accent shadow behind it.
+ *
+ * **A button does something; a link goes somewhere.** If it navigates, render an
+ * anchor — `<Button asChild><a href="…">…</a></Button>` keeps the styling while
+ * giving the user a real link they can middle-click, copy and open in a new tab.
+ * The `link` variant is the reverse case: an anchor that should *look* like text.
+ *
+ * At most one `accent` or `solid` button per view — the emphasis only reads if
+ * it's scarce. Everything secondary is `default` or `ghost`, and `destructive`
+ * is reserved for actions that lose data.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild, type, ...props }, ref) => {

@@ -20,6 +20,14 @@ export interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPri
  *   <TabsContent value="activity">…</TabsContent>
  * </Tabs>
  * ```
+ *
+ * **Use tabs** for alternative views of the *same* subject, where exactly one is
+ * relevant at a time and the labels are short enough to sit on one line —
+ * Overview / Activity / Settings. **Reach for `Accordion`** instead when the
+ * sections are independent, when a reader might want several open at once, or
+ * when the labels are full sentences: tabs collapse badly on narrow screens,
+ * accordions don't. Inactive panels unmount, so don't put unsaved form state in
+ * one without lifting it to the parent.
  */
 export const Tabs = React.forwardRef<React.ComponentRef<typeof TabsPrimitive.Root>, TabsProps>(
   ({ className, ...props }, ref) => (

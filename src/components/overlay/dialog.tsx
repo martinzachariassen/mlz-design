@@ -34,6 +34,12 @@ export interface DialogProps {
  * automatically — they're wired to it via `aria-labelledby` / `aria-describedby`,
  * so screen readers announce them on open.
  *
+ * **Use a dialog** when the task genuinely blocks — a confirmation before
+ * something irreversible, or a short focused form. It takes over the screen and
+ * traps focus, so the cost is high: **reach for `InfoTip`** for optional
+ * explanation, and put anything longer than a couple of fields on its own page.
+ * Always give it a `DialogTitle`, or it reaches assistive tech unnamed.
+ *
  * ```tsx
  * <Dialog open={open} onOpenChange={setOpen}>
  *   <DialogContent>

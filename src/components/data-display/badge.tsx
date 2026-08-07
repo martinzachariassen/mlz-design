@@ -30,6 +30,11 @@ export interface BadgeProps
  * A small mono chip for status, versions and categories — the tracked-out
  * uppercase label that sits next to a title. It's a plain `<span>` with no
  * semantics of its own, so put the meaning in the text, not the colour alone.
+ *
+ * **Use a badge** for a stable attribute of the thing beside it — a category, a
+ * version, a tag. **Reach for `StatusDot`** when the value is live and changes
+ * (online/offline, build state), and for `Callout` or `Alert` when it's
+ * something the reader has to act on. A badge is a label, not a notification.
  */
 export function Badge({ className, variant, asChild, ...props }: BadgeProps) {
   const Comp = asChild ? Slot : "span";

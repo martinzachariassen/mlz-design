@@ -7,6 +7,11 @@ export type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "t
  * A checkbox with a real `<input type="checkbox">` underneath — the box you see
  * is a `peer`-styled label, so keyboard focus, form submission and validation are
  * the platform's. Pass an `id` to pair it with a `Label`, or let it generate one.
+ *
+ * **Use a checkbox** when the change is *staged* — it takes effect on submit,
+ * and several may be selected together. **Reach for `Switch`** when the change
+ * applies the moment it's flipped, with no Save button. If the options are
+ * mutually exclusive, neither is right — that's a radio group.
  */
 export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, id, ...props }, ref) => {

@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { BrandLockup, BrandMark, BrandWordmark } from "./brand-mark";
 
 const meta = {
-  title: "Components/Brand/Brand Mark",
+  title: "Brand/BrandMark",
   component: BrandMark,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

@@ -102,10 +102,22 @@ dependency by the back door. `rg -n "lucide-react" src/` must stay empty.
   so Testing Library's auto-cleanup registers. `tsconfig.json` also covers
   `.storybook/` and the root `*.config.ts`, so those are typechecked too.
 - **Autodocs is on globally** (`tags: ["autodocs"]` in `.storybook/preview.tsx`).
+  **Every meta sets `tags` explicitly** — never rely on the global default.
+  Meta has `component` → `["autodocs"]`; meta has none → `["!autodocs"]`.
   A story file with no `component` in its meta — foundations or a
-  multi-component composition — **must** opt out with `tags: ["!autodocs"]`, or it
-  adds an empty docs page to the sidebar. Setting `component` on a meta makes
-  Storybook infer required `args`, so don't add it to render-only stories.
+  multi-component composition — **must** opt out, or it adds an empty docs page
+  to the sidebar. Setting `component` on a meta makes Storybook infer required
+  `args`: for a render-only compound story that still deserves a props table
+  (see `dialog.stories.tsx`), name the `component`, add `subcomponents`, and
+  satisfy the inference with `args: { children: null }` plus an `argTypes` entry
+  disabling that row.
+- **Component prose lives in the component's JSDoc**, not in
+  `parameters.docs.description.component` — docgen lifts it into the docs page
+  *and* the consumer's editor tooltip, so there's one source of truth. Setting
+  the parameter **overrides** the JSDoc rather than adding to it, which silently
+  drops it. Reserve the parameter for metas that document several components at
+  once (`layout.stories.tsx`). Every component's JSDoc should say what it is and
+  **when to reach for a sibling instead**.
 - Storybook's props tables come from `react-docgen-typescript` with a `propFilter`
   that drops anything declared in `node_modules` — that's what keeps inherited
   React HTML attributes out of the table.

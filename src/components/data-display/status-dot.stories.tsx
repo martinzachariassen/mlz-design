@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { StatusDot } from "./status-dot";
 
 const meta = {
-  title: "Components/Data Display/StatusDot",
+  title: "Components/Data display/StatusDot",
   component: StatusDot,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

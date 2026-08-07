@@ -1,0 +1,112 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Get started/Installation" />
+
+# Installation
+
+Four steps, and the last one is two lines of CSS.
+
+## 1. Point the scope at GitHub Packages
+
+The package publishes to GitHub Packages, not npmjs.org, so the `@martinzachariassen`
+scope needs a registry. Add an `.npmrc` to your app repo:
+
+```ini
+@martinzachariassen:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Export a `GITHUB_TOKEN` with `read:packages` in your shell and CI. It's a
+`${VAR}` reference, so the `.npmrc` itself is safe to commit — **the token never is.**
+
+## 2. Install
+
+```bash
+bun add @martinzachariassen/design
+bun add react react-dom          # peers, if not already present
+```
+
+React 18 or newer. Tailwind v4 is required — this package ships tokens as
+`@theme` layers, which v3 can't read.
+
+## 3. Inherit the whole system
+
+Two lines in your app's main stylesheet:
+
+```css
+@import "tailwindcss";
+@import "@martinzachariassen/design/styles/index.css";
+```
+
+That's the entire setup. `index.css` bundles the tokens, fonts and base
+defaults, **and declares the package's own Tailwind source** — so every
+component's classes are emitted automatically. No manual `@source`, no separate
+imports.
+
+## 4. Use it
+
+```tsx
+import { Button, Card, CardHeader, CardTitle, CardContent, Badge } from "@martinzachariassen/design";
+
+export function Example() {
+  return (
+    <Card>
+      <CardHeader><CardTitle>Deploy</CardTitle></CardHeader>
+      <CardContent className="flex items-center gap-3">
+        <Button variant="solid">Ship it</Button>
+        <Badge variant="accent">v0.3.0</Badge>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+Utilities (`bg-background`, `text-muted-foreground`, `border-border`,
+`font-hand`, `ring-ring`, `rounded-md`…) and raw variables (`var(--accent)`,
+`var(--ease-out)`…) are both available for your own markup — see
+**Foundations → Colour** for the full token map.
+
+## Variations
+
+**Strict CSP or privacy-first?** Use the self-hosted bundle instead — identical,
+but it loads Space Mono and Space Grotesk from bundled WOFF2 files same-origin
+rather than the Google Fonts CDN. Works under `font-src 'self'` /
+`style-src 'self'`.
+
+```css
+@import "@martinzachariassen/design/styles/index-self-hosted.css";
+```
+
+**Want finer control?** Skip `index.css` and import the pieces yourself:
+`styles/theme.css` (tokens, required), plus `styles/fonts.css` and
+`styles/base.css` (both optional). If you go this route you **must** add the
+source directive yourself, or Tailwind won't emit the component classes:
+
+```css
+@source "../node_modules/@martinzachariassen/design/dist";
+```
+
+## Tokens outside CSS
+
+For charts, canvas, email or motion libraries, the same values ship as typed JS:
+
+```ts
+import { accents, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
+
+accents.rust.base; // "oklch(0.66 0.15 45)"
+motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
+breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia
+```
+
+One naming quirk: the CSS role `--destructive` is exported as `signals.danger`
+in JS. Same colour.
+
+## Adding shadcn/ui components
+
+Semantic token names match shadcn/ui deliberately, and both use Radix as the
+behaviour backbone — so anything you add inherits this palette and behaves like
+the components here, with no extra wiring:
+
+```bash
+npx shadcn@latest add dropdown-menu
+```

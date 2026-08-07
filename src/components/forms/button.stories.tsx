@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { Button } from "./button";
 
 const meta = {
-  title: "Components/Forms/Button",
+  title: "Components/Actions/Button",
   component: Button,
   tags: ["autodocs"],
   argTypes: {

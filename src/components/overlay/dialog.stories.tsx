@@ -16,23 +16,25 @@ import {
 
 const meta = {
   title: "Components/Overlay/Dialog",
-  parameters: {
-    layout: "centered",
-    docs: {
-      description: {
-        component:
-          "A modal dialog built on the native `<dialog>` element — focus trapping, the Esc key, " +
-          "background inerting and the top layer all come from the platform, with no dependency. " +
-          "It is controlled: drive `open` / `onOpenChange` yourself, and clicking the backdrop " +
-          "closes it.\n\n" +
-          "Compose it from `DialogContent` (the card surface and the ✕ button), `DialogHeader` " +
-          "with `DialogTitle` + `DialogDescription`, and `DialogFooter` for actions. `DialogClose` " +
-          "with `asChild` turns any control into a dismiss button. Children only mount while the " +
-          "dialog is open, so a form inside starts fresh every time.",
-      },
-    },
+  component: Dialog,
+  // The description comes from the component's own JSDoc via docgen — one source
+  // of truth, so it can't drift from the implementation the way a copy here did.
+  subcomponents: {
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+    DialogClose,
   },
-} satisfies Meta;
+  tags: ["autodocs"],
+  // Every story here renders its own trigger + dialog pair, so `args` are never
+  // read — but naming `component` makes Storybook infer them as required. Supply
+  // the empty case and keep it out of the controls table.
+  args: { children: null },
+  argTypes: { children: { table: { disable: true } } },
+  parameters: { layout: "centered" },
+} satisfies Meta<typeof Dialog>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

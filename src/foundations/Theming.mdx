@@ -1,0 +1,112 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Get started/Theming" />
+
+# Theming
+
+Two independent dimensions, both switched at runtime with no rebuild: **theme**
+(light / dark) and **accent** (five families). Every component reads only the
+semantic token layer, so both switches propagate everywhere for free.
+
+The toolbar at the top of this Storybook drives exactly the same two attributes
+a consuming app would set — try them on any story.
+
+## The two attributes
+
+Everything is driven from `<html>`:
+
+| Attribute | Effect |
+| --- | --- |
+| `class="dark"` | Ink-surface dark mode. `data-theme="dark"` works identically. |
+| `data-accent="rust"` | Re-tints accent, ring and glitch colours. |
+
+Accent families: `cyan` (default), `blue`, `green`, `rust`, `ink`.
+
+Neither has to be global. Set them on any subtree and you get a scoped island —
+a local `<div class="dark">` becomes an inverted panel, and `data-accent` re-tints
+just that branch:
+
+```html
+<section data-accent="rust">
+  <!-- accent-coloured things in here are rust, the rest of the page is unchanged -->
+</section>
+```
+
+## ThemeProvider
+
+For apps that let users choose, the package ships a provider that owns both
+dimensions and persists them to `localStorage`:
+
+```tsx
+import { ThemeProvider } from "@martinzachariassen/design";
+
+export function App({ children }) {
+  return <ThemeProvider defaultTheme="system">{children}</ThemeProvider>;
+}
+```
+
+| Prop | Default | Notes |
+| --- | --- | --- |
+| `defaultTheme` | `"system"` | `"light"`, `"dark"` or `"system"` |
+| `defaultAccent` | `"cyan"` | any of the five families |
+| `storageKey` | `"mlz-theme"` | localStorage key for the theme |
+| `accentStorageKey` | `"mlz-accent"` | localStorage key for the accent |
+| `enableSystem` | `true` | whether `"system"` follows `prefers-color-scheme` |
+| `attribute` | `"class"` | `"class"` toggles `.dark`; `"data-theme"` sets the attribute |
+
+Read and drive it from anywhere underneath with `useTheme()`:
+
+```tsx
+import { useTheme } from "@martinzachariassen/design";
+
+function ThemeToggle() {
+  const { theme, setTheme, resolvedTheme, accent, setAccent } = useTheme();
+  return (
+    <button type="button" onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+      {resolvedTheme === "dark" ? "Light" : "Dark"}
+    </button>
+  );
+}
+```
+
+`theme` is what the user picked — including `"system"`. `resolvedTheme` is the
+concrete `"light"` or `"dark"` actually applied. Toggle against `resolvedTheme`,
+display `theme`.
+
+## Avoiding the flash
+
+`ThemeProvider` can only apply the stored theme after React hydrates, which is
+one paint too late — the page flashes light before switching to dark. Inline
+`themeInitScript()` in `<head>`, **ahead of your stylesheet**, to apply it before
+first paint:
+
+```tsx
+import { themeInitScript } from "@martinzachariassen/design";
+
+<head>
+  <script dangerouslySetInnerHTML={{ __html: themeInitScript() }} />
+</head>
+```
+
+Keep its options identical to the `ThemeProvider` props, or the two will disagree
+about which key to read.
+
+## Overriding the palette
+
+A consuming app never edits the brand primitives. It re-maps the **semantic
+layer**, and every component follows:
+
+```css
+/* your app's stylesheet, after the MLZ import */
+:root {
+  --accent: oklch(0.70 0.15 300);   /* a different house accent for this app */
+  --radius: 0.5rem;                  /* softer corners than the sharp default */
+}
+```
+
+That's the whole contract: **read and override the semantic layer, never the
+`--mlz-*` primitives.** See **Foundations → Colour** for the full role map, and
+**Foundations → Colour usage** for which role belongs where.
+
+Because the semantic names match shadcn/ui, anything added with
+`npx shadcn@latest add …` inherits these overrides too.

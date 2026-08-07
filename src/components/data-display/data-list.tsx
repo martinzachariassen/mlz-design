@@ -24,6 +24,11 @@ export interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
  * is a `<div>` grouping a `<dt>`/`<dd>` pair (valid HTML5), so it's accessible
  * and copy-pastable.
  *
+ * **Use it** for the facts *about one thing* — a spec panel, a metadata block, a
+ * receipt. **Reach for a `<table>`** the moment you have the same fields across
+ * several rows: a definition list has no column headers and no row semantics, so
+ * it can't express a grid of data accessibly.
+ *
  * ```tsx
  * <DataList>
  *   <DataRow label="Location">Oslo, Norway</DataRow>
