@@ -14,10 +14,10 @@ MLZ Design is my **single source of truth for design**. Instead of re-deciding c
 
 - **Inherit in two lines.** One `@import` pulls in the tokens, fonts, base layer and every component's styles — the package declares its own Tailwind source, so there's nothing else to wire up.
 - **Restyle once, everywhere.** Components read only *semantic* tokens (`--primary`, `--accent`, `--border`…). Override them in a consuming app to make it your own; change them here to move every app.
-- **One system, every surface.** React components, layout primitives and full page templates, all reading the same token layer.
+- **One system, every surface.** React components, layout primitives and composed patterns, all reading the same token layer.
 - **Not a component library to depend on blindly.** It's *my* house style — a warm paper/ink palette, house cyan accent, an engineering-notebook character with a cyberpunk edge. Fork it or re-map the semantic layer if you want a different look; for a neutral, unopinionated kit use [shadcn/ui](https://ui.shadcn.com) directly (the token names match, so it drops in).
 
-The repo is **public** on purpose — browse it, learn from it, lift pieces — but built first for me. Try everything in the [interactive Storybook](#playground): colour, type, components, templates, with live theme and accent switches.
+The repo is **public** on purpose — browse it, learn from it, lift pieces — but built first for me. Try everything in the [interactive Storybook](#playground): colour, type, components, patterns, with live theme and accent switches.
 
 ## Quick start
 
@@ -99,7 +99,7 @@ Consuming apps re-map the **semantic tokens** to make the system their own — s
 
 ## Playground
 
-An interactive Storybook — components with generated props tables, live foundations (colour, type, motion, responsive), full-page templates, an a11y checker on every story, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Cloudflare Workers at **[design.mlz.no](https://design.mlz.no)**.
+An interactive Storybook — components with generated props tables, live foundations (colour, type, motion, responsive), composed patterns, an a11y checker on every story, and toolbar switches for **theme** (light/dark) and **accent** (all five families). Deployed to Cloudflare Workers at **[design.mlz.no](https://design.mlz.no)**.
 
 ```bash
 bun run storybook          # dev server at http://localhost:6006

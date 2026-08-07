@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
@@ -33,21 +34,33 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  /**
+   * Render the single child instead of a `<button>`, passing the button's styling
+   * and props down to it. Use it when the control has to be something else — most
+   * often a link: `<Button asChild><a href="/work">Work</a></Button>`.
+   */
+  asChild?: boolean;
+}
 
 /**
  * The signature MLZ button: a technical ghost outline that lifts up and to the
  * left on hover, dropping an offset accent shadow behind it.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, type = "button", ...props }, ref) => (
-    <button
-      ref={ref}
-      type={type}
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    />
-  ),
+  ({ className, variant, size, asChild, type, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return (
+      <Comp
+        ref={ref}
+        // `type` is only meaningful on a real <button>; forcing it onto an <a>
+        // would emit an invalid attribute.
+        type={asChild ? type : (type ?? "button")}
+        className={cn(buttonVariants({ variant, size }), className)}
+        {...props}
+      />
+    );
+  },
 );
 Button.displayName = "Button";
 

@@ -1,10 +1,17 @@
 export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './chunk-AMCCIDMK.js';
 import { cva } from 'class-variance-authority';
-import * as React25 from 'react';
+import * as React30 from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
-import { createPortal } from 'react-dom';
+import { Slot } from '@radix-ui/react-slot';
+import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import * as LabelPrimitive from '@radix-ui/react-label';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import * as SeparatorPrimitive from '@radix-ui/react-separator';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
+import * as PopoverPrimitive from '@radix-ui/react-popover';
 
 function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -21,7 +28,7 @@ var brandMarkVariants = cva("inline-block shrink-0 align-middle", {
   },
   defaultVariants: { variant: "tile" }
 });
-var BrandMark = React25.forwardRef(
+var BrandMark = React30.forwardRef(
   ({ variant = "tile", size = 32, tile = "var(--foreground)", glyph, className, ...props }, ref) => {
     const isTile = variant === "tile";
     const letter = glyph ?? (isTile ? "var(--background)" : "currentColor");
@@ -46,7 +53,7 @@ var BrandMark = React25.forwardRef(
   }
 );
 BrandMark.displayName = "BrandMark";
-var BrandWordmark = React25.forwardRef(
+var BrandWordmark = React30.forwardRef(
   ({ size = 24, period, className, style, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -69,7 +76,7 @@ var BrandWordmark = React25.forwardRef(
   )
 );
 BrandWordmark.displayName = "BrandWordmark";
-var BrandLockup = React25.forwardRef(
+var BrandLockup = React30.forwardRef(
   ({ tagline = "", size = 40, orientation = "horizontal", className, ...props }, ref) => {
     const stacked = orientation === "stacked";
     const wordmarkSize = size / 1.45;
@@ -140,9 +147,9 @@ function Mark({ shape, size }) {
       return /* @__PURE__ */ jsx("span", { className: "block border border-current", style: s });
   }
 }
-var FloatingMarks = React25.forwardRef(
+var FloatingMarks = React30.forwardRef(
   ({ count = 14, className, ...props }, ref) => {
-    const marks = React25.useMemo(
+    const marks = React30.useMemo(
       () => Array.from({ length: count }, (_, i) => {
         const a = rand(i + 1);
         const b = rand(i + 7);
@@ -198,10 +205,10 @@ FloatingMarks.displayName = "FloatingMarks";
 function prefersReducedMotion() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
-var GlitchText = React25.forwardRef(
+var GlitchText = React30.forwardRef(
   ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
-    const containerRef = React25.useRef(null);
-    const setRefs = React25.useCallback(
+    const containerRef = React30.useRef(null);
+    const setRefs = React30.useCallback(
       (node) => {
         containerRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -209,11 +216,11 @@ var GlitchText = React25.forwardRef(
       },
       [ref]
     );
-    const segments = React25.useMemo(
+    const segments = React30.useMemo(
       () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
       [text]
     );
-    const burst = React25.useCallback(() => {
+    const burst = React30.useCallback(() => {
       const root = containerRef.current;
       if (!root) return;
       const chars = root.querySelectorAll("[data-glitch-char]");
@@ -230,7 +237,7 @@ var GlitchText = React25.forwardRef(
         });
       }
     }, []);
-    React25.useEffect(() => {
+    React30.useEffect(() => {
       if (trigger !== "ambient" || prefersReducedMotion()) return;
       const [min, max] = interval;
       let timer;
@@ -267,10 +274,10 @@ var GlitchText = React25.forwardRef(
   }
 );
 GlitchText.displayName = "GlitchText";
-var GridBackground = React25.forwardRef(
+var GridBackground = React30.forwardRef(
   ({ cell = 30, interactive = false, glow = true, spotlight = 340, className, style, ...props }, ref) => {
-    const rootRef = React25.useRef(null);
-    const setRefs = React25.useCallback(
+    const rootRef = React30.useRef(null);
+    const setRefs = React30.useCallback(
       (node) => {
         rootRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -278,7 +285,7 @@ var GridBackground = React25.forwardRef(
       },
       [ref]
     );
-    React25.useEffect(() => {
+    React30.useEffect(() => {
       if (!interactive) return;
       const move = (event) => {
         const root = rootRef.current;
@@ -350,8 +357,9 @@ var badgeVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-function Badge({ className, variant, ...props }) {
-  return /* @__PURE__ */ jsx("span", { className: cn(badgeVariants({ variant }), className), ...props });
+function Badge({ className, variant, asChild, ...props }) {
+  const Comp = asChild ? Slot : "span";
+  return /* @__PURE__ */ jsx(Comp, { className: cn(badgeVariants({ variant }), className), ...props });
 }
 function DefaultCover() {
   return /* @__PURE__ */ jsxs("div", { className: "relative flex size-full items-center justify-center overflow-hidden bg-[color-mix(in_oklch,var(--accent)_10%,var(--card))]", children: [
@@ -366,7 +374,7 @@ function DefaultCover() {
     )
   ] });
 }
-var ProjectCard = React25.forwardRef(
+var ProjectCard = React30.forwardRef(
   ({
     className,
     title,
@@ -379,7 +387,7 @@ var ProjectCard = React25.forwardRef(
     cta = "View project",
     ...props
   }, ref) => {
-    const titleId = React25.useId();
+    const titleId = React30.useId();
     return /* @__PURE__ */ jsxs(
       "article",
       {
@@ -471,7 +479,7 @@ function Lockup({ size }) {
     /* @__PURE__ */ jsx(BrandWordmark, { size: size / 1.45 })
   ] });
 }
-var RepoBanner = React25.forwardRef(
+var RepoBanner = React30.forwardRef(
   ({
     project,
     eyebrow = "MLZ \xB7 Design System",
@@ -616,7 +624,7 @@ var RepoBanner = React25.forwardRef(
 RepoBanner.displayName = "RepoBanner";
 var BASE_W2 = 1200;
 var BASE_H2 = 630;
-var SocialCard = React25.forwardRef(
+var SocialCard = React30.forwardRef(
   ({
     title,
     eyebrow = "Martin Zachariassen",
@@ -704,7 +712,7 @@ var statusColor = {
   busy: "bg-destructive",
   offline: "bg-[var(--muted-foreground)]"
 };
-var Avatar = React25.forwardRef(
+var Avatar = React30.forwardRef(
   ({ className, size, shape = "circle", status, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -714,7 +722,7 @@ var Avatar = React25.forwardRef(
       ...props,
       children: [
         /* @__PURE__ */ jsx(
-          "span",
+          AvatarPrimitive.Root,
           {
             "data-slot": "avatar-frame",
             className: cn(
@@ -739,28 +747,15 @@ var Avatar = React25.forwardRef(
   )
 );
 Avatar.displayName = "Avatar";
-var AvatarImage = React25.forwardRef(
-  ({ className, onError, ...props }, ref) => {
-    const [errored, setErrored] = React25.useState(false);
-    if (errored) return null;
-    return (
-      // biome-ignore lint/a11y/useAltText: alt is forwarded via props
-      /* @__PURE__ */ jsx(
-        "img",
-        {
-          ref,
-          "data-slot": "avatar-image",
-          className: cn("size-full object-cover", className),
-          onError: (event) => {
-            setErrored(true);
-            onError?.(event);
-          },
-          ...props
-        }
-      )
-    );
+var AvatarImage = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  AvatarPrimitive.Image,
+  {
+    ref,
+    "data-slot": "avatar-image",
+    className: cn("size-full object-cover", className),
+    ...props
   }
-);
+));
 AvatarImage.displayName = "AvatarImage";
 var fallbackVariants = cva(
   "flex size-full items-center justify-center font-mono uppercase tracking-[0.08em]",
@@ -775,21 +770,19 @@ var fallbackVariants = cva(
     defaultVariants: { tone: "default" }
   }
 );
-var AvatarFallback = React25.forwardRef(
-  ({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
-    "span",
-    {
-      ref,
-      "data-slot": "avatar-fallback",
-      className: cn(fallbackVariants({ tone }), className),
-      ...props
-    }
-  )
-);
+var AvatarFallback = React30.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
+  AvatarPrimitive.Fallback,
+  {
+    ref,
+    "data-slot": "avatar-fallback",
+    className: cn(fallbackVariants({ tone }), className),
+    ...props
+  }
+));
 AvatarFallback.displayName = "AvatarFallback";
-var AvatarGroup = React25.forwardRef(
+var AvatarGroup = React30.forwardRef(
   ({ className, max, size = "default", children, ...props }, ref) => {
-    const items = React25.Children.toArray(children).filter(React25.isValidElement);
+    const items = React30.Children.toArray(children).filter(React30.isValidElement);
     const shown = typeof max === "number" ? items.slice(0, max) : items;
     const overflow = items.length - shown.length;
     return /* @__PURE__ */ jsxs(
@@ -814,8 +807,8 @@ var AvatarGroup = React25.forwardRef(
   }
 );
 AvatarGroup.displayName = "AvatarGroup";
-var DataListContext = React25.createContext("justify");
-var DataList = React25.forwardRef(
+var DataListContext = React30.createContext("justify");
+var DataList = React30.forwardRef(
   ({ layout = "justify", className, ...props }, ref) => /* @__PURE__ */ jsx(DataListContext.Provider, { value: layout, children: /* @__PURE__ */ jsx(
     "dl",
     {
@@ -828,9 +821,9 @@ var DataList = React25.forwardRef(
   ) })
 );
 DataList.displayName = "DataList";
-var DataRow = React25.forwardRef(
+var DataRow = React30.forwardRef(
   ({ label, mono, layout, className, children, ...props }, ref) => {
-    const inherited = React25.useContext(DataListContext);
+    const inherited = React30.useContext(DataListContext);
     const resolved = layout ?? inherited;
     const grid = resolved === "grid";
     return /* @__PURE__ */ jsxs(
@@ -872,7 +865,7 @@ var DataRow = React25.forwardRef(
   }
 );
 DataRow.displayName = "DataRow";
-var Kbd = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var Kbd = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "kbd",
   {
     ref,
@@ -884,7 +877,7 @@ var Kbd = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ j
   }
 ));
 Kbd.displayName = "Kbd";
-var Prose = React25.forwardRef(
+var Prose = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -941,7 +934,7 @@ var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   },
   defaultVariants: { variant: "muted" }
 });
-var StatusDot = React25.forwardRef(
+var StatusDot = React30.forwardRef(
   ({ variant, pulse, label, className, ...props }, ref) => {
     const a11y = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
     return /* @__PURE__ */ jsxs(
@@ -979,7 +972,7 @@ var textVariants = cva("", {
   },
   defaultVariants: { variant: "body" }
 });
-var Text = React25.forwardRef(
+var Text = React30.forwardRef(
   ({ as, variant, size, className, ...props }, ref) => {
     const Component = as ?? "span";
     return /* @__PURE__ */ jsx(
@@ -1009,7 +1002,7 @@ var alertVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Alert = React25.forwardRef(
+var Alert = React30.forwardRef(
   ({ className, variant, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1022,7 +1015,7 @@ var Alert = React25.forwardRef(
   )
 );
 Alert.displayName = "Alert";
-var AlertTitle = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertTitle = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1035,7 +1028,7 @@ var AlertTitle = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 AlertTitle.displayName = "AlertTitle";
-var AlertDescription = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertDescription = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1058,7 +1051,7 @@ var calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
   },
   defaultVariants: { variant: "muted" }
 });
-var Callout = React25.forwardRef(
+var Callout = React30.forwardRef(
   ({ variant, title, description, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "div",
     {
@@ -1090,28 +1083,30 @@ var indicatorVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Progress = React25.forwardRef(
-  ({ className, value = 0, variant, ...props }, ref) => {
-    const pct = Math.min(100, Math.max(0, value));
-    const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
-    return /* @__PURE__ */ jsx(
-      "div",
-      {
-        ref,
-        role: "progressbar",
-        "aria-label": hasLabel ? void 0 : "Progress",
-        "aria-valuenow": pct,
-        "aria-valuemin": 0,
-        "aria-valuemax": 100,
-        className: cn("h-2 w-full overflow-hidden rounded-full bg-muted", className),
-        ...props,
-        children: /* @__PURE__ */ jsx("div", { className: cn(indicatorVariants({ variant })), style: { width: `${pct}%` } })
-      }
-    );
-  }
-);
+var Progress = React30.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
+  const pct = Math.min(100, Math.max(0, value));
+  const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
+  return /* @__PURE__ */ jsx(
+    ProgressPrimitive.Root,
+    {
+      ref,
+      value: pct,
+      max: 100,
+      "aria-label": hasLabel ? void 0 : "Progress",
+      className: cn("h-2 w-full overflow-hidden rounded-full bg-muted", className),
+      ...props,
+      children: /* @__PURE__ */ jsx(
+        ProgressPrimitive.Indicator,
+        {
+          className: cn(indicatorVariants({ variant })),
+          style: { width: `${pct}%` }
+        }
+      )
+    }
+  );
+});
 Progress.displayName = "Progress";
-var Skeleton = React25.forwardRef(
+var Skeleton = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1135,7 +1130,7 @@ var spinnerVariants = cva(
     defaultVariants: { size: "default" }
   }
 );
-var Spinner = React25.forwardRef(
+var Spinner = React30.forwardRef(
   ({ className, size, label = "Loading", ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1171,21 +1166,24 @@ var buttonVariants = cva(
     defaultVariants: { variant: "default", size: "default" }
   }
 );
-var Button = React25.forwardRef(
-  ({ className, variant, size, type = "button", ...props }, ref) => /* @__PURE__ */ jsx(
-    "button",
-    {
-      ref,
-      type,
-      className: cn(buttonVariants({ variant, size }), className),
-      ...props
-    }
-  )
+var Button = React30.forwardRef(
+  ({ className, variant, size, asChild, type, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return /* @__PURE__ */ jsx(
+      Comp,
+      {
+        ref,
+        type: asChild ? type : type ?? "button",
+        className: cn(buttonVariants({ variant, size }), className),
+        ...props
+      }
+    );
+  }
 );
 Button.displayName = "Button";
-var Checkbox = React25.forwardRef(
+var Checkbox = React30.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React25.useId();
+    const generatedId = React30.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -1217,7 +1215,7 @@ var Checkbox = React25.forwardRef(
   }
 );
 Checkbox.displayName = "Checkbox";
-var Input = React25.forwardRef(
+var Input = React30.forwardRef(
   ({ className, type, ...props }, ref) => /* @__PURE__ */ jsx(
     "input",
     {
@@ -1232,26 +1230,23 @@ var Input = React25.forwardRef(
   )
 );
 Input.displayName = "Input";
-var Label = React25.forwardRef(
-  ({ className, ...props }, ref) => (
-    // biome-ignore lint/a11y/noLabelWithoutControl: label is associated via htmlFor by the consumer
-    /* @__PURE__ */ jsx(
-      "label",
-      {
-        ref,
-        className: cn(
-          "font-mono text-xs uppercase tracking-[0.1em] text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
-          className
-        ),
-        ...props
-      }
-    )
+var Label = React30.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+    LabelPrimitive.Root,
+    {
+      ref,
+      className: cn(
+        "font-mono text-xs uppercase tracking-[0.1em] text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-50",
+        className
+      ),
+      ...props
+    }
   )
 );
 Label.displayName = "Label";
-var Switch = React25.forwardRef(
+var Switch = React30.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React25.useId();
+    const generatedId = React30.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -1270,7 +1265,7 @@ var Switch = React25.forwardRef(
   }
 );
 Switch.displayName = "Switch";
-var Textarea = React25.forwardRef(
+var Textarea = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "textarea",
     {
@@ -1284,198 +1279,68 @@ var Textarea = React25.forwardRef(
   )
 );
 Textarea.displayName = "Textarea";
-var AccordionContext = React25.createContext(null);
-function useAccordionContext(component) {
-  const context = React25.useContext(AccordionContext);
-  if (!context) throw new Error(`<${component}> must be used within <Accordion>`);
-  return context;
-}
-var ItemContext = React25.createContext(null);
-function useItemContext(component) {
-  const context = React25.useContext(ItemContext);
-  if (!context) throw new Error(`<${component}> must be used within <AccordionItem>`);
-  return context;
-}
-function toArray(value) {
-  if (value === void 0) return [];
-  return Array.isArray(value) ? value : [value];
-}
-var Accordion = React25.forwardRef(
-  ({
-    type = "single",
-    value,
-    defaultValue,
-    onValueChange,
-    collapsible = false,
-    className,
-    children,
-    ...props
-  }, ref) => {
-    const [uncontrolled, setUncontrolled] = React25.useState(() => toArray(defaultValue));
-    const isControlled = value !== void 0;
-    const open = isControlled ? toArray(value) : uncontrolled;
-    const order = React25.useRef([]);
-    const commit = React25.useCallback(
-      (next) => {
-        if (!isControlled) setUncontrolled(next);
-        onValueChange?.(type === "single" ? next[0] ?? "" : next);
-      },
-      [isControlled, onValueChange, type]
-    );
-    const toggle = React25.useCallback(
-      (item) => {
-        const isItemOpen = open.includes(item);
-        if (type === "single") {
-          commit(isItemOpen ? collapsible ? [] : open : [item]);
-        } else {
-          commit(isItemOpen ? open.filter((v) => v !== item) : [...open, item]);
-        }
-      },
-      [open, type, collapsible, commit]
-    );
-    const isOpen = React25.useCallback((item) => open.includes(item), [open]);
-    const register = React25.useCallback((item) => {
-      if (!order.current.includes(item)) order.current.push(item);
-    }, []);
-    const focusRelative = React25.useCallback(
-      (from, direction) => {
-        const items = order.current;
-        if (items.length === 0) return;
-        let nextValue;
-        if (direction === "first") nextValue = items[0];
-        else if (direction === "last") nextValue = items[items.length - 1];
-        else {
-          const index = items.indexOf(from);
-          if (index === -1) return;
-          nextValue = items[(index + direction + items.length) % items.length];
-        }
-        if (nextValue == null) return;
-        document.querySelector(
-          `[data-slot="accordion-trigger"][data-value="${nextValue}"]`
-        )?.focus();
-      },
-      []
-    );
-    const context = React25.useMemo(
-      () => ({ isOpen, toggle, register, focusRelative }),
-      [isOpen, toggle, register, focusRelative]
-    );
-    return /* @__PURE__ */ jsx(AccordionContext.Provider, { value: context, children: /* @__PURE__ */ jsx("div", { ref, "data-slot": "accordion", className: cn("flex flex-col", className), ...props, children }) });
+var Accordion = React30.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
+  AccordionPrimitive.Root,
+  {
+    ref,
+    "data-slot": "accordion",
+    className: cn("flex flex-col", className),
+    ...{ type, ...props }
   }
-);
+));
 Accordion.displayName = "Accordion";
-var AccordionItem = React25.forwardRef(
-  ({ value, className, children, ...props }, ref) => {
-    const { isOpen } = useAccordionContext("AccordionItem");
-    const reactId = React25.useId();
-    const open = isOpen(value);
-    const item = React25.useMemo(
-      () => ({
-        value,
-        open,
-        triggerId: `${reactId}-trigger`,
-        contentId: `${reactId}-content`
-      }),
-      [value, open, reactId]
-    );
-    return /* @__PURE__ */ jsx(ItemContext.Provider, { value: item, children: /* @__PURE__ */ jsx(
-      "div",
-      {
-        ref,
-        "data-slot": "accordion-item",
-        "data-state": open ? "open" : "closed",
-        className: cn("border-b border-border", className),
-        ...props,
-        children
-      }
-    ) });
+var AccordionItem = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  AccordionPrimitive.Item,
+  {
+    ref,
+    "data-slot": "accordion-item",
+    className: cn("border-b border-border", className),
+    ...props
   }
-);
+));
 AccordionItem.displayName = "AccordionItem";
-var AccordionTrigger = React25.forwardRef(
-  ({ className, children, hideIndicator, onKeyDown, ...props }, ref) => {
-    const { toggle, register, focusRelative } = useAccordionContext("AccordionTrigger");
-    const { value, open, triggerId, contentId } = useItemContext("AccordionTrigger");
-    React25.useEffect(() => register(value), [register, value]);
-    return /* @__PURE__ */ jsx("h3", { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
-      "button",
-      {
-        ref,
-        type: "button",
-        id: triggerId,
-        "data-slot": "accordion-trigger",
-        "data-value": value,
-        "data-state": open ? "open" : "closed",
-        "aria-expanded": open,
-        "aria-controls": contentId,
-        onClick: () => toggle(value),
-        onKeyDown: (event) => {
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            focusRelative(value, 1);
-          } else if (event.key === "ArrowUp") {
-            event.preventDefault();
-            focusRelative(value, -1);
-          } else if (event.key === "Home") {
-            event.preventDefault();
-            focusRelative(value, "first");
-          } else if (event.key === "End") {
-            event.preventDefault();
-            focusRelative(value, "last");
-          }
-          onKeyDown?.(event);
-        },
-        className: cn(
-          "flex w-full items-center gap-3 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-          className
-        ),
-        ...props,
-        children: [
-          children,
-          hideIndicator ? null : /* @__PURE__ */ jsx(
-            "svg",
-            {
-              "aria-hidden": "true",
-              viewBox: "0 0 24 24",
-              fill: "none",
-              stroke: "currentColor",
-              strokeWidth: 2,
-              strokeLinecap: "round",
-              strokeLinejoin: "round",
-              className: cn(
-                "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
-                open && "rotate-180 text-accent"
-              ),
-              children: /* @__PURE__ */ jsx("path", { d: "m6 9 6 6 6-6" })
-            }
-          )
-        ]
-      }
-    ) });
+var AccordionTrigger = React30.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
+  AccordionPrimitive.Trigger,
+  {
+    ref,
+    "data-slot": "accordion-trigger",
+    className: cn(
+      "group flex w-full items-center gap-3 py-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+      className
+    ),
+    ...props,
+    children: [
+      children,
+      hideIndicator ? null : /* @__PURE__ */ jsx(
+        "svg",
+        {
+          "aria-hidden": "true",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: "currentColor",
+          strokeWidth: 2,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          className: "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 group-data-[state=open]:text-accent motion-reduce:transition-none",
+          children: /* @__PURE__ */ jsx("path", { d: "m6 9 6 6 6-6" })
+        }
+      )
+    ]
   }
-);
+) }));
 AccordionTrigger.displayName = "AccordionTrigger";
-var AccordionContent = React25.forwardRef(({ className, children, ...props }, ref) => {
-  const { open, triggerId, contentId } = useItemContext("AccordionContent");
-  return (
-    // A `<section>` with an accessible name is an implicit `region` landmark.
-    /* @__PURE__ */ jsx(
-      "section",
-      {
-        id: contentId,
-        "aria-labelledby": triggerId,
-        "data-slot": "accordion-content",
-        "data-state": open ? "open" : "closed",
-        "aria-hidden": !open,
-        className: cn(
-          "grid transition-[grid-template-rows] duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
-          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        ),
-        children: /* @__PURE__ */ jsx("div", { className: "min-h-0 overflow-hidden", children: /* @__PURE__ */ jsx("div", { ref, className: cn("pb-4 text-sm text-muted-foreground", className), ...props, children }) })
-      }
-    )
-  );
-});
+var AccordionContent = React30.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+  AccordionPrimitive.Content,
+  {
+    forceMount: true,
+    "data-slot": "accordion-content",
+    className: cn(
+      "grid transition-[grid-template-rows,visibility] duration-300 ease-[var(--ease-out)] motion-reduce:transition-none",
+      "data-[state=open]:grid-rows-[1fr] data-[state=closed]:grid-rows-[0fr] data-[state=closed]:invisible"
+    ),
+    children: /* @__PURE__ */ jsx("div", { className: "min-h-0 overflow-hidden", children: /* @__PURE__ */ jsx("div", { ref, className: cn("pb-4 text-sm text-muted-foreground", className), ...props, children }) })
+  }
+));
 AccordionContent.displayName = "AccordionContent";
 var cardVariants = cva(
   "rounded-[var(--radius-lg)] text-card-foreground transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out)]",
@@ -1492,19 +1357,22 @@ var cardVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Card = React25.forwardRef(
-  ({ className, variant, ...props }, ref) => /* @__PURE__ */ jsx(
-    "div",
-    {
-      ref,
-      "data-slot": "card",
-      className: cn(cardVariants({ variant }), className),
-      ...props
-    }
-  )
+var Card = React30.forwardRef(
+  ({ className, variant, asChild, ...props }, ref) => {
+    const Comp = asChild ? Slot : "div";
+    return /* @__PURE__ */ jsx(
+      Comp,
+      {
+        ref,
+        "data-slot": "card",
+        className: cn(cardVariants({ variant }), className),
+        ...props
+      }
+    );
+  }
 );
 Card.displayName = "Card";
-var CardHeader = React25.forwardRef(
+var CardHeader = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1519,7 +1387,7 @@ var CardHeader = React25.forwardRef(
   )
 );
 CardHeader.displayName = "CardHeader";
-var CardTitle = React25.forwardRef(
+var CardTitle = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1534,7 +1402,7 @@ var CardTitle = React25.forwardRef(
   )
 );
 CardTitle.displayName = "CardTitle";
-var CardDescription = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var CardDescription = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1544,7 +1412,7 @@ var CardDescription = React25.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 CardDescription.displayName = "CardDescription";
-var CardAction = React25.forwardRef(
+var CardAction = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1556,11 +1424,11 @@ var CardAction = React25.forwardRef(
   )
 );
 CardAction.displayName = "CardAction";
-var CardContent = React25.forwardRef(
+var CardContent = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "card-content", className: cn("p-5 pt-0", className), ...props })
 );
 CardContent.displayName = "CardContent";
-var CardFooter = React25.forwardRef(
+var CardFooter = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1593,7 +1461,7 @@ var containerVariants = cva("mx-auto w-full", {
   },
   defaultVariants: { size: "lg", gutter: "md" }
 });
-var Container = React25.forwardRef(
+var Container = React30.forwardRef(
   ({ className, size, gutter, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1642,7 +1510,7 @@ var stackVariants = cva("flex", {
   },
   defaultVariants: { direction: "col", gap: "md", align: "stretch", justify: "start" }
 });
-var Stack = React25.forwardRef(
+var Stack = React30.forwardRef(
   ({ className, direction, gap, align, justify, wrap, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1670,7 +1538,7 @@ var gapMap = {
   lg: "gap-6",
   xl: "gap-10"
 };
-var Grid = React25.forwardRef(
+var Grid = React30.forwardRef(
   ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
     const auto = min != null;
     const minW = typeof min === "number" ? `${min}px` : min;
@@ -1690,164 +1558,134 @@ var Grid = React25.forwardRef(
   }
 );
 Grid.displayName = "Grid";
-var Separator = React25.forwardRef(
-  ({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
-    const semantics = decorative ? { "aria-hidden": true } : { role: "separator", "aria-orientation": orientation };
-    if (label != null && orientation === "horizontal") {
-      return /* @__PURE__ */ jsxs(
-        "div",
-        {
-          ref,
-          ...semantics,
-          className: cn("flex w-full items-center gap-3", className),
-          ...props,
-          children: [
-            /* @__PURE__ */ jsx("span", { className: "h-px flex-1 bg-border" }),
-            /* @__PURE__ */ jsx("span", { className: "shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground", children: label }),
-            /* @__PURE__ */ jsx("span", { className: "h-px flex-1 bg-border" })
-          ]
-        }
-      );
-    }
-    return /* @__PURE__ */ jsx(
-      "div",
+var Separator = React30.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
+  if (label != null && orientation === "horizontal") {
+    return /* @__PURE__ */ jsxs(
+      SeparatorPrimitive.Root,
       {
         ref,
-        ...semantics,
-        className: cn(
-          "shrink-0 bg-border",
-          orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
-          className
-        ),
-        ...props
+        orientation,
+        decorative,
+        "aria-hidden": decorative || void 0,
+        className: cn("flex w-full items-center gap-3", className),
+        ...props,
+        children: [
+          /* @__PURE__ */ jsx("span", { className: "h-px flex-1 bg-border" }),
+          /* @__PURE__ */ jsx("span", { className: "shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground", children: label }),
+          /* @__PURE__ */ jsx("span", { className: "h-px flex-1 bg-border" })
+        ]
       }
     );
   }
-);
-Separator.displayName = "Separator";
-var TabsContext = React25.createContext(null);
-function useTabsContext(component) {
-  const context = React25.useContext(TabsContext);
-  if (!context) {
-    throw new Error(`<${component}> must be used within <Tabs>`);
-  }
-  return context;
-}
-var Tabs = React25.forwardRef(
-  ({ className, value, defaultValue, onValueChange, children, ...props }, ref) => {
-    const [uncontrolled, setUncontrolled] = React25.useState(defaultValue);
-    const isControlled = value !== void 0;
-    const active = isControlled ? value : uncontrolled;
-    const order = React25.useRef([]);
-    const setValue = React25.useCallback(
-      (next) => {
-        if (!isControlled) setUncontrolled(next);
-        onValueChange?.(next);
-      },
-      [isControlled, onValueChange]
-    );
-    const register = React25.useCallback((triggerValue) => {
-      if (!order.current.includes(triggerValue)) order.current.push(triggerValue);
-    }, []);
-    const focusRelative = React25.useCallback((from, direction) => {
-      const items = order.current;
-      const index = items.indexOf(from);
-      if (index === -1) return;
-      const next = items[(index + direction + items.length) % items.length];
-      document.querySelector(`[role="tab"][data-value="${next}"]`)?.focus();
-    }, []);
-    const context = React25.useMemo(
-      () => ({ value: active, setValue, register, focusRelative }),
-      [active, setValue, register, focusRelative]
-    );
-    return /* @__PURE__ */ jsx(TabsContext.Provider, { value: context, children: /* @__PURE__ */ jsx("div", { ref, className: cn("flex flex-col gap-4", className), ...props, children }) });
-  }
-);
-Tabs.displayName = "Tabs";
-var TabsList = React25.forwardRef(
-  ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-    "div",
+  return /* @__PURE__ */ jsx(
+    SeparatorPrimitive.Root,
     {
       ref,
-      role: "tablist",
-      className: cn("flex gap-1 border-b border-border", className),
+      orientation,
+      decorative,
+      className: cn(
+        "shrink-0 bg-border",
+        orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
+        className
+      ),
+      ...props
+    }
+  );
+});
+Separator.displayName = "Separator";
+var Tabs = React30.forwardRef(
+  ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+    TabsPrimitive.Root,
+    {
+      ref,
+      className: cn("flex flex-col gap-4 data-[orientation=vertical]:flex-row", className),
       ...props
     }
   )
 );
+Tabs.displayName = "Tabs";
+var TabsList = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  TabsPrimitive.List,
+  {
+    ref,
+    className: cn(
+      "flex gap-1 border-b border-border",
+      "data-[orientation=vertical]:flex-col data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r",
+      className
+    ),
+    ...props
+  }
+));
 TabsList.displayName = "TabsList";
-var TabsTrigger = React25.forwardRef(
-  ({ className, value, onKeyDown, ...props }, ref) => {
-    const { value: active, setValue, register, focusRelative } = useTabsContext("TabsTrigger");
-    React25.useEffect(() => register(value), [register, value]);
-    const selected = active === value;
-    return /* @__PURE__ */ jsx(
-      "button",
-      {
-        ref,
-        type: "button",
-        role: "tab",
-        "data-value": value,
-        "aria-selected": selected,
-        tabIndex: selected ? 0 : -1,
-        onClick: () => setValue(value),
-        onKeyDown: (event) => {
-          if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-            event.preventDefault();
-            focusRelative(value, 1);
-          } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-            event.preventDefault();
-            focusRelative(value, -1);
-          }
-          onKeyDown?.(event);
-        },
-        className: cn(
-          "-mb-px border-b-2 border-transparent px-3 pb-2 font-mono text-xs uppercase tracking-[0.1em] transition-colors duration-200 ease-[var(--ease-out)] hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50",
-          selected ? "border-accent text-foreground" : "text-muted-foreground",
-          className
-        ),
-        ...props
-      }
-    );
+var TabsTrigger = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  TabsPrimitive.Trigger,
+  {
+    ref,
+    className: cn(
+      "-mb-px border-b-2 border-transparent px-3 pb-2 font-mono text-xs uppercase tracking-[0.1em] transition-colors duration-200 ease-[var(--ease-out)] hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50",
+      "text-muted-foreground data-[state=active]:border-accent data-[state=active]:text-foreground",
+      "data-[orientation=vertical]:-mr-px data-[orientation=vertical]:mb-0 data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r-2 data-[orientation=vertical]:pb-1.5 data-[orientation=vertical]:pr-3 data-[orientation=vertical]:text-left",
+      className
+    ),
+    ...props
   }
-);
+));
 TabsTrigger.displayName = "TabsTrigger";
-var TabsContent = React25.forwardRef(
-  ({ className, value, ...props }, ref) => {
-    const { value: active } = useTabsContext("TabsContent");
-    if (active !== value) return null;
-    return /* @__PURE__ */ jsx(
-      "div",
-      {
-        ref,
-        role: "tabpanel",
-        className: cn("text-sm text-muted-foreground focus-visible:outline-none", className),
-        ...props
-      }
-    );
+var TabsContent = React30.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  TabsPrimitive.Content,
+  {
+    ref,
+    className: cn("text-sm text-muted-foreground focus-visible:outline-none", className),
+    ...props
   }
-);
+));
 TabsContent.displayName = "TabsContent";
-var DialogContext = React25.createContext(null);
-function Dialog({ open, onOpenChange, children }) {
-  const ref = React25.useRef(null);
-  React25.useEffect(() => {
+var DialogContext = React30.createContext(null);
+function Dialog({
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  children
+}) {
+  const ref = React30.useRef(null);
+  const pressStartedOnBackdrop = React30.useRef(false);
+  const reactId = React30.useId();
+  const titleId = `${reactId}-title`;
+  const descriptionId = `${reactId}-description`;
+  const [uncontrolledOpen, setUncontrolledOpen] = React30.useState(defaultOpen);
+  const isControlled = openProp !== void 0;
+  const open = isControlled ? openProp : uncontrolledOpen;
+  const [hasTitle, setHasTitle] = React30.useState(false);
+  const [hasDescription, setHasDescription] = React30.useState(false);
+  React30.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (open && !el.open) el.showModal();
     else if (!open && el.open) el.close();
   }, [open]);
-  const close = React25.useCallback(() => onOpenChange(false), [onOpenChange]);
-  const ctx = React25.useMemo(() => ({ close }), [close]);
+  const close = React30.useCallback(() => {
+    if (!isControlled) setUncontrolledOpen(false);
+    onOpenChange?.(false);
+  }, [isControlled, onOpenChange]);
+  const ctx = React30.useMemo(
+    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
+    [close, titleId, descriptionId]
+  );
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
     /* @__PURE__ */ jsx(
       "dialog",
       {
         ref,
+        "aria-labelledby": hasTitle ? titleId : void 0,
+        "aria-describedby": hasDescription ? descriptionId : void 0,
         onClose: close,
+        onMouseDown: (event) => {
+          pressStartedOnBackdrop.current = event.target === ref.current;
+        },
         onClick: (event) => {
-          if (event.target === ref.current) close();
+          if (event.target === ref.current && pressStartedOnBackdrop.current) close();
+          pressStartedOnBackdrop.current = false;
         },
         className: "m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
         children: open ? /* @__PURE__ */ jsx(DialogContext.Provider, { value: ctx, children }) : null
@@ -1855,9 +1693,9 @@ function Dialog({ open, onOpenChange, children }) {
     )
   );
 }
-var DialogContent = React25.forwardRef(
+var DialogContent = React30.forwardRef(
   ({ className, children, ...props }, ref) => {
-    const ctx = React25.useContext(DialogContext);
+    const ctx = React30.useContext(DialogContext);
     return /* @__PURE__ */ jsxs(
       "div",
       {
@@ -1888,7 +1726,7 @@ var DialogContent = React25.forwardRef(
   }
 );
 DialogContent.displayName = "DialogContent";
-var DialogHeader = React25.forwardRef(
+var DialogHeader = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1900,30 +1738,48 @@ var DialogHeader = React25.forwardRef(
   )
 );
 DialogHeader.displayName = "DialogHeader";
-var DialogTitle = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-  "h2",
-  {
-    ref,
-    "data-slot": "dialog-title",
-    className: cn(
-      "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-      className
-    ),
-    ...props
-  }
-));
+var DialogTitle = React30.forwardRef(({ className, ...props }, ref) => {
+  const ctx = React30.useContext(DialogContext);
+  const setHasTitle = ctx?.setHasTitle;
+  React30.useEffect(() => {
+    setHasTitle?.(true);
+    return () => setHasTitle?.(false);
+  }, [setHasTitle]);
+  return /* @__PURE__ */ jsx(
+    "h2",
+    {
+      ref,
+      id: ctx?.titleId,
+      "data-slot": "dialog-title",
+      className: cn(
+        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+        className
+      ),
+      ...props
+    }
+  );
+});
 DialogTitle.displayName = "DialogTitle";
-var DialogDescription = React25.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-  "p",
-  {
-    ref,
-    "data-slot": "dialog-description",
-    className: cn("text-sm leading-relaxed text-muted-foreground", className),
-    ...props
-  }
-));
+var DialogDescription = React30.forwardRef(({ className, ...props }, ref) => {
+  const ctx = React30.useContext(DialogContext);
+  const setHasDescription = ctx?.setHasDescription;
+  React30.useEffect(() => {
+    setHasDescription?.(true);
+    return () => setHasDescription?.(false);
+  }, [setHasDescription]);
+  return /* @__PURE__ */ jsx(
+    "p",
+    {
+      ref,
+      id: ctx?.descriptionId,
+      "data-slot": "dialog-description",
+      className: cn("text-sm leading-relaxed text-muted-foreground", className),
+      ...props
+    }
+  );
+});
 DialogDescription.displayName = "DialogDescription";
-var DialogFooter = React25.forwardRef(
+var DialogFooter = React30.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1938,23 +1794,22 @@ var DialogFooter = React25.forwardRef(
   )
 );
 DialogFooter.displayName = "DialogFooter";
-var DialogClose = React25.forwardRef(
-  ({ asChild, onClick, children, ...props }, ref) => {
-    const ctx = React25.useContext(DialogContext);
-    const handle = (event) => {
-      onClick?.(event);
-      if (!event.defaultPrevented) ctx?.close();
-    };
-    if (asChild && React25.isValidElement(children)) {
-      const child = children;
-      return React25.cloneElement(child, {
+var DialogClose = React30.forwardRef(
+  ({ asChild, onClick, type, ...props }, ref) => {
+    const ctx = React30.useContext(DialogContext);
+    const Comp = asChild ? Slot : "button";
+    return /* @__PURE__ */ jsx(
+      Comp,
+      {
+        ref,
+        type: asChild ? type : type ?? "button",
         onClick: (event) => {
-          child.props.onClick?.(event);
-          handle(event);
-        }
-      });
-    }
-    return /* @__PURE__ */ jsx("button", { ref, type: "button", onClick: handle, ...props, children });
+          onClick?.(event);
+          if (!event.defaultPrevented) ctx?.close();
+        },
+        ...props
+      }
+    );
   }
 );
 DialogClose.displayName = "DialogClose";
@@ -1965,104 +1820,22 @@ function InfoTip({
   title,
   children,
   side = "auto",
-  open: controlledOpen,
+  open,
   onOpenChange,
   className,
   contentClassName
 }) {
-  const [uncontrolledOpen, setUncontrolledOpen] = React25.useState(false);
-  const isControlled = controlledOpen !== void 0;
-  const open = isControlled ? controlledOpen : uncontrolledOpen;
-  const [mounted, setMounted] = React25.useState(false);
-  const [position, setPosition] = React25.useState({
-    top: 0,
-    left: 0,
-    placement: "bottom",
-    ready: false
-  });
-  const triggerRef = React25.useRef(null);
-  const panelRef = React25.useRef(null);
-  const reactId = React25.useId();
-  const titleId = `${reactId}-title`;
-  const setOpen = React25.useCallback(
-    (next) => {
-      if (!isControlled) setUncontrolledOpen(next);
-      onOpenChange?.(next);
-    },
-    [isControlled, onOpenChange]
-  );
-  React25.useEffect(() => setMounted(true), []);
-  const reposition = React25.useCallback(() => {
-    const trigger = triggerRef.current;
-    const panel = panelRef.current;
-    if (!trigger || !panel) return;
-    const t = trigger.getBoundingClientRect();
-    const p = panel.getBoundingClientRect();
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const spaceBelow = vh - t.bottom;
-    const spaceAbove = t.top;
-    const fitsBelow = spaceBelow >= p.height + GAP + MARGIN;
-    const placement = side === "top" ? "top" : side === "bottom" ? "bottom" : fitsBelow || spaceBelow >= spaceAbove ? "bottom" : "top";
-    const top = placement === "bottom" ? t.bottom + GAP : Math.max(MARGIN, t.top - p.height - GAP);
-    const centred = t.left + t.width / 2 - p.width / 2;
-    const left = Math.min(Math.max(MARGIN, centred), Math.max(MARGIN, vw - p.width - MARGIN));
-    setPosition({ top, left, placement, ready: true });
-  }, [side]);
-  React25.useLayoutEffect(() => {
-    if (!open) {
-      setPosition((prev) => prev.ready ? { ...prev, ready: false } : prev);
-      return;
-    }
-    reposition();
-    const onScroll = () => reposition();
-    window.addEventListener("scroll", onScroll, true);
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll, true);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [open, reposition]);
-  React25.useEffect(() => {
-    if (!open) return;
-    panelRef.current?.focus();
-  }, [open]);
-  React25.useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") {
-        event.stopPropagation();
-        setOpen(false);
-        triggerRef.current?.focus();
-      }
-    };
-    const onPointerDown = (event) => {
-      const target = event.target;
-      if (triggerRef.current?.contains(target) || panelRef.current?.contains(target)) return;
-      setOpen(false);
-    };
-    document.addEventListener("keydown", onKeyDown, true);
-    document.addEventListener("pointerdown", onPointerDown, true);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown, true);
-      document.removeEventListener("pointerdown", onPointerDown, true);
-    };
-  }, [open, setOpen]);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
+  const titleId = React30.useId();
+  return /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open, onOpenChange, children: [
     /* @__PURE__ */ jsx(
-      "button",
+      PopoverPrimitive.Trigger,
       {
-        ref: triggerRef,
-        type: "button",
         "data-slot": "info-tip-trigger",
         "aria-label": label,
-        "aria-expanded": open,
-        "aria-haspopup": "dialog",
-        onClick: () => setOpen(!open),
         className: cn(
           "inline-flex size-[1.15em] shrink-0 cursor-help items-center justify-center rounded-full align-[-0.15em] text-muted-foreground transition-colors",
           "hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-          open && "text-accent",
+          "data-[state=open]:text-accent",
           className
         ),
         children: /* @__PURE__ */ jsxs(
@@ -2085,48 +1858,38 @@ function InfoTip({
         )
       }
     ),
-    mounted && open ? createPortal(
-      /* @__PURE__ */ jsxs(
-        "div",
-        {
-          ref: panelRef,
-          tabIndex: -1,
-          role: "dialog",
-          "aria-labelledby": title ? titleId : void 0,
-          "aria-label": title ? void 0 : label,
-          "data-slot": "info-tip-content",
-          "data-placement": position.placement,
-          style: {
-            position: "fixed",
-            top: position.top,
-            left: position.left,
-            opacity: position.ready ? 1 : 0
-          },
-          className: cn(
-            "z-50 w-[min(20rem,calc(100vw-1rem))] rounded-[var(--radius-lg)] border border-border bg-popover p-3.5 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
-            contentClassName
-          ),
-          children: [
-            title ? /* @__PURE__ */ jsx(
-              "p",
-              {
-                id: titleId,
-                className: "mb-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-foreground",
-                children: title
-              }
-            ) : null,
-            /* @__PURE__ */ jsx("div", { className: "text-[13px] leading-relaxed text-muted-foreground", children })
-          ]
-        }
-      ),
-      document.body
-    ) : null
+    /* @__PURE__ */ jsx(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
+      PopoverPrimitive.Content,
+      {
+        side: side === "auto" ? "bottom" : side,
+        sideOffset: GAP,
+        collisionPadding: MARGIN,
+        "aria-labelledby": title ? titleId : void 0,
+        "aria-label": title ? void 0 : label,
+        "data-slot": "info-tip-content",
+        className: cn(
+          "z-50 w-[min(20rem,calc(100vw-1rem))] rounded-[var(--radius-lg)] border border-border bg-popover p-3.5 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
+          contentClassName
+        ),
+        children: [
+          title ? /* @__PURE__ */ jsx(
+            "p",
+            {
+              id: titleId,
+              className: "mb-1.5 font-mono text-xs font-bold uppercase tracking-[0.08em] text-foreground",
+              children: title
+            }
+          ) : null,
+          /* @__PURE__ */ jsx("div", { className: "text-[13px] leading-relaxed text-muted-foreground", children })
+        ]
+      }
+    ) })
   ] });
 }
 InfoTip.displayName = "InfoTip";
 var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
-var ThemeContext = React25.createContext(null);
+var ThemeContext = React30.createContext(null);
 var isBrowser = typeof window !== "undefined";
 function prefersDark() {
   return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -2166,16 +1929,16 @@ function ThemeProvider({
   enableSystem = true,
   attribute = "class"
 }) {
-  const [theme, setThemeState] = React25.useState(
+  const [theme, setThemeState] = React30.useState(
     () => readStored(storageKey, defaultTheme, THEMES)
   );
-  const [accent, setAccentState] = React25.useState(
+  const [accent, setAccentState] = React30.useState(
     () => readStored(accentStorageKey, defaultAccent, ACCENTS)
   );
-  const [systemDark, setSystemDark] = React25.useState(() => prefersDark());
+  const [systemDark, setSystemDark] = React30.useState(() => prefersDark());
   const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
-  React25.useEffect(() => {
+  React30.useEffect(() => {
     if (!isBrowser || !enableSystem) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setSystemDark(mql.matches);
@@ -2183,31 +1946,31 @@ function ThemeProvider({
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [enableSystem]);
-  React25.useEffect(() => {
+  React30.useEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
-  const setTheme = React25.useCallback(
+  const setTheme = React30.useCallback(
     (next) => {
       setThemeState(next);
       writeStored(storageKey, next);
     },
     [storageKey]
   );
-  const setAccent = React25.useCallback(
+  const setAccent = React30.useCallback(
     (next) => {
       setAccentState(next);
       writeStored(accentStorageKey, next);
     },
     [accentStorageKey]
   );
-  const value = React25.useMemo(
+  const value = React30.useMemo(
     () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
     [theme, setTheme, resolvedTheme, accent, setAccent]
   );
   return /* @__PURE__ */ jsx(ThemeContext.Provider, { value, children });
 }
 function useTheme() {
-  const ctx = React25.useContext(ThemeContext);
+  const ctx = React30.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme must be used within a <ThemeProvider>.");
   }

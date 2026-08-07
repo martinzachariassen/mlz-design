@@ -9,5 +9,5 @@ Everything beyond the [root README](../README.md) lives here.
 | [CONTRIBUTING.md](CONTRIBUTING.md)       | Local development, the release flow (Changesets → GitHub Packages), and deployment. |
 | [SECURITY.md](SECURITY.md)               | Supported versions and how to report a vulnerability privately.                 |
 
-The live playground — every component, foundation and template with theme and
+The live playground — every component, foundation and pattern with theme and
 accent switches — is at **[design.mlz.no](https://design.mlz.no)**.

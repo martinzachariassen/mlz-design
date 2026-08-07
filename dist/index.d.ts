@@ -3,6 +3,12 @@ import { VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import { AccentName } from './tokens.js';
 export { Breakpoint, Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './tokens.js';
+import * as AvatarPrimitive from '@radix-ui/react-avatar';
+import * as ProgressPrimitive from '@radix-ui/react-progress';
+import * as LabelPrimitive from '@radix-ui/react-label';
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import * as SeparatorPrimitive from '@radix-ui/react-separator';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { ClassValue } from 'clsx';
 
 declare const brandMarkVariants: (props?: ({
@@ -263,21 +269,23 @@ interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProp
  * ```
  */
 declare const Avatar: React.ForwardRefExoticComponent<AvatarProps & React.RefAttributes<HTMLSpanElement>>;
-type AvatarImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+type AvatarImageProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>;
 /**
- * The avatar's photo. It unmounts itself on the first `error` event, so whatever
- * `AvatarFallback` you put beside it takes over — no broken-image icon, no state
- * to manage. Always pass an `alt`.
+ * The avatar's photo. It renders only once the image has actually loaded, so a
+ * slow or broken `src` shows the `AvatarFallback` beside it instead — no
+ * broken-image icon, no state to manage. Always pass an `alt`.
  */
-declare const AvatarImage: React.ForwardRefExoticComponent<AvatarImageProps & React.RefAttributes<HTMLImageElement>>;
+declare const AvatarImage: React.ForwardRefExoticComponent<Omit<AvatarPrimitive.AvatarImageProps & React.RefAttributes<HTMLImageElement>, "ref"> & React.RefAttributes<HTMLImageElement>>;
 declare const fallbackVariants: (props?: ({
     tone?: "default" | "accent" | "muted" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface AvatarFallbackProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof fallbackVariants> {
+interface AvatarFallbackProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>, VariantProps<typeof fallbackVariants> {
 }
 /**
- * What fills the frame when there's no image — initials, in tracked-out mono.
- * `tone` picks the chip colour; use `accent` sparingly to mark "you".
+ * What fills the frame while there's no loaded image — initials, in tracked-out
+ * mono. `tone` picks the chip colour; use `accent` sparingly to mark "you". Pass
+ * `delayMs` to hold it back briefly, so a fast-loading image doesn't flash the
+ * initials first.
  */
 declare const AvatarFallback: React.ForwardRefExoticComponent<AvatarFallbackProps & React.RefAttributes<HTMLSpanElement>>;
 interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -296,13 +304,15 @@ declare const badgeVariants: (props?: ({
     variant?: "default" | "accent" | "outline" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
+    /** Render the single child instead of a `<span>` — e.g. a link for a tag chip. */
+    asChild?: boolean;
 }
 /**
  * A small mono chip for status, versions and categories — the tracked-out
  * uppercase label that sits next to a title. It's a plain `<span>` with no
  * semantics of its own, so put the meaning in the text, not the colour alone.
  */
-declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.Element;
+declare function Badge({ className, variant, asChild, ...props }: BadgeProps): React.JSX.Element;
 
 /** How a `DataRow` lays out its term/description pair. */
 type DataLayout = "justify" | "grid";
@@ -467,16 +477,17 @@ declare const Callout: React.ForwardRefExoticComponent<CalloutProps & React.RefA
 declare const indicatorVariants: (props?: ({
     variant?: "default" | "accent" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface ProgressProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof indicatorVariants> {
+interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value">, VariantProps<typeof indicatorVariants> {
     /** Completion as a percentage, clamped to 0–100. */
     value?: number;
 }
 /**
  * A determinate progress bar: a muted track with a fill that eases to its new
  * width over 500ms. `value` is a percentage and is clamped to 0–100, so a stray
- * `120` can't overflow the track. It renders as a `role="progressbar"` with the
- * ARIA value attributes wired up — pass `aria-label` (or `aria-labelledby`) when
- * you have a real label, otherwise it falls back to a generic "Progress".
+ * `120` can't overflow the track. Built on the Radix primitive, so it renders as
+ * a `role="progressbar"` with the ARIA value attributes wired up — pass
+ * `aria-label` (or `aria-labelledby`) when you have a real label, otherwise it
+ * falls back to a generic "Progress".
  */
 declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -507,6 +518,12 @@ declare const buttonVariants: (props?: ({
     size?: "default" | "icon" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+    /**
+     * Render the single child instead of a `<button>`, passing the button's styling
+     * and props down to it. Use it when the control has to be something else — most
+     * often a link: `<Button asChild><a href="/work">Work</a></Button>`.
+     */
+    asChild?: boolean;
 }
 /**
  * The signature MLZ button: a technical ghost outline that lifts up and to the
@@ -530,13 +547,17 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
  */
 declare const Input: React.ForwardRefExoticComponent<InputProps & React.RefAttributes<HTMLInputElement>>;
 
-type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
+type LabelProps = React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
 /**
  * A field label in the mlz eyebrow voice — mono, uppercase, wide-tracked. Wire it
  * to its control with `htmlFor`; when the control is a `peer`, the label dims
  * along with it as the field goes disabled.
+ *
+ * Built on the Radix label primitive, which stops a double-click on the label
+ * from selecting its text — the browser default that makes rapid checkbox
+ * toggling highlight everything instead.
  */
-declare const Label: React.ForwardRefExoticComponent<LabelProps & React.RefAttributes<HTMLLabelElement>>;
+declare const Label: React.ForwardRefExoticComponent<Omit<LabelPrimitive.LabelProps & React.RefAttributes<HTMLLabelElement>, "ref"> & React.RefAttributes<HTMLLabelElement>>;
 
 type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 /**
@@ -554,26 +575,28 @@ type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
  */
 declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.RefAttributes<HTMLTextAreaElement>>;
 
-type AccordionType = "single" | "multiple";
-interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+type SingleProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
+    type: "single";
+}, "type"> & {
+    /** `single` allows one open item at a time; `multiple` allows many. Defaults to `single`. */
+    type?: "single";
+};
+type MultipleProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
+    type: "multiple";
+}, "type"> & {
     /** `single` allows one open item at a time; `multiple` allows many. */
-    type?: AccordionType;
-    /** Controlled open value(s). Use `onValueChange` alongside it. */
-    value?: string | string[];
-    /** Uncontrolled initial open value(s). */
-    defaultValue?: string | string[];
-    /** Fired with the new open value(s) — a string for `single`, an array for `multiple`. */
-    onValueChange?: (value: string | string[]) => void;
-    /** For `type="single"`, allow closing the open item by clicking it again. */
-    collapsible?: boolean;
-}
+    type: "multiple";
+};
+type AccordionProps = SingleProps | MultipleProps;
 /**
- * A Radix-free, context-driven accordion. The root owns the open set (controlled
- * via `value`/`onValueChange` or uncontrolled via `defaultValue`) and shares it
- * through context; triggers register so the Up/Down/Home/End keys roam between
- * them (WAI-ARIA accordion pattern). Content animates open/closed with the
- * `grid-template-rows: 0fr → 1fr` technique, so height is fluid with no JS
- * measuring and no fixed max-height.
+ * An accordion on the Radix primitive. The root owns the open set (controlled via
+ * `value`/`onValueChange` or uncontrolled via `defaultValue`) and Radix handles the
+ * WAI-ARIA keyboard pattern — Up/Down between triggers, Home/End to the ends, and
+ * `orientation` awareness. `type="single"` opens one item at a time (add
+ * `collapsible` to let it close again); `type="multiple"` opens many.
+ *
+ * Content animates open and closed with the `grid-template-rows: 0fr → 1fr`
+ * technique, so height is fluid with no JS measuring and no fixed max-height.
  *
  * ```tsx
  * <Accordion type="single" collapsible>
@@ -585,7 +608,7 @@ interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onC
  * ```
  */
 declare const Accordion: React.ForwardRefExoticComponent<AccordionProps & React.RefAttributes<HTMLDivElement>>;
-interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+interface AccordionItemProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item> {
     /** Identifies this item to the root. Unique within the `Accordion`. */
     value: string;
 }
@@ -595,28 +618,35 @@ interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
  * be unique within the accordion.
  */
 declare const AccordionItem: React.ForwardRefExoticComponent<AccordionItemProps & React.RefAttributes<HTMLDivElement>>;
-interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface AccordionTriggerProps extends React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> {
     /** Hide the default rotating chevron indicator. */
     hideIndicator?: boolean;
 }
 /**
  * The clickable header of an `AccordionItem`. Renders a real `<button>` inside an
- * `<h3>` with `aria-expanded`/`aria-controls` wired up, and handles the arrow-key
- * roving itself. Children are laid out in a flex row, so a trigger can carry a
- * number, a subtitle and a badge as easily as a single line of text.
+ * `<h3>` with `aria-expanded`/`aria-controls` wired up by Radix. Children are laid
+ * out in a flex row, so a trigger can carry a number, a subtitle and a badge as
+ * easily as a single line of text.
  */
 declare const AccordionTrigger: React.ForwardRefExoticComponent<AccordionTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 /**
- * The panel an `AccordionTrigger` reveals. It's a `<section>` named by its
- * trigger — an implicit `region` landmark — that animates its height via the
- * `0fr → 1fr` grid-row trick.
+ * The panel an `AccordionTrigger` reveals, named by its trigger. It animates its
+ * height via the `0fr → 1fr` grid-row trick, which needs the panel to stay
+ * mounted — hence `forceMount`. `visibility` is transitioned alongside the grid
+ * track so a closed panel leaves the accessibility tree and the tab order once
+ * the collapse finishes, rather than lingering as reachable-but-invisible content.
  */
-declare const AccordionContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+declare const AccordionContent: React.ForwardRefExoticComponent<Omit<AccordionPrimitive.AccordionContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
 declare const cardVariants: (props?: ({
     variant?: "default" | "interactive" | "accent" | "ghost" | "elevated" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface CardProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {
+    /**
+     * Render the single child instead of a `<div>`. Handy for a whole-card link or
+     * an `<article>`/`<section>` that should carry the card's surface styling.
+     */
+    asChild?: boolean;
 }
 /**
  * Paper-look surfaces: elevation is a hairline border, never a heavy drop shadow.
@@ -720,7 +750,7 @@ interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 declare const Grid: React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>>;
 
-interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
+interface SeparatorProps extends React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> {
     /** Horizontal fills its container's width; vertical fills its height (give the parent one). */
     orientation?: "horizontal" | "vertical";
     /** `true` (default) hides the rule from assistive tech. Set `false` when it genuinely divides sections. */
@@ -729,25 +759,20 @@ interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {
     label?: React.ReactNode;
 }
 /**
- * A hairline rule. Purely decorative by default (`aria-hidden`); pass
- * `decorative={false}` for a real `role="separator"`. A horizontal rule can
- * carry a centered mono label that splits the line.
+ * A hairline rule on the Radix primitive. Purely decorative by default; pass
+ * `decorative={false}` for a real `role="separator"` with the right
+ * `aria-orientation`. A horizontal rule can carry a centered mono label that
+ * splits the line.
  */
 declare const Separator: React.ForwardRefExoticComponent<SeparatorProps & React.RefAttributes<HTMLDivElement>>;
 
-interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
-    /** Controlled active tab. Use `onValueChange` alongside it. */
-    value?: string;
-    /** Uncontrolled initial tab. */
-    defaultValue?: string;
-    /** Fired with the newly selected tab's value. */
-    onValueChange?: (value: string) => void;
+interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {
 }
 /**
- * A tiny Radix-free tabs implementation: the root owns the active value (either
- * controlled via `value`/`onValueChange` or uncontrolled via `defaultValue`)
- * and shares it through context. Triggers register themselves so arrow keys can
- * roam between them.
+ * Tabs on the Radix primitive: the root owns the active value (controlled via
+ * `value`/`onValueChange` or uncontrolled via `defaultValue`) and Radix handles
+ * the full WAI-ARIA keyboard pattern — roving tab order, arrow keys, Home/End,
+ * and `orientation`-aware navigation.
  *
  * ```tsx
  * <Tabs defaultValue="overview">
@@ -761,19 +786,19 @@ interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange
  * ```
  */
 declare const Tabs: React.ForwardRefExoticComponent<TabsProps & React.RefAttributes<HTMLDivElement>>;
-/** The `role="tablist"` rail the triggers sit on, ruled off from the panel below. */
-declare const TabsList: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
-interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+/** The `role="tablist"` rail the triggers sit on, ruled off from the panel beside it. */
+declare const TabsList: React.ForwardRefExoticComponent<Omit<TabsPrimitive.TabsListProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+interface TabsTriggerProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
     /** Identifies this tab and the `TabsContent` it reveals. Unique within the `Tabs`. */
     value: string;
 }
 /**
  * One tab. Its `value` selects the matching `TabsContent`. Only the selected tab
- * is in the tab order — arrow keys move between the rest, per the WAI-ARIA tabs
- * pattern — and the active one is marked by an accent underline.
+ * is in the tab order — arrow keys and Home/End move between the rest, following
+ * the list's `orientation` — and the active one is marked by an accent rule.
  */
 declare const TabsTrigger: React.ForwardRefExoticComponent<TabsTriggerProps & React.RefAttributes<HTMLButtonElement>>;
-interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
+interface TabsContentProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
     /** The `TabsTrigger` value this panel belongs to. */
     value: string;
 }
@@ -784,19 +809,25 @@ interface TabsContentProps extends React.HTMLAttributes<HTMLDivElement> {
 declare const TabsContent: React.ForwardRefExoticComponent<TabsContentProps & React.RefAttributes<HTMLDivElement>>;
 
 interface DialogProps {
-    /** Whether the dialog is showing. Controlled — you own this state. */
-    open: boolean;
+    /** Whether the dialog is showing. Pass it to control the dialog yourself. */
+    open?: boolean;
+    /** Initial open state when uncontrolled. Ignored if `open` is provided. */
+    defaultOpen?: boolean;
     /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
-    onOpenChange: (open: boolean) => void;
+    onOpenChange?: (open: boolean) => void;
     /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
     children: React.ReactNode;
 }
 /**
  * A modal dialog built on the native `<dialog>` element — so focus-trapping, the
  * Esc key, background inerting and the top layer come from the platform, with no
- * dependency. Controlled: drive `open` / `onOpenChange` yourself. Children only
- * mount while it's open, so a form inside starts fresh each time. Clicking the
- * backdrop dismisses it.
+ * dependency. Works controlled (`open` / `onOpenChange`) or uncontrolled
+ * (`defaultOpen`). Children only mount while it's open, so a form inside starts
+ * fresh each time. Clicking the backdrop dismisses it.
+ *
+ * A `DialogTitle` and `DialogDescription` name and describe the dialog
+ * automatically — they're wired to it via `aria-labelledby` / `aria-describedby`,
+ * so screen readers announce them on open.
  *
  * ```tsx
  * <Dialog open={open} onOpenChange={setOpen}>
@@ -813,7 +844,7 @@ interface DialogProps {
  * </Dialog>
  * ```
  */
-declare function Dialog({ open, onOpenChange, children }: DialogProps): React.JSX.Element;
+declare function Dialog({ open: openProp, defaultOpen, onOpenChange, children, }: DialogProps): React.JSX.Element;
 /**
  * The card surface inside the dialog, and where the ✕ close button lives. Caps at
  * 85% of the viewport height and scrolls its own overflow.
@@ -821,7 +852,7 @@ declare function Dialog({ open, onOpenChange, children }: DialogProps): React.JS
 declare const DialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 /** Title + description block, inset on the right to clear the close button. */
 declare const DialogHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
-/** The dialog's `<h2>` heading, in tracked-out mono. */
+/** The dialog's `<h2>` heading, in tracked-out mono. Names the dialog for AT. */
 declare const DialogTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>>;
 /** The muted sentence under the title — say what's about to happen. */
 declare const DialogDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
@@ -848,7 +879,7 @@ interface InfoTipProps {
     title?: React.ReactNode;
     /** The explanation. Plain text or rich content (a link, `<code>`, …). */
     children: React.ReactNode;
-    /** Preferred side to open on. `auto` (default) flips to wherever there's room. */
+    /** Preferred side to open on. `auto` (default) prefers below, and flips when there's no room. */
     side?: "top" | "bottom" | "auto";
     /** Controlled open state. Provide `onOpenChange` alongside it. */
     open?: boolean;
@@ -864,12 +895,12 @@ interface InfoTipProps {
  * on click, opens a little popover explaining a term. Built for glossary-style
  * help — pair a piece of jargon with a plain-language "what / why".
  *
- * It's Radix-free and leans on the platform where it can: the panel renders in a
- * portal (so no ancestor `overflow: hidden` can clip it) as a non-modal
- * `role="dialog"`, positions itself with `getBoundingClientRect` (flipping above
- * the trigger when there's no room below and clamping to the viewport), and light-
- * dismisses on outside-click, Esc, or a second click on the trigger. Focus moves
- * into the panel on open and returns to the trigger on close.
+ * Built on the Radix popover primitive, so the panel renders in a portal (no
+ * ancestor `overflow: hidden` can clip it) as a non-modal `role="dialog"`,
+ * positions itself with collision detection — flipping and clamping to stay in
+ * the viewport — and light-dismisses on outside-click, Esc, or a second click on
+ * the trigger. Focus moves into the panel on open and returns to the trigger on
+ * close.
  *
  * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
  * it's dropped into.
@@ -883,7 +914,7 @@ interface InfoTipProps {
  * </p>
  * ```
  */
-declare function InfoTip({ label, title, children, side, open: controlledOpen, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
+declare function InfoTip({ label, title, children, side, open, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
 declare namespace InfoTip {
     var displayName: string;
 }

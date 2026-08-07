@@ -1,7 +1,13 @@
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { InfoTip } from "./info-tip";
+
+/** A full pointer press: the down, then the click that completes it. */
+function press(target: Element | Node) {
+  fireEvent.pointerDown(target);
+  fireEvent.click(target);
+}
 
 describe("InfoTip", () => {
   it("labels the trigger and hides the popover until opened", () => {
@@ -50,16 +56,25 @@ describe("InfoTip", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  it("closes on an outside pointer press but not on an inside one", () => {
+  it("closes on an outside pointer press but not on an inside one", async () => {
     render(
       <InfoTip label="help" title="T">
         body
       </InfoTip>,
     );
     fireEvent.click(screen.getByRole("button"));
-    fireEvent.pointerDown(screen.getByText("body"));
+    // The popover registers its outside-press listener on the next tick, so that
+    // the click which opened it can't immediately close it again.
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    // A primary-button press only dismisses once the matching `click` arrives —
+    // that's what stops a drag or a text selection from closing the panel — so
+    // each press below has to be a full press/release pair to be realistic.
+    press(screen.getByText("body"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    fireEvent.pointerDown(document.body);
+    press(document.body);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
