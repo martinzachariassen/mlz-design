@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mlz-design",
+  "compatibility_date": "2026-08-07",
+  "account_id": "1524bafd76d520ef1ce36c47a3f3bce1",
+  "assets": {
+    "directory": "./storybook-static",
+    "html_handling": "none"
+  },
+  "routes": [{ "pattern": "design.mlz.no", "custom_domain": true }]
+}

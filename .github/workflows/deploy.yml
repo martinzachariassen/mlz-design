@@ -1,7 +1,8 @@
 name: Deploy
 
-# Publishes the Storybook playground to Cloudflare Pages (design.mlz.no) on
-# every push to main. Independent of the npm release flow in release.yml.
+# Publishes the Storybook playground to Cloudflare Workers (design.mlz.no,
+# static assets — see wrangler.jsonc) on every push to main. Independent of
+# the npm release flow in release.yml.
 on:
   push:
     branches: [main]
@@ -32,5 +33,4 @@ jobs:
       - uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 1524bafd76d520ef1ce36c47a3f3bce1
-          command: pages deploy storybook-static --project-name=mlz-design
+          command: deploy
