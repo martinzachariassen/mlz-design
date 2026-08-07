@@ -31,7 +31,9 @@ var fonts = {
 var motion = {
   easeOut: "cubic-bezier(.22, .61, .36, 1)",
   easeInOut: "cubic-bezier(.65, 0, .35, 1)",
+  easeGlide: "cubic-bezier(.2, .7, .2, 1)",
   durationFast: "0.15s",
+  durationHover: "0.26s",
   durationBase: "0.3s",
   durationSlow: "0.9s"
 };
@@ -64,5 +66,5 @@ var tokens = {
 };
 
 export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens };
-//# sourceMappingURL=chunk-WDGGZ5QK.js.map
-//# sourceMappingURL=chunk-WDGGZ5QK.js.map
+//# sourceMappingURL=chunk-AMCCIDMK.js.map
+//# sourceMappingURL=chunk-AMCCIDMK.js.map

@@ -279,6 +279,47 @@ interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps
 }
 declare function Badge({ className, variant, ...props }: BadgeProps): React.JSX.Element;
 
+/** How a `DataRow` lays out its term/description pair. */
+type DataLayout = "justify" | "grid";
+interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
+    /**
+     * How child rows lay out, cascaded to every `DataRow` (each row can still
+     * override its own `layout`):
+     * - `"justify"` (default) — term left, value right-aligned, dashed row rule.
+     *   Best for compact fact pairs where the value is short-to-medium.
+     * - `"grid"` — a fixed eyebrow label column + value, collapsing to a single
+     *   column on narrow screens. Best for a scannable field list. Set the label
+     *   column width with the `--mlz-data-label` CSS var (default `8rem`).
+     */
+    layout?: DataLayout;
+}
+/**
+ * A definition list for key/value facts. Renders a real `<dl>`; each `DataRow`
+ * is a `<div>` grouping a `<dt>`/`<dd>` pair (valid HTML5), so it's accessible
+ * and copy-pastable.
+ *
+ * ```tsx
+ * <DataList>
+ *   <DataRow label="Location">Oslo, Norway</DataRow>
+ *   <DataRow label="IP" mono>203.0.113.7</DataRow>
+ * </DataList>
+ *
+ * <DataList layout="grid">
+ *   <DataRow label="User agent" mono>Mozilla/5.0 …</DataRow>
+ * </DataList>
+ * ```
+ */
+declare const DataList: React.ForwardRefExoticComponent<DataListProps & React.RefAttributes<HTMLDListElement>>;
+interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** The row's key/term. */
+    label: React.ReactNode;
+    /** Render the value in the mono type family (for IPs, hashes, headers…). */
+    mono?: boolean;
+    /** Override the layout inherited from the parent `DataList`. */
+    layout?: DataLayout;
+}
+declare const DataRow: React.ForwardRefExoticComponent<DataRowProps & React.RefAttributes<HTMLDivElement>>;
+
 /**
  * The MLZ Design house icon set — inline Lucide data, offline and deterministic.
  * Prefer the typed `<Icon name="…" />` component over reading this directly.
@@ -725,6 +766,50 @@ type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 declare const Prose: React.ForwardRefExoticComponent<ProseProps & React.RefAttributes<HTMLDivElement>>;
 
 /**
+ * A small status dot — a filled circle that carries a semantic colour and, when
+ * `pulse` is set, a soft breathing ring in the same colour (via `animate-ping`
+ * on a matched overlay). The fill uses `bg-current` so the colour is set once by
+ * the variant's `text-*` and the ring tracks it automatically.
+ *
+ * ```tsx
+ * <StatusDot variant="success" />
+ * <StatusDot variant="destructive" pulse />
+ * ```
+ */
+declare const statusDotVariants: (props?: ({
+    variant?: "accent" | "muted" | "destructive" | "info" | "success" | "warning" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusDotVariants> {
+    /** Add a soft pulsing ring in the dot's colour to signal live/active state. */
+    pulse?: boolean;
+    /** Accessible label. When set, the dot is exposed to assistive tech. */
+    label?: string;
+}
+declare const StatusDot: React.ForwardRefExoticComponent<StatusDotProps & React.RefAttributes<HTMLSpanElement>>;
+
+/**
+ * Inline/text typography primitive — the small, everyday type roles that don't
+ * warrant a full `Prose` block: mono values, muted asides, and the tracked-out
+ * mono eyebrow used above sections. `variant` sets the whole look; `size`
+ * optionally overrides just the font-size (tailwind-merge keeps the later win).
+ *
+ * ```tsx
+ * <Text variant="eyebrow" as="div">Connection details</Text>
+ * <Text variant="mono">203.0.113.7</Text>
+ * <Text variant="lead">What sites can infer about your connection.</Text>
+ * ```
+ */
+declare const textVariants: (props?: ({
+    variant?: "body" | "muted" | "eyebrow" | "mono" | "lead" | null | undefined;
+    size?: "base" | "xs" | "sm" | "lg" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof textVariants> {
+    /** The element to render. Defaults to `<span>`. */
+    as?: React.ElementType;
+}
+declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
+
+/**
  * A signal panel: a subtle-tinted fill, a left accent rail and a colour-matched
  * title. Drop an svg as the first child and it slots into the icon column
  * (shadcn grid idiom); text flows in the second column.
@@ -737,6 +822,28 @@ interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<
 declare const Alert: React.ForwardRefExoticComponent<AlertProps & React.RefAttributes<HTMLDivElement>>;
 declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+
+/**
+ * A compact, dot-led inline note — lighter than `Alert`. A leading `StatusDot`
+ * carries the severity colour, followed by a bold title and an optional muted
+ * description. Ideal for dense lists of findings/checks where a full bordered
+ * `Alert` panel per row would be too heavy.
+ *
+ * ```tsx
+ * <Callout variant="success" title="No DNS leak detected" />
+ * <Callout variant="warning" title="VPN likely" description="Hosting ASN in use." />
+ * ```
+ */
+declare const calloutVariants: (props?: ({
+    variant?: "accent" | "muted" | "destructive" | "info" | "success" | "warning" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
+    title: React.ReactNode;
+    description?: React.ReactNode;
+    /** Add a pulsing ring to the leading dot. */
+    pulse?: boolean;
+}
+declare const Callout: React.ForwardRefExoticComponent<CalloutProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const indicatorVariants: (props?: ({
     variant?: "default" | "accent" | null | undefined;
@@ -792,6 +899,47 @@ declare const Switch: React.ForwardRefExoticComponent<SwitchProps & React.RefAtt
 
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.RefAttributes<HTMLTextAreaElement>>;
+
+/**
+ * A Radix-free, context-driven accordion. The root owns the open set (controlled
+ * via `value`/`onValueChange` or uncontrolled via `defaultValue`) and shares it
+ * through context; triggers register so the Up/Down/Home/End keys roam between
+ * them (WAI-ARIA accordion pattern). Content animates open/closed with the
+ * `grid-template-rows: 0fr → 1fr` technique, so height is fluid with no JS
+ * measuring and no fixed max-height.
+ *
+ * ```tsx
+ * <Accordion type="single" collapsible>
+ *   <AccordionItem value="a">
+ *     <AccordionTrigger>Section A</AccordionTrigger>
+ *     <AccordionContent>…</AccordionContent>
+ *   </AccordionItem>
+ * </Accordion>
+ * ```
+ */
+type AccordionType = "single" | "multiple";
+interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+    /** `single` allows one open item at a time; `multiple` allows many. */
+    type?: AccordionType;
+    /** Controlled open value(s). Use `onValueChange` alongside it. */
+    value?: string | string[];
+    /** Uncontrolled initial open value(s). */
+    defaultValue?: string | string[];
+    onValueChange?: (value: string | string[]) => void;
+    /** For `type="single"`, allow closing the open item by clicking it again. */
+    collapsible?: boolean;
+}
+declare const Accordion: React.ForwardRefExoticComponent<AccordionProps & React.RefAttributes<HTMLDivElement>>;
+interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
+    value: string;
+}
+declare const AccordionItem: React.ForwardRefExoticComponent<AccordionItemProps & React.RefAttributes<HTMLDivElement>>;
+interface AccordionTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Hide the default rotating chevron indicator. */
+    hideIndicator?: boolean;
+}
+declare const AccordionTrigger: React.ForwardRefExoticComponent<AccordionTriggerProps & React.RefAttributes<HTMLButtonElement>>;
+declare const AccordionContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
 /**
  * Paper-look surfaces: elevation is a hairline border, never a heavy drop shadow.
@@ -927,6 +1075,58 @@ interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 declare const DialogClose: React.ForwardRefExoticComponent<DialogCloseProps & React.RefAttributes<HTMLButtonElement>>;
 
 /**
+ * An inline "info tip": a small icon button that sits in the flow of text and,
+ * on click, opens a little popover explaining a term. Built for glossary-style
+ * help — pair a piece of jargon with a plain-language "what / why".
+ *
+ * It's Radix-free and leans on the platform where it can: the panel renders in a
+ * portal (so no ancestor `overflow: hidden` can clip it) as a non-modal
+ * `role="dialog"`, positions itself with `getBoundingClientRect` (flipping above
+ * the trigger when there's no room below and clamping to the viewport), and light-
+ * dismisses on outside-click, Esc, or a second click on the trigger. Focus moves
+ * into the panel on open and returns to the trigger on close.
+ *
+ * The trigger sizes itself in `em`, so it tracks the font-size of whatever text
+ * it's dropped into.
+ *
+ * ```tsx
+ * <p>
+ *   Your ASN
+ *   <InfoTip label="What is an ASN?" title="ASN — Autonomous System Number">
+ *     The network (usually an ISP or host) that announces your IP to the internet.
+ *   </InfoTip>
+ * </p>
+ * ```
+ */
+interface InfoTipProps {
+    /**
+     * Accessible name for the trigger button and, when no `title` is given, the
+     * popover's label. Required — a bare icon button is meaningless to AT.
+     */
+    label: string;
+    /** Optional bold heading shown at the top of the popover. */
+    title?: React.ReactNode;
+    /** The explanation. Plain text or rich content (a link, `<code>`, …). */
+    children: React.ReactNode;
+    /** House icon for the trigger. Defaults to `info`; `circle-help` is the other natural pick. */
+    icon?: IconName;
+    /** Preferred side to open on. `auto` (default) flips to wherever there's room. */
+    side?: "top" | "bottom" | "auto";
+    /** Controlled open state. Provide `onOpenChange` alongside it. */
+    open?: boolean;
+    /** Notified whenever the open state should change (controlled or not). */
+    onOpenChange?: (open: boolean) => void;
+    /** Extra classes for the trigger button. */
+    className?: string;
+    /** Extra classes for the popover panel. */
+    contentClassName?: string;
+}
+declare function InfoTip({ label, title, children, icon, side, open: controlledOpen, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
+declare namespace InfoTip {
+    var displayName: string;
+}
+
+/**
  * Merge class names with Tailwind conflict resolution.
  * Later classes win — `cn("px-2", "px-4")` → `"px-4"`.
  */
@@ -998,4 +1198,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Icon, type IconName, type IconProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, themeInitScript, useTheme };
+export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, Icon, type IconName, type IconProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, houseIcons, iconNames, iconVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
