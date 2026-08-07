@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Button } from "../forms/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
@@ -24,6 +25,14 @@ type Story = StoryObj<typeof meta>;
 
 /** Hover or tab to the button. Everything sits inside one `TooltipProvider`, which shares the timing. */
 export const Playground: Story = {
+  // Focus rather than hover: it's the keyboard path, and it's what proves the
+  // tooltip isn't mouse-only.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.tab();
+    await expect(canvas.getByRole("button", { name: "Redeploy" })).toHaveFocus();
+    await expect(await within(document.body).findByRole("tooltip")).toBeInTheDocument();
+  },
   render: (args) => (
     <TooltipProvider>
       <Tooltip {...args}>

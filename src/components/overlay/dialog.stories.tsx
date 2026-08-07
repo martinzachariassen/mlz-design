@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Button } from "../forms/button";
 import { Input } from "../forms/input";
@@ -41,6 +42,11 @@ type Story = StoryObj<typeof meta>;
 
 /** The everyday form dialog. `autoFocus` on the first field is what the native `<dialog>` focus trap picks up. */
 export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: /New project/ }));
+    await expect(await within(document.body).findByRole("dialog")).toBeInTheDocument();
+  },
   render: () => {
     const [open, setOpen] = React.useState(false);
     return (
