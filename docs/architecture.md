@@ -89,25 +89,45 @@ Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not
 
 `tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`. The committed `dist/` is the token-free fallback for `bun add github:martinzachariassen/mlz-design` — refresh it (`bun run build`) in any PR that changes `src/`. Primary distribution is **GitHub Packages** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
-### Known blocker: Storybook manager theming
+### Storybook manager theming, and the addon bug behind it
 
-The Storybook **manager chrome is unbranded** (stock light theme, default logo)
-and that's deliberate for now, not an oversight. On Storybook **10.5.7**, adding
-a `.storybook/manager.ts` at all crashes the manager: it renders a blank page
-and throws `PolishedError #5` from `parseToRgb` inside
-`sb-manager/globals-runtime.js`.
+The manager chrome is MLZ-branded via `.storybook/manager.ts` + `theme.ts`, with
+every colour read from `src/tokens.ts` so the chrome can't drift from the system
+it documents. Getting there required working around a Storybook bug; both the
+workaround and the trap next to it are load-bearing.
 
-This was bisected to the file itself, not its contents — a `manager.ts`
-containing only `export {}` reproduces it, as does one calling
-`addons.setConfig({})` with no theme. So it is not the MLZ token values.
+**The bug.** On Storybook **10.5.7**, a *built* manager renders a blank page and
+throws `PolishedError #5` from `parseToRgb` when **two addons are registered and
+a `.storybook/manager.ts` exists**. Bisected:
 
-Two things to know when picking this back up:
+| Setup | Result |
+| ----- | ------ |
+| 2 addons, no `manager.ts` | works |
+| 1 addon + `manager.ts` | works (either addon) |
+| 2 addons + `manager.ts` | **blank** |
+| `storybook dev`, 2 addons + `manager.ts` | works |
 
-- The favicon is set through `managerHead` in `main.ts`, which works
-  independently of `manager.ts`.
-- MLZ accents are authored in **OKLCH**, and Storybook pipes theme colours
-  through `polished`, which parses only hex/rgb/hsl. Any future manager theme
-  must convert them first, or it will fail with the same `PolishedError` for a
-  genuinely different reason.
+It is neither the theme values nor `create()` — a `manager.ts` containing only
+`export {}` reproduces it, a built-in `themes.light` reproduces it, and swapping
+the addon order changes nothing. Only `storybook build` is affected.
 
-Retry after a Storybook upgrade.
+**The workaround.** `@storybook/addon-a11y` is registered only outside the build,
+gated on `MLZ_STORYBOOK_BUILD=1` which `build:storybook` sets. The panel is
+available in `bun run storybook`; the deployed build drops it and keeps the
+branded chrome. **The a11y *gate* is unaffected** — that's `axe-playwright` in
+`test-runner.ts`, which reads `parameters.a11y` directly and never imported the
+addon. Verified: all 161 checks pass either way.
+
+Revisit on the next Storybook release; if it's fixed, delete the `isBuild` gate.
+
+**The adjacent trap.** MLZ accents are authored in **OKLCH**, and Storybook pipes
+theme colours through `polished`, which parses only hex/rgb/hsl. An `oklch()`
+string reaching the theme throws the *same* `PolishedError` for an entirely
+different reason — hence `.storybook/oklch.ts`, which converts them.
+
+### MDX needs GFM wired up explicitly
+
+Storybook's MDX pipeline ships **no GFM**, so a markdown table in an `.mdx` page
+renders as literal `|` characters — with no build warning. `Theming.mdx` shipped
+that way and it was only caught by looking at the page. `remark-gfm` is now
+passed through `addon-docs`'s `mdxPluginOptions` in `main.ts`; keep it there.
