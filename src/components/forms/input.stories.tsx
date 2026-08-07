@@ -1,0 +1,48 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ThemeSplit } from "../../foundations/theme-split";
+import { Input } from "./input";
+
+const meta = {
+  title: "Components/Forms/Input",
+  component: Input,
+  tags: ["autodocs"],
+  argTypes: {
+    placeholder: { control: "text" },
+    disabled: { control: "boolean" },
+    type: { control: "select", options: ["text", "email", "password", "search", "number"] },
+  },
+  args: { placeholder: "you@example.com", type: "email" },
+  parameters: { layout: "padded" },
+} satisfies Meta<typeof Input>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {
+  render: (args) => (
+    <div className="w-72">
+      <Input {...args} />
+    </div>
+  ),
+};
+
+export const Disabled: Story = {
+  args: { disabled: true, placeholder: "Unavailable" },
+  render: (args) => (
+    <div className="w-72">
+      <Input {...args} />
+    </div>
+  ),
+};
+
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-72 flex-col gap-4">
+        <Input type="email" placeholder="you@example.com" />
+        <Input disabled placeholder="Unavailable" />
+      </div>
+    </ThemeSplit>
+  ),
+};

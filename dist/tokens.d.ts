@@ -53,7 +53,9 @@ declare const fonts: {
 declare const motion: {
     readonly easeOut: "cubic-bezier(.22, .61, .36, 1)";
     readonly easeInOut: "cubic-bezier(.65, 0, .35, 1)";
+    readonly easeGlide: "cubic-bezier(.2, .7, .2, 1)";
     readonly durationFast: "0.15s";
+    readonly durationHover: "0.26s";
     readonly durationBase: "0.3s";
     readonly durationSlow: "0.9s";
 };
@@ -136,7 +138,9 @@ declare const tokens: {
     readonly motion: {
         readonly easeOut: "cubic-bezier(.22, .61, .36, 1)";
         readonly easeInOut: "cubic-bezier(.65, 0, .35, 1)";
+        readonly easeGlide: "cubic-bezier(.2, .7, .2, 1)";
         readonly durationFast: "0.15s";
+        readonly durationHover: "0.26s";
         readonly durationBase: "0.3s";
         readonly durationSlow: "0.9s";
     };
