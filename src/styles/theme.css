@@ -70,7 +70,9 @@
   /* Motion — the signature MLZ feel */
   --mlz-ease-out:    cubic-bezier(.22, .61, .36, 1);
   --mlz-ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --mlz-ease-glide:  cubic-bezier(.2, .7, .2, 1);   /* interactive lift — even, calm settle (not front-loaded) */
   --mlz-dur-fast:  .15s;
+  --mlz-dur-hover: .26s;                             /* hover/focus lift — deliberate, never snappy */
   --mlz-dur-base:  .3s;
   --mlz-dur-slow:  .9s;
 }
@@ -103,6 +105,11 @@
   /* A hair darker than the --mlz-muted primitive (#6e6c64 clears only 4.05:1 on
      paper-2); this lands ≥4.5:1 AA on every paper surface while staying muted. */
   --muted-foreground:      #63615a;
+  /* Third, fainter text level — de-emphasised labels/captions/eyebrows. Reads a
+     touch lighter than --muted-foreground yet still clears WCAG AA (≈5.0:1 on
+     paper, 4.6:1 on paper-2). It is a label/caption tone — do NOT set long body
+     copy in it; reach for --foreground / --muted-foreground for reading text. */
+  --muted-foreground-2:    color-mix(in oklab, var(--foreground) 65%, var(--background));
 
   /* Accent = house cyan; focus rings & hovers reach for it */
   --accent:                var(--mlz-cyan);
@@ -130,8 +137,17 @@
   --glitch-1:              var(--mlz-cyan);
   --glitch-2:              var(--mlz-danger);
 
-  /* Type roles */
-  --font-sans:  var(--mlz-font-mono);
+  /* Type roles — accessibility-first mapping. The body/reading face is the
+     grotesque (highly legible sans); monospace is reserved for data, code and
+     tracked eyebrows where its fixed advance actually helps. Nothing is removed —
+     every family is still reachable by its own role.
+       sans    → reading / UI / prose default (Space Grotesk). The body face.
+       mono    → data, code, IDs, tracked eyebrows (Space Mono). NOT for prose.
+       grotesk → the sans face by name, for explicit display/headings.
+       serif   → editorial / long-form accent (Instrument Serif), opt-in.
+       hand    → brand personality display only (Architects Daughter), never body.
+     See foundations/Typography.stories.tsx for the how/where + do's & don'ts. */
+  --font-sans:  var(--mlz-font-grotesk);
   --font-mono:  var(--mlz-font-mono);
   --font-hand:  var(--mlz-font-hand);
   --font-grotesk: var(--mlz-font-grotesk);
@@ -175,6 +191,8 @@
 
   --muted:                 oklch(0.27 0.004 110);
   --muted-foreground:      oklch(0.70 0.008 100);
+  /* Fainter label/caption tone, still ≥4.5:1 AA on every dark surface. */
+  --muted-foreground-2:    oklch(0.66 0.008 100);
 
   --accent:                var(--mlz-cyan);
   --accent-deep:           oklch(0.66 0.12 197);
@@ -236,6 +254,7 @@
   --color-secondary-foreground:   var(--secondary-foreground);
   --color-muted:                  var(--muted);
   --color-muted-foreground:       var(--muted-foreground);
+  --color-muted-foreground-2:     var(--muted-foreground-2);
   --color-accent:                 var(--accent);
   --color-accent-deep:            var(--accent-deep);
   --color-accent-foreground:      var(--accent-foreground);
@@ -277,6 +296,8 @@
 
   --ease-out:    var(--mlz-ease-out);
   --ease-in-out: var(--mlz-ease-in-out);
+  --ease-glide:  var(--mlz-ease-glide);
+  --dur-hover:   var(--mlz-dur-hover);
 }
 
 /* -----------------------------------------------------------------------------

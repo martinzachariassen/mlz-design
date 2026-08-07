@@ -32,9 +32,22 @@ export {
   fallbackVariants,
 } from "./components/data-display/avatar";
 export { Badge, type BadgeProps, badgeVariants } from "./components/data-display/badge";
+export {
+  type DataLayout,
+  DataList,
+  type DataListProps,
+  DataRow,
+  type DataRowProps,
+} from "./components/data-display/data-list";
 export { Icon, type IconProps, iconVariants } from "./components/data-display/icon";
 export { Kbd, type KbdProps } from "./components/data-display/kbd";
 export { Prose, type ProseProps } from "./components/data-display/prose";
+export {
+  StatusDot,
+  type StatusDotProps,
+  statusDotVariants,
+} from "./components/data-display/status-dot";
+export { Text, type TextProps, textVariants } from "./components/data-display/text";
 export {
   Alert,
   AlertDescription,
@@ -42,6 +55,11 @@ export {
   AlertTitle,
   alertVariants,
 } from "./components/feedback/alert";
+export {
+  Callout,
+  type CalloutProps,
+  calloutVariants,
+} from "./components/feedback/callout";
 export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
 export { Skeleton } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
@@ -51,6 +69,15 @@ export { Input, type InputProps } from "./components/forms/input";
 export { Label, type LabelProps } from "./components/forms/label";
 export { Switch, type SwitchProps } from "./components/forms/switch";
 export { Textarea, type TextareaProps } from "./components/forms/textarea";
+export {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  type AccordionItemProps,
+  type AccordionProps,
+  AccordionTrigger,
+  type AccordionTriggerProps,
+} from "./components/layout/accordion";
 export {
   Card,
   CardAction,
@@ -93,6 +120,7 @@ export {
   type DialogProps,
   DialogTitle,
 } from "./components/overlay/dialog";
+export { InfoTip, type InfoTipProps } from "./components/overlay/info-tip";
 export { houseIcons, type IconName, iconNames } from "./icons/generated";
 export { cn } from "./lib/cn";
 export {

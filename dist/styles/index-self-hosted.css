@@ -1,0 +1,24 @@
+/* =============================================================================
+   MLZ Design — index-self-hosted.css  (the CSP-safe one-import bundle)
+   Identical to index.css, but loads fonts from the bundled WOFF2 files
+   (fonts-self-hosted.css) instead of the Google Fonts CDN — so it works under a
+   strict `font-src 'self'` / `style-src 'self'` Content-Security-Policy and never
+   leaks a visitor IP to a third party. Inherit the whole system in TWO lines:
+
+       @import "tailwindcss";
+       @import "@martinzachariassen/design/styles/index-self-hosted.css";
+
+   Your bundler fingerprints the WOFF2 files and serves them same-origin. No
+   manual `@source` for the package, no separate theme/font/base imports.
+
+   Want the quick CDN path instead? Use styles/index.css (Google Fonts).
+   ============================================================================= */
+
+@import "./theme.css";
+@import "./fonts-self-hosted.css";
+@import "./base.css";
+
+/* The components ship as compiled JS; their Tailwind classes live as strings in
+   that bundle, which Tailwind ignores inside node_modules by default. Point it
+   there so consumers get every component's styles with no extra config. */
+@source "../*.js";
