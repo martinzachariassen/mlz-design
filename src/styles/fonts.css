@@ -6,9 +6,9 @@
        @import "@martinzachariassen/design/styles/fonts.css";
 
    Roles (map to --font-* in theme.css):
-     Space Mono          → mono / sans   (body & default UI text — technical)
-     Architects Daughter → hand          (display / name / hero headline)
-     Space Grotesk       → grotesk       (alt display, tighter & modern)
+     Space Grotesk       → sans / grotesk (body, UI & prose — the reading face)
+     Space Mono          → mono           (data, code, IDs & tracked eyebrows)
+     Architects Daughter → hand           (display / name / hero headline)
      Instrument Serif    → serif          (editorial display)
 
    ── For production / resilience, self-host with Fontsource instead ────────────

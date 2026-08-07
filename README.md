@@ -94,6 +94,13 @@ emitted automatically. No manual `@source`, no separate imports. (Tailwind v4
 auto-scans your own files; the package just adds the one thing it can't see — the
 utility classes compiled into `node_modules`.)
 
+> **Strict CSP / privacy-first?** Use the self-hosted bundle instead —
+> `@import "@martinzachariassen/design/styles/index-self-hosted.css";`. It's
+> identical to `index.css` but loads the fonts from bundled WOFF2 files (Space Mono
+> + Space Grotesk) with relative urls, so your bundler serves them same-origin —
+> no Google Fonts CDN. Works under `font-src 'self'` / `style-src 'self'` and never
+> leaks a visitor IP to a third party.
+
 **4. Use it:**
 
 ```tsx
@@ -115,6 +122,15 @@ export function Example() {
 Utilities (`bg-background`, `text-muted-foreground`, `border-border`, `font-hand`,
 `ring-ring`, `rounded-md`…) and raw variables (`var(--accent)`, `var(--ease-out)`…)
 are both available for your own markup.
+
+> **Typography in one rule: sans for reading, mono for data.** `font-sans` (Space
+> Grotesk) is the body/UI/prose reading face and the default; `font-mono` (Space
+> Mono) is for IPs, hashes, code, and tracked-out eyebrows — not long prose.
+> `font-serif` (editorial accent) and `font-hand` (the wordmark / one personality
+> moment) are opt-in, never body copy. Text tones `text-foreground` →
+> `text-muted-foreground` → `text-muted-foreground-2` step down in emphasis while
+> all clearing WCAG AA. See the **Foundations → Typography** story for the full
+> role map and do's & don'ts.
 
 > **Want finer control?** Skip `index.css` and import the pieces yourself:
 > `styles/theme.css` (tokens, required), `styles/fonts.css` (or self-host — see its
@@ -216,10 +232,16 @@ Every component reads only semantic tokens, so all of them re-theme with the
 | `Card` (+ `Header`/`Title`/`Description`/`Action`/`Content`/`Footer`) | `default` · `elevated` · `interactive` (hover-lift) · `accent` · `ghost` |
 | `Badge`    | `default` · `accent` · `outline` · `muted` · `destructive` |
 | `Alert` (+ `Title`/`Description`) | `default` · `info` · `success` · `warning` · `destructive` signal panels |
+| `Callout`  | compact, dot-led inline note (lighter than `Alert`) for dense lists of findings/checks; semantic `tone` |
+| `StatusDot` | semantic status dot (`success`/`warning`/`destructive`/`info`/`accent`/`muted`) with an optional pulsing ring |
 | `Avatar` (+ `Image`/`Fallback`/`Group`) | initials-first; `xs`–`xl`, circle/square, presence `status`, overlap group with `+N` |
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
+| `InfoTip`  | accessible inline help popover (glossary/hints) — click or hover, keyboard + Esc, no dependency |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
+| `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
+| `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
+| `Accordion` (+ `Item`/`Trigger`/`Content`) | Radix-free disclosure — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | Radix-free, keyboard-navigable  |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
@@ -267,11 +289,15 @@ called `--destructive` in CSS is exported as `signals.danger` in JS (same colour
 
 ### Fonts
 
-Space Mono (`mono`/body), Architects Daughter (`hand`/display), Space Grotesk
-(`grotesk`), Instrument Serif (`serif`). `styles/fonts.css` (bundled into
-`index.css`) loads them from Google Fonts for convenience; for production, self-host
-with Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
-file). The `--font-*` stacks carry robust system fallbacks either way.
+Space Grotesk (`sans`/`grotesk`, the body/UI/prose **reading face** — the default
+mapped to `--font-sans`), Space Mono (`mono`, data/code/IDs & tracked eyebrows),
+Instrument Serif (`serif`, editorial accent) and Architects Daughter (`hand`,
+wordmark / one personality moment). `styles/fonts.css` (bundled into `index.css`)
+loads them from Google Fonts for convenience; for production, self-host with
+Fontsource + Fontaine metric-matched fallbacks (see the header comment in that
+file). The `--font-*` stacks carry robust system fallbacks either way. For the
+role map, do's & don'ts and the legibility/a11y rules (sizing, line-height,
+measure, spacing), see the **Foundations → Typography** story.
 
 ### Native (SwiftUI)
 

@@ -45,7 +45,9 @@ export const fonts = {
 export const motion = {
   easeOut: "cubic-bezier(.22, .61, .36, 1)",
   easeInOut: "cubic-bezier(.65, 0, .35, 1)",
+  easeGlide: "cubic-bezier(.2, .7, .2, 1)",
   durationFast: "0.15s",
+  durationHover: "0.26s",
   durationBase: "0.3s",
   durationSlow: "0.9s",
 } as const;
