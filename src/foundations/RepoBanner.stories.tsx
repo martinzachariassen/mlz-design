@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RepoBanner } from "../components/repo-banner";
+import { RepoBanner } from "../components/brand/repo-banner";
 
 const meta = {
   title: "Foundations/Repo Banner",

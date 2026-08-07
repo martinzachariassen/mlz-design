@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "../components/badge";
-import { BrandLockup, BrandMark } from "../components/brand-mark";
-import { Button } from "../components/button";
-import { Card, CardContent } from "../components/card";
-import { Container, Grid, Stack } from "../components/layout";
-import { Separator } from "../components/separator";
+import { BrandLockup, BrandMark } from "../components/brand/brand-mark";
+import { Badge } from "../components/data-display/badge";
+import { Button } from "../components/forms/button";
+import { Card, CardContent } from "../components/layout/card";
+import { Container, Grid, Stack } from "../components/layout/layout";
+import { Separator } from "../components/layout/separator";
 import { breakpoints } from "../tokens";
 
 const meta = {

@@ -1,18 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Alert, AlertDescription, AlertTitle } from "../components/alert";
-import { Avatar, AvatarFallback } from "../components/avatar";
-import { Badge } from "../components/badge";
-import { BrandLockup, BrandMark } from "../components/brand-mark";
-import { Button } from "../components/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/card";
-import { Checkbox } from "../components/checkbox";
-import { Input } from "../components/input";
-import { Kbd } from "../components/kbd";
-import { Label } from "../components/label";
-import { Progress } from "../components/progress";
-import { Separator } from "../components/separator";
-import { Switch } from "../components/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/tabs";
+import { BrandLockup, BrandMark } from "../components/brand/brand-mark";
+import { Avatar, AvatarFallback } from "../components/data-display/avatar";
+import { Badge } from "../components/data-display/badge";
+import { Kbd } from "../components/data-display/kbd";
+import { Alert, AlertDescription, AlertTitle } from "../components/feedback/alert";
+import { Progress } from "../components/feedback/progress";
+import { Button } from "../components/forms/button";
+import { Checkbox } from "../components/forms/checkbox";
+import { Input } from "../components/forms/input";
+import { Label } from "../components/forms/label";
+import { Switch } from "../components/forms/switch";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/layout/card";
+import { Separator } from "../components/layout/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/layout/tabs";
 
 const meta = {
   title: "Foundations/Patterns",

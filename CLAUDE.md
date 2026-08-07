@@ -41,7 +41,9 @@ bun run changeset        # start a release (see below)
 3. `@theme inline` — re-exports the semantic layer to Tailwind so tokens and
    utilities are the same thing (and runtime theme/accent swaps keep working).
 
-Components (`src/components/*.tsx`) use CVA + `tailwind-merge` via `cn()`
+Components (`src/components/<group>/*.tsx`, grouped by function — `forms`,
+`data-display`, `feedback`, `layout`, `overlay`, `brand`) use CVA +
+`tailwind-merge` via `cn()`
 (`src/lib/cn.ts`) and are styled purely from semantic-token utilities
 (`bg-primary`, `border-input`, `ring-ring`…). `src/tokens.ts` mirrors the values
 as typed JS (exported at `./tokens`). `src/foundations/*` are Storybook-only.
@@ -80,11 +82,22 @@ is exported as `signals.danger` in JS.
 - CI (`ci.yml`): lint · typecheck · test · build · build-storybook. Plus CodeQL,
   Dependency Review, Dependabot (npm / actions / docker).
 - **Releases via Changesets → GitHub Packages** (scope `@martinzachariassen`,
-  `.npmrc`), driven by a **version tag** — decoupled from the push-to-`main` CI
-  build. Add a changeset, then when ready to ship: `bun run version-packages`
-  (applies the bump + CHANGELOG), commit, and push a `v*` tag
-  (`git tag vX.Y.Z && git push --follow-tags`). `release.yml` triggers on the
-  `v*` tag, builds, and `changeset publish`es.
+  `.npmrc`), **fully automated** by the Changesets action — no manual version
+  bump, no `v*` tag, no local `publish`. `release.yml` runs on **push to `main`**;
+  the action decides what to do from pending changesets:
+  1. Add a changeset to your feature PR (`bun run changeset` — describe the change,
+     pick the bump).
+  2. Merge the PR. `release.yml` sees the pending changeset and opens/updates a
+     **"chore(release): version packages"** PR (`bun run version-packages` applies
+     every bump + CHANGELOG and consumes the changesets).
+  3. Merge that version PR. `release.yml` now finds no pending changesets and runs
+     the publish path (`bun run release` = `bun run build && changeset publish`) —
+     publishes to GitHub Packages and cuts the GitHub Release + tag. (No npm
+     provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing /
+     Sigstore attestation — that's a `registry.npmjs.org` feature.)
+  Committed `dist/` is the token-free fallback for
+  `bun add github:martinzachariassen/mlz-design`; refresh it (`bun run build`) in
+  any PR touching `src/`.
 
 ## Hosting
 

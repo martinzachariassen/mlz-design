@@ -1,7 +1,7 @@
 {
   "name": "@martinzachariassen/design",
-  "version": "0.2.0",
-  "description": "MLZ Design — Martin Zachariassen's design system: the single source of truth for colour, type, style and motion, packaged as React + Tailwind v4 tokens and components so every project inherits one consistent look.",
+  "version": "0.3.0",
+  "description": "Martin Zachariassen's design system — colour, type, style and motion as an installable React + Tailwind v4 package.",
   "license": "MIT",
   "author": "Martin Zachariassen",
   "type": "module",
@@ -32,8 +32,10 @@
       "import": "./dist/brand-assets.js"
     },
     "./styles/index.css": "./dist/styles/index.css",
+    "./styles/index-self-hosted.css": "./dist/styles/index-self-hosted.css",
     "./styles/theme.css": "./dist/styles/theme.css",
     "./styles/fonts.css": "./dist/styles/fonts.css",
+    "./styles/fonts-self-hosted.css": "./dist/styles/fonts-self-hosted.css",
     "./styles/base.css": "./dist/styles/base.css",
     "./package.json": "./package.json"
   },
@@ -51,6 +53,7 @@
     "serve:storybook": "node server.mjs",
     "test-storybook": "test-storybook",
     "preview": "python3 -m http.server 4321 --bind 127.0.0.1",
+    "gen:icons": "bun scripts/generate-icons.ts",
     "gen:swift": "bun scripts/generate-swift-tokens.ts",
     "gen:banner": "bun scripts/generate-banner.ts",
     "gen:assets": "bun scripts/brand-assets/generate.ts",
@@ -64,6 +67,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0"
@@ -71,6 +75,8 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
     "@changesets/cli": "^2.31.1",
+    "@iconify-json/lucide": "^1.2.120",
+    "@iconify/utils": "^3.1.4",
     "@storybook/addon-a11y": "^10.5.3",
     "@storybook/react-vite": "^10.5.3",
     "@storybook/test-runner": "^0.24.4",
@@ -84,7 +90,7 @@
     "axe-playwright": "^2.2.2",
     "concurrently": "^10.0.3",
     "http-server": "^14.1.1",
-    "jsdom": "^29.1.1",
+    "jsdom": "^30.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "storybook": "^10.5.3",
