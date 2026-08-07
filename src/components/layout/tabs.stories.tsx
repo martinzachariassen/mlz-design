@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
@@ -23,6 +24,14 @@ type Story = StoryObj<typeof meta>;
 
 /** Three tabs. Click one, then use the arrow keys — only the selected tab is in the tab order, per the WAI-ARIA pattern. */
 export const Playground: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("tab", { name: "Activity" }));
+    await expect(canvas.getByRole("tab", { name: "Activity" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  },
   render: () => (
     <Tabs defaultValue="overview" className="w-80">
       <TabsList>

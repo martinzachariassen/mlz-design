@@ -23,7 +23,12 @@ const config: TestRunnerConfig = {
       if (rule?.id) rules[rule.id] = { enabled: rule.enabled !== false };
     }
 
-    await checkA11y(page, a11y.element ?? "#storybook-root", {
+    // Scope to the whole preview `body`, not `#storybook-root`. Overlays —
+    // dialogs, menus, listboxes, tooltips — portal to `document.body`, so a
+    // root-scoped run silently skips exactly the markup most worth auditing.
+    // Inside the preview iframe the body holds the story and its portals and
+    // nothing else, so this widens coverage without pulling in Storybook chrome.
+    await checkA11y(page, a11y.element ?? "body", {
       detailedReport: true,
       detailedReportOptions: { html: true },
       axeOptions: {

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, within } from "storybook/test";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Text } from "../data-display/text";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./accordion";
@@ -32,6 +33,17 @@ type Story = StoryObj<typeof meta>;
 
 /** The default: one open item at a time, `collapsible` so the last one can close. Try Up/Down/Home/End on a focused trigger. */
 export const Playground: Story = {
+  // The first item starts open (`defaultValue="a"`), so this opens a *different*
+  // one — which also proves `type="single"` closes the previous panel.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const first = canvas.getByRole("button", { name: /What can sites see/ });
+    const second = canvas.getByRole("button", { name: /Is anything stored/ });
+    await expect(first).toHaveAttribute("aria-expanded", "true");
+    await userEvent.click(second);
+    await expect(second).toHaveAttribute("aria-expanded", "true");
+    await expect(first).toHaveAttribute("aria-expanded", "false");
+  },
   render: () => (
     <Accordion type="single" collapsible defaultValue="a" className="max-w-lg">
       <AccordionItem value="a">
