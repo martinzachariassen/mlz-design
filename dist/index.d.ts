@@ -574,7 +574,7 @@ interface StatDeltaProps extends React.HTMLAttributes<HTMLParagraphElement>, Var
 declare const StatDelta: React.ForwardRefExoticComponent<StatDeltaProps & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const statusDotVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusDotVariants> {
     /** Add a soft pulsing ring in the dot's colour to signal live/active state. */
@@ -686,7 +686,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<type
 declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
 
 declare const alertVariants: (props?: ({
-    variant?: "default" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "default" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
 }
@@ -713,7 +713,7 @@ declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<H
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const calloutVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
     /** The headline — the finding itself, in full-strength foreground. */
