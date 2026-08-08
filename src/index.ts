@@ -205,6 +205,18 @@ export {
   type TabsTriggerProps,
 } from "./components/layout/tabs";
 export {
+  AlertDialog,
+  AlertDialogAction,
+  type AlertDialogActionProps,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  type AlertDialogProps,
+  AlertDialogTitle,
+} from "./components/overlay/alert-dialog";
+export {
   Dialog,
   DialogClose,
   type DialogCloseProps,

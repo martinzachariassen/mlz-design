@@ -110,7 +110,7 @@ const preview: Preview = {
             "Layout",
             ["Container", "Card", "Separator", "Tabs", "Accordion", "Breadcrumb", "Pagination"],
             "Overlay",
-            ["Dialog", "Sheet", "Popover", "DropdownMenu", "Tooltip", "InfoTip"],
+            ["Dialog", "AlertDialog", "Sheet", "Popover", "DropdownMenu", "Tooltip", "InfoTip"],
           ],
           "Patterns",
           "Reference",

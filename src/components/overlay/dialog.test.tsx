@@ -11,21 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./dialog";
+import { stubNativeDialog } from "./modal-test-env";
 
-// jsdom ships <dialog> but not its modal methods, so the top-layer behaviour this
-// component leans on has to be stubbed. Focus-trapping and Esc are the platform's
-// job and are verified in a real browser, not here.
-beforeAll(() => {
-  if (!HTMLDialogElement.prototype.showModal) {
-    HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
-      this.setAttribute("open", "");
-    };
-    HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
-      this.removeAttribute("open");
-      this.dispatchEvent(new Event("close"));
-    };
-  }
-});
+beforeAll(stubNativeDialog);
 
 describe("Dialog", () => {
   it("names and describes itself from its title and description", () => {

@@ -1,7 +1,7 @@
 import { accents } from './chunk-EYYGHWPE.js';
 export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens } from './chunk-EYYGHWPE.js';
 import { cva } from 'class-variance-authority';
-import * as React44 from 'react';
+import * as React32 from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
@@ -37,7 +37,7 @@ var brandMarkVariants = cva("inline-block shrink-0 align-middle", {
   },
   defaultVariants: { variant: "tile" }
 });
-var BrandMark = React44.forwardRef(
+var BrandMark = React32.forwardRef(
   ({ variant = "tile", size = 32, tile = "var(--foreground)", glyph, className, ...props }, ref) => {
     const isTile = variant === "tile";
     const letter = glyph ?? (isTile ? "var(--background)" : "currentColor");
@@ -62,7 +62,7 @@ var BrandMark = React44.forwardRef(
   }
 );
 BrandMark.displayName = "BrandMark";
-var BrandWordmark = React44.forwardRef(
+var BrandWordmark = React32.forwardRef(
   ({ size = 24, period, className, style, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -85,7 +85,7 @@ var BrandWordmark = React44.forwardRef(
   )
 );
 BrandWordmark.displayName = "BrandWordmark";
-var BrandLockup = React44.forwardRef(
+var BrandLockup = React32.forwardRef(
   ({ tagline = "", size = 40, orientation = "horizontal", className, ...props }, ref) => {
     const stacked = orientation === "stacked";
     const wordmarkSize = size / 1.45;
@@ -156,9 +156,9 @@ function Mark({ shape, size }) {
       return /* @__PURE__ */ jsx("span", { className: "block border border-current", style: s });
   }
 }
-var FloatingMarks = React44.forwardRef(
+var FloatingMarks = React32.forwardRef(
   ({ count = 14, className, ...props }, ref) => {
-    const marks = React44.useMemo(
+    const marks = React32.useMemo(
       () => Array.from({ length: count }, (_, i) => {
         const a = rand(i + 1);
         const b = rand(i + 7);
@@ -214,10 +214,10 @@ FloatingMarks.displayName = "FloatingMarks";
 function prefersReducedMotion() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
-var GlitchText = React44.forwardRef(
+var GlitchText = React32.forwardRef(
   ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
-    const containerRef = React44.useRef(null);
-    const setRefs = React44.useCallback(
+    const containerRef = React32.useRef(null);
+    const setRefs = React32.useCallback(
       (node) => {
         containerRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -225,11 +225,11 @@ var GlitchText = React44.forwardRef(
       },
       [ref]
     );
-    const segments = React44.useMemo(
+    const segments = React32.useMemo(
       () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
       [text]
     );
-    const burst = React44.useCallback(() => {
+    const burst = React32.useCallback(() => {
       const root = containerRef.current;
       if (!root) return;
       const chars = root.querySelectorAll("[data-glitch-char]");
@@ -246,7 +246,7 @@ var GlitchText = React44.forwardRef(
         });
       }
     }, []);
-    React44.useEffect(() => {
+    React32.useEffect(() => {
       if (trigger !== "ambient" || prefersReducedMotion()) return;
       const [min, max] = interval;
       let timer;
@@ -283,10 +283,10 @@ var GlitchText = React44.forwardRef(
   }
 );
 GlitchText.displayName = "GlitchText";
-var GridBackground = React44.forwardRef(
+var GridBackground = React32.forwardRef(
   ({ cell = 30, interactive = false, glow = true, spotlight = 340, className, style, ...props }, ref) => {
-    const rootRef = React44.useRef(null);
-    const setRefs = React44.useCallback(
+    const rootRef = React32.useRef(null);
+    const setRefs = React32.useCallback(
       (node) => {
         rootRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -294,7 +294,7 @@ var GridBackground = React44.forwardRef(
       },
       [ref]
     );
-    React44.useEffect(() => {
+    React32.useEffect(() => {
       if (!interactive) return;
       const move = (event) => {
         const root = rootRef.current;
@@ -383,7 +383,7 @@ function DefaultCover() {
     )
   ] });
 }
-var ProjectCard = React44.forwardRef(
+var ProjectCard = React32.forwardRef(
   ({
     className,
     title,
@@ -396,7 +396,7 @@ var ProjectCard = React44.forwardRef(
     cta = "View project",
     ...props
   }, ref) => {
-    const titleId = React44.useId();
+    const titleId = React32.useId();
     return /* @__PURE__ */ jsxs(
       "article",
       {
@@ -488,7 +488,7 @@ function Lockup({ size }) {
     /* @__PURE__ */ jsx(BrandWordmark, { size: size / 1.45 })
   ] });
 }
-var RepoBanner = React44.forwardRef(
+var RepoBanner = React32.forwardRef(
   ({
     project,
     eyebrow = "MLZ \xB7 Design System",
@@ -633,7 +633,7 @@ var RepoBanner = React44.forwardRef(
 RepoBanner.displayName = "RepoBanner";
 var BASE_W2 = 1200;
 var BASE_H2 = 630;
-var SocialCard = React44.forwardRef(
+var SocialCard = React32.forwardRef(
   ({
     title,
     eyebrow = "Martin Zachariassen",
@@ -748,7 +748,7 @@ function DotIcon({ className, ...props }) {
 }
 var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
-var ThemeContext = React44.createContext(null);
+var ThemeContext = React32.createContext(null);
 var isBrowser = typeof window !== "undefined";
 function prefersDark() {
   return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -788,16 +788,16 @@ function ThemeProvider({
   enableSystem = true,
   attribute = "class"
 }) {
-  const [theme, setThemeState] = React44.useState(
+  const [theme, setThemeState] = React32.useState(
     () => readStored(storageKey, defaultTheme, THEMES)
   );
-  const [accent, setAccentState] = React44.useState(
+  const [accent, setAccentState] = React32.useState(
     () => readStored(accentStorageKey, defaultAccent, ACCENTS)
   );
-  const [systemDark, setSystemDark] = React44.useState(() => prefersDark());
+  const [systemDark, setSystemDark] = React32.useState(() => prefersDark());
   const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
-  React44.useEffect(() => {
+  React32.useEffect(() => {
     if (!isBrowser || !enableSystem) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setSystemDark(mql.matches);
@@ -805,31 +805,31 @@ function ThemeProvider({
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [enableSystem]);
-  React44.useEffect(() => {
+  React32.useEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
-  const setTheme = React44.useCallback(
+  const setTheme = React32.useCallback(
     (next) => {
       setThemeState(next);
       writeStored(storageKey, next);
     },
     [storageKey]
   );
-  const setAccent = React44.useCallback(
+  const setAccent = React32.useCallback(
     (next) => {
       setAccentState(next);
       writeStored(accentStorageKey, next);
     },
     [accentStorageKey]
   );
-  const value = React44.useMemo(
+  const value = React32.useMemo(
     () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
     [theme, setTheme, resolvedTheme, accent, setAccent]
   );
   return /* @__PURE__ */ jsx(ThemeContext.Provider, { value, children });
 }
 function useTheme() {
-  const ctx = React44.useContext(ThemeContext);
+  const ctx = React32.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme must be used within a <ThemeProvider>.");
   }
@@ -847,7 +847,7 @@ function themeInitScript(options = {}) {
   const write = attribute === "class" ? `d.classList.toggle("dark",r==="dark");` : `d.setAttribute("data-theme",r);`;
   return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
 }
-var RadioGroup = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var RadioGroup = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   RadioGroupPrimitive.Root,
   {
     ref,
@@ -857,7 +857,7 @@ var RadioGroup = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 RadioGroup.displayName = "RadioGroup";
-var RadioGroupItem = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var RadioGroupItem = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   RadioGroupPrimitive.Item,
   {
     ref,
@@ -894,7 +894,7 @@ var toggleVariants = cva(
     defaultVariants: { variant: "default", size: "default" }
   }
 );
-var Toggle = React44.forwardRef(({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(
+var Toggle = React32.forwardRef(({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(
   TogglePrimitive.Root,
   {
     ref,
@@ -904,9 +904,9 @@ var Toggle = React44.forwardRef(({ className, variant, size, ...props }, ref) =>
   }
 ));
 Toggle.displayName = "Toggle";
-var ToggleGroupContext = React44.createContext({});
-var ToggleGroup = React44.forwardRef(({ className, variant, size, children, ...props }, ref) => {
-  const context = React44.useMemo(() => ({ variant, size }), [variant, size]);
+var ToggleGroupContext = React32.createContext({});
+var ToggleGroup = React32.forwardRef(({ className, variant, size, children, ...props }, ref) => {
+  const context = React32.useMemo(() => ({ variant, size }), [variant, size]);
   return /* @__PURE__ */ jsx(
     ToggleGroupPrimitive.Root,
     {
@@ -919,8 +919,8 @@ var ToggleGroup = React44.forwardRef(({ className, variant, size, children, ...p
   );
 });
 ToggleGroup.displayName = "ToggleGroup";
-var ToggleGroupItem = React44.forwardRef(({ className, variant, size, ...props }, ref) => {
-  const context = React44.useContext(ToggleGroupContext);
+var ToggleGroupItem = React32.forwardRef(({ className, variant, size, ...props }, ref) => {
+  const context = React32.useContext(ToggleGroupContext);
   return /* @__PURE__ */ jsx(
     ToggleGroupPrimitive.Item,
     {
@@ -940,7 +940,7 @@ var THEMES2 = [
   { value: "dark", label: "Dark", Icon: MoonIcon },
   { value: "system", label: "System", Icon: MonitorIcon }
 ];
-var ThemeToggle = React44.forwardRef(
+var ThemeToggle = React32.forwardRef(
   ({ className, iconOnly, hideSystem, ...props }, ref) => {
     const { theme, setTheme } = useTheme();
     const options = hideSystem ? THEMES2.filter((t) => t.value !== "system") : THEMES2;
@@ -973,7 +973,7 @@ var ThemeToggle = React44.forwardRef(
 );
 ThemeToggle.displayName = "ThemeToggle";
 var ALL_ACCENTS = Object.keys(accents);
-var AccentPicker = React44.forwardRef(
+var AccentPicker = React32.forwardRef(
   ({ className, families = ALL_ACCENTS, ...props }, ref) => {
     const { accent, setAccent } = useTheme();
     return /* @__PURE__ */ jsx("div", { ref, "data-slot": "accent-picker", ...props, children: /* @__PURE__ */ jsx(
@@ -1024,7 +1024,7 @@ var statusColor = {
   busy: "bg-destructive",
   offline: "bg-[var(--muted-foreground)]"
 };
-var Avatar = React44.forwardRef(
+var Avatar = React32.forwardRef(
   ({ className, size, shape = "circle", status, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -1059,7 +1059,7 @@ var Avatar = React44.forwardRef(
   )
 );
 Avatar.displayName = "Avatar";
-var AvatarImage = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AvatarImage = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   AvatarPrimitive.Image,
   {
     ref,
@@ -1082,7 +1082,7 @@ var fallbackVariants = cva(
     defaultVariants: { tone: "default" }
   }
 );
-var AvatarFallback = React44.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
+var AvatarFallback = React32.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
   AvatarPrimitive.Fallback,
   {
     ref,
@@ -1092,9 +1092,9 @@ var AvatarFallback = React44.forwardRef(({ className, tone, ...props }, ref) => 
   }
 ));
 AvatarFallback.displayName = "AvatarFallback";
-var AvatarGroup = React44.forwardRef(
+var AvatarGroup = React32.forwardRef(
   ({ className, max, size = "default", children, ...props }, ref) => {
-    const items = React44.Children.toArray(children).filter(React44.isValidElement);
+    const items = React32.Children.toArray(children).filter(React32.isValidElement);
     const shown = typeof max === "number" ? items.slice(0, max) : items;
     const overflow = items.length - shown.length;
     return /* @__PURE__ */ jsxs(
@@ -1119,7 +1119,7 @@ var AvatarGroup = React44.forwardRef(
   }
 );
 AvatarGroup.displayName = "AvatarGroup";
-var Code = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var Code = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "code",
   {
     ref,
@@ -1132,10 +1132,10 @@ var Code = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ 
   }
 ));
 Code.displayName = "Code";
-var CodeBlock = React44.forwardRef(
+var CodeBlock = React32.forwardRef(
   ({ children, filename, copyable, copyLabel = "Copy code", className, ...props }, ref) => {
-    const [copied, setCopied] = React44.useState(false);
-    React44.useEffect(() => {
+    const [copied, setCopied] = React32.useState(false);
+    React32.useEffect(() => {
       if (!copied) return;
       const timer = setTimeout(() => setCopied(false), 2e3);
       return () => clearTimeout(timer);
@@ -1188,8 +1188,8 @@ var CodeBlock = React44.forwardRef(
   }
 );
 CodeBlock.displayName = "CodeBlock";
-var DataListContext = React44.createContext("justify");
-var DataList = React44.forwardRef(
+var DataListContext = React32.createContext("justify");
+var DataList = React32.forwardRef(
   ({ layout = "justify", className, ...props }, ref) => /* @__PURE__ */ jsx(DataListContext.Provider, { value: layout, children: /* @__PURE__ */ jsx(
     "dl",
     {
@@ -1202,9 +1202,9 @@ var DataList = React44.forwardRef(
   ) })
 );
 DataList.displayName = "DataList";
-var DataRow = React44.forwardRef(
+var DataRow = React32.forwardRef(
   ({ label, mono, layout, className, children, ...props }, ref) => {
-    const inherited = React44.useContext(DataListContext);
+    const inherited = React32.useContext(DataListContext);
     const resolved = layout ?? inherited;
     const grid = resolved === "grid";
     return /* @__PURE__ */ jsxs(
@@ -1246,7 +1246,7 @@ var DataRow = React44.forwardRef(
   }
 );
 DataRow.displayName = "DataRow";
-var Kbd = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var Kbd = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "kbd",
   {
     ref,
@@ -1279,7 +1279,7 @@ var linkVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Link = React44.forwardRef(
+var Link = React32.forwardRef(
   ({ className, variant, asChild, external, children, target, rel, ...props }, ref) => {
     const Comp = asChild ? Slot : "a";
     return /* @__PURE__ */ jsx(
@@ -1303,7 +1303,7 @@ var Link = React44.forwardRef(
   }
 );
 Link.displayName = "Link";
-var Prose = React44.forwardRef(
+var Prose = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1357,11 +1357,11 @@ var deltaVariants = cva("font-mono text-xs tabular-nums", {
   },
   defaultVariants: { direction: "flat" }
 });
-var Stat = React44.forwardRef(
+var Stat = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "stat", className: cn("flex flex-col gap-1", className), ...props })
 );
 Stat.displayName = "Stat";
-var StatLabel = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var StatLabel = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1374,7 +1374,7 @@ var StatLabel = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE_
   }
 ));
 StatLabel.displayName = "StatLabel";
-var StatValue = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var StatValue = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1384,7 +1384,7 @@ var StatValue = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE_
   }
 ));
 StatValue.displayName = "StatValue";
-var StatDelta = React44.forwardRef(
+var StatDelta = React32.forwardRef(
   ({ className, direction, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
@@ -1409,7 +1409,7 @@ var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   },
   defaultVariants: { variant: "muted" }
 });
-var StatusDot = React44.forwardRef(
+var StatusDot = React32.forwardRef(
   ({ variant, pulse, label, className, ...props }, ref) => {
     const a11y = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
     return /* @__PURE__ */ jsxs(
@@ -1429,7 +1429,7 @@ var StatusDot = React44.forwardRef(
   }
 );
 StatusDot.displayName = "StatusDot";
-var Table = React44.forwardRef(
+var Table = React32.forwardRef(
   ({ className, containerClassName, ...props }, ref) => (
     // A scrollable box must be reachable by keyboard (WCAG 2.1.1, and axe's
     // `scrollable-region-focusable`), or someone who can't drag horizontally
@@ -1456,11 +1456,11 @@ var Table = React44.forwardRef(
   )
 );
 Table.displayName = "Table";
-var TableHeader = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("thead", { ref, "data-slot": "table-header", className: cn(className), ...props }));
+var TableHeader = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("thead", { ref, "data-slot": "table-header", className: cn(className), ...props }));
 TableHeader.displayName = "TableHeader";
-var TableBody = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("tbody", { ref, "data-slot": "table-body", className: cn(className), ...props }));
+var TableBody = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("tbody", { ref, "data-slot": "table-body", className: cn(className), ...props }));
 TableBody.displayName = "TableBody";
-var TableFooter = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TableFooter = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "tfoot",
   {
     ref,
@@ -1470,7 +1470,7 @@ var TableFooter = React44.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 TableFooter.displayName = "TableFooter";
-var TableRow = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TableRow = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "tr",
   {
     ref,
@@ -1484,7 +1484,7 @@ var TableRow = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   }
 ));
 TableRow.displayName = "TableRow";
-var TableHead = React44.forwardRef(({ className, scope = "col", ...props }, ref) => /* @__PURE__ */ jsx(
+var TableHead = React32.forwardRef(({ className, scope = "col", ...props }, ref) => /* @__PURE__ */ jsx(
   "th",
   {
     ref,
@@ -1499,7 +1499,7 @@ var TableHead = React44.forwardRef(({ className, scope = "col", ...props }, ref)
   }
 ));
 TableHead.displayName = "TableHead";
-var TableCell = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TableCell = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "td",
   {
     ref,
@@ -1513,7 +1513,7 @@ var TableCell = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE_
   }
 ));
 TableCell.displayName = "TableCell";
-var TableCaption = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TableCaption = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "caption",
   {
     ref,
@@ -1541,7 +1541,7 @@ var textVariants = cva("", {
   },
   defaultVariants: { variant: "body" }
 });
-var Text = React44.forwardRef(
+var Text = React32.forwardRef(
   ({ as, variant, size, className, ...props }, ref) => {
     const Component = as ?? "span";
     return /* @__PURE__ */ jsx(
@@ -1571,7 +1571,7 @@ var alertVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Alert = React44.forwardRef(
+var Alert = React32.forwardRef(
   ({ className, variant, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1584,7 +1584,7 @@ var Alert = React44.forwardRef(
   )
 );
 Alert.displayName = "Alert";
-var AlertTitle = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertTitle = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1597,7 +1597,7 @@ var AlertTitle = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 AlertTitle.displayName = "AlertTitle";
-var AlertDescription = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertDescription = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1620,7 +1620,7 @@ var calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
   },
   defaultVariants: { variant: "muted" }
 });
-var Callout = React44.forwardRef(
+var Callout = React32.forwardRef(
   ({ variant, title, description, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "div",
     {
@@ -1660,7 +1660,7 @@ var emptyStateVariants = cva(
     defaultVariants: { variant: "dashed", size: "default" }
   }
 );
-var EmptyState = React44.forwardRef(
+var EmptyState = React32.forwardRef(
   ({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1672,7 +1672,7 @@ var EmptyState = React44.forwardRef(
   )
 );
 EmptyState.displayName = "EmptyState";
-var EmptyStateMedia = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var EmptyStateMedia = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "div",
   {
     ref,
@@ -1686,7 +1686,7 @@ var EmptyStateMedia = React44.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 EmptyStateMedia.displayName = "EmptyStateMedia";
-var EmptyStateTitle = React44.forwardRef(
+var EmptyStateTitle = React32.forwardRef(
   ({ as: Comp = "p", className, ...props }, ref) => /* @__PURE__ */ jsx(
     Comp,
     {
@@ -1701,7 +1701,7 @@ var EmptyStateTitle = React44.forwardRef(
   )
 );
 EmptyStateTitle.displayName = "EmptyStateTitle";
-var EmptyStateDescription = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var EmptyStateDescription = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1711,7 +1711,7 @@ var EmptyStateDescription = React44.forwardRef(({ className, ...props }, ref) =>
   }
 ));
 EmptyStateDescription.displayName = "EmptyStateDescription";
-var EmptyStateActions = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var EmptyStateActions = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "div",
   {
     ref,
@@ -1733,7 +1733,7 @@ var indicatorVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Progress = React44.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
+var Progress = React32.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
   const pct = Math.min(100, Math.max(0, value));
   const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
   return /* @__PURE__ */ jsx(
@@ -1756,7 +1756,7 @@ var Progress = React44.forwardRef(({ className, value = 0, variant, ...props }, 
   );
 });
 Progress.displayName = "Progress";
-var Skeleton = React44.forwardRef(
+var Skeleton = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1780,7 +1780,7 @@ var spinnerVariants = cva(
     defaultVariants: { size: "default" }
   }
 );
-var Spinner = React44.forwardRef(
+var Spinner = React32.forwardRef(
   ({ className, size, label = "Loading", ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1850,7 +1850,7 @@ var buttonVariants = cva(
     defaultVariants: { variant: "default", size: "default" }
   }
 );
-var Button = React44.forwardRef(
+var Button = React32.forwardRef(
   ({ className, variant, size, asChild, type, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return /* @__PURE__ */ jsx(
@@ -1865,9 +1865,9 @@ var Button = React44.forwardRef(
   }
 );
 Button.displayName = "Button";
-var Checkbox = React44.forwardRef(
+var Checkbox = React32.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React44.useId();
+    const generatedId = React32.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -1899,7 +1899,7 @@ var Checkbox = React44.forwardRef(
   }
 );
 Checkbox.displayName = "Checkbox";
-var Label = React44.forwardRef(
+var Label = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     LabelPrimitive.Root,
     {
@@ -1913,9 +1913,9 @@ var Label = React44.forwardRef(
   )
 );
 Label.displayName = "Label";
-var FieldContext = React44.createContext(null);
+var FieldContext = React32.createContext(null);
 function useField() {
-  return React44.useContext(FieldContext);
+  return React32.useContext(FieldContext);
 }
 function useFieldControlProps() {
   const field = useField();
@@ -1928,17 +1928,17 @@ function useFieldControlProps() {
     disabled: field.disabled || void 0
   };
 }
-var Field = React44.forwardRef(
+var Field = React32.forwardRef(
   ({ id, invalid = false, disabled = false, className, children, ...props }, ref) => {
-    const reactId = React44.useId();
+    const reactId = React32.useId();
     const controlId = id ?? `${reactId}-control`;
-    const [hasDescription, setHasDescription] = React44.useState(false);
-    const [hasError, setHasError] = React44.useState(false);
-    const register = React44.useCallback((part, present) => {
+    const [hasDescription, setHasDescription] = React32.useState(false);
+    const [hasError, setHasError] = React32.useState(false);
+    const register = React32.useCallback((part, present) => {
       if (part === "description") setHasDescription(present);
       else setHasError(present);
     }, []);
-    const ctx = React44.useMemo(
+    const ctx = React32.useMemo(
       () => ({
         controlId,
         descriptionId: `${reactId}-description`,
@@ -1966,7 +1966,7 @@ var Field = React44.forwardRef(
   }
 );
 Field.displayName = "Field";
-var FieldLabel = React44.forwardRef(
+var FieldLabel = React32.forwardRef(
   ({ htmlFor, className, ...props }, ref) => {
     const field = useField();
     return /* @__PURE__ */ jsx(
@@ -1982,10 +1982,10 @@ var FieldLabel = React44.forwardRef(
   }
 );
 FieldLabel.displayName = "FieldLabel";
-var FieldDescription = React44.forwardRef(({ className, ...props }, ref) => {
+var FieldDescription = React32.forwardRef(({ className, ...props }, ref) => {
   const field = useField();
   const register = field?.register;
-  React44.useEffect(() => {
+  React32.useEffect(() => {
     register?.("description", true);
     return () => register?.("description", false);
   }, [register]);
@@ -2001,11 +2001,11 @@ var FieldDescription = React44.forwardRef(({ className, ...props }, ref) => {
   );
 });
 FieldDescription.displayName = "FieldDescription";
-var FieldError = React44.forwardRef(({ className, children, ...props }, ref) => {
+var FieldError = React32.forwardRef(({ className, children, ...props }, ref) => {
   const field = useField();
   const register = field?.register;
   const present = children !== void 0 && children !== null && children !== false;
-  React44.useEffect(() => {
+  React32.useEffect(() => {
     register?.("error", present);
     return () => register?.("error", false);
   }, [register, present]);
@@ -2024,7 +2024,7 @@ var FieldError = React44.forwardRef(({ className, children, ...props }, ref) => 
   );
 });
 FieldError.displayName = "FieldError";
-var Input = React44.forwardRef(
+var Input = React32.forwardRef(
   ({ className, type, ...props }, ref) => /* @__PURE__ */ jsx(
     "input",
     {
@@ -2046,7 +2046,7 @@ function Select(props) {
 Select.displayName = "Select";
 var SelectValue = SelectPrimitive.Value;
 var SelectGroup = SelectPrimitive.Group;
-var SelectTrigger = React44.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var SelectTrigger = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   SelectPrimitive.Trigger,
   {
     ref,
@@ -2067,7 +2067,7 @@ var SelectTrigger = React44.forwardRef(({ className, children, ...props }, ref) 
   }
 ));
 SelectTrigger.displayName = "SelectTrigger";
-var SelectContent = React44.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
+var SelectContent = React32.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
   SelectPrimitive.Content,
   {
     ref,
@@ -2090,7 +2090,7 @@ var SelectContent = React44.forwardRef(({ className, children, position = "poppe
   }
 ) }));
 SelectContent.displayName = "SelectContent";
-var SelectItem = React44.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var SelectItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   SelectPrimitive.Item,
   {
     ref,
@@ -2109,7 +2109,7 @@ var SelectItem = React44.forwardRef(({ className, children, ...props }, ref) => 
   }
 ));
 SelectItem.displayName = "SelectItem";
-var SelectLabel = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var SelectLabel = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   SelectPrimitive.Label,
   {
     ref,
@@ -2122,7 +2122,7 @@ var SelectLabel = React44.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 SelectLabel.displayName = "SelectLabel";
-var SelectSeparator = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var SelectSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   SelectPrimitive.Separator,
   {
     ref,
@@ -2132,9 +2132,9 @@ var SelectSeparator = React44.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 SelectSeparator.displayName = "SelectSeparator";
-var Switch = React44.forwardRef(
+var Switch = React32.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React44.useId();
+    const generatedId = React32.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -2153,7 +2153,7 @@ var Switch = React44.forwardRef(
   }
 );
 Switch.displayName = "Switch";
-var Textarea = React44.forwardRef(
+var Textarea = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "textarea",
     {
@@ -2168,7 +2168,7 @@ var Textarea = React44.forwardRef(
   )
 );
 Textarea.displayName = "Textarea";
-var Accordion = React44.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
+var Accordion = React32.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Root,
   {
     ref,
@@ -2178,7 +2178,7 @@ var Accordion = React44.forwardRef(({ className, type = "single", ...props }, re
   }
 ));
 Accordion.displayName = "Accordion";
-var AccordionItem = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AccordionItem = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Item,
   {
     ref,
@@ -2188,7 +2188,7 @@ var AccordionItem = React44.forwardRef(({ className, ...props }, ref) => /* @__P
   }
 ));
 AccordionItem.displayName = "AccordionItem";
-var AccordionTrigger = React44.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
+var AccordionTrigger = React32.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
   AccordionPrimitive.Trigger,
   {
     ref,
@@ -2218,7 +2218,7 @@ var AccordionTrigger = React44.forwardRef(({ className, children, hideIndicator,
   }
 ) }));
 AccordionTrigger.displayName = "AccordionTrigger";
-var AccordionContent = React44.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+var AccordionContent = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Content,
   {
     forceMount: true,
@@ -2231,7 +2231,7 @@ var AccordionContent = React44.forwardRef(({ className, children, ...props }, re
   }
 ));
 AccordionContent.displayName = "AccordionContent";
-var Breadcrumb = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var Breadcrumb = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "nav",
   {
     ref,
@@ -2242,7 +2242,7 @@ var Breadcrumb = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 Breadcrumb.displayName = "Breadcrumb";
-var BreadcrumbList = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var BreadcrumbList = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "ol",
   {
     ref,
@@ -2255,7 +2255,7 @@ var BreadcrumbList = React44.forwardRef(({ className, ...props }, ref) => /* @__
   }
 ));
 BreadcrumbList.displayName = "BreadcrumbList";
-var BreadcrumbItem = React44.forwardRef(
+var BreadcrumbItem = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "li",
     {
@@ -2267,7 +2267,7 @@ var BreadcrumbItem = React44.forwardRef(
   )
 );
 BreadcrumbItem.displayName = "BreadcrumbItem";
-var BreadcrumbLink = React44.forwardRef(
+var BreadcrumbLink = React32.forwardRef(
   ({ className, asChild, ...props }, ref) => {
     const Comp = asChild ? Slot : "a";
     return /* @__PURE__ */ jsx(
@@ -2285,7 +2285,7 @@ var BreadcrumbLink = React44.forwardRef(
   }
 );
 BreadcrumbLink.displayName = "BreadcrumbLink";
-var BreadcrumbPage = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var BreadcrumbPage = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "span",
   {
     ref,
@@ -2344,7 +2344,7 @@ var cardVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Card = React44.forwardRef(
+var Card = React32.forwardRef(
   ({ className, variant, asChild, ...props }, ref) => {
     const Comp = asChild ? Slot : "div";
     return /* @__PURE__ */ jsx(
@@ -2359,7 +2359,7 @@ var Card = React44.forwardRef(
   }
 );
 Card.displayName = "Card";
-var CardHeader = React44.forwardRef(
+var CardHeader = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2374,7 +2374,7 @@ var CardHeader = React44.forwardRef(
   )
 );
 CardHeader.displayName = "CardHeader";
-var CardTitle = React44.forwardRef(
+var CardTitle = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2389,7 +2389,7 @@ var CardTitle = React44.forwardRef(
   )
 );
 CardTitle.displayName = "CardTitle";
-var CardDescription = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var CardDescription = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -2399,7 +2399,7 @@ var CardDescription = React44.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 CardDescription.displayName = "CardDescription";
-var CardAction = React44.forwardRef(
+var CardAction = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2411,11 +2411,11 @@ var CardAction = React44.forwardRef(
   )
 );
 CardAction.displayName = "CardAction";
-var CardContent = React44.forwardRef(
+var CardContent = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "card-content", className: cn("p-5 pt-0", className), ...props })
 );
 CardContent.displayName = "CardContent";
-var CardFooter = React44.forwardRef(
+var CardFooter = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2448,7 +2448,7 @@ var containerVariants = cva("mx-auto w-full", {
   },
   defaultVariants: { size: "lg", gutter: "md" }
 });
-var Container = React44.forwardRef(
+var Container = React32.forwardRef(
   ({ className, size, gutter, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2497,7 +2497,7 @@ var stackVariants = cva("flex", {
   },
   defaultVariants: { direction: "col", gap: "md", align: "stretch", justify: "start" }
 });
-var Stack = React44.forwardRef(
+var Stack = React32.forwardRef(
   ({ className, direction, gap, align, justify, wrap, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2525,7 +2525,7 @@ var gapMap = {
   lg: "gap-6",
   xl: "gap-10"
 };
-var Grid = React44.forwardRef(
+var Grid = React32.forwardRef(
   ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
     const auto = min != null;
     const minW = typeof min === "number" ? `${min}px` : min;
@@ -2568,7 +2568,7 @@ function Pagination({ className, ...props }) {
     }
   );
 }
-var PaginationContent = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var PaginationContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "ul",
   {
     ref,
@@ -2578,11 +2578,11 @@ var PaginationContent = React44.forwardRef(({ className, ...props }, ref) => /* 
   }
 ));
 PaginationContent.displayName = "PaginationContent";
-var PaginationItem = React44.forwardRef(
+var PaginationItem = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("li", { ref, "data-slot": "pagination-item", className: cn(className), ...props })
 );
 PaginationItem.displayName = "PaginationItem";
-var PaginationLink = React44.forwardRef(
+var PaginationLink = React32.forwardRef(
   ({ className, isActive, asChild, ...props }, ref) => {
     const Comp = asChild ? Slot : "a";
     return /* @__PURE__ */ jsx(
@@ -2631,7 +2631,7 @@ function PaginationEllipsis({
     }
   );
 }
-var Separator2 = React44.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
+var Separator2 = React32.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
   if (label != null && orientation === "horizontal") {
     return /* @__PURE__ */ jsxs(
       SeparatorPrimitive.Root,
@@ -2666,7 +2666,7 @@ var Separator2 = React44.forwardRef(({ className, orientation = "horizontal", de
   );
 });
 Separator2.displayName = "Separator";
-var Tabs = React44.forwardRef(
+var Tabs = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     TabsPrimitive.Root,
     {
@@ -2677,7 +2677,7 @@ var Tabs = React44.forwardRef(
   )
 );
 Tabs.displayName = "Tabs";
-var TabsList = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsList = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.List,
   {
     ref,
@@ -2690,7 +2690,7 @@ var TabsList = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   }
 ));
 TabsList.displayName = "TabsList";
-var TabsTrigger = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsTrigger = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.Trigger,
   {
     ref,
@@ -2704,7 +2704,7 @@ var TabsTrigger = React44.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 TabsTrigger.displayName = "TabsTrigger";
-var TabsContent = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.Content,
   {
     ref,
@@ -2713,34 +2713,50 @@ var TabsContent = React44.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 TabsContent.displayName = "TabsContent";
-var DialogContext = React44.createContext(null);
-function Dialog({
+var ModalContext = React32.createContext(null);
+function useModal() {
+  return React32.useContext(ModalContext);
+}
+function useModalPart(part) {
+  const modal = useModal();
+  const register = part === "title" ? modal?.setHasTitle : modal?.setHasDescription;
+  React32.useEffect(() => {
+    register?.(true);
+    return () => register?.(false);
+  }, [register]);
+  return part === "title" ? modal?.titleId : modal?.descriptionId;
+}
+function ModalRoot({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
+  className,
+  slot,
+  role,
+  dismissOnBackdrop = true,
   children
 }) {
-  const ref = React44.useRef(null);
-  const pressStartedOnBackdrop = React44.useRef(false);
-  const reactId = React44.useId();
+  const ref = React32.useRef(null);
+  const pressStartedOnBackdrop = React32.useRef(false);
+  const reactId = React32.useId();
   const titleId = `${reactId}-title`;
   const descriptionId = `${reactId}-description`;
-  const [uncontrolledOpen, setUncontrolledOpen] = React44.useState(defaultOpen);
+  const [uncontrolledOpen, setUncontrolledOpen] = React32.useState(defaultOpen);
   const isControlled = openProp !== void 0;
   const open = isControlled ? openProp : uncontrolledOpen;
-  const [hasTitle, setHasTitle] = React44.useState(false);
-  const [hasDescription, setHasDescription] = React44.useState(false);
-  React44.useEffect(() => {
+  const [hasTitle, setHasTitle] = React32.useState(false);
+  const [hasDescription, setHasDescription] = React32.useState(false);
+  React32.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (open && !el.open) el.showModal();
     else if (!open && el.open) el.close();
   }, [open]);
-  const close = React44.useCallback(() => {
+  const close = React32.useCallback(() => {
     if (!isControlled) setUncontrolledOpen(false);
     onOpenChange?.(false);
   }, [isControlled, onOpenChange]);
-  const ctx = React44.useMemo(
+  const ctx = React32.useMemo(
     () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
     [close, titleId, descriptionId]
   );
@@ -2750,25 +2766,174 @@ function Dialog({
       "dialog",
       {
         ref,
+        role,
         "aria-labelledby": hasTitle ? titleId : void 0,
         "aria-describedby": hasDescription ? descriptionId : void 0,
         onClose: close,
         onMouseDown: (event) => {
-          pressStartedOnBackdrop.current = event.target === ref.current;
+          pressStartedOnBackdrop.current = dismissOnBackdrop && event.target === ref.current;
         },
         onClick: (event) => {
-          if (event.target === ref.current && pressStartedOnBackdrop.current) close();
+          if (dismissOnBackdrop && event.target === ref.current && pressStartedOnBackdrop.current) {
+            close();
+          }
           pressStartedOnBackdrop.current = false;
         },
-        className: "m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
-        children: open ? /* @__PURE__ */ jsx(DialogContext.Provider, { value: ctx, children }) : null
+        "data-slot": slot,
+        className,
+        children: open ? /* @__PURE__ */ jsx(ModalContext.Provider, { value: ctx, children }) : null
       }
     )
   );
 }
-var DialogContent = React44.forwardRef(
+function AlertDialog({
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  children
+}) {
+  return /* @__PURE__ */ jsx(
+    ModalRoot,
+    {
+      open,
+      defaultOpen,
+      onOpenChange,
+      slot: "alert-dialog",
+      role: "alertdialog",
+      dismissOnBackdrop: false,
+      className: "m-auto w-[calc(100%-2rem)] max-w-md overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
+      children
+    }
+  );
+}
+var AlertDialogContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "div",
+  {
+    ref,
+    "data-slot": "alert-dialog-content",
+    className: cn(
+      "relative mx-auto w-full rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+      className
+    ),
+    ...props
+  }
+));
+AlertDialogContent.displayName = "AlertDialogContent";
+var AlertDialogHeader = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "div",
+  {
+    ref,
+    "data-slot": "alert-dialog-header",
+    className: cn("mb-4 flex flex-col gap-1.5", className),
+    ...props
+  }
+));
+AlertDialogHeader.displayName = "AlertDialogHeader";
+var AlertDialogTitle = React32.forwardRef(({ className, ...props }, ref) => {
+  const titleId = useModalPart("title");
+  return /* @__PURE__ */ jsx(
+    "h2",
+    {
+      ref,
+      id: titleId,
+      "data-slot": "alert-dialog-title",
+      className: cn(
+        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+        className
+      ),
+      ...props
+    }
+  );
+});
+AlertDialogTitle.displayName = "AlertDialogTitle";
+var AlertDialogDescription = React32.forwardRef(({ className, ...props }, ref) => {
+  const descriptionId = useModalPart("description");
+  return /* @__PURE__ */ jsx(
+    "p",
+    {
+      ref,
+      id: descriptionId,
+      "data-slot": "alert-dialog-description",
+      className: cn("text-sm leading-relaxed text-muted-foreground", className),
+      ...props
+    }
+  );
+});
+AlertDialogDescription.displayName = "AlertDialogDescription";
+var AlertDialogFooter = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "div",
+  {
+    ref,
+    "data-slot": "alert-dialog-footer",
+    className: cn(
+      "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3",
+      className
+    ),
+    ...props
+  }
+));
+AlertDialogFooter.displayName = "AlertDialogFooter";
+var AlertDialogCancel = React32.forwardRef(
+  ({ asChild, onClick, type, ...props }, ref) => {
+    const ctx = useModal();
+    const localRef = React32.useRef(null);
+    React32.useImperativeHandle(ref, () => localRef.current);
+    React32.useEffect(() => {
+      localRef.current?.focus();
+    }, []);
+    const Comp = asChild ? Slot : "button";
+    return /* @__PURE__ */ jsx(
+      Comp,
+      {
+        ref: localRef,
+        "data-slot": "alert-dialog-cancel",
+        type: asChild ? type : type ?? "button",
+        onClick: (event) => {
+          onClick?.(event);
+          if (!event.defaultPrevented) ctx?.close();
+        },
+        ...props
+      }
+    );
+  }
+);
+AlertDialogCancel.displayName = "AlertDialogCancel";
+var AlertDialogAction = React32.forwardRef(
+  ({ asChild, onClick, type, ...props }, ref) => {
+    const ctx = useModal();
+    const Comp = asChild ? Slot : "button";
+    return /* @__PURE__ */ jsx(
+      Comp,
+      {
+        ref,
+        "data-slot": "alert-dialog-action",
+        type: asChild ? type : type ?? "button",
+        onClick: (event) => {
+          onClick?.(event);
+          if (!event.defaultPrevented) ctx?.close();
+        },
+        ...props
+      }
+    );
+  }
+);
+AlertDialogAction.displayName = "AlertDialogAction";
+function Dialog({ open, defaultOpen = false, onOpenChange, children }) {
+  return /* @__PURE__ */ jsx(
+    ModalRoot,
+    {
+      open,
+      defaultOpen,
+      onOpenChange,
+      slot: "dialog",
+      className: "m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
+      children
+    }
+  );
+}
+var DialogContent = React32.forwardRef(
   ({ className, children, ...props }, ref) => {
-    const ctx = React44.useContext(DialogContext);
+    const ctx = useModal();
     return /* @__PURE__ */ jsxs(
       "div",
       {
@@ -2799,7 +2964,7 @@ var DialogContent = React44.forwardRef(
   }
 );
 DialogContent.displayName = "DialogContent";
-var DialogHeader = React44.forwardRef(
+var DialogHeader = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2811,18 +2976,13 @@ var DialogHeader = React44.forwardRef(
   )
 );
 DialogHeader.displayName = "DialogHeader";
-var DialogTitle = React44.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React44.useContext(DialogContext);
-  const setHasTitle = ctx?.setHasTitle;
-  React44.useEffect(() => {
-    setHasTitle?.(true);
-    return () => setHasTitle?.(false);
-  }, [setHasTitle]);
+var DialogTitle = React32.forwardRef(({ className, ...props }, ref) => {
+  const titleId = useModalPart("title");
   return /* @__PURE__ */ jsx(
     "h2",
     {
       ref,
-      id: ctx?.titleId,
+      id: titleId,
       "data-slot": "dialog-title",
       className: cn(
         "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
@@ -2833,18 +2993,13 @@ var DialogTitle = React44.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogTitle.displayName = "DialogTitle";
-var DialogDescription = React44.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React44.useContext(DialogContext);
-  const setHasDescription = ctx?.setHasDescription;
-  React44.useEffect(() => {
-    setHasDescription?.(true);
-    return () => setHasDescription?.(false);
-  }, [setHasDescription]);
+var DialogDescription = React32.forwardRef(({ className, ...props }, ref) => {
+  const descriptionId = useModalPart("description");
   return /* @__PURE__ */ jsx(
     "p",
     {
       ref,
-      id: ctx?.descriptionId,
+      id: descriptionId,
       "data-slot": "dialog-description",
       className: cn("text-sm leading-relaxed text-muted-foreground", className),
       ...props
@@ -2852,7 +3007,7 @@ var DialogDescription = React44.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogDescription.displayName = "DialogDescription";
-var DialogFooter = React44.forwardRef(
+var DialogFooter = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -2867,9 +3022,9 @@ var DialogFooter = React44.forwardRef(
   )
 );
 DialogFooter.displayName = "DialogFooter";
-var DialogClose = React44.forwardRef(
+var DialogClose = React32.forwardRef(
   ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = React44.useContext(DialogContext);
+    const ctx = useModal();
     const Comp = asChild ? Slot : "button";
     return /* @__PURE__ */ jsx(
       Comp,
@@ -2903,7 +3058,7 @@ DropdownMenu.displayName = "DropdownMenu";
 var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 var DropdownMenuGroup = DropdownMenuPrimitive.Group;
 var DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-var DropdownMenuContent = React44.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var DropdownMenuContent = React32.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Content,
   {
     ref,
@@ -2915,7 +3070,7 @@ var DropdownMenuContent = React44.forwardRef(({ className, sideOffset = 6, ...pr
   }
 ) }));
 DropdownMenuContent.displayName = "DropdownMenuContent";
-var DropdownMenuItem = React44.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuItem = React32.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Item,
   {
     ref,
@@ -2931,7 +3086,7 @@ var DropdownMenuItem = React44.forwardRef(({ className, variant = "default", ins
   }
 ));
 DropdownMenuItem.displayName = "DropdownMenuItem";
-var DropdownMenuCheckboxItem = React44.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuCheckboxItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.CheckboxItem,
   {
     ref,
@@ -2945,7 +3100,7 @@ var DropdownMenuCheckboxItem = React44.forwardRef(({ className, children, ...pro
   }
 ));
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
-var DropdownMenuRadioItem = React44.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuRadioItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.RadioItem,
   {
     ref,
@@ -2959,7 +3114,7 @@ var DropdownMenuRadioItem = React44.forwardRef(({ className, children, ...props 
   }
 ));
 DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
-var DropdownMenuLabel = React44.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuLabel = React32.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Label,
   {
     ref,
@@ -2973,7 +3128,7 @@ var DropdownMenuLabel = React44.forwardRef(({ className, inset, ...props }, ref)
   }
 ));
 DropdownMenuLabel.displayName = "DropdownMenuLabel";
-var DropdownMenuSeparator = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Separator,
   {
     ref,
@@ -3001,7 +3156,7 @@ function DropdownMenuShortcut({
   );
 }
 var DropdownMenuSub = DropdownMenuPrimitive.Sub;
-var DropdownMenuSubTrigger = React44.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuSubTrigger = React32.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.SubTrigger,
   {
     ref,
@@ -3015,7 +3170,7 @@ var DropdownMenuSubTrigger = React44.forwardRef(({ className, inset, children, .
   }
 ));
 DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
-var DropdownMenuSubContent = React44.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var DropdownMenuSubContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.SubContent,
   {
     ref,
@@ -3038,7 +3193,7 @@ function InfoTip({
   className,
   contentClassName
 }) {
-  const titleId = React44.useId();
+  const titleId = React32.useId();
   return /* @__PURE__ */ jsxs(PopoverPrimitive2.Root, { open, onOpenChange, children: [
     /* @__PURE__ */ jsx(
       PopoverPrimitive2.Trigger,
@@ -3107,7 +3262,7 @@ Popover.displayName = "Popover";
 var PopoverTrigger = PopoverPrimitive2.Trigger;
 var PopoverAnchor = PopoverPrimitive2.Anchor;
 var PopoverClose = PopoverPrimitive2.Close;
-var PopoverContent = React44.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx(
+var PopoverContent = React32.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(PopoverPrimitive2.Portal, { children: /* @__PURE__ */ jsx(
   PopoverPrimitive2.Content,
   {
     ref,
@@ -3124,7 +3279,6 @@ var PopoverContent = React44.forwardRef(({ className, align = "center", side = "
   }
 ) }));
 PopoverContent.displayName = "PopoverContent";
-var SheetContext = React44.createContext(null);
 var sheetVariants = cva(
   [
     "m-0 max-h-none border-border bg-card p-0 text-card-foreground shadow-[var(--shadow-lg)]",
@@ -3149,63 +3303,28 @@ var sheetVariants = cva(
   }
 );
 function Sheet({
-  open: openProp,
+  open,
   defaultOpen = false,
   onOpenChange,
   side,
   className,
   children
 }) {
-  const ref = React44.useRef(null);
-  const pressStartedOnBackdrop = React44.useRef(false);
-  const reactId = React44.useId();
-  const titleId = `${reactId}-title`;
-  const descriptionId = `${reactId}-description`;
-  const [uncontrolledOpen, setUncontrolledOpen] = React44.useState(defaultOpen);
-  const isControlled = openProp !== void 0;
-  const open = isControlled ? openProp : uncontrolledOpen;
-  const [hasTitle, setHasTitle] = React44.useState(false);
-  const [hasDescription, setHasDescription] = React44.useState(false);
-  React44.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    else if (!open && el.open) el.close();
-  }, [open]);
-  const close = React44.useCallback(() => {
-    if (!isControlled) setUncontrolledOpen(false);
-    onOpenChange?.(false);
-  }, [isControlled, onOpenChange]);
-  const ctx = React44.useMemo(
-    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
-    [close, titleId, descriptionId]
-  );
-  return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
-    /* @__PURE__ */ jsx(
-      "dialog",
-      {
-        ref,
-        "aria-labelledby": hasTitle ? titleId : void 0,
-        "aria-describedby": hasDescription ? descriptionId : void 0,
-        onClose: close,
-        onMouseDown: (event) => {
-          pressStartedOnBackdrop.current = event.target === ref.current;
-        },
-        onClick: (event) => {
-          if (event.target === ref.current && pressStartedOnBackdrop.current) close();
-          pressStartedOnBackdrop.current = false;
-        },
-        "data-slot": "sheet",
-        className: cn(sheetVariants({ side }), className),
-        children: open ? /* @__PURE__ */ jsx(SheetContext.Provider, { value: ctx, children }) : null
-      }
-    )
+  return /* @__PURE__ */ jsx(
+    ModalRoot,
+    {
+      open,
+      defaultOpen,
+      onOpenChange,
+      slot: "sheet",
+      className: cn(sheetVariants({ side }), className),
+      children
+    }
   );
 }
-var SheetContent = React44.forwardRef(
+var SheetContent = React32.forwardRef(
   ({ className, children, ...props }, ref) => {
-    const ctx = React44.useContext(SheetContext);
+    const ctx = useModal();
     return /* @__PURE__ */ jsxs(
       "div",
       {
@@ -3233,7 +3352,7 @@ var SheetContent = React44.forwardRef(
   }
 );
 SheetContent.displayName = "SheetContent";
-var SheetHeader = React44.forwardRef(
+var SheetHeader = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -3245,18 +3364,13 @@ var SheetHeader = React44.forwardRef(
   )
 );
 SheetHeader.displayName = "SheetHeader";
-var SheetTitle = React44.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React44.useContext(SheetContext);
-  const setHasTitle = ctx?.setHasTitle;
-  React44.useEffect(() => {
-    setHasTitle?.(true);
-    return () => setHasTitle?.(false);
-  }, [setHasTitle]);
+var SheetTitle = React32.forwardRef(({ className, ...props }, ref) => {
+  const titleId = useModalPart("title");
   return /* @__PURE__ */ jsx(
     "h2",
     {
       ref,
-      id: ctx?.titleId,
+      id: titleId,
       "data-slot": "sheet-title",
       className: cn(
         "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
@@ -3267,18 +3381,13 @@ var SheetTitle = React44.forwardRef(({ className, ...props }, ref) => {
   );
 });
 SheetTitle.displayName = "SheetTitle";
-var SheetDescription = React44.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React44.useContext(SheetContext);
-  const setHasDescription = ctx?.setHasDescription;
-  React44.useEffect(() => {
-    setHasDescription?.(true);
-    return () => setHasDescription?.(false);
-  }, [setHasDescription]);
+var SheetDescription = React32.forwardRef(({ className, ...props }, ref) => {
+  const descriptionId = useModalPart("description");
   return /* @__PURE__ */ jsx(
     "p",
     {
       ref,
-      id: ctx?.descriptionId,
+      id: descriptionId,
       "data-slot": "sheet-description",
       className: cn("text-sm leading-relaxed text-muted-foreground", className),
       ...props
@@ -3286,7 +3395,7 @@ var SheetDescription = React44.forwardRef(({ className, ...props }, ref) => {
   );
 });
 SheetDescription.displayName = "SheetDescription";
-var SheetFooter = React44.forwardRef(
+var SheetFooter = React32.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -3301,9 +3410,9 @@ var SheetFooter = React44.forwardRef(
   )
 );
 SheetFooter.displayName = "SheetFooter";
-var SheetClose = React44.forwardRef(
+var SheetClose = React32.forwardRef(
   ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = React44.useContext(SheetContext);
+    const ctx = useModal();
     const Comp = asChild ? Slot : "button";
     return /* @__PURE__ */ jsx(
       Comp,
@@ -3326,7 +3435,7 @@ function Tooltip(props) {
 }
 Tooltip.displayName = "Tooltip";
 var TooltipTrigger = TooltipPrimitive.Trigger;
-var TooltipContent = React44.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var TooltipContent = React32.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   TooltipPrimitive.Content,
   {
     ref,
@@ -3343,6 +3452,6 @@ var TooltipContent = React44.forwardRef(({ className, sideOffset = 6, ...props }
 ) }));
 TooltipContent.displayName = "TooltipContent";
 
-export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Link, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
+export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Link, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

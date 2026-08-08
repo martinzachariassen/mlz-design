@@ -37,13 +37,18 @@ src/
     brand/              BrandMark/Wordmark/Lockup, GlitchText, GridBackground,
                         FloatingMarks, ProjectCard, RepoBanner, SocialCard,
                         ThemeToggle/AccentPicker
-    data-display/       Avatar, Badge, DataList, Kbd, Prose, StatusDot, Table, Text
-    feedback/           Alert, Callout, Progress, Skeleton, Spinner, Toaster
-    forms/              Button, Checkbox, Input, Label, RadioGroup, Select,
-                        Switch, Textarea, Toggle, ToggleGroup
+    data-display/       Avatar, Badge, Code/CodeBlock, DataList, Kbd, Link,
+                        Prose, Stat, StatusDot, Table, Text
+    feedback/           Alert, Callout, EmptyState, Progress, Skeleton, Spinner,
+                        Toaster
+    forms/              Button, Checkbox, Field, Input, Label, RadioGroup,
+                        Select, Switch, Textarea, Toggle, ToggleGroup
     layout/             Accordion, Breadcrumb, Card, Container/Stack/Grid,
                         Pagination, Separator, Tabs
-    overlay/            Dialog, DropdownMenu, InfoTip, Sheet, Tooltip
+    overlay/            AlertDialog, Dialog, DropdownMenu, InfoTip, Popover,
+                        Sheet, Tooltip
+                        modal-root.tsx — the shared <dialog> engine, internal
+                        modal-test-env.ts — the jsdom stub, test-only
   foundations/          Storybook-only: Introduction, Installation, Theming,
                         Colours, Colour usage, Typography, Motion, Responsive,
                         Logo, Favicon, Patterns + theme-split.tsx
@@ -86,12 +91,12 @@ Which layer owns what:
 
 | Layer | Components |
 | ----- | ---------- |
-| **Radix primitive** | `Accordion` · `Avatar` · `DropdownMenu` · `InfoTip` (popover) · `Label` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
-| **Platform element** — Radix would add JS for what the browser already does | `Dialog` and `Sheet` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Table` (a real `<table>`) · `DataList` (a real `<dl>`) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
+| **Radix primitive** | `Accordion` · `Avatar` · `DropdownMenu` · `Popover` · `InfoTip` (a narrower popover) · `Label` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
+| **Platform element** — Radix would add JS for what the browser already does | `Dialog`, `Sheet` and `AlertDialog` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Table` (a real `<table>`) · `DataList` (a real `<dl>`) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
 | **Third party** — the one non-Radix runtime dependency | `Toaster` (`sonner`, with its own styling switched off and every slot re-dressed from semantic tokens) |
 | **Presentational only** — no behaviour to own | everything else: `Alert`, `Badge`, `Breadcrumb`, `Callout`, `Card`, `Kbd`, `Pagination`, `Prose`, `Skeleton`, `Spinner`, `StatusDot`, `Text`, the layout primitives, all of `brand/` |
 
-Two of those placements are worth spelling out, because they look like exceptions and aren't. **`Breadcrumb` and `Pagination` are presentational** even though they navigate: they render real `<a>` elements inside a landmark `<nav>`, and the browser already owns every behaviour they need — bookmarkable URLs, middle-click, back/forward. Radix has no primitive for either. **`Sheet` runs the same `<dialog>` + `showModal()` engine as `Dialog`** — separately implemented rather than shared, so the two can diverge; only the transform and the `side` variant differ today. If either grows a third behaviour, extract the engine rather than copying it a third time.
+Two of those placements are worth spelling out, because they look like exceptions and aren't. **`Breadcrumb` and `Pagination` are presentational** even though they navigate: they render real `<a>` elements inside a landmark `<nav>`, and the browser already owns every behaviour they need — bookmarkable URLs, middle-click, back/forward. Radix has no primitive for either. **`Dialog`, `Sheet` and `AlertDialog` share one `<dialog>` + `showModal()` engine**, `src/components/overlay/modal-root.tsx` — internal, never exported. It owns the controlled/uncontrolled state, the generated `aria-labelledby` / `aria-describedby` ids, and the backdrop-dismissal rule; the platform owns the focus trap, Esc, inerting and the top layer. Each component supplies its own surface classes and, for `AlertDialog`, `role="alertdialog"` with backdrop dismissal off.
 
 Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not via the unified `radix-ui` meta-package: this ships as a library, and the meta-package would make every consumer install ~40 primitives to use one. A corollary that has bitten once: **every Radix package a component imports must be in `dependencies`**, not merely resolvable through another package's tree. `tsup` externalises exactly `dependencies` + `peerDependencies`, so an undeclared one gets silently *bundled* into `dist/index.js` while the `.d.ts` still imports it by name — which typechecks here and fails for anyone on pnpm's strict layout or Yarn PnP.
 

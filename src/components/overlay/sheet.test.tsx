@@ -2,6 +2,7 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { Button } from "../forms/button";
+import { stubNativeDialog } from "./modal-test-env";
 import {
   Sheet,
   SheetClose,
@@ -12,20 +13,7 @@ import {
   SheetTitle,
 } from "./sheet";
 
-// jsdom ships <dialog> but not its modal methods — the same stub dialog.test.tsx
-// uses. Focus-trapping and Esc are the platform's job and are only meaningful in
-// a real browser.
-beforeAll(() => {
-  if (!HTMLDialogElement.prototype.showModal) {
-    HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
-      this.setAttribute("open", "");
-    };
-    HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
-      this.removeAttribute("open");
-      this.dispatchEvent(new Event("close"));
-    };
-  }
-});
+beforeAll(stubNativeDialog);
 
 describe("Sheet", () => {
   it("names and describes itself from its title and description", () => {
