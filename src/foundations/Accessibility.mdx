@@ -1,0 +1,110 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Get started/Accessibility" />
+
+# Accessibility
+
+Accessibility here is a **build gate**, not a review step. Every story in this
+Storybook is run through axe in a real browser on every pull request, at WCAG 2.1
+level A and AA, and a single violation fails CI. That is the floor, and it is
+enforced automatically — the sections below are what the system does on top of it.
+
+## What you inherit
+
+**A focus ring you cannot lose.** `base.css` sets one `:focus-visible` rule for
+the whole document — a 2px `var(--ring)` outline at 2px offset. It re-tints with
+the accent, it survives dark mode, and no component overrides it with
+`outline: none`. If you build your own controls on these tokens, you get it too.
+
+**Behaviour from primitives, not from us.** Anything with a real keyboard
+pattern is a Radix primitive underneath, so the WAI-ARIA roles, roving focus and
+type-ahead are the reference implementations rather than our approximations. The
+things the browser already does well — modality, focus trapping, form semantics —
+stay native. See **Architecture** in the repo docs for which tier owns what.
+
+**Motion that respects the user.** `@media (prefers-reduced-motion: reduce)` in
+`base.css` collapses every animation and transition to 0.01ms globally. On top of
+that, `data-motion="off"` on `<html>` or any subtree kills animations outright —
+the toolbar's **Motion** switch drives exactly that attribute, so you can check
+any story both ways without touching OS settings.
+
+**Windows High Contrast.** Under `forced-colors: active` the system stops
+fighting the OS palette: `--ring` becomes `Highlight` and `--border` becomes
+`CanvasText`, so focus and structure stay visible when the user's colours win.
+
+**Contrast built into the palette.** Every surface token is paired with a
+`-foreground` chosen to clear AA against it, in both themes and all five accent
+families. Use the pairs (`bg-primary` with `text-primary-foreground`) and
+contrast is handled; mix and match across pairs and it is not.
+
+## What is still yours
+
+The gate cannot see intent. These are the things it will not catch for you:
+
+**Names for icon-only controls.** A glyph is not an accessible name. Any
+icon-only `Button`, `Toggle` or `DialogClose` needs an `aria-label`.
+
+**Label association.** `Label` needs `htmlFor` pointing at the control's `id`,
+or the control nested inside it. An unassociated label is a visual label only,
+and axe cannot always tell the difference.
+
+**Heading order.** Components render the heading level you ask for.
+`CardTitle` and `DialogTitle` do not know where they sit in your page outline.
+
+**Meaning carried only by colour.** `StatusDot` and `Badge` will happily encode
+state as a hue alone. Pair them with text.
+
+**Live-region urgency.** `Alert` is a static panel — it does not announce
+itself. If something needs to interrupt, reach for `toast()`, which mounts into
+sonner's live region.
+
+## Keyboard reference
+
+Native elements (`Button`, `Input`, `Textarea`, `Checkbox`, `Switch`,
+`BreadcrumbLink`, `PaginationLink`) behave exactly as the browser defines them
+and are not repeated here.
+
+| Component | Keys |
+| --- | --- |
+| `Tabs` | The tab list is **one** tab stop. `←` `→` (or `↑` `↓` when vertical) move *and* activate — activation follows focus. `Home` / `End` jump to the ends. `Tab` moves on into the panel. |
+| `Accordion` | `Tab` moves between triggers. `Enter` / `Space` opens and closes. `↑` `↓` move between triggers. `Home` / `End` jump to the ends. |
+| `RadioGroup` | The group is one tab stop. `↑` `↓` `←` `→` move focus *and* select. `Space` selects the focused item. |
+| `Select` | `Space`, `Enter` or `↓` opens. `↑` `↓` move, typing jumps by prefix, `Enter` selects, `Esc` closes and returns focus to the trigger. |
+| `ToggleGroup` | One tab stop; arrows move within the group. `Space` / `Enter` toggles. `Toggle` on its own is an ordinary button that reports state through `aria-pressed`. |
+| `DropdownMenu` | `Enter`, `Space` or `↓` opens. `↑` `↓` move, typing jumps by prefix. `→` opens a submenu, `←` closes it. `Esc` closes everything and returns focus to the trigger. |
+| `Dialog`, `Sheet` | Native `<dialog>` + `showModal()`: focus moves in, the rest of the page is inert, `Tab` cycles inside, `Esc` closes. All from the platform. |
+| `Tooltip` | Opens on **focus** as well as hover — keyboard users get it too. `Esc` dismisses. It is attached as a *description*, so it never replaces the trigger's name. |
+| `InfoTip` | A popover, not a tooltip: `Enter` / `Space` opens, `Esc` closes, focus returns to the trigger. Use it when the help text is long enough that a user needs to keep it open. |
+| `Toaster` | Sonner's default hotkey (`⌥`/`alt` + `T`) moves focus into the toast region. |
+
+## Checking your own work
+
+The same gate runs locally. It needs a **built and served** Storybook — the dev
+server is not enough:
+
+```bash
+mise run a11y
+```
+
+Or by hand:
+
+```bash
+bun run build:storybook
+bunx http-server storybook-static --port 6006 --silent &
+bun run test-storybook --url http://127.0.0.1:6006
+```
+
+The run is scoped to the preview `body` rather than `#storybook-root`, so
+portalled overlays — dialogs, menus, listboxes, tooltips — are audited too. That
+is deliberate: a root-scoped run skips exactly the markup most worth checking.
+
+In development, the **Accessibility** panel gives the same axe results per story
+without the full build. It is dev-only by design; the CI gate does not depend on
+it.
+
+A story tunes the gate with the standard `a11y` parameter — prefer disabling one
+rule over disabling the story:
+
+```tsx
+parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } }
+```

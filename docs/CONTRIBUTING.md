@@ -17,6 +17,42 @@ If you use [mise](https://mise.jdx.dev), `mise install && mise run setup` pins t
 
 Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR. Any PR that touches `src/` **must** refresh the committed `dist/` (`bun run build`) — it's the token-free fallback for `bun add github:...`, and CI fails the `verify` job if it's stale. See [architecture.md](architecture.md) for the token layering and repo layout.
 
+## Testing
+
+There are **two tiers**, and they check different things. Both gate `main`.
+
+**Vitest + Testing Library** (`bun run test`) is the fast tier: jsdom, no browser, run on every commit. Tests colocate as `*.test.tsx` next to their component. They assert behaviour and API — that `Toggle` reports through `aria-pressed`, that `ToggleGroup` passes `variant` down through context, that a controlled component stays controlled. Class assertions are fair game (`expect(item.className).toContain("border-input")`), because the classes *are* the styling contract, but prefer a role query over a class query wherever one exists. Vitest runs with `globals: true` so Testing Library's auto-cleanup registers.
+
+**axe over every story** is the slow tier: a real Chromium, driven by `@storybook/test-runner` against a built Storybook. `.storybook/test-runner.ts` runs WCAG 2.1 A/AA on each story and fails the build on any violation — currently 161 checks. It is scoped to the preview `body` rather than `#storybook-root` on purpose: dialogs, menus, listboxes and tooltips portal to `document.body`, and a root-scoped run would silently skip exactly the markup most worth auditing.
+
+Run it locally — it needs a *built and served* Storybook, not the dev server:
+
+```bash
+mise run a11y                     # build → serve → axe, in one task
+```
+
+or by hand:
+
+```bash
+bun run build:storybook
+bunx http-server storybook-static --port 6006 --silent &
+bun run test-storybook --url http://127.0.0.1:6006
+```
+
+A story tunes or opts out of the gate with the standard `a11y` parameter:
+
+```tsx
+// Skip the whole story — use sparingly, and say why in a comment.
+parameters: { a11y: { disable: true } }
+
+// Or disable one rule, which is almost always the better answer.
+parameters: { a11y: { config: { rules: [{ id: "color-contrast", enabled: false }] } } }
+```
+
+Prefer the per-rule form. A blanket `disable` hides every future regression in that story too, and the reason it was added is rarely still true a year later.
+
+**What to write for a new component.** A story is not optional — the a11y gate only sees what has a story, so an unstoried component is an unaudited one. Beyond that: a unit test for anything with state, a variant, or a prop that changes markup; a `LightDark` story (see `theme-split.tsx`) for anything whose colours could break in one theme; and an interaction test for anything with a keyboard pattern of its own.
+
 ## Releasing
 
 Automated with [Changesets](https://github.com/changesets/changesets) → GitHub Packages. There's no manual version bump or tag — you only ever describe changes; `release.yml` does the rest on merge to `main`.

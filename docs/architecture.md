@@ -23,15 +23,22 @@ src/
   lib/
     cn.ts               clsx + tailwind-merge
     theme.tsx           ThemeProvider / useTheme / init script
+    icons.tsx           the handful of glyphs components draw themselves —
+                        internal, never exported (consumers bring lucide-react)
   components/           grouped by function, kebab-case files
-    brand/              BrandMark, GlitchText, ProjectCard, RepoBanner, SocialCard…
-    data-display/       Badge, Avatar, DataList, Prose, StatusDot, Text, Kbd
-    feedback/           Alert, Callout, Progress, Skeleton, Spinner
-    forms/              Button, Input, Label, Checkbox, Switch, Textarea
-    layout/             Card, Container/Stack/Grid, Accordion, Tabs, Separator
-    overlay/            Dialog, InfoTip
-  foundations/          Storybook-only: Introduction, Colours, Typography, Motion,
-                        Patterns, Logo, Responsive… + theme-split.tsx
+    brand/              BrandMark/Wordmark/Lockup, GlitchText, GridBackground,
+                        FloatingMarks, ProjectCard, RepoBanner, SocialCard,
+                        ThemeToggle/AccentPicker
+    data-display/       Avatar, Badge, DataList, Kbd, Prose, StatusDot, Table, Text
+    feedback/           Alert, Callout, Progress, Skeleton, Spinner, Toaster
+    forms/              Button, Checkbox, Input, Label, RadioGroup, Select,
+                        Switch, Textarea, Toggle, ToggleGroup
+    layout/             Accordion, Breadcrumb, Card, Container/Stack/Grid,
+                        Pagination, Separator, Tabs
+    overlay/            Dialog, DropdownMenu, InfoTip, Sheet, Tooltip
+  foundations/          Storybook-only: Introduction, Installation, Theming,
+                        Colours, Colour usage, Typography, Motion, Responsive,
+                        Logo, Favicon, Patterns + theme-split.tsx
   styles/
     index.css           the one-import bundle                → ./styles/index.css
     index-self-hosted.css  same, with bundled WOFF2 fonts    → ./styles/index-self-hosted.css
@@ -71,13 +78,16 @@ Which layer owns what:
 
 | Layer | Components |
 | ----- | ---------- |
-| **Radix primitive** | `Tabs` · `Accordion` · `InfoTip` (popover) · `Avatar` · `Progress` · `Separator` · `Label`, plus `Slot` for `asChild` |
-| **Platform element** — Radix would add JS for what the browser already does | `Dialog` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
-| **Presentational only** — no behaviour to own | everything else: `Badge`, `Card`, `Text`, `Prose`, `Kbd`, `Callout`, `Alert`, `Skeleton`, `Spinner`, `StatusDot`, `DataList`, the layout primitives, all of `brand/` |
+| **Radix primitive** | `Accordion` · `Avatar` · `DropdownMenu` · `InfoTip` (popover) · `Label` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
+| **Platform element** — Radix would add JS for what the browser already does | `Dialog` and `Sheet` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Table` (a real `<table>`) · `DataList` (a real `<dl>`) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
+| **Third party** — the one non-Radix runtime dependency | `Toaster` (`sonner`, with its own styling switched off and every slot re-dressed from semantic tokens) |
+| **Presentational only** — no behaviour to own | everything else: `Alert`, `Badge`, `Breadcrumb`, `Callout`, `Card`, `Kbd`, `Pagination`, `Prose`, `Skeleton`, `Spinner`, `StatusDot`, `Text`, the layout primitives, all of `brand/` |
 
-Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not via the unified `radix-ui` meta-package: this ships as a library, and the meta-package would make every consumer install ~40 primitives to use one.
+Two of those placements are worth spelling out, because they look like exceptions and aren't. **`Breadcrumb` and `Pagination` are presentational** even though they navigate: they render real `<a>` elements inside a landmark `<nav>`, and the browser already owns every behaviour they need — bookmarkable URLs, middle-click, back/forward. Radix has no primitive for either. **`Sheet` runs the same `<dialog>` + `showModal()` engine as `Dialog`** — separately implemented rather than shared, so the two can diverge; only the transform and the `side` variant differ today. If either grows a third behaviour, extract the engine rather than copying it a third time.
 
-`asChild` (via `@radix-ui/react-slot`) is available on `Button`, `Badge`, `Card` and `DialogClose` — render a link or any other element while keeping the component's styling and props.
+Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not via the unified `radix-ui` meta-package: this ships as a library, and the meta-package would make every consumer install ~40 primitives to use one. A corollary that has bitten once: **every Radix package a component imports must be in `dependencies`**, not merely resolvable through another package's tree. `tsup` externalises exactly `dependencies` + `peerDependencies`, so an undeclared one gets silently *bundled* into `dist/index.js` while the `.d.ts` still imports it by name — which typechecks here and fails for anyone on pnpm's strict layout or Yarn PnP.
+
+`asChild` (via `@radix-ui/react-slot`) is wired by hand on `Button`, `Badge`, `Card`, `BreadcrumbLink`, `PaginationLink`, `DialogClose` and `SheetClose` — render a router link or any other element while keeping the component's styling and props. The Radix-backed components (`Select`, `DropdownMenu`, `Tooltip`…) get `asChild` from the primitive itself, so it works there without us doing anything.
 
 ## Conventions that bite
 
