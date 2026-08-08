@@ -37,11 +37,28 @@ jobs:
       - run: bun run build
       # dist/ is committed as the fallback for `bun add github:...`, so a PR that
       # changes src/ without rebuilding would ship stale code to those consumers.
+      #
+      # Everything in dist EXCEPT the `.d.ts`. `dist/index.js` is bit-identical
+      # across rebuilds; `dist/index.d.ts` is not — TypeScript orders union
+      # members by internal type ids that depend on the order modules happen to
+      # be processed, so a CVA `variant` union emits as
+      # `"success" | "warning" | "accent"` on one run and
+      # `"accent" | "success" | "warning"` on the next. Measured at roughly 1 run
+      # in 6 on an unchanged tree, which failed PRs for no real reason.
+      #
+      # Nothing is lost: the guard exists to catch "changed src/ without
+      # rebuilding", and any added, removed or renamed export changes
+      # `dist/index.js` too. Union ordering is invisible to consumers.
+      #
+      # `:(exclude)` is git pathspec magic and is load-bearing — a plain
+      # `dist/**/*.js` pathspec matches *nothing* (git's default globbing won't
+      # cross `/`), so writing it that way would silently pass everything.
       - name: Committed dist/ is up to date
         run: |
-          if [ -n "$(git status --porcelain -- dist)" ]; then
+          stale=$(git status --porcelain -- dist ':(exclude)dist/*.d.ts')
+          if [ -n "$stale" ]; then
             echo "::error::dist/ is stale — run 'bun run build' and commit the result."
-            git status --porcelain -- dist
+            echo "$stale"
             exit 1
           fi
       - run: bun run build:storybook
