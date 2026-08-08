@@ -1,0 +1,15 @@
+import { Markdown, Meta } from "@storybook/addon-docs/blocks";
+// Read straight from the repo root at build time, so the published playground
+// always shows the changelog of the exact commit it was built from. Changesets
+// owns this file — never edit it by hand.
+import changelog from "../../CHANGELOG.md?raw";
+
+<Meta title="Reference/Changelog" />
+
+# Changelog
+
+Written by [Changesets](https://github.com/changesets/changesets) from the
+changeset each PR carries, then published to GitHub Packages. Releases and tags
+are cut automatically — see **Contributing** in the repo docs for the flow.
+
+<Markdown>{changelog}</Markdown>

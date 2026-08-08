@@ -47,7 +47,7 @@ const preview: Preview = {
       storySort: {
         order: [
           "Get started",
-          ["Introduction", "Installation", "Theming"],
+          ["Introduction", "Installation", "Theming", "Accessibility"],
           "Foundations",
           ["Colour", "Colour usage", "Typography", "Motion", "Responsive"],
           "Brand",
@@ -65,6 +65,8 @@ const preview: Preview = {
           "Components",
           ["Actions", "Forms", "Data display", "Feedback", "Layout", "Overlay"],
           "Patterns",
+          "Reference",
+          ["Tokens", "Changelog"],
         ],
       },
     },
