@@ -1,6 +1,21 @@
 import type { Decorator, Preview } from "@storybook/react-vite";
 import { useEffect } from "react";
+import { breakpoints } from "../src/tokens";
 import "./app.css";
+
+// Viewport presets generated from the system's own breakpoint ladder, so
+// responsive checks happen at the widths the components actually switch at
+// rather than at some stock phone sizes. `mobile` is the one width below `sm`,
+// where every `direction="responsive"` / `cols` utility is in its stacked state.
+const viewports = {
+  mobile: { name: "Mobile (below sm)", styles: { width: "23.4375rem", height: "60rem" } },
+  ...Object.fromEntries(
+    Object.entries(breakpoints).map(([name, width]) => [
+      name,
+      { name: `${name} (${width})`, styles: { width, height: "60rem" } },
+    ]),
+  ),
+} as const;
 
 // One decorator, two independent toolbar dimensions (Theme + Accent). Both are
 // applied to the preview <html>, so every token in theme.css re-resolves live —
@@ -24,6 +39,7 @@ const preview: Preview = {
       expanded: true,
     },
     a11y: { test: "todo" },
+    viewport: { options: viewports },
     docs: { toc: true },
     options: {
       // Enumerate every level: anything unlisted falls through to definition

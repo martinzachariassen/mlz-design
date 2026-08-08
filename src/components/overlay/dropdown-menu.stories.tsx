@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
+import { expect, userEvent, within } from "storybook/test";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Button } from "../forms/button";
 import {
@@ -48,6 +49,27 @@ type Story = StoryObj<typeof meta>;
 
 /** Every prop wired to a control. Open it and try the arrow keys, Home/End, and type-ahead. */
 export const Playground: Story = {
+  parameters: {
+    a11y: {
+      // A *modal* Radix overlay marks the rest of the page `aria-hidden` while
+      // it's open (via the `aria-hidden` package), and axe then flags the
+      // still-focusable trigger underneath as `aria-hidden-focus`. That is
+      // Radix's modal strategy, not our markup — focus is moved into the
+      // overlay, so screen readers behave correctly — and it fires only because
+      // the `play` function audits the open state in isolation. Note the
+      // `Dialog` story does *not* trip this: the native `<dialog>` element uses
+      // the top layer and inerting instead of `aria-hidden`.
+      config: { rules: [{ id: "aria-hidden-focus", enabled: false }] },
+    },
+  },
+  // Opens the menu so the a11y run audits the rendered items, not just the
+  // trigger. Everything portals out of #storybook-root, hence the `body` scope
+  // in .storybook/test-runner.ts.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: /Actions/ }));
+    await expect(await within(document.body).findByRole("menu")).toBeInTheDocument();
+  },
   render: (args) => (
     <DropdownMenu {...args}>
       <DropdownMenuTrigger asChild>
