@@ -29,7 +29,7 @@ export const Welcome: Story = {
           {[
             ["Foundations", "Colour, type & motion — the tokens, live and switchable."],
             ["Components", "Buttons, forms, cards, dialogs — styled purely from tokens."],
-            ["Patterns", "Composed references — dashboards, forms, alerts."],
+            ["Patterns", "Whole screens, built only from the parts above."],
           ].map(([title, body]) => (
             <div key={title} className="rounded-[var(--radius-lg)] border border-border p-5">
               <h2 className="font-mono text-xs font-bold uppercase tracking-[0.14em]">{title}</h2>
