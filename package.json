@@ -100,7 +100,7 @@
     "concurrently": "^10.0.4",
     "http-server": "^14.1.1",
     "jsdom": "^30.0.1",
-    "playwright": "1.61.1",
+    "playwright": "1.62.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "remark-gfm": "^4.0.1",
