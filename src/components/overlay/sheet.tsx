@@ -3,16 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CloseIcon } from "../../lib/icons";
-
-interface SheetContextValue {
-  close: () => void;
-  titleId: string;
-  descriptionId: string;
-  setHasTitle: (present: boolean) => void;
-  setHasDescription: (present: boolean) => void;
-}
-
-const SheetContext = React.createContext<SheetContextValue | null>(null);
+import { ModalRoot, useModal, useModalPart } from "./modal-root";
 
 const sheetVariants = cva(
   [
@@ -83,71 +74,29 @@ export interface SheetProps extends VariantProps<typeof sheetVariants> {
  * ```
  */
 export function Sheet({
-  open: openProp,
+  open,
   defaultOpen = false,
   onOpenChange,
   side,
   className,
   children,
 }: SheetProps) {
-  const ref = React.useRef<HTMLDialogElement>(null);
-  const pressStartedOnBackdrop = React.useRef(false);
-  const reactId = React.useId();
-  const titleId = `${reactId}-title`;
-  const descriptionId = `${reactId}-description`;
-
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : uncontrolledOpen;
-
-  const [hasTitle, setHasTitle] = React.useState(false);
-  const [hasDescription, setHasDescription] = React.useState(false);
-
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    else if (!open && el.open) el.close();
-  }, [open]);
-
-  const close = React.useCallback(() => {
-    if (!isControlled) setUncontrolledOpen(false);
-    onOpenChange?.(false);
-  }, [isControlled, onOpenChange]);
-
-  const ctx = React.useMemo<SheetContextValue>(
-    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
-    [close, titleId, descriptionId],
-  );
-
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
-    <dialog
-      ref={ref}
-      aria-labelledby={hasTitle ? titleId : undefined}
-      aria-describedby={hasDescription ? descriptionId : undefined}
-      onClose={close}
-      // Require the press to both start and end on the backdrop, so releasing a
-      // text selection that began inside the sheet doesn't dismiss it.
-      onMouseDown={(event) => {
-        pressStartedOnBackdrop.current = event.target === ref.current;
-      }}
-      onClick={(event) => {
-        if (event.target === ref.current && pressStartedOnBackdrop.current) close();
-        pressStartedOnBackdrop.current = false;
-      }}
-      data-slot="sheet"
+    <ModalRoot
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      slot="sheet"
       className={cn(sheetVariants({ side }), className)}
     >
-      {open ? <SheetContext.Provider value={ctx}>{children}</SheetContext.Provider> : null}
-    </dialog>
+      {children}
+    </ModalRoot>
   );
 }
 
-/** The scrolling body of the sheet, and where the ✕ button lives. */
 export const SheetContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
-    const ctx = React.useContext(SheetContext);
+    const ctx = useModal();
     return (
       <div
         ref={ref}
@@ -188,16 +137,11 @@ export const SheetTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
-  const ctx = React.useContext(SheetContext);
-  const setHasTitle = ctx?.setHasTitle;
-  React.useEffect(() => {
-    setHasTitle?.(true);
-    return () => setHasTitle?.(false);
-  }, [setHasTitle]);
+  const titleId = useModalPart("title");
   return (
     <h2
       ref={ref}
-      id={ctx?.titleId}
+      id={titleId}
       data-slot="sheet-title"
       className={cn(
         "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
@@ -214,16 +158,11 @@ export const SheetDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const ctx = React.useContext(SheetContext);
-  const setHasDescription = ctx?.setHasDescription;
-  React.useEffect(() => {
-    setHasDescription?.(true);
-    return () => setHasDescription?.(false);
-  }, [setHasDescription]);
+  const descriptionId = useModalPart("description");
   return (
     <p
       ref={ref}
-      id={ctx?.descriptionId}
+      id={descriptionId}
       data-slot="sheet-description"
       className={cn("text-sm leading-relaxed text-muted-foreground", className)}
       {...props}
@@ -256,7 +195,7 @@ export interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 /** Closes the sheet. Wrap your own control with `asChild`. */
 export const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
   ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = React.useContext(SheetContext);
+    const ctx = useModal();
     const Comp = asChild ? Slot : "button";
     return (
       <Comp

@@ -1,16 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
-
-interface DialogContextValue {
-  close: () => void;
-  titleId: string;
-  descriptionId: string;
-  setHasTitle: (present: boolean) => void;
-  setHasDescription: (present: boolean) => void;
-}
-
-const DialogContext = React.createContext<DialogContextValue | null>(null);
+import { ModalRoot, useModal, useModalPart } from "./modal-root";
 
 export interface DialogProps {
   /** Whether the dialog is showing. Pass it to control the dialog yourself. */
@@ -55,64 +46,17 @@ export interface DialogProps {
  * </Dialog>
  * ```
  */
-export function Dialog({
-  open: openProp,
-  defaultOpen = false,
-  onOpenChange,
-  children,
-}: DialogProps) {
-  const ref = React.useRef<HTMLDialogElement>(null);
-  const pressStartedOnBackdrop = React.useRef(false);
-  const reactId = React.useId();
-  const titleId = `${reactId}-title`;
-  const descriptionId = `${reactId}-description`;
-
-  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
-  const isControlled = openProp !== undefined;
-  const open = isControlled ? openProp : uncontrolledOpen;
-
-  // Only advertise the label/description once the matching part actually renders,
-  // so a dialog without a title doesn't point `aria-labelledby` at nothing.
-  const [hasTitle, setHasTitle] = React.useState(false);
-  const [hasDescription, setHasDescription] = React.useState(false);
-
-  React.useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (open && !el.open) el.showModal();
-    else if (!open && el.open) el.close();
-  }, [open]);
-
-  const close = React.useCallback(() => {
-    if (!isControlled) setUncontrolledOpen(false);
-    onOpenChange?.(false);
-  }, [isControlled, onOpenChange]);
-
-  const ctx = React.useMemo<DialogContextValue>(
-    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
-    [close, titleId, descriptionId],
-  );
-
+export function Dialog({ open, defaultOpen = false, onOpenChange, children }: DialogProps) {
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
-    <dialog
-      ref={ref}
-      aria-labelledby={hasTitle ? titleId : undefined}
-      aria-describedby={hasDescription ? descriptionId : undefined}
-      onClose={close}
-      // Require the press to both start and end on the backdrop, so releasing a
-      // text selection that began inside the dialog doesn't dismiss it.
-      onMouseDown={(event) => {
-        pressStartedOnBackdrop.current = event.target === ref.current;
-      }}
-      onClick={(event) => {
-        if (event.target === ref.current && pressStartedOnBackdrop.current) close();
-        pressStartedOnBackdrop.current = false;
-      }}
+    <ModalRoot
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange}
+      slot="dialog"
       className="m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
     >
-      {open ? <DialogContext.Provider value={ctx}>{children}</DialogContext.Provider> : null}
-    </dialog>
+      {children}
+    </ModalRoot>
   );
 }
 
@@ -122,7 +66,7 @@ export function Dialog({
  */
 export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
-    const ctx = React.useContext(DialogContext);
+    const ctx = useModal();
     return (
       <div
         ref={ref}
@@ -168,16 +112,11 @@ export const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
-  const ctx = React.useContext(DialogContext);
-  const setHasTitle = ctx?.setHasTitle;
-  React.useEffect(() => {
-    setHasTitle?.(true);
-    return () => setHasTitle?.(false);
-  }, [setHasTitle]);
+  const titleId = useModalPart("title");
   return (
     <h2
       ref={ref}
-      id={ctx?.titleId}
+      id={titleId}
       data-slot="dialog-title"
       className={cn(
         "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
@@ -194,16 +133,11 @@ export const DialogDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => {
-  const ctx = React.useContext(DialogContext);
-  const setHasDescription = ctx?.setHasDescription;
-  React.useEffect(() => {
-    setHasDescription?.(true);
-    return () => setHasDescription?.(false);
-  }, [setHasDescription]);
+  const descriptionId = useModalPart("description");
   return (
     <p
       ref={ref}
-      id={ctx?.descriptionId}
+      id={descriptionId}
       data-slot="dialog-description"
       className={cn("text-sm leading-relaxed text-muted-foreground", className)}
       {...props}
@@ -240,7 +174,7 @@ export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonE
 /** Closes the dialog. Wrap your own control with `asChild`. */
 export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
   ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = React.useContext(DialogContext);
+    const ctx = useModal();
     const Comp = asChild ? Slot : "button";
     return (
       <Comp

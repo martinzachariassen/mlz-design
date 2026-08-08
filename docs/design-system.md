@@ -58,6 +58,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Avatar` (+ `Image`/`Fallback`/`Group`) | initials-first; `xs`–`xl`, circle/square, presence `status`, overlap group with `+N` |
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
+| `AlertDialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Cancel`/`Action`) | a confirmation before something irreversible. `role="alertdialog"`, no backdrop dismissal and no ✕ — the two ways out are both in the footer, and Cancel takes focus. Reach for `Dialog` for anything reversible |
 | `Sheet` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | a panel sliding in from any edge — mobile nav, filter drawer. Native `<dialog>` like `Dialog`, so one modal implementation, not two |
 | `Popover` (+ `Trigger`/`Content`/`Anchor`/`Close`) | a non-modal panel anchored to its trigger — filter menus, small forms. Portals out, collision-aware, Esc-dismissing, and unlike `Dialog` it never traps focus or inerts the page |
 | `InfoTip`  | accessible inline help popover (glossary/hints) — the same primitive with a fixed inline trigger and a narrower API |

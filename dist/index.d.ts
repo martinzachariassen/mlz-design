@@ -574,7 +574,7 @@ interface StatDeltaProps extends React.HTMLAttributes<HTMLParagraphElement>, Var
 declare const StatDelta: React.ForwardRefExoticComponent<StatDeltaProps & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const statusDotVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusDotVariants> {
     /** Add a soft pulsing ring in the dot's colour to signal live/active state. */
@@ -686,7 +686,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<type
 declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
 
 declare const alertVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "default" | "destructive" | null | undefined;
+    variant?: "default" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
 }
@@ -713,7 +713,7 @@ declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<H
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const calloutVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
     /** The headline — the finding itself, in full-strength foreground. */
@@ -1557,6 +1557,97 @@ interface TabsContentProps extends React.ComponentPropsWithoutRef<typeof TabsPri
  */
 declare const TabsContent: React.ForwardRefExoticComponent<TabsContentProps & React.RefAttributes<HTMLDivElement>>;
 
+interface AlertDialogProps {
+    /** Whether the dialog is showing. Pass it to control the dialog yourself. */
+    open?: boolean;
+    /** Initial open state when uncontrolled. Ignored if `open` is provided. */
+    defaultOpen?: boolean;
+    /** Called with `false` on Esc or an `AlertDialogCancel`. Never on a backdrop click. */
+    onOpenChange?: (open: boolean) => void;
+    /** Usually a single `AlertDialogContent`. Only mounted while open. */
+    children: React.ReactNode;
+}
+/**
+ * A confirmation before something irreversible — deleting a project, revoking a
+ * key, discarding unsaved work.
+ *
+ * The same native `<dialog>` engine as `Dialog` and `Sheet`, so focus-trapping,
+ * Esc, background inerting and the top layer come from the platform. Three
+ * things are deliberately different, and all three exist because the answer
+ * matters:
+ *
+ * - `role="alertdialog"`, so assistive tech announces it as a decision to make
+ *   rather than as an ordinary panel, and reads the description on open.
+ * - **The backdrop does not dismiss.** A stray click must not be able to answer
+ *   a question about deleting something.
+ * - **No ✕ button.** There are exactly two ways out, and both are in the
+ *   footer, so neither can be taken by accident.
+ *
+ * Esc still cancels — that is the platform's, it is unambiguous, and removing
+ * it would trap someone who opened the dialog by mistake.
+ *
+ * **Use it only when the action can't be undone.** **Reach for `Dialog`** for a
+ * short form or anything reversible: if every delete raises a confirm, people
+ * stop reading them, and the one that mattered gets dismissed with the rest.
+ * The better answer is often no dialog at all — do it, and offer an undo.
+ *
+ * `AlertDialogDescription` is not optional here the way it is on `Dialog`. Say
+ * what will be destroyed, by name.
+ *
+ * ```tsx
+ * <AlertDialog open={open} onOpenChange={setOpen}>
+ *   <AlertDialogContent>
+ *     <AlertDialogHeader>
+ *       <AlertDialogTitle>Delete aurora</AlertDialogTitle>
+ *       <AlertDialogDescription>
+ *         This removes the project and its deploy history. It can't be undone.
+ *       </AlertDialogDescription>
+ *     </AlertDialogHeader>
+ *     <AlertDialogFooter>
+ *       <AlertDialogCancel asChild><Button variant="ghost">Cancel</Button></AlertDialogCancel>
+ *       <AlertDialogAction asChild>
+ *         <Button variant="destructive" onClick={remove}>Delete</Button>
+ *       </AlertDialogAction>
+ *     </AlertDialogFooter>
+ *   </AlertDialogContent>
+ * </AlertDialog>
+ * ```
+ */
+declare function AlertDialog({ open, defaultOpen, onOpenChange, children, }: AlertDialogProps): React.JSX.Element;
+/** The card surface. Narrower than `DialogContent` — a confirm is two sentences. */
+declare const AlertDialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** Title + description block. No close button to clear, so no right inset. */
+declare const AlertDialogHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** Names the dialog. Say what is about to happen, and to what. */
+declare const AlertDialogTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>>;
+/**
+ * The consequence, spelled out. `role="alertdialog"` means this is read on
+ * open, so it is the sentence that does the work — name the thing being
+ * destroyed and say that it can't be undone.
+ */
+declare const AlertDialogDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+/**
+ * The action row. Write cancel first in the source: it reverses to a full-width
+ * column on mobile so the confirm lands on top, then flows right-aligned from
+ * `sm` up.
+ */
+declare const AlertDialogFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+interface AlertDialogActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Render the single child instead of a `<button>`, forwarding the close handler. */
+    asChild?: boolean;
+}
+/**
+ * The way out that does nothing. **Receives focus when the dialog opens**, so
+ * Enter on a dialog someone hasn't read yet is safe.
+ */
+declare const AlertDialogCancel: React.ForwardRefExoticComponent<AlertDialogActionProps & React.RefAttributes<HTMLButtonElement>>;
+/**
+ * The confirm. Closes the dialog after your `onClick` runs — call
+ * `event.preventDefault()` in the handler to keep it open (a failed request
+ * that wants to show an error, say).
+ */
+declare const AlertDialogAction: React.ForwardRefExoticComponent<AlertDialogActionProps & React.RefAttributes<HTMLButtonElement>>;
+
 interface DialogProps {
     /** Whether the dialog is showing. Pass it to control the dialog yourself. */
     open?: boolean;
@@ -1599,7 +1690,7 @@ interface DialogProps {
  * </Dialog>
  * ```
  */
-declare function Dialog({ open: openProp, defaultOpen, onOpenChange, children, }: DialogProps): React.JSX.Element;
+declare function Dialog({ open, defaultOpen, onOpenChange, children }: DialogProps): React.JSX.Element;
 /**
  * The card surface inside the dialog, and where the ✕ close button lives. Caps at
  * 85% of the viewport height and scrolls its own overflow.
@@ -1852,8 +1943,7 @@ interface SheetProps extends VariantProps<typeof sheetVariants> {
  * </Sheet>
  * ```
  */
-declare function Sheet({ open: openProp, defaultOpen, onOpenChange, side, className, children, }: SheetProps): React.JSX.Element;
-/** The scrolling body of the sheet, and where the ✕ button lives. */
+declare function Sheet({ open, defaultOpen, onOpenChange, side, className, children, }: SheetProps): React.JSX.Element;
 declare const SheetContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 /** Title + description block, inset on the right to clear the close button. */
 declare const SheetHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
@@ -1992,4 +2082,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toaster, type ToasterProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toaster, type ToasterProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
