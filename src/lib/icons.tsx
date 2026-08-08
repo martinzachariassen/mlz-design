@@ -44,6 +44,21 @@ export const ChevronRightIcon = strokeIcon(<path d="m9 18 6-6-6-6" />);
 /** The same tick the `Checkbox` draws, so selection reads identically everywhere. */
 export const CheckIcon = strokeIcon(<path d="M3.5 8.5l3 3 6-7" />, "0 0 16 16");
 
+/** The three theme choices, for `ThemeToggle`. */
+export const SunIcon = strokeIcon(
+  <>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+  </>,
+);
+export const MoonIcon = strokeIcon(<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />);
+export const MonitorIcon = strokeIcon(
+  <>
+    <rect x="2" y="4" width="20" height="13" rx="2" />
+    <path d="M8 21h8M12 17v4" />
+  </>,
+);
+
 /** A filled dot — the selected marker for radio items. */
 export function DotIcon({ className, ...props }: IconProps) {
   return (

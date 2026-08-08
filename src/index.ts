@@ -17,6 +17,12 @@ export { ProjectCard, type ProjectCardProps } from "./components/brand/project-c
 export { RepoBanner, type RepoBannerProps } from "./components/brand/repo-banner";
 export { SocialCard, type SocialCardProps } from "./components/brand/social-card";
 export {
+  AccentPicker,
+  type AccentPickerProps,
+  ThemeToggle,
+  type ThemeToggleProps,
+} from "./components/brand/theme-toggle";
+export {
   Avatar,
   AvatarFallback,
   type AvatarFallbackProps,
@@ -95,6 +101,13 @@ export {
 } from "./components/forms/select";
 export { Switch, type SwitchProps } from "./components/forms/switch";
 export { Textarea, type TextareaProps } from "./components/forms/textarea";
+export { Toggle, type ToggleProps, toggleVariants } from "./components/forms/toggle";
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+  type ToggleGroupItemProps,
+  type ToggleGroupProps,
+} from "./components/forms/toggle-group";
 export {
   Accordion,
   AccordionContent,

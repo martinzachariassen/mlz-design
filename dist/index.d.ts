@@ -8,6 +8,8 @@ import * as ProgressPrimitive from '@radix-ui/react-progress';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import * as TogglePrimitive from '@radix-ui/react-toggle';
+import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
@@ -242,8 +244,52 @@ interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
  */
 declare const SocialCard: React.ForwardRefExoticComponent<SocialCardProps & React.RefAttributes<HTMLDivElement>>;
 
+interface ThemeToggleProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Drop the text labels and show only the icons. */
+    iconOnly?: boolean;
+    /** Hide "System", leaving a straight light/dark choice. */
+    hideSystem?: boolean;
+}
+/**
+ * The light / dark / system switch, wired to `ThemeProvider` — so an app gets the
+ * system's headline feature without rebuilding the control.
+ *
+ * **Must be rendered under a `<ThemeProvider>`**; it reads and writes the same
+ * state as `useTheme()`. Pair the provider with `themeInitScript()` in `<head>`,
+ * or the page paints in the wrong theme before React hydrates and this control
+ * appears to jump.
+ *
+ * Keep **System**. It's the option most people want and the only one that
+ * follows the OS at dusk; drop it with `hideSystem` only when the app genuinely
+ * has no use for it. Note the button reflects the *chosen* theme, so with
+ * "System" selected it stays on System rather than jumping to Light or Dark.
+ *
+ * ```tsx
+ * <ThemeProvider>
+ *   <ThemeToggle iconOnly />
+ * </ThemeProvider>
+ * ```
+ */
+declare const ThemeToggle: React.ForwardRefExoticComponent<ThemeToggleProps & React.RefAttributes<HTMLDivElement>>;
+interface AccentPickerProps extends React.HTMLAttributes<HTMLDivElement> {
+    /** Limit the choices; defaults to all five families. */
+    families?: readonly AccentName[];
+}
+/**
+ * Swatches for the five accent families, wired to `ThemeProvider`.
+ *
+ * Each swatch is a real radio in a group, so the whole picker is one tab stop
+ * and the arrow keys move between families. Colour alone never carries the
+ * meaning — every swatch is named.
+ *
+ * Accent is a *preference*, not a setting that changes what anything does. If an
+ * app only ever ships one accent, don't render this; set `data-accent` once on
+ * `<html>` and be done.
+ */
+declare const AccentPicker: React.ForwardRefExoticComponent<AccentPickerProps & React.RefAttributes<HTMLDivElement>>;
+
 declare const avatarVariants: (props?: ({
-    size?: "default" | "xs" | "sm" | "lg" | "xl" | null | undefined;
+    size?: "default" | "sm" | "xs" | "lg" | "xl" | null | undefined;
     shape?: "square" | "circle" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 declare const statusColor: {
@@ -475,7 +521,7 @@ declare const TableCaption: React.ForwardRefExoticComponent<React.HTMLAttributes
 
 declare const textVariants: (props?: ({
     variant?: "body" | "muted" | "eyebrow" | "mono" | "lead" | null | undefined;
-    size?: "base" | "xs" | "sm" | "lg" | null | undefined;
+    size?: "base" | "sm" | "xs" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof textVariants> {
     /** The element to render. Defaults to `<span>`. */
@@ -764,6 +810,67 @@ type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
  */
 declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.RefAttributes<HTMLTextAreaElement>>;
 
+declare const toggleVariants: (props?: ({
+    variant?: "default" | "outline" | null | undefined;
+    size?: "default" | "icon" | "sm" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>, VariantProps<typeof toggleVariants> {
+}
+/**
+ * A button that stays pressed — bold in an editor toolbar, "show archived" on a
+ * list. It reports itself with `aria-pressed`, so screen readers announce the
+ * state on the control itself.
+ *
+ * **Use it when the label describes a state the button turns on**, and the
+ * change applies immediately. **Reach for `Checkbox`** when the value is part of
+ * a form that gets submitted, and for `Switch` when it reads as a setting rather
+ * than an action. A toggle whose label changes when pressed ("Show" → "Hide") is
+ * a plain `Button`, not this — `aria-pressed` would then contradict the label.
+ *
+ * An icon-only toggle needs an `aria-label`.
+ *
+ * ```tsx
+ * <Toggle aria-label="Bold" size="icon" pressed={bold} onPressedChange={setBold}>B</Toggle>
+ * ```
+ */
+declare const Toggle: React.ForwardRefExoticComponent<ToggleProps & React.RefAttributes<HTMLButtonElement>>;
+
+/**
+ * A type alias, not `interface extends`: Radix's Root props are a discriminated
+ * union on `type`, and an interface flattens that union so `children` and the
+ * `type` discriminant both go missing.
+ */
+type ToggleGroupProps = React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> & VariantProps<typeof toggleVariants>;
+/**
+ * A row of toggles that belong together — a view switcher, a text-alignment
+ * picker, a filter bar.
+ *
+ * `type="single"` behaves like a segmented control: exactly one item on at a
+ * time. `type="multiple"` lets several be on at once. Radix owns the roving
+ * focus, so the whole group is one tab stop and the arrow keys move within it.
+ *
+ * **Use it for view state that applies immediately.** **Reach for `RadioGroup`**
+ * when it's a form field whose value gets submitted, and for `Tabs` when
+ * choosing also swaps a panel of content — a toggle group changes how something
+ * looks, tabs change what you're looking at.
+ *
+ * Set `variant` and `size` here rather than on each item.
+ *
+ * ```tsx
+ * <ToggleGroup type="single" defaultValue="grid" aria-label="Layout">
+ *   <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
+ *   <ToggleGroupItem value="list">List</ToggleGroupItem>
+ * </ToggleGroup>
+ * ```
+ */
+declare const ToggleGroup: React.ForwardRefExoticComponent<ToggleGroupProps & React.RefAttributes<HTMLDivElement>>;
+type ToggleGroupItemProps = React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> & VariantProps<typeof toggleVariants>;
+/** One choice in a `ToggleGroup`. Inherits the group's `variant` and `size`. */
+declare const ToggleGroupItem: React.ForwardRefExoticComponent<Omit<ToggleGroupPrimitive.ToggleGroupItemProps & React.RefAttributes<HTMLButtonElement>, "ref"> & VariantProps<(props?: ({
+    variant?: "default" | "outline" | null | undefined;
+    size?: "default" | "icon" | "sm" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string> & React.RefAttributes<HTMLButtonElement>>;
+
 type SingleProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
     type: "single";
 }, "type"> & {
@@ -898,7 +1005,7 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
 declare const Container: React.ForwardRefExoticComponent<ContainerProps & React.RefAttributes<HTMLDivElement>>;
 declare const stackVariants: (props?: ({
     direction?: "row" | "col" | "responsive" | null | undefined;
-    gap?: "none" | "xs" | "sm" | "lg" | "xl" | "md" | null | undefined;
+    gap?: "none" | "sm" | "xs" | "lg" | "xl" | "md" | null | undefined;
     align?: "end" | "baseline" | "start" | "stretch" | "center" | null | undefined;
     justify?: "end" | "start" | "center" | "between" | "around" | null | undefined;
     wrap?: boolean | null | undefined;
@@ -1334,4 +1441,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };
