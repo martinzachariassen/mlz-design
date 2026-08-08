@@ -15,10 +15,14 @@ import { Toaster as Toaster$1 } from 'sonner';
 export { toast } from 'sonner';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
 import * as PopoverPrimitive2 from '@radix-ui/react-popover';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
@@ -1266,8 +1270,13 @@ var linkVariants = cva(
         /** Underlined in running text, where the underline is what marks it as a link. */
         default: "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent hover:text-accent",
         /**
-         * Accent-coloured, underline only on hover — for links that already sit
-         * apart. Uses `--accent-deep`, not `--accent`: the plain accent is a
+         * Accent-coloured, underline only on hover — **for links that stand
+         * alone**, not for links inside a paragraph. In running text the
+         * underline is the only thing distinguishing a link from its
+         * surroundings, and colour alone fails WCAG 1.4.1 (axe flags it as
+         * `link-in-text-block`). Use `default` there.
+         *
+         * Uses `--accent-deep`, not `--accent`: the plain accent is a
          * fill-and-border colour (cyan measures 1.8:1 on paper) and fails AA as
          * text. `Prose` colours its links the same way.
          */
@@ -2132,6 +2141,49 @@ var SelectSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 SelectSeparator.displayName = "SelectSeparator";
+var Slider = React32.forwardRef(({ className, thumbLabels, ...props }, ref) => {
+  const thumbCount = (props.value ?? props.defaultValue)?.length ?? 1;
+  const rootLabel = props["aria-label"];
+  return /* @__PURE__ */ jsxs(
+    SliderPrimitive.Root,
+    {
+      ref,
+      "data-slot": "slider",
+      className: cn(
+        "relative flex w-full touch-none select-none items-center data-[orientation=vertical]:h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col",
+        "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
+        className
+      ),
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx(
+          SliderPrimitive.Track,
+          {
+            "data-slot": "slider-track",
+            className: "relative h-1.5 w-full grow overflow-hidden rounded-full bg-secondary data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5",
+            children: /* @__PURE__ */ jsx(
+              SliderPrimitive.Range,
+              {
+                "data-slot": "slider-range",
+                className: "absolute h-full bg-accent data-[orientation=vertical]:w-full"
+              }
+            )
+          }
+        ),
+        Array.from({ length: thumbCount }, (_, i) => /* @__PURE__ */ jsx(
+          SliderPrimitive.Thumb,
+          {
+            "aria-label": thumbLabels?.[i] ?? (thumbCount === 1 ? rootLabel : void 0),
+            "data-slot": "slider-thumb",
+            className: "block size-4 shrink-0 rounded-full border-[1.5px] border-accent bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
+          },
+          i
+        ))
+      ]
+    }
+  );
+});
+Slider.displayName = "Slider";
 var Switch = React32.forwardRef(
   ({ className, id, ...props }, ref) => {
     const generatedId = React32.useId();
@@ -2427,6 +2479,38 @@ var CardFooter = React32.forwardRef(
   )
 );
 CardFooter.displayName = "CardFooter";
+function Collapsible(props) {
+  return /* @__PURE__ */ jsx(CollapsiblePrimitive.Root, { "data-slot": "collapsible", ...props });
+}
+Collapsible.displayName = "Collapsible";
+var CollapsibleTrigger = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  CollapsiblePrimitive.Trigger,
+  {
+    ref,
+    "data-slot": "collapsible-trigger",
+    className: cn(
+      "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] py-2 text-left font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+      className
+    ),
+    ...props
+  }
+));
+CollapsibleTrigger.displayName = "CollapsibleTrigger";
+var CollapsibleContent = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+  CollapsiblePrimitive.Content,
+  {
+    ref,
+    "data-slot": "collapsible-content",
+    className: cn(
+      "grid transition-[grid-template-rows] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
+      "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]",
+      className
+    ),
+    ...props,
+    children: /* @__PURE__ */ jsx("div", { className: "overflow-hidden", children })
+  }
+));
+CollapsibleContent.displayName = "CollapsibleContent";
 var containerVariants = cva("mx-auto w-full", {
   variants: {
     /** Max content width. `prose` is measure-optimised for reading. */
@@ -2631,6 +2715,56 @@ function PaginationEllipsis({
     }
   );
 }
+var ScrollArea = React32.forwardRef(({ className, viewportClassName, orientation = "vertical", children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  ScrollAreaPrimitive.Root,
+  {
+    ref,
+    "data-slot": "scroll-area",
+    className: cn("relative overflow-hidden", className),
+    ...props,
+    children: [
+      /* @__PURE__ */ jsx(
+        ScrollAreaPrimitive.Viewport,
+        {
+          "data-slot": "scroll-area-viewport",
+          tabIndex: 0,
+          className: cn(
+            "size-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+            viewportClassName
+          ),
+          children
+        }
+      ),
+      orientation !== "horizontal" ? /* @__PURE__ */ jsx(ScrollBar, { orientation: "vertical" }) : null,
+      orientation !== "vertical" ? /* @__PURE__ */ jsx(ScrollBar, { orientation: "horizontal" }) : null,
+      /* @__PURE__ */ jsx(ScrollAreaPrimitive.Corner, {})
+    ]
+  }
+));
+ScrollArea.displayName = "ScrollArea";
+var ScrollBar = React32.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ jsx(
+  ScrollAreaPrimitive.ScrollAreaScrollbar,
+  {
+    ref,
+    orientation,
+    "data-slot": "scroll-bar",
+    className: cn(
+      "flex touch-none select-none p-0.5 transition-colors",
+      orientation === "vertical" && "h-full w-2.5 border-l border-l-transparent",
+      orientation === "horizontal" && "h-2.5 flex-col border-t border-t-transparent",
+      className
+    ),
+    ...props,
+    children: /* @__PURE__ */ jsx(
+      ScrollAreaPrimitive.ScrollAreaThumb,
+      {
+        "data-slot": "scroll-bar-thumb",
+        className: "relative flex-1 rounded-full bg-border transition-colors hover:bg-muted-foreground"
+      }
+    )
+  }
+));
+ScrollBar.displayName = "ScrollBar";
 var Separator2 = React32.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
   if (label != null && orientation === "horizontal") {
     return /* @__PURE__ */ jsxs(
@@ -3181,6 +3315,28 @@ var DropdownMenuSubContent = React32.forwardRef(({ className, ...props }, ref) =
   }
 ) }));
 DropdownMenuSubContent.displayName = "DropdownMenuSubContent";
+function HoverCard({ openDelay = 700, closeDelay = 200, ...props }) {
+  return /* @__PURE__ */ jsx(HoverCardPrimitive.Root, { openDelay, closeDelay, ...props });
+}
+HoverCard.displayName = "HoverCard";
+var HoverCardTrigger = HoverCardPrimitive.Trigger;
+var HoverCardContent = React32.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(HoverCardPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  HoverCardPrimitive.Content,
+  {
+    ref,
+    align,
+    side,
+    sideOffset,
+    collisionPadding: 8,
+    "data-slot": "hover-card-content",
+    className: cn(
+      "z-50 w-72 max-w-[calc(100vw-1rem)] rounded-[var(--radius-lg)] border border-border bg-popover p-4 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
+      className
+    ),
+    ...props
+  }
+) }));
+HoverCardContent.displayName = "HoverCardContent";
 var GAP = 8;
 var MARGIN = 8;
 function InfoTip({
@@ -3452,6 +3608,6 @@ var TooltipContent = React32.forwardRef(({ className, sideOffset = 6, ...props }
 ) }));
 TooltipContent.displayName = "TooltipContent";
 
-export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Link, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
+export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, ScrollArea, ScrollBar, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toaster, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

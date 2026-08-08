@@ -34,12 +34,17 @@ export const Variants: Story = {
         Read the <Link href="#">architecture notes</Link> before changing a token.
       </p>
       <p>
-        Browse the{" "}
-        <Link href="#" variant="subtle">
-          component catalogue
-        </Link>
-        .
+        Browse the <Link href="#">component catalogue</Link>.
       </p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+        `subtle` belongs on a standalone link, never inside a sentence — there the underline is what
+        marks it as a link at all.
+      </p>
+      <div>
+        <Link href="#" variant="subtle">
+          Standalone subtle link
+        </Link>
+      </div>
       <p className="text-muted-foreground">
         <Link href="#" variant="quiet">
           Privacy

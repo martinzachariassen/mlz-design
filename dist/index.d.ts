@@ -10,12 +10,16 @@ export { toast } from 'sonner';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
+import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { ClassValue } from 'clsx';
@@ -1125,6 +1129,44 @@ declare const SelectLabel: React.ForwardRefExoticComponent<Omit<SelectPrimitive.
 /** A hairline rule between groups of options. */
 declare const SelectSeparator: React.ForwardRefExoticComponent<Omit<SelectPrimitive.SelectSeparatorProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
+interface SliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
+    /**
+     * One accessible name per thumb, in order. **Required for a range** — two
+     * thumbs both called "Price" are indistinguishable to a screen reader.
+     *
+     * A single-thumb slider can just use `aria-label` on the root; it is copied
+     * down automatically, because the element carrying `role="slider"` is the
+     * thumb, not the root, and a name on the root never reaches it.
+     */
+    thumbLabels?: string[];
+}
+/**
+ * A value picked by dragging along a track — volume, opacity, a price ceiling.
+ * Pass an array of two or more values for a range.
+ *
+ * **Use it when the approximate position matters more than the exact number**
+ * and the reader wants to feel their way to an answer. **Reach for `Input
+ * type="number"`** when they already know the value they want: a slider makes
+ * "37" take ten seconds and a steady hand. Best of both is a slider with the
+ * number shown beside it, which is what the stories do.
+ *
+ * Radix owns the keyboard pattern — arrows step by `step`, `PageUp`/`PageDown`
+ * by ten steps, `Home`/`End` to the ends — and each thumb is its own tab stop
+ * in a range.
+ *
+ * **Every thumb needs a name**, and this is the part that catches people out:
+ * the element carrying `role="slider"` is the *thumb*, so an `aria-label` on
+ * the root never reaches it. For one thumb, `aria-label` on the root is copied
+ * down for you. For a range, pass `thumbLabels` — two thumbs both called
+ * "Price" are indistinguishable to a screen reader.
+ *
+ * ```tsx
+ * <Slider defaultValue={[40]} max={100} step={1} aria-label="Volume" />
+ * <Slider defaultValue={[20, 80]} max={100} thumbLabels={["Minimum price", "Maximum price"]} />
+ * ```
+ */
+declare const Slider: React.ForwardRefExoticComponent<SliderProps & React.RefAttributes<HTMLSpanElement>>;
+
 type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 /**
  * An on/off toggle for settings that apply immediately — no Save button. Like
@@ -1373,6 +1415,48 @@ declare const CardContent: React.ForwardRefExoticComponent<React.HTMLAttributes<
 /** The bottom row, for actions. A flex row — set your own `gap`. */
 declare const CardFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
+type CollapsibleProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>;
+/**
+ * One thing that opens and closes. A "show more", a nav section, an advanced
+ * options block.
+ *
+ * **Reach for `Accordion`** the moment there are several of these that belong
+ * together and should coordinate — Accordion adds the arrow-key pattern between
+ * triggers and can enforce one-open-at-a-time. A row of independent
+ * `Collapsible`s is an accordion with the keyboard support left out.
+ *
+ * **Reach for `Tabs`** when exactly one of the sections is relevant at a time
+ * and they are alternative views of one subject.
+ *
+ * Radix wires `aria-expanded` on the trigger and `aria-controls` to the content,
+ * and keeps the content out of the accessibility tree while closed.
+ *
+ * ```tsx
+ * <Collapsible>
+ *   <CollapsibleTrigger>Advanced options</CollapsibleTrigger>
+ *   <CollapsibleContent>…</CollapsibleContent>
+ * </Collapsible>
+ * ```
+ */
+declare function Collapsible(props: CollapsibleProps): React.JSX.Element;
+declare namespace Collapsible {
+    var displayName: string;
+}
+type CollapsibleTriggerProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Trigger>;
+/**
+ * The control that opens it. Renders a `<button>`; use `asChild` to style your
+ * own. Keep the label constant — the open state lives in `aria-expanded`, and a
+ * label that flips between "Show" and "Hide" contradicts it.
+ */
+declare const CollapsibleTrigger: React.ForwardRefExoticComponent<Omit<CollapsiblePrimitive.CollapsibleTriggerProps & React.RefAttributes<HTMLButtonElement>, "ref"> & React.RefAttributes<HTMLButtonElement>>;
+type CollapsibleContentProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Content>;
+/**
+ * The part that opens. Animates with the `grid-template-rows: 0fr → 1fr`
+ * technique, the same as `Accordion` — height stays fluid with no JS measuring
+ * and no fixed `max-height` to outgrow.
+ */
+declare const CollapsibleContent: React.ForwardRefExoticComponent<Omit<CollapsiblePrimitive.CollapsibleContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+
 declare const containerVariants: (props?: ({
     size?: "sm" | "lg" | "xl" | "prose" | "md" | "full" | null | undefined;
     gutter?: "none" | "sm" | "lg" | "md" | null | undefined;
@@ -1490,6 +1574,43 @@ declare function PaginationPrevious({ className, children, ...props }: Paginatio
 declare function PaginationNext({ className, children, ...props }: PaginationLinkProps): React.JSX.Element;
 /** A gap in the page run. Decorative, but keeps a name for screen readers. */
 declare function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<"span">): React.JSX.Element;
+
+interface ScrollAreaProps extends React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.Root> {
+    /** Which axis gets a scrollbar. `vertical` by default. */
+    orientation?: "vertical" | "horizontal" | "both";
+    /** Classes for the scrolling viewport rather than the outer box. */
+    viewportClassName?: string;
+}
+/**
+ * A scrolling box with a scrollbar that matches the system instead of the OS.
+ *
+ * **This is the one Radix primitive here that overlaps something the browser
+ * already does**, so the reasoning matters. It does not replace scrolling —
+ * the viewport underneath is ordinary `overflow: auto`, so wheel, trackpad,
+ * touch, keyboard, scroll-anchoring and find-in-page all behave natively. What
+ * it replaces is the *scrollbar's appearance*, which otherwise ranges from a
+ * heavy grey slab on Windows to nothing at all on macOS until you scroll.
+ *
+ * **So use it only where the scrollbar itself is part of the design** — a
+ * bounded panel, a command list, a sidebar — and where its absence would leave
+ * a reader unaware there is more. **Don't wrap the page in one**: the browser's
+ * own scrollbar carries position and length information the OS expects to
+ * provide, and taking it over on the document breaks scroll-restoration and
+ * overscroll behaviour.
+ *
+ * ```tsx
+ * <ScrollArea className="h-64 rounded-[var(--radius-md)] border border-border">
+ *   <div className="p-4">…</div>
+ * </ScrollArea>
+ * ```
+ */
+declare const ScrollArea: React.ForwardRefExoticComponent<ScrollAreaProps & React.RefAttributes<HTMLDivElement>>;
+type ScrollBarProps = React.ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>;
+/**
+ * The bar itself. `ScrollArea` renders these for you from `orientation`; reach
+ * for it directly only when you need a differently styled bar on one axis.
+ */
+declare const ScrollBar: React.ForwardRefExoticComponent<Omit<ScrollAreaPrimitive.ScrollAreaScrollbarProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
 interface SeparatorProps extends React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> {
     /** Horizontal fills its container's width; vertical fills its height (give the parent one). */
@@ -1791,6 +1912,45 @@ declare const DropdownMenuSubTrigger: React.ForwardRefExoticComponent<Omit<Dropd
 /** The submenu surface. */
 declare const DropdownMenuSubContent: React.ForwardRefExoticComponent<Omit<DropdownMenuPrimitive.DropdownMenuSubContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
+type HoverCardProps = React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Root>;
+/**
+ * A rich preview that appears on hover — a user card behind an @mention, a
+ * repository summary behind a link.
+ *
+ * **It is an enhancement, never the only route to the information.** It opens
+ * on hover and focus but not on click or touch, so anything only reachable this
+ * way is unreachable on a phone. Everything inside must exist somewhere the
+ * trigger leads.
+ *
+ * **Reach for `Tooltip`** when the content is a short line of text — a tooltip
+ * attaches as the trigger's *description* and costs nothing. **Reach for
+ * `Popover`** when the content has controls or the reader needs to keep it
+ * open: a hover card closes the moment the pointer leaves, which makes it a
+ * poor place to put a button.
+ *
+ * The default 700ms open delay is deliberate. Anything faster and cards flash
+ * open as the pointer crosses a paragraph of links.
+ *
+ * ```tsx
+ * <HoverCard>
+ *   <HoverCardTrigger asChild><Link href="/martin">@martin</Link></HoverCardTrigger>
+ *   <HoverCardContent>…</HoverCardContent>
+ * </HoverCard>
+ * ```
+ */
+declare function HoverCard({ openDelay, closeDelay, ...props }: HoverCardProps): React.JSX.Element;
+declare namespace HoverCard {
+    var displayName: string;
+}
+/** What the card hangs off. Use `asChild` to keep it a real link. */
+declare const HoverCardTrigger: React.ForwardRefExoticComponent<HoverCardPrimitive.HoverCardTriggerProps & React.RefAttributes<HTMLAnchorElement>>;
+type HoverCardContentProps = React.ComponentPropsWithoutRef<typeof HoverCardPrimitive.Content>;
+/**
+ * The floating card. Portals out and positions with collision detection, so no
+ * ancestor `overflow: hidden` can clip it and it can't leave the viewport.
+ */
+declare const HoverCardContent: React.ForwardRefExoticComponent<Omit<HoverCardPrimitive.HoverCardContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+
 interface InfoTipProps {
     /**
      * Accessible name for the trigger button and, when no `title` is given, the
@@ -2082,4 +2242,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toaster, type ToasterProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toaster, type ToasterProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };

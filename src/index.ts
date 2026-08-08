@@ -135,6 +135,7 @@ export {
   type SelectTriggerProps,
   SelectValue,
 } from "./components/forms/select";
+export { Slider, type SliderProps } from "./components/forms/slider";
 export { Switch, type SwitchProps } from "./components/forms/switch";
 export { Textarea, type TextareaProps } from "./components/forms/textarea";
 export { Toggle, type ToggleProps, toggleVariants } from "./components/forms/toggle";
@@ -175,6 +176,14 @@ export {
   cardVariants,
 } from "./components/layout/card";
 export {
+  Collapsible,
+  CollapsibleContent,
+  type CollapsibleContentProps,
+  type CollapsibleProps,
+  CollapsibleTrigger,
+  type CollapsibleTriggerProps,
+} from "./components/layout/collapsible";
+export {
   Container,
   type ContainerProps,
   containerVariants,
@@ -194,6 +203,12 @@ export {
   PaginationNext,
   PaginationPrevious,
 } from "./components/layout/pagination";
+export {
+  ScrollArea,
+  type ScrollAreaProps,
+  ScrollBar,
+  type ScrollBarProps,
+} from "./components/layout/scroll-area";
 export { Separator, type SeparatorProps } from "./components/layout/separator";
 export {
   Tabs,
@@ -247,6 +262,13 @@ export {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "./components/overlay/dropdown-menu";
+export {
+  HoverCard,
+  HoverCardContent,
+  type HoverCardContentProps,
+  type HoverCardProps,
+  HoverCardTrigger,
+} from "./components/overlay/hover-card";
 export { InfoTip, type InfoTipProps } from "./components/overlay/info-tip";
 export {
   Popover,
