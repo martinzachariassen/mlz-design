@@ -47,11 +47,35 @@ run = "bun run build"
 description = "Build the static Storybook site"
 run = "bun run build:storybook"
 
+# ── Gates that CI runs and a plain build does not ────────────────────────────
+[tasks.dist-check]
+description = "Fail if committed dist/ is stale (mirrors the ci.yml step)"
+depends = ["build"]
+run = '''
+if [ -n "$(git status --porcelain -- dist)" ]; then
+  echo "dist/ is stale — run 'bun run build' and commit the result." >&2
+  git status --porcelain -- dist
+  exit 1
+fi
+'''
+
+[tasks.a11y]
+description = "Run axe (WCAG 2.1 A/AA) over every story"
+depends = ["build-storybook"]
+run = '''
+bunx concurrently -k -s first -n "SB,A11Y" -c "magenta,blue" \
+  "bunx http-server storybook-static --port 6006 --silent" \
+  "bunx wait-on tcp:127.0.0.1:6006 && bun run test-storybook --url http://127.0.0.1:6006"
+'''
+
 # ── Aggregates ───────────────────────────────────────────────────────────────
 [tasks.check]
 description = "Run all fast checks (lint · typecheck · test)"
 depends = ["lint", "typecheck", "test"]
 
+# Mirrors ci.yml exactly, including the two gates a plain build misses: the
+# stale-dist check and the axe pass. Without them a green local run could still
+# fail CI.
 [tasks.ci]
-description = "Full CI pipeline (lint · typecheck · test · build · build-storybook)"
-depends = ["lint", "typecheck", "test", "build", "build-storybook"]
+description = "Full CI pipeline (lint · typecheck · test · build · dist-check · a11y)"
+depends = ["lint", "typecheck", "test", "dist-check", "a11y"]

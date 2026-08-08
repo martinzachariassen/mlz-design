@@ -1,0 +1,51 @@
+name: Bug report
+description: Something in the package or the playground behaves wrongly.
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you got instead.
+    validations:
+      required: true
+
+  - type: input
+    id: component
+    attributes:
+      label: Component or area
+      description: e.g. `Dialog`, the token layer, the Storybook build, the release workflow.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: >
+        The smallest snippet that shows it. If it reproduces in the playground,
+        link the story — design.mlz.no puts the story id in the URL.
+      render: tsx
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: From your lockfile, not from memory.
+      placeholder: "0.3.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Does it depend on theme or accent?
+      description: Several bugs here turn out to be one `data-theme` / `data-accent` combination.
+      options:
+        - "No — happens in every combination"
+        - "Only in dark"
+        - "Only in light"
+        - "Only with a particular accent"
+        - "Haven't checked"
+    validations:
+      required: true

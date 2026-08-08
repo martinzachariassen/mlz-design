@@ -6,8 +6,12 @@ updates:
       interval: weekly
     open-pull-requests-limit: 5
     groups:
-      dependencies:
+      # Routine bumps land as one PR. Majors are deliberately left ungrouped:
+      # in a single all-inclusive group, one breaking major blocks every patch
+      # behind it until someone finds time to deal with it.
+      minor-and-patch:
         patterns: ["*"]
+        update-types: ["minor", "patch"]
     ignore:
       # TypeScript 7 is the native port: the npm package no longer exports the
       # classic compiler API, so every tool that reads it breaks — tsup's dts
@@ -19,3 +23,7 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]

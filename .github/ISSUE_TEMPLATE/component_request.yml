@@ -1,0 +1,61 @@
+name: Component request
+description: Propose a new component for the library.
+labels: ["component"]
+body:
+  - type: markdown
+    attributes:
+      value: >
+        This system stays small on purpose. Before filing, check
+        [design.mlz.no](https://design.mlz.no) — a sibling component often
+        already covers the case.
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed name
+      placeholder: "Combobox"
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: What you're trying to build
+      description: The real screen that needs it, not the abstract capability.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-not-existing
+    attributes:
+      label: Why an existing component doesn't cover it
+      description: >
+        Name the closest sibling and say where it falls short. This is the part
+        that decides whether it gets built.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which tier would own the behaviour?
+      description: >
+        See docs/architecture.md. Platform where the browser already does the
+        work, Radix where the WAI-ARIA pattern is genuinely hard, presentational
+        where there is no behaviour at all.
+      options:
+        - "Platform — a native element already does this"
+        - "Radix — needs a real keyboard/focus pattern"
+        - "Presentational — no behaviour, just styling"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: dependency
+    attributes:
+      label: New runtime dependency it would need
+      description: >
+        Blank if none. The library ships granular `@radix-ui/*` packages and one
+        non-Radix exception (`sonner`); every addition is a cost every consumer
+        pays, so it needs a reason.
