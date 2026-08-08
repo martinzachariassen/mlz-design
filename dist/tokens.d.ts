@@ -12,56 +12,103 @@ declare const colors: {
     readonly ink2: "#4a4a45";
     readonly muted: "#6e6c64";
     readonly line: "#cbc9be";
-    readonly glitchRed: "oklch(0.53 0.22 18)";
+    readonly glitchRed: "oklch(0.52 0.158 25)";
 };
 /**
- * Meaning-carrying signal colours, harmonised with the palette. These are the
- * **solids** — tuned for fills, borders and dots.
+ * How a fill behaves, and therefore which foreground it takes. No single
+ * lightness works for every hue — yellow cannot go dark and stay yellow, red
+ * cannot go light and stay emphatic — so the ladder has two fill modes instead
+ * of pretending otherwise.
+ *
+ * - `tint` — light fill (L 0.74), carries `colors.ink` at 7.2:1–8.0:1.
+ * - `bold` — dark fill, carries `colors.paper` at 4.6:1 or better.
+ *
+ * The band between them (L ≈ 0.55–0.70) is unusable for fills: there neither
+ * ink nor paper text reaches 4.5:1, topping out near 4.3:1 either way.
+ */
+type FillMode = "tint" | "bold";
+/**
+ * Meaning-carrying signal colours, on the same ladder as {@link accents} so a
+ * badge and a status dot read at the same weight. These are the **fills** —
+ * backgrounds for their paired foreground, never text colours. On paper the
+ * tints measure roughly 1.9:1; reach for {@link signalsDeep} to colour anything.
  */
 declare const signals: {
-    readonly danger: "oklch(0.53 0.22 18)";
-    readonly success: "oklch(0.60 0.13 150)";
-    readonly warning: "oklch(0.80 0.15 78)";
-    readonly info: "oklch(0.62 0.15 250)";
+    readonly danger: "oklch(0.52 0.158 25)";
+    readonly success: "oklch(0.74 0.138 148)";
+    readonly warning: "oklch(0.74 0.138 75)";
+    readonly info: "oklch(0.74 0.137 250)";
+};
+/** The fill mode of each {@link signals} entry — which foreground it pairs with. */
+declare const signalFill: {
+    readonly danger: "bold";
+    readonly success: "tint";
+    readonly warning: "tint";
+    readonly info: "tint";
 };
 /**
- * The text-safe partners of {@link signals} — the same hues darkened until they
- * clear WCAG AA (4.5:1) against the light paper background. On paper the solids
- * measure 3.1:1 for `success` and 1.6:1 for `warning`, so **colour small text
- * with these and fill shapes with the solids**. `danger` needs no darkening; it
- * is listed so the set is complete and a caller can reach for it unconditionally.
+ * The on-light rung: the same hues, placed so they clear WCAG AA (4.5:1) against
+ * **every** paper surface — `paper`, `paper2` and `paper3` alike, measuring
+ * 5.32:1–5.49:1 on `paper` and never dropping below 4.54:1 on `paper3`.
  *
- * Mirrors `--success-deep` and friends in `theme.css`, which in dark mode map
- * straight back to the solids — those already clear AA on the ink surface.
+ * **Colour text, icons and focus rings with these; fill shapes with
+ * {@link signals}.** Mirrors `--success-deep` and friends in `theme.css`, which
+ * in dark mode map back to the fills — those are already light against ink.
  */
 declare const signalsDeep: {
-    readonly danger: "oklch(0.53 0.22 18)";
-    readonly success: "oklch(0.48 0.12 150)";
-    readonly warning: "oklch(0.50 0.11 78)";
-    readonly info: "oklch(0.50 0.14 250)";
+    readonly danger: "oklch(0.50 0.158 25)";
+    readonly success: "oklch(0.47 0.134 148)";
+    readonly warning: "oklch(0.49 0.102 75)";
+    readonly info: "oklch(0.48 0.134 250)";
+};
+/**
+ * The on-dark rung, for the `bold` roles only. A dark fill would sink into an
+ * ink surface (1.5:1), so on dark it flips to a lighter value carrying ink text
+ * at about 5.4:1. The `tint` roles need no entry here: a light fill with ink
+ * text already works on both surfaces, which is why `theme.css` leaves them
+ * untouched in the dark block.
+ */
+declare const onDark: {
+    readonly danger: "oklch(0.67 0.158 25)";
+    readonly ink: "oklch(0.65 0.023 250)";
 };
 type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
+/**
+ * The five accent families, each `{ base, deep }` — the fill and the on-light
+ * rung. Lightness is fixed per rung, so swapping families changes hue without
+ * changing perceived weight: all four tints carry ink text between 7.2:1 and
+ * 8.0:1. `ink` is the neutral family and the one `bold` fill; it takes paper
+ * text (10.6:1) and has an {@link onDark} entry.
+ */
 declare const accents: {
     readonly cyan: {
-        readonly base: "oklch(0.74 0.13 195)";
-        readonly deep: "oklch(0.48 0.10 200)";
+        readonly base: "oklch(0.74 0.124 195)";
+        readonly deep: "oklch(0.47 0.078 195)";
     };
     readonly blue: {
-        readonly base: "oklch(0.62 0.15 250)";
-        readonly deep: "oklch(0.46 0.13 255)";
+        readonly base: "oklch(0.74 0.137 250)";
+        readonly deep: "oklch(0.48 0.134 250)";
     };
     readonly green: {
-        readonly base: "oklch(0.70 0.13 155)";
-        readonly deep: "oklch(0.48 0.11 158)";
+        readonly base: "oklch(0.74 0.138 155)";
+        readonly deep: "oklch(0.47 0.114 155)";
     };
     readonly rust: {
-        readonly base: "oklch(0.66 0.15 45)";
-        readonly deep: "oklch(0.48 0.13 42)";
+        readonly base: "oklch(0.74 0.138 45)";
+        readonly deep: "oklch(0.50 0.138 45)";
     };
     readonly ink: {
-        readonly base: "oklch(0.32 0.02 250)";
+        readonly base: "oklch(0.32 0.020 250)";
         readonly deep: "oklch(0.24 0.015 250)";
     };
+};
+/** The fill mode of each {@link accents} family — which foreground it pairs with. */
+declare const accentFill: {
+    readonly cyan: "tint";
+    readonly blue: "tint";
+    readonly green: "tint";
+    readonly rust: "tint";
+    readonly ink: "bold";
 };
 declare const fonts: {
     readonly hand: "\"Architects Daughter\", \"Comic Sans MS\", cursive";
@@ -118,41 +165,58 @@ declare const tokens: {
         readonly ink2: "#4a4a45";
         readonly muted: "#6e6c64";
         readonly line: "#cbc9be";
-        readonly glitchRed: "oklch(0.53 0.22 18)";
+        readonly glitchRed: "oklch(0.52 0.158 25)";
     };
     readonly signals: {
-        readonly danger: "oklch(0.53 0.22 18)";
-        readonly success: "oklch(0.60 0.13 150)";
-        readonly warning: "oklch(0.80 0.15 78)";
-        readonly info: "oklch(0.62 0.15 250)";
+        readonly danger: "oklch(0.52 0.158 25)";
+        readonly success: "oklch(0.74 0.138 148)";
+        readonly warning: "oklch(0.74 0.138 75)";
+        readonly info: "oklch(0.74 0.137 250)";
+    };
+    readonly signalFill: {
+        readonly danger: "bold";
+        readonly success: "tint";
+        readonly warning: "tint";
+        readonly info: "tint";
     };
     readonly signalsDeep: {
-        readonly danger: "oklch(0.53 0.22 18)";
-        readonly success: "oklch(0.48 0.12 150)";
-        readonly warning: "oklch(0.50 0.11 78)";
-        readonly info: "oklch(0.50 0.14 250)";
+        readonly danger: "oklch(0.50 0.158 25)";
+        readonly success: "oklch(0.47 0.134 148)";
+        readonly warning: "oklch(0.49 0.102 75)";
+        readonly info: "oklch(0.48 0.134 250)";
+    };
+    readonly onDark: {
+        readonly danger: "oklch(0.67 0.158 25)";
+        readonly ink: "oklch(0.65 0.023 250)";
     };
     readonly accents: {
         readonly cyan: {
-            readonly base: "oklch(0.74 0.13 195)";
-            readonly deep: "oklch(0.48 0.10 200)";
+            readonly base: "oklch(0.74 0.124 195)";
+            readonly deep: "oklch(0.47 0.078 195)";
         };
         readonly blue: {
-            readonly base: "oklch(0.62 0.15 250)";
-            readonly deep: "oklch(0.46 0.13 255)";
+            readonly base: "oklch(0.74 0.137 250)";
+            readonly deep: "oklch(0.48 0.134 250)";
         };
         readonly green: {
-            readonly base: "oklch(0.70 0.13 155)";
-            readonly deep: "oklch(0.48 0.11 158)";
+            readonly base: "oklch(0.74 0.138 155)";
+            readonly deep: "oklch(0.47 0.114 155)";
         };
         readonly rust: {
-            readonly base: "oklch(0.66 0.15 45)";
-            readonly deep: "oklch(0.48 0.13 42)";
+            readonly base: "oklch(0.74 0.138 45)";
+            readonly deep: "oklch(0.50 0.138 45)";
         };
         readonly ink: {
-            readonly base: "oklch(0.32 0.02 250)";
+            readonly base: "oklch(0.32 0.020 250)";
             readonly deep: "oklch(0.24 0.015 250)";
         };
+    };
+    readonly accentFill: {
+        readonly cyan: "tint";
+        readonly blue: "tint";
+        readonly green: "tint";
+        readonly rust: "tint";
+        readonly ink: "bold";
     };
     readonly fonts: {
         readonly hand: "\"Architects Daughter\", \"Comic Sans MS\", cursive";
@@ -189,4 +253,4 @@ declare const tokens: {
 };
 type Tokens = typeof tokens;
 
-export { type AccentName, type Breakpoint, type Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens };
+export { type AccentName, type Breakpoint, type FillMode, type Tokens, accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens };

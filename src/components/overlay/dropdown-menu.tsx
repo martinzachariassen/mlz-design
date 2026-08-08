@@ -123,7 +123,7 @@ export const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex size-4 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <CheckIcon className="size-3.5 text-accent" />
+        <CheckIcon className="size-3.5 text-accent-deep" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}
@@ -144,7 +144,7 @@ export const DropdownMenuRadioItem = React.forwardRef<
   >
     <span className="absolute left-2 flex size-4 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <DotIcon className="text-accent" />
+        <DotIcon className="text-accent-deep" />
       </DropdownMenuPrimitive.ItemIndicator>
     </span>
     {children}

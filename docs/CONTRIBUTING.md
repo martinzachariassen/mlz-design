@@ -53,6 +53,8 @@ Prefer the per-rule form. A blanket `disable` hides every future regression in t
 
 **What to write for a new component.** A story is not optional — the a11y gate only sees what has a story, so an unstoried component is an unaudited one. Beyond that: a unit test for anything with state, a variant, or a prop that changes markup; a `LightDark` story (see `theme-split.tsx`) for anything whose colours could break in one theme; and an interaction test for anything with a keyboard pattern of its own.
 
+**Picking colours for it.** Use the rung that matches the job: `bg-*` + the paired `text-*-foreground` for fills, and `text-*-deep` for text, icons, focus rings and hover states. A bare `text-accent` / `text-success` is a bug — the fill values measure under 2:1 on paper, and axe cannot see a focus ring. `-deep` maps back to the fill in dark mode, so it is right in both themes without branching. See [the colour ladder](architecture.md#the-colour-ladder--fills-fill--deep-reads); `src/tokens.contrast.test.ts` will fail you if a new token breaks the contract.
+
 **Every component is covered, but not every component has its own test file.** Five are tested from a sibling, on purpose: `toggle-group` from `toggle.test.tsx` (they share a variant contract), `modal-root` from the `dialog` / `sheet` / `alert-dialog` / `command` tests that exercise it, and `grid-background` / `repo-banner` / `social-card` from `asset-templates.test.tsx`, which groups them because what they share — a locked aspect ratio and a decorative layer — is the thing worth asserting. Adding empty files for those would be coverage theatre.
 
 ### The story ladder

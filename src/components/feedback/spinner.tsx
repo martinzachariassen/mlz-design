@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 
 const spinnerVariants = cva(
-  "inline-block animate-spin rounded-full border-current border-t-transparent text-accent motion-reduce:animate-none",
+  "inline-block animate-spin rounded-full border-current border-t-transparent text-accent-deep motion-reduce:animate-none",
   {
     variants: {
       size: {

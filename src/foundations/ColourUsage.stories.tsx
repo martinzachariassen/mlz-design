@@ -203,19 +203,20 @@ export const Usage: Story = {
                   <a href="#dark" className="text-accent underline underline-offset-2">
                     accent-coloured link
                   </a>{" "}
-                  uses the base <code>accent</code> — bright enough on ink.
+                  uses the base <code>accent</code> — bright enough on ink. <code>accent-deep</code>{" "}
+                  maps back to it here, so either name is correct in dark.
                 </p>
                 <Verdict ok>Do — foreground / muted-foreground / accent link</Verdict>
               </div>
               <div className="space-y-3">
-                <p className="text-sm" style={{ color: "var(--accent-deep)" } as CSSProperties}>
-                  Don't set body or links in <code>accent-deep</code> — it's tuned for light and
-                  goes murky on ink.
+                <p className="text-sm" style={{ color: "var(--mlz-slate)" } as CSSProperties}>
+                  Don't reach for a raw <code>--mlz-*</code> primitive on ink — the slate base is a
+                  dark fill and all but vanishes here.
                 </p>
                 <div className="rounded-[var(--radius-sm)] bg-destructive p-3 text-sm text-destructive-foreground">
                   Don't wrap paragraphs in a solid signal fill — reserve solids for badges/buttons.
                 </div>
-                <Verdict ok={false}>Don't — accent-deep text / solid fills behind prose</Verdict>
+                <Verdict ok={false}>Don't — raw primitives / solid fills behind prose</Verdict>
               </div>
             </div>
           </ThemePanel>

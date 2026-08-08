@@ -51,10 +51,10 @@ export function Toaster({ className, toastOptions, ...props }: ToasterProps) {
           content: "flex-1",
           // The signal colours come from the same tokens Alert and Callout use,
           // so a success toast and a success alert are the same green.
-          success: "[&_[data-icon]]:text-success",
+          success: "[&_[data-icon]]:text-success-deep",
           error: "[&_[data-icon]]:text-destructive",
-          warning: "[&_[data-icon]]:text-warning",
-          info: "[&_[data-icon]]:text-info",
+          warning: "[&_[data-icon]]:text-warning-deep",
+          info: "[&_[data-icon]]:text-info-deep",
           actionButton:
             "ml-auto shrink-0 rounded-[var(--radius-sm)] bg-primary px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary-foreground",
           cancelButton:

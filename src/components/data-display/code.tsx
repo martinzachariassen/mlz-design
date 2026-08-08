@@ -98,7 +98,7 @@ export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
                 onClick={copy}
                 className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
               >
-                {copied ? <CheckIcon className="size-3.5 text-success" /> : null}
+                {copied ? <CheckIcon className="size-3.5 text-success-deep" /> : null}
                 {copied ? "Copied" : "Copy"}
                 <span className="sr-only">{copyLabel}</span>
               </button>

@@ -13,46 +13,97 @@ export const colors = {
   ink2: "#4a4a45",
   muted: "#6e6c64",
   line: "#cbc9be",
-  glitchRed: "oklch(0.53 0.22 18)",
+  glitchRed: "oklch(0.52 0.158 25)",
 } as const;
 
 /**
- * Meaning-carrying signal colours, harmonised with the palette. These are the
- * **solids** — tuned for fills, borders and dots.
+ * How a fill behaves, and therefore which foreground it takes. No single
+ * lightness works for every hue — yellow cannot go dark and stay yellow, red
+ * cannot go light and stay emphatic — so the ladder has two fill modes instead
+ * of pretending otherwise.
+ *
+ * - `tint` — light fill (L 0.74), carries `colors.ink` at 7.2:1–8.0:1.
+ * - `bold` — dark fill, carries `colors.paper` at 4.6:1 or better.
+ *
+ * The band between them (L ≈ 0.55–0.70) is unusable for fills: there neither
+ * ink nor paper text reaches 4.5:1, topping out near 4.3:1 either way.
+ */
+export type FillMode = "tint" | "bold";
+
+/**
+ * Meaning-carrying signal colours, on the same ladder as {@link accents} so a
+ * badge and a status dot read at the same weight. These are the **fills** —
+ * backgrounds for their paired foreground, never text colours. On paper the
+ * tints measure roughly 1.9:1; reach for {@link signalsDeep} to colour anything.
  */
 export const signals = {
-  danger: "oklch(0.53 0.22 18)",
-  success: "oklch(0.60 0.13 150)",
-  warning: "oklch(0.80 0.15 78)",
-  info: "oklch(0.62 0.15 250)",
+  danger: "oklch(0.52 0.158 25)",
+  success: "oklch(0.74 0.138 148)",
+  warning: "oklch(0.74 0.138 75)",
+  info: "oklch(0.74 0.137 250)",
 } as const;
 
+/** The fill mode of each {@link signals} entry — which foreground it pairs with. */
+export const signalFill = {
+  danger: "bold",
+  success: "tint",
+  warning: "tint",
+  info: "tint",
+} as const satisfies Record<keyof typeof signals, FillMode>;
+
 /**
- * The text-safe partners of {@link signals} — the same hues darkened until they
- * clear WCAG AA (4.5:1) against the light paper background. On paper the solids
- * measure 3.1:1 for `success` and 1.6:1 for `warning`, so **colour small text
- * with these and fill shapes with the solids**. `danger` needs no darkening; it
- * is listed so the set is complete and a caller can reach for it unconditionally.
+ * The on-light rung: the same hues, placed so they clear WCAG AA (4.5:1) against
+ * **every** paper surface — `paper`, `paper2` and `paper3` alike, measuring
+ * 5.32:1–5.49:1 on `paper` and never dropping below 4.54:1 on `paper3`.
  *
- * Mirrors `--success-deep` and friends in `theme.css`, which in dark mode map
- * straight back to the solids — those already clear AA on the ink surface.
+ * **Colour text, icons and focus rings with these; fill shapes with
+ * {@link signals}.** Mirrors `--success-deep` and friends in `theme.css`, which
+ * in dark mode map back to the fills — those are already light against ink.
  */
 export const signalsDeep = {
-  danger: "oklch(0.53 0.22 18)",
-  success: "oklch(0.48 0.12 150)",
-  warning: "oklch(0.50 0.11 78)",
-  info: "oklch(0.50 0.14 250)",
+  danger: "oklch(0.50 0.158 25)",
+  success: "oklch(0.47 0.134 148)",
+  warning: "oklch(0.49 0.102 75)",
+  info: "oklch(0.48 0.134 250)",
 } as const satisfies Record<keyof typeof signals, string>;
+
+/**
+ * The on-dark rung, for the `bold` roles only. A dark fill would sink into an
+ * ink surface (1.5:1), so on dark it flips to a lighter value carrying ink text
+ * at about 5.4:1. The `tint` roles need no entry here: a light fill with ink
+ * text already works on both surfaces, which is why `theme.css` leaves them
+ * untouched in the dark block.
+ */
+export const onDark = {
+  danger: "oklch(0.67 0.158 25)",
+  ink: "oklch(0.65 0.023 250)",
+} as const;
 
 export type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
 
+/**
+ * The five accent families, each `{ base, deep }` — the fill and the on-light
+ * rung. Lightness is fixed per rung, so swapping families changes hue without
+ * changing perceived weight: all four tints carry ink text between 7.2:1 and
+ * 8.0:1. `ink` is the neutral family and the one `bold` fill; it takes paper
+ * text (10.6:1) and has an {@link onDark} entry.
+ */
 export const accents = {
-  cyan: { base: "oklch(0.74 0.13 195)", deep: "oklch(0.48 0.10 200)" },
-  blue: { base: "oklch(0.62 0.15 250)", deep: "oklch(0.46 0.13 255)" },
-  green: { base: "oklch(0.70 0.13 155)", deep: "oklch(0.48 0.11 158)" },
-  rust: { base: "oklch(0.66 0.15 45)", deep: "oklch(0.48 0.13 42)" },
-  ink: { base: "oklch(0.32 0.02 250)", deep: "oklch(0.24 0.015 250)" },
+  cyan: { base: "oklch(0.74 0.124 195)", deep: "oklch(0.47 0.078 195)" },
+  blue: { base: "oklch(0.74 0.137 250)", deep: "oklch(0.48 0.134 250)" },
+  green: { base: "oklch(0.74 0.138 155)", deep: "oklch(0.47 0.114 155)" },
+  rust: { base: "oklch(0.74 0.138 45)", deep: "oklch(0.50 0.138 45)" },
+  ink: { base: "oklch(0.32 0.020 250)", deep: "oklch(0.24 0.015 250)" },
 } as const satisfies Record<AccentName, { base: string; deep: string }>;
+
+/** The fill mode of each {@link accents} family — which foreground it pairs with. */
+export const accentFill = {
+  cyan: "tint",
+  blue: "tint",
+  green: "tint",
+  rust: "tint",
+  ink: "bold",
+} as const satisfies Record<AccentName, FillMode>;
 
 export const fonts = {
   hand: '"Architects Daughter", "Comic Sans MS", cursive',
@@ -110,8 +161,11 @@ export type Breakpoint = keyof typeof breakpoints;
 export const tokens = {
   colors,
   signals,
+  signalFill,
   signalsDeep,
+  onDark,
   accents,
+  accentFill,
   fonts,
   motion,
   animations,

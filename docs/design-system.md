@@ -113,8 +113,11 @@ For the times you need the values outside CSS (charts, canvas, email, framer-mot
 ```ts
 import { tokens, accents, colors, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
 
-accents.rust.base; // "oklch(0.66 0.15 45)"
-signals.warning;   // "oklch(0.80 0.15 78)"
+accents.rust.base; // "oklch(0.74 0.138 45)"  — the fill rung
+accents.rust.deep; // "oklch(0.50 0.138 45)"  — text/icons/rings on paper
+accentFill.rust;   // "tint" — so it pairs with colors.ink, not colors.paper
+signals.warning;   // "oklch(0.74 0.138 75)"
+onDark.danger;     // "oklch(0.67 0.158 25)" — bold roles flip on ink surfaces
 fonts.hand;        // '"Architects Daughter", "Comic Sans MS", cursive'
 motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
 radius.base;       // "0.25rem"
@@ -122,6 +125,13 @@ breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia etc.
 ```
 
 These mirror `theme.css` value-for-value. One naming quirk: the signal role called `--destructive` in CSS is exported as `signals.danger` in JS (same colour).
+
+Colour is authored in OKLCH and every chromatic value is held inside the sRGB
+gamut, so the contrast figures hold on any display rather than only on wide-gamut
+ones. Each value sits on a rung that decides its use — `base` fills, `deep`
+colours text, icons and focus rings on paper — and `src/tokens.contrast.test.ts`
+asserts each rung's promise, so a value edited in only one of the two files fails
+CI. Foundations → Colour model documents the whole ladder.
 
 ## Fonts
 

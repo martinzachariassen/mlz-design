@@ -122,7 +122,7 @@ export const AccordionTrigger = React.forwardRef<
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 group-data-[state=open]:text-accent motion-reduce:transition-none"
+          className="ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 group-data-[state=open]:text-accent-deep motion-reduce:transition-none"
         >
           <path d="m6 9 6 6 6-6" />
         </svg>

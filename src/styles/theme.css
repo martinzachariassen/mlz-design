@@ -21,15 +21,26 @@
      3. @theme inline  re-exports the semantic layer to Tailwind so tokens and
                      utilities are the same thing and runtime swaps keep working.
 
-   Colour is authored in OKLCH (perceptual, wide-gamut ready). Foregrounds are
-   chosen so text on a surface clears WCAG AA for body copy; solid accent/signal
-   fills are for emphasis (badges, buttons), not long-form text.
+   Colour is authored in OKLCH, so lightness means the same thing across hues and
+   a family swap does not change perceived weight. Every chromatic value is also
+   held INSIDE the sRGB gamut on purpose: a value the browser has to clip is not
+   the value you measured, so the contrast figures below would only be true on
+   some displays. OKLCH still buys the perceptual uniformity either way.
+
+   Which rung a colour sits on decides what it may be used for — fills carry
+   their paired foreground, `-deep` carries text and focus rings on paper. See
+   the ladder note in section 1, and foundations/ColourModel for the long form.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
-   1. PRIMITIVES  — the canonical MLZ brand values. Neutrals keep their source hex
-   (a warm paper/ink scale); everything chromatic is OKLCH so it lightens and
-   mixes predictably.
+   1. PRIMITIVES  — the canonical MLZ brand values.
+
+   The seven neutrals below are the ONLY hex left in this file, and deliberately
+   so: they are the literal warm paper/ink values every MLZ project inherits, and
+   restating them in OKLCH would churn the brand's core surface colour to buy
+   nothing (their chroma is ~0.01 — there is no hue behaviour to reason about).
+   Everything else — every chromatic primitive, and every tuned semantic value —
+   is OKLCH, so it lightens, darkens and mixes predictably. Do not add new hex.
    -------------------------------------------------------------------------- */
 :root {
   /* Paper — warm off-white surfaces, light→deep */
@@ -43,31 +54,63 @@
   --mlz-muted:    #6e6c64;
   --mlz-line:     #cbc9be;
 
-  /* Accent families — { base, deep }. Cyan is the house colour. */
-  --mlz-cyan:       oklch(0.74 0.13 195);
-  --mlz-cyan-deep:  oklch(0.48 0.10 200);
-  --mlz-blue:       oklch(0.62 0.15 250);
-  --mlz-blue-deep:  oklch(0.46 0.13 255);
-  --mlz-green:      oklch(0.70 0.13 155);
-  --mlz-green-deep: oklch(0.48 0.11 158);
-  --mlz-rust:       oklch(0.66 0.15 45);
-  --mlz-rust-deep:  oklch(0.48 0.13 42);
-  --mlz-slate:      oklch(0.32 0.02 250);
-  --mlz-slate-deep: oklch(0.24 0.015 250);
+  /* ── The chromatic ladder ──────────────────────────────────────────────────
+     Every chromatic value is one of three rungs, and the rung — not the hue —
+     decides where it may be used. Lightness is fixed per rung so a family swap
+     changes hue, never weight; chroma is whatever that hue can carry at that
+     lightness without leaving sRGB (yellow simply cannot be as chromatic as red
+     — the ceiling is a fact of the gamut, not a choice).
 
-  /* Signals — meaning-carrying hues, harmonised with the palette. Each has a
-     `-deep` partner: the solids are tuned for fills and borders, and on paper
-     `--mlz-success` measures 3.1:1 and `--mlz-warning` 1.6:1 as text. The deep
-     variants are the same hue darkened until they clear AA — the same
-     relationship `--mlz-cyan-deep` has to `--mlz-cyan`. */
-  --mlz-danger:        oklch(0.53 0.22 18);   /* deep enough that paper text on it clears AA; also the glitch red */
-  --mlz-danger-deep:   oklch(0.53 0.22 18);   /* already 4.9:1 on paper — nothing to darken */
-  --mlz-success:       oklch(0.60 0.13 150);
-  --mlz-success-deep:  oklch(0.48 0.12 150);
-  --mlz-warning:       oklch(0.80 0.15 78);
-  --mlz-warning-deep:  oklch(0.50 0.11 78);
-  --mlz-info:          oklch(0.62 0.15 250);
-  --mlz-info-deep:     oklch(0.50 0.14 250);
+       base   the FILL rung: a background for its paired foreground, never text.
+       -deep  the ON-LIGHT rung: text, icons, focus rings on a paper surface.
+              ≥4.5:1 on paper, paper-2 AND paper-3.
+       (dark) the ON-DARK rung: same job on an ink surface. Only the two `bold`
+              families need one — see below — the rest reuse their base.
+
+     Fills come in two modes, because no single lightness works for every hue:
+
+       tint  L 0.74, carries INK text at 7.2–8.0:1  — cyan, blue, green, rust,
+             warning, success, info.
+       bold  dark,   carries PAPER text at ≥4.6:1   — danger and slate only.
+
+     The band between them (L ≈ 0.55–0.70) is a DEAD ZONE: there, neither ink
+     nor paper text reaches 4.5:1 against the fill — mid-lightness tops out
+     around 4.3:1 either way. Never put a fill there. (That dead zone is exactly
+     where the previous blue/rust/success solids sat, which is why paper text on
+     them measured 2.75–3.12:1.)
+
+     Numbers verified by src/tokens.contrast.test.ts — change a value and
+     the test tells you which promise you broke. */
+
+  /* Accent families — { base = fill, deep = on-light }. Cyan is the house colour.
+     `slate` is the neutral family (it backs data-accent="ink"): it is the one
+     bold accent, deliberately anchored far darker than the 4.6:1 minimum. */
+  --mlz-cyan:       oklch(0.74 0.124 195);   /* tint */
+  --mlz-cyan-deep:  oklch(0.47 0.078 195);
+  --mlz-blue:       oklch(0.74 0.137 250);   /* tint */
+  --mlz-blue-deep:  oklch(0.48 0.134 250);
+  --mlz-green:      oklch(0.74 0.138 155);   /* tint */
+  --mlz-green-deep: oklch(0.47 0.114 155);
+  --mlz-rust:       oklch(0.74 0.138 45);    /* tint */
+  --mlz-rust-deep:  oklch(0.50 0.138 45);
+  --mlz-slate:      oklch(0.32 0.020 250);   /* bold — paper text at 10.6:1 */
+  --mlz-slate-deep: oklch(0.24 0.015 250);
+  --mlz-slate-dark: oklch(0.65 0.023 250);   /* on-dark: bold families must flip */
+
+  /* Signals — meaning-carrying hues, on the same ladder as the accents so a
+     badge and a status dot read at the same weight. Three of the four are tint
+     fills; `danger` is bold, because a destructive action must not read as
+     decorative — a light salmon button is the wrong affordance, and red is the
+     one hue with the chroma to stay emphatic while dark. */
+  --mlz-danger:        oklch(0.52 0.158 25);   /* bold — paper text at 5.0:1; also the glitch red */
+  --mlz-danger-deep:   oklch(0.50 0.158 25);
+  --mlz-danger-dark:   oklch(0.67 0.158 25);   /* on-dark: flips to a light fill with ink text */
+  --mlz-success:       oklch(0.74 0.138 148);  /* tint */
+  --mlz-success-deep:  oklch(0.47 0.134 148);
+  --mlz-warning:       oklch(0.74 0.138 75);   /* tint */
+  --mlz-warning-deep:  oklch(0.49 0.102 75);
+  --mlz-info:          oklch(0.74 0.137 250);  /* tint */
+  --mlz-info-deep:     oklch(0.48 0.134 250);
 
   /* Type stacks — robust fallbacks so the system holds if a webfont fails */
   --mlz-font-hand:    "Architects Daughter", "Comic Sans MS", cursive;
@@ -111,8 +154,11 @@
 
   --muted:                 var(--mlz-paper-2);
   /* A hair darker than the --mlz-muted primitive (#6e6c64 clears only 4.05:1 on
-     paper-2); this lands ≥4.5:1 AA on every paper surface while staying muted. */
-  --muted-foreground:      #63615a;
+     paper-2); this clears AA on both surfaces it is actually used against —
+     5.19:1 on paper, 4.78:1 on paper-2 — while staying muted. It measures
+     4.43:1 on `--mlz-paper-3`, which is why paper-3 is a primitive with no
+     semantic surface role: nothing sets text on it. Resolves to #63615a. */
+  --muted-foreground:      oklch(0.4922 0.0112 93.7);
   /* Third, fainter text level — de-emphasised labels/captions/eyebrows. Reads a
      touch lighter than --muted-foreground yet still clears WCAG AA (≈5.0:1 on
      paper, 4.6:1 on paper-2). It is a label/caption tone — do NOT set long body
@@ -129,29 +175,35 @@
 
   --border:                var(--mlz-line);
   --input:                 var(--mlz-line);
-  --ring:                  var(--mlz-cyan);
+  /* The focus ring is drawn ON the paper surface, so it takes the on-light rung,
+     not the fill. WCAG 2.1 SC 1.4.11 wants ≥3:1 for a focus indicator; the base
+     accent manages only 1.82:1 against paper (a tint fill cannot also contrast
+     with a light surface — that is the whole point of the two rungs). Deep
+     measures 5.49:1. Dark mode overrides this back to the base, which is light
+     against the ink surface. */
+  --ring:                  var(--mlz-cyan-deep);
 
-  /* Signals — each carries a solid, a foreground, a subtle tint (below), and a
-     `-deep` text-safe variant.
+  /* Signals — each carries a fill, its paired foreground, a subtle tint (below),
+     and the `-deep` on-light rung.
 
-     The solids are fill-and-border colours, chosen for presence rather than for
-     reading: on paper, `--success` measures 3.1:1 and `--warning` 1.6:1, both
-     short of the 4.5:1 AA needs for body text. `-deep` is the same hue darkened
-     until it clears AA, exactly as `--accent-deep` is to `--accent`. **Colour
-     small text with `-deep`; fill shapes with the solid.** In dark mode the
-     solids already clear AA against the ink background, so `-deep` maps
-     straight back to them. */
-  --destructive:            var(--mlz-danger);
+     The fill is a background, never a text colour: on paper the tint fills
+     measure about 1.9:1, nowhere near readable. `-deep` is the same hue on the
+     on-light rung, ≥4.5:1 against every paper surface. **Colour text, icons and
+     rings with `-deep`; fill shapes with the solid.** The foreground pairing
+     follows the fill mode — ink on a tint, paper on a bold — so it is not a
+     free choice per role. In dark mode `-deep` maps back to the fill, which is
+     already light against the ink surface. */
+  --destructive:            var(--mlz-danger);     /* bold  → paper text */
   --destructive-foreground: var(--mlz-paper);
   --destructive-deep:       var(--mlz-danger-deep);
-  --success:                var(--mlz-success);
-  --success-foreground:     var(--mlz-paper);
+  --success:                var(--mlz-success);    /* tint  → ink text */
+  --success-foreground:     var(--mlz-ink);
   --success-deep:           var(--mlz-success-deep);
-  --warning:                var(--mlz-warning);
+  --warning:                var(--mlz-warning);    /* tint  → ink text */
   --warning-foreground:     var(--mlz-ink);
   --warning-deep:           var(--mlz-warning-deep);
-  --info:                   var(--mlz-info);
-  --info-foreground:        var(--mlz-paper);
+  --info:                   var(--mlz-info);       /* tint  → ink text */
+  --info-foreground:        var(--mlz-ink);
   --info-deep:              var(--mlz-info-deep);
 
   /* Per-character glitch pair (cyberpunk accent motion) */
@@ -215,36 +267,37 @@
   /* Fainter label/caption tone, still ≥4.5:1 AA on every dark surface. */
   --muted-foreground-2:    oklch(0.66 0.008 100);
 
+  /* A tint fill is a light colour carrying ink text — that works just as well on
+     an ink surface as on paper, so the tint families need no dark override at
+     all. What flips is the on-light rung: `-deep` was darkened for paper and is
+     far too dark here, so it maps back to the fill (8.3:1 on `--background`). */
   --accent:                var(--mlz-cyan);
-  --accent-deep:           oklch(0.66 0.12 197);
-  --accent-foreground:     oklch(0.20 0.004 110);
+  --accent-deep:           var(--accent);
+  --accent-foreground:     var(--mlz-ink);
   --brand-period:          var(--accent);
 
   --border:                oklch(0.31 0.004 110);
   --input:                 oklch(0.31 0.004 110);
   --ring:                  var(--mlz-cyan);
 
-  --destructive:            oklch(0.64 0.19 20);
-  --destructive-foreground: oklch(0.18 0.02 20);
-  --warning:                oklch(0.83 0.15 80);
-  --warning-foreground:     oklch(0.20 0.02 80);
-  --success:                oklch(0.70 0.13 152);
-  --success-foreground:     oklch(0.18 0.02 150);
-  --info:                   oklch(0.68 0.14 250);
-  --info-foreground:        oklch(0.18 0.02 250);
+  /* `danger` is the one signal that is a bold fill, so it is the one that has to
+     change: dark-on-dark would vanish. It flips to the on-dark rung — a lighter
+     red carrying ink text at 5.4:1 — mirroring how the tints already behave. */
+  --destructive:            var(--mlz-danger-dark);
+  --destructive-foreground: var(--mlz-ink);
 
-  /* On the dark surface the solids measure 5.1–11.0 against `--background`, so
-     there is nothing to deepen — `-deep` is the solid itself. Keeping the role
-     defined in both themes means a component can reach for it unconditionally. */
+  /* `-deep` is the on-light rung; on an ink surface the fill already clears AA,
+     so each maps back to it. Keeping the role defined in both themes means a
+     component can reach for it unconditionally. */
   --destructive-deep:       var(--destructive);
   --success-deep:           var(--success);
   --warning-deep:           var(--warning);
   --info-deep:              var(--info);
 
   --glitch-1:              var(--mlz-cyan);
-  --glitch-2:              oklch(0.66 0.21 20);
+  --glitch-2:              var(--mlz-danger-dark);
 
-  --overlay:              color-mix(in oklch, #000 70%, transparent);
+  --overlay:              color-mix(in oklch, oklch(0 0 0) 70%, transparent);
 
   /* Recomputed here so the tints resolve against the dark `--background`
      (see the light-scope note above). */
@@ -257,14 +310,45 @@
 
 /* -----------------------------------------------------------------------------
    Accent families — swap the accent role (and its ring/glitch/foreground) on any
-   element, in any theme: <html data-accent="rust">. Foregrounds are picked per
-   family for legible fills.
+   element, in any theme: <html data-accent="rust">.
+
+   Because every family sits on the same rungs, a swap changes hue without
+   changing weight: all four tints fill at L 0.74 and carry ink text between
+   7.2:1 and 8.0:1. The foreground is therefore not a per-family judgement call
+   any more — it falls out of the fill mode. `ink` is the one bold family and
+   the one that takes paper text.
+
+   `--ring` takes the on-light rung, not the fill: the ring is drawn on the paper
+   surface and needs ≥3:1 there (SC 1.4.11), which a tint cannot give.
    -------------------------------------------------------------------------- */
-[data-accent="cyan"]  { --accent: var(--mlz-cyan);  --accent-deep: var(--mlz-cyan-deep);  --ring: var(--mlz-cyan);  --glitch-1: var(--mlz-cyan);  --accent-foreground: var(--mlz-ink); }
-[data-accent="blue"]  { --accent: var(--mlz-blue);  --accent-deep: var(--mlz-blue-deep);  --ring: var(--mlz-blue);  --glitch-1: var(--mlz-blue);  --accent-foreground: var(--mlz-paper); }
-[data-accent="green"] { --accent: var(--mlz-green); --accent-deep: var(--mlz-green-deep); --ring: var(--mlz-green); --glitch-1: var(--mlz-green); --accent-foreground: var(--mlz-ink); }
-[data-accent="rust"]  { --accent: var(--mlz-rust);  --accent-deep: var(--mlz-rust-deep);  --ring: var(--mlz-rust);  --glitch-1: var(--mlz-rust);  --accent-foreground: var(--mlz-paper); }
-[data-accent="ink"]   { --accent: var(--mlz-slate); --accent-deep: var(--mlz-slate-deep); --ring: var(--mlz-slate); --glitch-1: var(--mlz-slate); --accent-foreground: var(--mlz-paper); }
+[data-accent="cyan"]  { --accent: var(--mlz-cyan);  --accent-deep: var(--mlz-cyan-deep);  --ring: var(--mlz-cyan-deep);  --glitch-1: var(--mlz-cyan);  --accent-foreground: var(--mlz-ink); }
+[data-accent="blue"]  { --accent: var(--mlz-blue);  --accent-deep: var(--mlz-blue-deep);  --ring: var(--mlz-blue-deep);  --glitch-1: var(--mlz-blue);  --accent-foreground: var(--mlz-ink); }
+[data-accent="green"] { --accent: var(--mlz-green); --accent-deep: var(--mlz-green-deep); --ring: var(--mlz-green-deep); --glitch-1: var(--mlz-green); --accent-foreground: var(--mlz-ink); }
+[data-accent="rust"]  { --accent: var(--mlz-rust);  --accent-deep: var(--mlz-rust-deep);  --ring: var(--mlz-rust-deep);  --glitch-1: var(--mlz-rust);  --accent-foreground: var(--mlz-ink); }
+[data-accent="ink"]   { --accent: var(--mlz-slate); --accent-deep: var(--mlz-slate-deep); --ring: var(--mlz-slate-deep); --glitch-1: var(--mlz-slate); --accent-foreground: var(--mlz-paper); }
+
+/* Dark mode, restated. The rules above and the `.dark` block have the SAME
+   specificity (0,1,0), and these come later in the file — so on an
+   `<html class="dark" data-accent="rust">` they win, and dark mode would
+   silently get the paper-tuned on-light rung. Restating the flip at (0,2,0)
+   settles it, and covers both the same-element and ancestor cases. */
+.dark [data-accent], .dark[data-accent],
+[data-theme="dark"] [data-accent], [data-theme="dark"][data-accent] {
+  --accent-deep: var(--accent);
+  --ring: var(--accent);
+}
+
+/* …except `ink`, the bold family: its fill is dark, so on an ink surface it
+   would disappear into the background (1.5:1) and its ring would fail outright.
+   It flips to the on-dark rung, exactly as `danger` does. */
+.dark [data-accent="ink"], .dark[data-accent="ink"],
+[data-theme="dark"] [data-accent="ink"], [data-theme="dark"][data-accent="ink"] {
+  --accent: var(--mlz-slate-dark);
+  --accent-deep: var(--mlz-slate-dark);
+  --ring: var(--mlz-slate-dark);
+  --glitch-1: var(--mlz-slate-dark);
+  --accent-foreground: var(--mlz-ink);
+}
 
 /* -----------------------------------------------------------------------------
    3. @theme inline  — hand the semantic layer to Tailwind v4. `inline` keeps the

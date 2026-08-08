@@ -7,26 +7,43 @@ var colors = {
   ink2: "#4a4a45",
   muted: "#6e6c64",
   line: "#cbc9be",
-  glitchRed: "oklch(0.53 0.22 18)"
+  glitchRed: "oklch(0.52 0.158 25)"
 };
 var signals = {
-  danger: "oklch(0.53 0.22 18)",
-  success: "oklch(0.60 0.13 150)",
-  warning: "oklch(0.80 0.15 78)",
-  info: "oklch(0.62 0.15 250)"
+  danger: "oklch(0.52 0.158 25)",
+  success: "oklch(0.74 0.138 148)",
+  warning: "oklch(0.74 0.138 75)",
+  info: "oklch(0.74 0.137 250)"
+};
+var signalFill = {
+  danger: "bold",
+  success: "tint",
+  warning: "tint",
+  info: "tint"
 };
 var signalsDeep = {
-  danger: "oklch(0.53 0.22 18)",
-  success: "oklch(0.48 0.12 150)",
-  warning: "oklch(0.50 0.11 78)",
-  info: "oklch(0.50 0.14 250)"
+  danger: "oklch(0.50 0.158 25)",
+  success: "oklch(0.47 0.134 148)",
+  warning: "oklch(0.49 0.102 75)",
+  info: "oklch(0.48 0.134 250)"
+};
+var onDark = {
+  danger: "oklch(0.67 0.158 25)",
+  ink: "oklch(0.65 0.023 250)"
 };
 var accents = {
-  cyan: { base: "oklch(0.74 0.13 195)", deep: "oklch(0.48 0.10 200)" },
-  blue: { base: "oklch(0.62 0.15 250)", deep: "oklch(0.46 0.13 255)" },
-  green: { base: "oklch(0.70 0.13 155)", deep: "oklch(0.48 0.11 158)" },
-  rust: { base: "oklch(0.66 0.15 45)", deep: "oklch(0.48 0.13 42)" },
-  ink: { base: "oklch(0.32 0.02 250)", deep: "oklch(0.24 0.015 250)" }
+  cyan: { base: "oklch(0.74 0.124 195)", deep: "oklch(0.47 0.078 195)" },
+  blue: { base: "oklch(0.74 0.137 250)", deep: "oklch(0.48 0.134 250)" },
+  green: { base: "oklch(0.74 0.138 155)", deep: "oklch(0.47 0.114 155)" },
+  rust: { base: "oklch(0.74 0.138 45)", deep: "oklch(0.50 0.138 45)" },
+  ink: { base: "oklch(0.32 0.020 250)", deep: "oklch(0.24 0.015 250)" }
+};
+var accentFill = {
+  cyan: "tint",
+  blue: "tint",
+  green: "tint",
+  rust: "tint",
+  ink: "bold"
 };
 var fonts = {
   hand: '"Architects Daughter", "Comic Sans MS", cursive',
@@ -63,8 +80,11 @@ var breakpoints = {
 var tokens = {
   colors,
   signals,
+  signalFill,
   signalsDeep,
+  onDark,
   accents,
+  accentFill,
   fonts,
   motion,
   animations,
@@ -72,6 +92,6 @@ var tokens = {
   breakpoints
 };
 
-export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens };
-//# sourceMappingURL=chunk-EYYGHWPE.js.map
-//# sourceMappingURL=chunk-EYYGHWPE.js.map
+export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens };
+//# sourceMappingURL=chunk-VGU7LGIZ.js.map
+//# sourceMappingURL=chunk-VGU7LGIZ.js.map
