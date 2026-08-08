@@ -6,7 +6,7 @@ import { Toaster, toast } from "./toaster";
 const meta = {
   title: "Components/Feedback/Toaster",
   component: Toaster,
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {
     position: {

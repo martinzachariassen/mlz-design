@@ -21,7 +21,7 @@ const meta = {
     PaginationNext,
     PaginationEllipsis,
   },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
 } satisfies Meta<typeof Pagination>;
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import * as React from "react";
 import { expect, userEvent, within } from "storybook/test";
+import { ThemeSplit } from "../../foundations/theme-split";
 import { Button } from "../forms/button";
 import { Input } from "../forms/input";
 import { Label } from "../forms/label";
@@ -25,7 +26,7 @@ const meta = {
     SheetFooter,
     SheetClose,
   },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   args: { children: null },
   argTypes: {
     children: { table: { disable: true } },
@@ -137,4 +138,34 @@ export const WithForm: Story = {
       </>
     );
   },
+};
+
+/**
+ * The panel surface across both themes. Like `Dialog`'s equivalent, the content
+ * is rendered inline rather than as a live sheet — a real one lives in the top
+ * layer, above everything, so it can't sit inside a split pane.
+ */
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-full max-w-xs flex-col gap-6">
+        <Button variant="solid">Filters</Button>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Filters</SheetTitle>
+            <SheetDescription>Narrow the list down.</SheetDescription>
+          </SheetHeader>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="ld-sheet-q">Search</Label>
+            <Input id="ld-sheet-q" placeholder="Project name" />
+          </div>
+          <SheetFooter>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="solid">Apply</Button>
+          </SheetFooter>
+        </SheetContent>
+      </div>
+    </ThemeSplit>
+  ),
 };

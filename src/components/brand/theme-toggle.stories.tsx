@@ -6,7 +6,7 @@ const meta = {
   title: "Brand/ThemeToggle",
   component: ThemeToggle,
   subcomponents: { AccentPicker },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: {
     layout: "centered",
     docs: {

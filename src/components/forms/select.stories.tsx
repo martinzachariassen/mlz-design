@@ -17,7 +17,7 @@ const meta = {
   title: "Components/Forms/Select",
   component: Select,
   subcomponents: { SelectTrigger, SelectContent, SelectItem, SelectLabel, SelectSeparator },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {
     defaultValue: { control: "text", description: "Uncontrolled initial value." },

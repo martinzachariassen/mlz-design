@@ -17,17 +17,26 @@ const viewports = {
   ),
 } as const;
 
-// One decorator, two independent toolbar dimensions (Theme + Accent). Both are
-// applied to the preview <html>, so every token in theme.css re-resolves live —
-// exactly how a consuming app would swap them at runtime.
+// One decorator, three independent toolbar dimensions (Theme + Accent + Motion).
+// All are applied to the preview <html>, so every token in theme.css re-resolves
+// live — exactly how a consuming app would swap them at runtime.
+//
+// Motion drives `data-motion`, the kill-switch theme.css already ships. It is a
+// superset of the OS `prefers-reduced-motion` guard in base.css, so switching it
+// off here is the only way to check the reduced-motion path without changing
+// system settings.
 const withThemeAndAccent: Decorator = (Story, context) => {
-  const { theme, accent } = context.globals;
+  const { theme, accent, motion } = context.globals;
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     root.setAttribute("data-accent", String(accent));
+    // Only set the attribute when motion is off: `data-motion="on"` matches
+    // nothing in theme.css, and leaving it unset keeps the default path honest.
+    if (motion === "off") root.setAttribute("data-motion", "off");
+    else root.removeAttribute("data-motion");
     root.style.background = "var(--background)";
-  }, [theme, accent]);
+  }, [theme, accent, motion]);
   return <Story />;
 };
 
@@ -61,9 +70,26 @@ const preview: Preview = {
             "ProjectCard",
             "RepoBanner",
             "SocialCard",
+            "ThemeToggle",
           ],
+          // Every leaf is named, not just the six group headings. A group listed
+          // without its children sorts its own children by definition order,
+          // which is file-discovery order — i.e. arbitrary.
           "Components",
-          ["Actions", "Forms", "Data display", "Feedback", "Layout", "Overlay"],
+          [
+            "Actions",
+            ["Button"],
+            "Forms",
+            ["Input", "Textarea", "Label", "Checkbox", "RadioGroup", "Select", "Switch", "Toggle"],
+            "Data display",
+            ["Text", "Prose", "Badge", "Kbd", "StatusDot", "Avatar", "Table", "DataList"],
+            "Feedback",
+            ["Alert", "Callout", "Toaster", "Progress", "Spinner", "Skeleton"],
+            "Layout",
+            ["Container", "Card", "Separator", "Tabs", "Accordion", "Breadcrumb", "Pagination"],
+            "Overlay",
+            ["Dialog", "Sheet", "DropdownMenu", "Tooltip", "InfoTip"],
+          ],
           "Patterns",
           "Reference",
           ["Tokens", "Changelog"],
@@ -100,6 +126,19 @@ const preview: Preview = {
           { value: "green", title: "Green" },
           { value: "rust", title: "Rust" },
           { value: "ink", title: "Ink" },
+        ],
+      },
+    },
+    motion: {
+      description: "Animation kill-switch (data-motion)",
+      defaultValue: "on",
+      toolbar: {
+        title: "Motion",
+        icon: "play",
+        dynamicTitle: true,
+        items: [
+          { value: "on", title: "Motion on", icon: "play" },
+          { value: "off", title: "Motion off", icon: "stop" },
         ],
       },
     },
