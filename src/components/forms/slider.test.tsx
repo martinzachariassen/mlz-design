@@ -1,19 +1,10 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
+import { stubResizeObserver } from "../../lib/dom-test-env";
 import { Slider } from "./slider";
 
-// Radix's slider measures its thumb through `react-use-size`, which needs a
-// ResizeObserver jsdom doesn't ship. Sizing is irrelevant to what these tests
-// assert — thumb count, value wiring and the keyboard pattern — so a no-op
-// observer is enough.
-beforeAll(() => {
-  globalThis.ResizeObserver ??= class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  } as unknown as typeof ResizeObserver;
-});
+beforeAll(stubResizeObserver);
 
 describe("Slider", () => {
   it("renders one thumb for a single value", () => {

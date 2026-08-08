@@ -49,6 +49,12 @@ export const CloseIcon = strokeIcon(<path d="M18 6 6 18M6 6l12 12" />);
 export const CheckIcon = strokeIcon(<path d="M3.5 8.5l3 3 6-7" />, "0 0 16 16");
 
 /** The three theme choices, for `ThemeToggle`. */
+export const SearchIcon = strokeIcon(
+  <>
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </>,
+);
 export const SunIcon = strokeIcon(
   <>
     <circle cx="12" cy="12" r="4" />

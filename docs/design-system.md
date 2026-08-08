@@ -45,6 +45,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Slider` | a value picked by dragging — pass an array of two or more for a range. Radix owns arrows / PageUp-Down / Home-End, and each thumb is its own tab stop. Pair it with a number field: a slider alone makes an exact value slow to reach |
 | `Toggle` · `ToggleGroup` (+ `Item`) | a button that stays pressed (`aria-pressed`); the group is a segmented control (`single`) or a filter bar (`multiple`) |
 | `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
+| `Combobox` | a `Select` you can type into — one value from a list long enough that scrolling it is a hunt (~15 options up). `Command` inside a `Popover`; joins a `Field` automatically. Below that line, `Select` costs one click instead of a click plus recall |
 | `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
 
 ### Surfaces & data
@@ -65,6 +66,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `InfoTip`  | accessible inline help popover (glossary/hints) — the same primitive with a fixed inline trigger and a narrower API |
 | `HoverCard` (+ `Trigger`/`Content`) | a rich preview on hover — a user card behind an @mention. Opens on hover and focus but never on click or touch, so it is always an enhancement: nothing inside may be the only route to that information |
 | `Tooltip` (+ `Provider`/`Trigger`/`Content`) | short hover/focus hint. Attaches as the trigger's *description*, so an icon button still needs its own `aria-label` |
+| `Command` (+ `Input`/`List`/`Empty`/`Group`/`Item`/`Separator`/`Shortcut`/`Dialog`) | a filterable command list, and the ⌘K palette. Backed by `cmdk`; `CommandDialog` runs on this system's native `<dialog>` rather than cmdk's Radix-backed one, so there is one modal implementation, not two |
 | `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
 | `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
