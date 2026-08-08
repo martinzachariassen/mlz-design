@@ -6,19 +6,35 @@ How `@martinzachariassen/design` is put together. The README is the landing page
 
 `src/styles/theme.css` is the source of truth, authored in **OKLCH**. Three layers keep components decoupled from raw brand values:
 
-1. **Primitives** (`--mlz-*`) — the canonical MLZ brand values (paper hex, accent oklch, font stacks, easings). This is the source of truth; **components never touch these directly.**
+1. **Primitives** (`--mlz-*`) — the canonical MLZ brand values (the seven neutral paper/ink hex values, every chromatic value in OKLCH, font stacks, easings). This is the source of truth; **components never touch these directly.**
 2. **Semantic** — shadcn/ui-standard role names (`--background`, `--foreground`, `--primary`, `--accent`, `--border`, `--ring`…), every surface paired with a `-foreground`, plus signal roles (`destructive`/`success`/`warning`/`info`) each with a solid, a foreground and a subtle tint. Light, dark (`.dark` / `data-theme`) and every `data-accent` family live here. **This is the only layer to read or override.**
 3. **`@theme inline`** — re-exports the semantic layer to Tailwind so tokens and utilities are the same thing, and runtime theme/accent swaps keep working.
 
 Beyond the core roles, the semantic layer also ships **subtle tints** for every accent/signal (`bg-accent-subtle`, `bg-warning-subtle`…, built with `color-mix`, so they follow the current theme and accent), a warm-tinted **elevation scale** (`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl` off `--radius`), and `--overlay` and `--glitch-1/2` for scrims and the cyberpunk glitch motion.
 
-### Solids fill, `-deep` reads
+### The colour ladder — fills fill, `-deep` reads
 
-Every accent and signal has a **`-deep`** partner — `--accent-deep`, `--success-deep`, `--warning-deep`, `--info-deep`, `--destructive-deep` — and the split is not decorative. The solids are chosen for presence in fills, borders and dots, which only needs 3:1. As *text* on the light paper surface most of them fail AA outright: cyan `--accent` measures **1.8:1**, `--warning` **1.6:1**, `--success` **3.1:1**. The `-deep` variants are the same hues darkened until they clear 4.5:1.
+Every chromatic value sits on a **rung**, and the rung — not the hue — decides what it may be used for. Lightness is fixed per rung, so swapping `data-accent` changes hue without changing perceived weight: all four tint accents carry ink text between 7.2:1 and 8.0:1.
 
-**Colour text with `-deep`; fill shapes with the solid.** `Prose` links, `Link variant="subtle"` and `StatDelta` all read from `-deep` for exactly this reason. In dark mode the solids already clear AA against the ink background (5.1–11.0), so `-deep` maps straight back to them — which means a component can reach for `-deep` unconditionally and never branch on theme.
+| Rung | Job | Contract |
+| --- | --- | --- |
+| `base` | a **fill** — background for its paired foreground, never text | ≥4.5:1 against its foreground |
+| `-deep` | **on light** — text, icons, focus rings on a paper surface | ≥4.5:1 on `paper`, `paper-2` *and* `paper-3` |
+| on-dark | the same job on an ink surface | ≥4.5:1 on `--background`, `--card` and `--muted` |
 
-`--destructive-deep` is the solid unchanged; at 4.9:1 it had nothing to darken. It exists so the set is complete and callers don't have to remember which signals happen to be dark enough.
+**Colour text, icons and rings with `-deep`; fill shapes with the base.** As *text* on paper the fills fail outright — cyan `--accent` measures **1.83:1**, the tint signals **1.8–2.0:1**. `Prose` links, `Link variant="subtle"`, `StatusDot`, the `Select`/`Combobox` check marks and every hover state read from `-deep` for exactly this reason. In dark mode `-deep` maps back to the fill, which is already light against ink — so a component reaches for `-deep` unconditionally and never branches on theme.
+
+**Two fill modes, because no single lightness works for every hue.** Yellow cannot go dark and stay yellow; red cannot go light and stay emphatic. `tint` fills (L 0.74) carry ink text; `bold` fills (dark) carry paper text. Only `danger` and the `ink`/slate accent are bold — a destructive action must not read as decorative. The foreground therefore follows from the mode rather than being chosen per role, and only the bold roles need an on-dark value (`--mlz-danger-dark`, `--mlz-slate-dark`); the tints are theme-independent.
+
+**The dead zone.** Between the two modes, at L ≈ 0.55–0.70, a fill can carry *neither* ink nor paper text at AA — both cap out near 4.3:1. No foreground rescues a fill placed there; the only fix is to move the fill. This is arithmetic, not taste, and it is exactly where the pre-ladder `blue`, `rust` and `success` solids sat, which is why paper text on them measured 2.75–3.12:1.
+
+**Everything stays inside the sRGB gamut.** OKLCH can express colours no sRGB screen shows; the browser clips those silently, so a clipped value is not the value you measured and its contrast figure would hold only on some displays. The perceptual benefits of OKLCH come from the coordinate system, not the gamut, so nothing is lost by staying inside it.
+
+Two test files hold this together, and the split is the point. `src/tokens.contrast.test.ts` asserts the ladder's **shape** against the `tokens.ts` mirror. `src/theme-css.test.ts` asserts **reality**: it parses `theme.css` — following `var()` and evaluating `color-mix()` — checks the mirror against it value-for-value, fails on any colour primitive the mirror has never heard of, re-runs the contrast contracts on the resolved semantic roles in both themes and every accent family, and fails if any doc or story quotes a value the palette no longer ships — prose is a mirror too, and three files were still advertising pre-ladder values when this landed.
+
+The second is what makes "update both" enforceable rather than aspirational. A contract test that reads only the mirror proves the mirror is self-consistent; edit `theme.css` alone and it still passes while the two files quietly disagree. Reading the CSS closes that, and means the asserted numbers are the ones that ship.
+
+Foundations → **Colour model** is the long form and computes its figures from the tokens, so the published numbers cannot go stale either.
 
 `theme.css` is the source of truth; `src/tokens.ts` is a hand-maintained JS mirror that must match it value-for-value — **when you touch a token value, update both.** One naming quirk the mirror carries: the CSS `--destructive` role is exported as `signals.danger` in JS.
 

@@ -1,5 +1,5 @@
-import { accents } from './chunk-EYYGHWPE.js';
-export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens } from './chunk-EYYGHWPE.js';
+import { accents } from './chunk-2DUXDNAX.js';
+export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-2DUXDNAX.js';
 import { cva } from 'class-variance-authority';
 import * as React35 from 'react';
 import { clsx } from 'clsx';
@@ -445,7 +445,7 @@ var ProjectCard = React35.forwardRef(
                       "a",
                       {
                         href,
-                        className: "outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent focus-visible:underline-offset-4",
+                        className: "outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent-deep focus-visible:underline-offset-4",
                         children: title
                       }
                     ) : title
@@ -1178,7 +1178,7 @@ var CodeBlock = React35.forwardRef(
                 onClick: copy,
                 className: "inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
                 children: [
-                  copied ? /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-success" }) : null,
+                  copied ? /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-success-deep" }) : null,
                   copied ? "Copied" : "Copy",
                   /* @__PURE__ */ jsx("span", { className: "sr-only", children: copyLabel })
                 ]
@@ -1275,7 +1275,7 @@ var linkVariants = cva(
     variants: {
       variant: {
         /** Underlined in running text, where the underline is what marks it as a link. */
-        default: "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent hover:text-accent",
+        default: "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent-deep hover:text-accent-deep",
         /**
          * Accent-coloured, underline only on hover — **for links that stand
          * alone**, not for links inside a paragraph. In running text the
@@ -1287,7 +1287,7 @@ var linkVariants = cva(
          * fill-and-border colour (cyan measures 1.8:1 on paper) and fails AA as
          * text. `Prose` colours its links the same way.
          */
-        subtle: "text-[var(--accent-deep)] hover:text-accent hover:underline hover:underline-offset-4",
+        subtle: "text-[var(--accent-deep)] hover:underline hover:underline-offset-4",
         /** Muted until hovered, for footers and dense secondary navigation. */
         quiet: "text-muted-foreground hover:text-foreground"
       }
@@ -1336,11 +1336,11 @@ var Prose = React35.forwardRef(
         "[&_h4]:mt-6 [&_h4]:mb-2 [&_h4]:font-mono [&_h4]:text-xs [&_h4]:font-bold [&_h4]:uppercase [&_h4]:tracking-[0.12em] [&_h4]:text-muted-foreground",
         // body
         "[&_p]:text-foreground/85",
-        "[&_a]:font-medium [&_a]:text-[var(--accent-deep)] [&_a]:underline [&_a]:decoration-from-font [&_a]:underline-offset-[3px] hover:[&_a]:text-accent",
+        "[&_a]:font-medium [&_a]:text-[var(--accent-deep)] [&_a]:underline [&_a]:decoration-from-font [&_a]:underline-offset-[3px] hover:[&_a]:decoration-accent-deep",
         "[&_strong]:font-bold [&_strong]:text-foreground",
         "[&_em]:italic",
         // lists
-        "[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1.5 [&_li]:pl-1 [&_li]:marker:text-accent",
+        "[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1.5 [&_li]:pl-1 [&_li]:marker:text-accent-deep",
         // lead paragraph (first paragraph after an h1)
         "[&_h1+p]:text-lg [&_h1+p]:leading-relaxed [&_h1+p]:text-muted-foreground",
         // blockquote
@@ -1415,11 +1415,11 @@ StatDelta.displayName = "StatDelta";
 var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   variants: {
     variant: {
-      success: "text-success",
-      warning: "text-warning",
+      success: "text-success-deep",
+      warning: "text-warning-deep",
       destructive: "text-destructive",
-      info: "text-info",
-      accent: "text-accent",
+      info: "text-info-deep",
+      accent: "text-accent-deep",
       muted: "text-muted-foreground"
     }
   },
@@ -1784,7 +1784,7 @@ var Skeleton = React35.forwardRef(
 );
 Skeleton.displayName = "Skeleton";
 var spinnerVariants = cva(
-  "inline-block animate-spin rounded-full border-current border-t-transparent text-accent motion-reduce:animate-none",
+  "inline-block animate-spin rounded-full border-current border-t-transparent text-accent-deep motion-reduce:animate-none",
   {
     variants: {
       size: {
@@ -1827,10 +1827,10 @@ function Toaster({ className, toastOptions, ...props }) {
           content: "flex-1",
           // The signal colours come from the same tokens Alert and Callout use,
           // so a success toast and a success alert are the same green.
-          success: "[&_[data-icon]]:text-success",
+          success: "[&_[data-icon]]:text-success-deep",
           error: "[&_[data-icon]]:text-destructive",
-          warning: "[&_[data-icon]]:text-warning",
-          info: "[&_[data-icon]]:text-info",
+          warning: "[&_[data-icon]]:text-warning-deep",
+          info: "[&_[data-icon]]:text-info-deep",
           actionButton: "ml-auto shrink-0 rounded-[var(--radius-sm)] bg-primary px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary-foreground",
           cancelButton: "shrink-0 rounded-[var(--radius-sm)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground",
           closeButton: "rounded-[var(--radius-sm)] border border-border bg-popover text-muted-foreground hover:text-foreground",
@@ -2356,7 +2356,7 @@ var Combobox = React35.forwardRef(
                   onSelect: () => select(option.value),
                   children: [
                     /* @__PURE__ */ jsx("span", { className: "flex-1 truncate", children: option.label }),
-                    option.value === value ? /* @__PURE__ */ jsx(CheckIcon, { className: "size-4 shrink-0 text-accent" }) : null
+                    option.value === value ? /* @__PURE__ */ jsx(CheckIcon, { className: "size-4 shrink-0 text-accent-deep" }) : null
                   ]
                 },
                 option.value
@@ -2448,7 +2448,7 @@ var SelectItem = React35.forwardRef(({ className, children, ...props }, ref) => 
     ),
     ...props,
     children: [
-      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-accent" }) }) }),
+      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(SelectPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-accent-deep" }) }) }),
       /* @__PURE__ */ jsx(SelectPrimitive.ItemText, { children })
     ]
   }
@@ -2598,7 +2598,7 @@ var AccordionTrigger = React35.forwardRef(({ className, children, hideIndicator,
           strokeWidth: 2,
           strokeLinecap: "round",
           strokeLinejoin: "round",
-          className: "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 group-data-[state=open]:text-accent motion-reduce:transition-none",
+          className: "ml-auto size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 group-data-[state=open]:text-accent-deep motion-reduce:transition-none",
           children: /* @__PURE__ */ jsx("path", { d: "m6 9 6 6 6-6" })
         }
       )
@@ -2825,7 +2825,7 @@ var CollapsibleTrigger = React35.forwardRef(({ className, ...props }, ref) => /*
     ref,
     "data-slot": "collapsible-trigger",
     className: cn(
-      "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] py-2 text-left font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+      "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] py-2 text-left font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:text-accent-deep focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
       className
     ),
     ...props
@@ -3491,7 +3491,7 @@ var DropdownMenuCheckboxItem = React35.forwardRef(({ className, children, ...pro
     className: cn(row, "pl-8", className),
     ...props,
     children: [
-      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(DropdownMenuPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-accent" }) }) }),
+      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(DropdownMenuPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-accent-deep" }) }) }),
       children
     ]
   }
@@ -3505,7 +3505,7 @@ var DropdownMenuRadioItem = React35.forwardRef(({ className, children, ...props 
     className: cn(row, "pl-8", className),
     ...props,
     children: [
-      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(DropdownMenuPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(DotIcon, { className: "text-accent" }) }) }),
+      /* @__PURE__ */ jsx("span", { className: "absolute left-2 flex size-4 items-center justify-center", children: /* @__PURE__ */ jsx(DropdownMenuPrimitive.ItemIndicator, { children: /* @__PURE__ */ jsx(DotIcon, { className: "text-accent-deep" }) }) }),
       children
     ]
   }
@@ -3621,8 +3621,8 @@ function InfoTip({
         "aria-label": label,
         className: cn(
           "inline-flex size-[1.15em] shrink-0 cursor-help items-center justify-center rounded-full align-[-0.15em] text-muted-foreground transition-colors",
-          "hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-          "data-[state=open]:text-accent",
+          "hover:text-accent-deep focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          "data-[state=open]:text-accent-deep",
           className
         ),
         children: /* @__PURE__ */ jsxs(

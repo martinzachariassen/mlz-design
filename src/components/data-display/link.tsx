@@ -10,7 +10,7 @@ const linkVariants = cva(
       variant: {
         /** Underlined in running text, where the underline is what marks it as a link. */
         default:
-          "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent hover:text-accent",
+          "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent-deep hover:text-accent-deep",
         /**
          * Accent-coloured, underline only on hover — **for links that stand
          * alone**, not for links inside a paragraph. In running text the
@@ -22,8 +22,7 @@ const linkVariants = cva(
          * fill-and-border colour (cyan measures 1.8:1 on paper) and fails AA as
          * text. `Prose` colours its links the same way.
          */
-        subtle:
-          "text-[var(--accent-deep)] hover:text-accent hover:underline hover:underline-offset-4",
+        subtle: "text-[var(--accent-deep)] hover:underline hover:underline-offset-4",
         /** Muted until hovered, for footers and dense secondary navigation. */
         quiet: "text-muted-foreground hover:text-foreground",
       },

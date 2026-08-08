@@ -18,7 +18,7 @@ describe("StatusDot", () => {
   it("applies the variant colour class", () => {
     const { container } = render(<StatusDot variant="warning" />);
     expect(container.querySelector('[data-slot="status-dot"]')?.className).toContain(
-      "text-warning",
+      "text-warning-deep",
     );
   });
 

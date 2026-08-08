@@ -76,8 +76,8 @@ export function InfoTip({
         aria-label={label}
         className={cn(
           "inline-flex size-[1.15em] shrink-0 cursor-help items-center justify-center rounded-full align-[-0.15em] text-muted-foreground transition-colors",
-          "hover:text-accent focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-          "data-[state=open]:text-accent",
+          "hover:text-accent-deep focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          "data-[state=open]:text-accent-deep",
           className,
         )}
       >

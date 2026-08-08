@@ -107,7 +107,7 @@ export const ProjectCard = React.forwardRef<HTMLElement, ProjectCardProps>(
             {href ? (
               <a
                 href={href}
-                className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent focus-visible:underline-offset-4"
+                className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent-deep focus-visible:underline-offset-4"
               >
                 {title}
               </a>

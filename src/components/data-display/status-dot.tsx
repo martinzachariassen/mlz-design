@@ -5,11 +5,11 @@ import { cn } from "../../lib/cn";
 const statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   variants: {
     variant: {
-      success: "text-success",
-      warning: "text-warning",
+      success: "text-success-deep",
+      warning: "text-warning-deep",
       destructive: "text-destructive",
-      info: "text-info",
-      accent: "text-accent",
+      info: "text-info-deep",
+      accent: "text-accent-deep",
       muted: "text-muted-foreground",
     },
   },

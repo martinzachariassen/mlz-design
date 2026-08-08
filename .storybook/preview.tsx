@@ -58,7 +58,7 @@ const preview: Preview = {
           "Get started",
           ["Introduction", "Installation", "Theming", "Accessibility"],
           "Foundations",
-          ["Colour", "Colour usage", "Typography", "Motion", "Responsive"],
+          ["Colour", "Colour model", "Colour usage", "Typography", "Motion", "Responsive"],
           "Brand",
           [
             "Logo",

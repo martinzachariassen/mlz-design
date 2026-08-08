@@ -136,7 +136,7 @@ export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
                 >
                   <span className="flex-1 truncate">{option.label}</span>
                   {option.value === value ? (
-                    <CheckIcon className="size-4 shrink-0 text-accent" />
+                    <CheckIcon className="size-4 shrink-0 text-accent-deep" />
                   ) : null}
                 </CommandItem>
               ))}

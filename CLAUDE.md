@@ -58,6 +58,56 @@ mirror that must match it value-for-value — **when you touch a token value,
 update both.** One naming quirk the mirror carries: the CSS `--destructive` role
 is exported as `signals.danger` in JS.
 
+## The colour ladder — read this before styling anything
+
+Every chromatic token sits on a **rung**, and the rung — not the hue — decides
+what it may be used for. Getting this wrong is the single most common colour bug
+here, and it is invisible until measured: the base accent is **1.83:1** against
+paper. Two test files hold this together, and the split matters:
+
+- `src/tokens.contrast.test.ts` — the ladder's **shape**, run against the
+  `tokens.ts` mirror.
+- `src/theme-css.test.ts` — **reality**: it parses `theme.css`, resolving `var()`
+  and `color-mix()`, asserts the mirror matches it value-for-value, fails on any
+  colour primitive the mirror has never heard of, re-runs the contrast contracts
+  on the resolved semantic roles in both themes and every accent family, and
+  fails if any doc or story quotes a value the palette no longer ships.
+
+The second exists because the first cannot catch drift: it reads the mirror, so
+editing `theme.css` alone leaves it passing while the two files disagree. **If
+you change a token, both files must agree or CI fails** — which is the enforcement
+behind the "update both" rule above.
+
+| You are colouring | Reach for | Needs |
+| --- | --- | --- |
+| A button/badge **background** | `bg-accent` + `text-accent-foreground` | 4.5:1 |
+| **Text** — body, labels, errors | `text-*-deep` | 4.5:1 |
+| An **icon** or status dot | `text-*-deep` | 3:1 |
+| A **focus ring** or hover text | `ring-ring` / `*-deep` (never the base) | 3:1 |
+| A tinted **surface** behind text | `bg-*-subtle` | — |
+
+- **Never use a fill value as a text, icon, ring or hover colour.** `text-accent`,
+  `text-success`, `hover:text-accent` are all bugs; use the `-deep` rung. It maps
+  back to the fill in dark mode, so `-deep` is correct in *both* themes — reach
+  for it unconditionally.
+- **Two fill modes, and the foreground follows from the mode, not from taste.**
+  `tint` (L 0.74) carries ink text; `bold` (dark) carries paper text. Only
+  `danger` and the `ink`/slate accent are bold.
+- **The dead zone.** No fill may sit at L ≈ 0.55–0.70: there *neither* ink nor
+  paper text reaches 4.5:1 (both cap out near 4.3:1). This is arithmetic, not
+  style — if a new fill lands there, move it, don't hunt for a foreground.
+- **Stay inside sRGB.** A clipped value is not the value you measured, so its
+  contrast figure stops being true on some displays. The gamut test catches this.
+- **Adding or moving a value?** Solve it against the contract, don't eyeball it:
+  `-deep` is anchored to clear 4.5:1 on `paper-3` (the darkest paper tone), the
+  on-dark rung against dark `--muted` (the lightest ink tone). Keep light + dark
+  + all five `data-accent` in sync, and update `tokens.ts` in the same edit.
+- **Hex is closed.** The seven neutral primitives keep their source hex because
+  they are the literal brand values; everything else is OKLCH. Don't add new hex.
+
+Foundations → **Colour model** (`src/foundations/ColourModel.stories.tsx`) is the
+long form, and computes its figures from the tokens so it cannot go stale.
+
 ## Behaviour: Radix backbone, MLZ styling
 
 Interaction behaviour comes from **Radix primitives**; we only style them. Same
