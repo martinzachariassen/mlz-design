@@ -31,6 +31,7 @@ src/
   lib/
     cn.ts               clsx + tailwind-merge
     theme.tsx           ThemeProvider / useTheme / init script
+    dom-test-env.ts     jsdom stubs (ResizeObserver, scrollIntoView), test-only
     icons.tsx           the handful of glyphs components draw themselves —
                         internal, never exported (consumers bring lucide-react)
   components/           grouped by function, kebab-case files
@@ -41,13 +42,14 @@ src/
                         Prose, Stat, StatusDot, Table, Text
     feedback/           Alert, Callout, EmptyState, Progress, Skeleton, Spinner,
                         Toaster
-    forms/              Button, Checkbox, Field, Input, Label, RadioGroup,
-                        Select, Slider, Switch, Textarea, Toggle, ToggleGroup
+    forms/              Button, Checkbox, Combobox, Field, Input, Label,
+                        RadioGroup, Select, Slider, Switch, Textarea, Toggle,
+                        ToggleGroup
     layout/             Accordion, Breadcrumb, Card, Collapsible,
                         Container/Stack/Grid, Pagination, ScrollArea,
                         Separator, Tabs
-    overlay/            AlertDialog, Dialog, DropdownMenu, HoverCard, InfoTip,
-                        Popover, Sheet, Tooltip
+    overlay/            AlertDialog, Command, Dialog, DropdownMenu, HoverCard,
+                        InfoTip, Popover, Sheet, Tooltip
                         modal-root.tsx — the shared <dialog> engine, internal
                         modal-test-env.ts — the jsdom stub, test-only
   foundations/          Storybook-only: Introduction, Installation, Theming,
@@ -94,7 +96,7 @@ Which layer owns what:
 | ----- | ---------- |
 | **Radix primitive** | `Accordion` · `Avatar` · `Collapsible` · `DropdownMenu` · `HoverCard` · `Popover` · `InfoTip` (a narrower popover) · `Label` · `ScrollArea` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Slider` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
 | **Platform element** — Radix would add JS for what the browser already does | `Dialog`, `Sheet` and `AlertDialog` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Table` (a real `<table>`) · `DataList` (a real `<dl>`) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
-| **Third party** — the one non-Radix runtime dependency | `Toaster` (`sonner`, with its own styling switched off and every slot re-dressed from semantic tokens) |
+| **Third party** — the two non-Radix runtime dependencies | `Toaster` (`sonner`) and `Command` / `Combobox` (`cmdk`), both with their own styling switched off and every slot re-dressed from semantic tokens |
 | **Presentational only** — no behaviour to own | everything else: `Alert`, `Badge`, `Breadcrumb`, `Callout`, `Card`, `Kbd`, `Pagination`, `Prose`, `Skeleton`, `Spinner`, `StatusDot`, `Text`, the layout primitives, all of `brand/` |
 
 **`ScrollArea` is the one entry that overlaps something the browser already does**, so it earns a sentence. It does not replace scrolling: the viewport underneath is ordinary `overflow: auto`, so wheel, trackpad, touch, keyboard, scroll-anchoring and find-in-page stay native. What it replaces is the scrollbar's *appearance*, which otherwise ranges from a heavy slab on Windows to nothing at all on macOS until you scroll. Use it for bounded panels where the bar is part of the design — never around the document, where taking over the browser's own bar breaks scroll restoration and overscroll.

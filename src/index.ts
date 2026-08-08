@@ -105,6 +105,11 @@ export { Toaster, type ToasterProps, toast } from "./components/feedback/toaster
 export { Button, type ButtonProps, buttonVariants } from "./components/forms/button";
 export { Checkbox, type CheckboxProps } from "./components/forms/checkbox";
 export {
+  Combobox,
+  type ComboboxOption,
+  type ComboboxProps,
+} from "./components/forms/combobox";
+export {
   Field,
   FieldDescription,
   FieldError,
@@ -231,6 +236,25 @@ export {
   type AlertDialogProps,
   AlertDialogTitle,
 } from "./components/overlay/alert-dialog";
+export {
+  Command,
+  CommandDialog,
+  type CommandDialogProps,
+  CommandEmpty,
+  type CommandEmptyProps,
+  CommandGroup,
+  type CommandGroupProps,
+  CommandInput,
+  type CommandInputProps,
+  CommandItem,
+  type CommandItemProps,
+  CommandList,
+  type CommandListProps,
+  type CommandProps,
+  CommandSeparator,
+  type CommandSeparatorProps,
+  CommandShortcut,
+} from "./components/overlay/command";
 export {
   Dialog,
   DialogClose,
