@@ -8,6 +8,13 @@ updates:
     groups:
       dependencies:
         patterns: ["*"]
+    ignore:
+      # TypeScript 7 is the native port: the npm package no longer exports the
+      # classic compiler API, so every tool that reads it breaks — tsup's dts
+      # step (rollup-plugin-dts) and react-docgen-typescript, which is what
+      # fills Storybook's props tables. Drop this once both support TS 7.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
