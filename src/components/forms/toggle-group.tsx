@@ -2,6 +2,7 @@ import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { toggleVariants } from "./toggle";
 
 type ToggleGroupContextValue = VariantProps<typeof toggleVariants>;
@@ -10,7 +11,7 @@ type ToggleGroupContextValue = VariantProps<typeof toggleVariants>;
  * Lets the group set `variant`/`size` once instead of on every item — the items
  * have to agree, or the row looks ragged.
  */
-const ToggleGroupContext = React.createContext<ToggleGroupContextValue>({});
+const ToggleGroupContext = /* @__PURE__ */ React.createContext<ToggleGroupContextValue>({});
 
 /**
  * A type alias, not `interface extends`: Radix's Root props are a discriminated
@@ -42,23 +43,25 @@ export type ToggleGroupProps = React.ComponentPropsWithoutRef<typeof ToggleGroup
  * </ToggleGroup>
  * ```
  */
-export const ToggleGroup = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
-  ToggleGroupProps
->(({ className, variant, size, children, ...props }, ref) => {
-  const context = React.useMemo(() => ({ variant, size }), [variant, size]);
-  return (
-    <ToggleGroupPrimitive.Root
-      ref={ref}
-      data-slot="toggle-group"
-      className={cn("flex items-center gap-1", className)}
-      {...(props as React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>)}
-    >
-      <ToggleGroupContext.Provider value={context}>{children}</ToggleGroupContext.Provider>
-    </ToggleGroupPrimitive.Root>
-  );
-});
-ToggleGroup.displayName = "ToggleGroup";
+export const ToggleGroup = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof ToggleGroupPrimitive.Root>,
+    ToggleGroupProps
+  >(({ className, variant, size, children, ...props }, ref) => {
+    const context = React.useMemo(() => ({ variant, size }), [variant, size]);
+    return (
+      <ToggleGroupPrimitive.Root
+        ref={ref}
+        data-slot="toggle-group"
+        className={cn("flex items-center gap-1", className)}
+        {...(props as React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root>)}
+      >
+        <ToggleGroupContext.Provider value={context}>{children}</ToggleGroupContext.Provider>
+      </ToggleGroupPrimitive.Root>
+    );
+  }),
+  "ToggleGroup",
+);
 
 export type ToggleGroupItemProps = React.ComponentPropsWithoutRef<
   typeof ToggleGroupPrimitive.Item
@@ -66,21 +69,23 @@ export type ToggleGroupItemProps = React.ComponentPropsWithoutRef<
   VariantProps<typeof toggleVariants>;
 
 /** One choice in a `ToggleGroup`. Inherits the group's `variant` and `size`. */
-export const ToggleGroupItem = React.forwardRef<
-  React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
-  ToggleGroupItemProps
->(({ className, variant, size, ...props }, ref) => {
-  const context = React.useContext(ToggleGroupContext);
-  return (
-    <ToggleGroupPrimitive.Item
-      ref={ref}
-      data-slot="toggle-group-item"
-      className={cn(
-        toggleVariants({ variant: variant ?? context.variant, size: size ?? context.size }),
-        className,
-      )}
-      {...props}
-    />
-  );
-});
-ToggleGroupItem.displayName = "ToggleGroupItem";
+export const ToggleGroupItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof ToggleGroupPrimitive.Item>,
+    ToggleGroupItemProps
+  >(({ className, variant, size, ...props }, ref) => {
+    const context = React.useContext(ToggleGroupContext);
+    return (
+      <ToggleGroupPrimitive.Item
+        ref={ref}
+        data-slot="toggle-group-item"
+        className={cn(
+          toggleVariants({ variant: variant ?? context.variant, size: size ?? context.size }),
+          className,
+        )}
+        {...props}
+      />
+    );
+  }),
+  "ToggleGroupItem",
+);

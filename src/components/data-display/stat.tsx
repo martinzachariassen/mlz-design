@@ -1,11 +1,12 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 // `-deep`, not the plain signals: these are 12px text, and on paper `--success`
 // measures 3.1:1 — the solids are fill colours. See the signal block in
 // theme.css.
-const deltaVariants = cva("font-mono text-xs tabular-nums", {
+const deltaVariants = /* @__PURE__ */ cva("font-mono text-xs tabular-nums", {
   variants: {
     direction: {
       up: "text-[var(--success-deep)]",
@@ -38,46 +39,52 @@ const deltaVariants = cva("font-mono text-xs tabular-nums", {
  * </Stat>
  * ```
  */
-export const Stat = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} data-slot="stat" className={cn("flex flex-col gap-1", className)} {...props} />
+export const Stat = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div ref={ref} data-slot="stat" className={cn("flex flex-col gap-1", className)} {...props} />
+    ),
   ),
+  "Stat",
 );
-Stat.displayName = "Stat";
 
 /** What is being measured, in the tracked-out mono eyebrow voice. */
-export const StatLabel = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="stat-label"
-    className={cn(
-      "font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
-StatLabel.displayName = "StatLabel";
+export const StatLabel = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="stat-label"
+      className={cn(
+        "font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "StatLabel",
+);
 
 /**
  * The number itself. `tabular-nums` is on, so a value that ticks live doesn't
  * make the row jitter as digit widths change.
  */
-export const StatValue = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="stat-value"
-    className={cn("font-grotesk text-3xl font-bold tabular-nums tracking-tight", className)}
-    {...props}
-  />
-));
-StatValue.displayName = "StatValue";
+export const StatValue = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="stat-value"
+      className={cn("font-grotesk text-3xl font-bold tabular-nums tracking-tight", className)}
+      {...props}
+    />
+  )),
+  "StatValue",
+);
 
 export interface StatDeltaProps
   extends React.HTMLAttributes<HTMLParagraphElement>,
@@ -91,16 +98,18 @@ export interface StatDeltaProps
  *
  * Never let the colour carry the message on its own: write the change out.
  */
-export const StatDelta = React.forwardRef<HTMLParagraphElement, StatDeltaProps>(
-  ({ className, direction, ...props }, ref) => (
-    <p
-      ref={ref}
-      data-slot="stat-delta"
-      className={cn(deltaVariants({ direction }), className)}
-      {...props}
-    />
+export const StatDelta = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLParagraphElement, StatDeltaProps>(
+    ({ className, direction, ...props }, ref) => (
+      <p
+        ref={ref}
+        data-slot="stat-delta"
+        className={cn(deltaVariants({ direction }), className)}
+        {...props}
+      />
+    ),
   ),
+  "StatDelta",
 );
-StatDelta.displayName = "StatDelta";
 
 export { deltaVariants as statDeltaVariants };

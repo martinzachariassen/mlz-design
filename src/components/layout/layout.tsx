@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const containerVariants = cva("mx-auto w-full", {
+const containerVariants = /* @__PURE__ */ cva("mx-auto w-full", {
   variants: {
     /** Max content width. `prose` is measure-optimised for reading. */
     size: {
@@ -37,19 +38,21 @@ export interface ContainerProps
  * so pages read the same from a 360px phone to a wide desktop. Compose the
  * painted components (Card, Button…) inside them.
  */
-export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
-  ({ className, size, gutter, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="container"
-      className={cn(containerVariants({ size, gutter }), className)}
-      {...props}
-    />
+export const Container = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, ContainerProps>(
+    ({ className, size, gutter, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="container"
+        className={cn(containerVariants({ size, gutter }), className)}
+        {...props}
+      />
+    ),
   ),
+  "Container",
 );
-Container.displayName = "Container";
 
-const stackVariants = cva("flex", {
+const stackVariants = /* @__PURE__ */ cva("flex", {
   variants: {
     /** `responsive` = column on mobile, row from `sm` up (the common card→row flip). */
     direction: {
@@ -95,17 +98,19 @@ export interface StackProps
  * A flex row or column with a token gap. `direction="responsive"` is the common
  * card→row flip: a column on mobile, a row from `sm` up.
  */
-export const Stack = React.forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction, gap, align, justify, wrap, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="stack"
-      className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)}
-      {...props}
-    />
+export const Stack = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, StackProps>(
+    ({ className, direction, gap, align, justify, wrap, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="stack"
+        className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)}
+        {...props}
+      />
+    ),
   ),
+  "Stack",
 );
-Stack.displayName = "Stack";
 
 /** Fixed column counts that step up with viewport width (mobile-first). */
 const colsMap = {
@@ -145,28 +150,30 @@ export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
  * for card lists. Pass `cols` when the column count itself is the design, and it
  * steps up at `sm`/`lg`. `min` wins if you set both.
  */
-export const Grid = React.forwardRef<HTMLDivElement, GridProps>(
-  ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
-    const auto = min != null;
-    const minW = typeof min === "number" ? `${min}px` : min;
-    return (
-      <div
-        ref={ref}
-        data-slot="grid"
-        className={cn("grid", gapMap[gap], !auto && colsMap[cols], className)}
-        style={
-          auto
-            ? {
-                gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${minW}), 1fr))`,
-                ...style,
-              }
-            : style
-        }
-        {...props}
-      />
-    );
-  },
+export const Grid = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, GridProps>(
+    ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
+      const auto = min != null;
+      const minW = typeof min === "number" ? `${min}px` : min;
+      return (
+        <div
+          ref={ref}
+          data-slot="grid"
+          className={cn("grid", gapMap[gap], !auto && colsMap[cols], className)}
+          style={
+            auto
+              ? {
+                  gridTemplateColumns: `repeat(auto-fill, minmax(min(100%, ${minW}), 1fr))`,
+                  ...style,
+                }
+              : style
+          }
+          {...props}
+        />
+      );
+    },
+  ),
+  "Grid",
 );
-Grid.displayName = "Grid";
 
 export { containerVariants, stackVariants };

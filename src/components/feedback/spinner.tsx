@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const spinnerVariants = cva(
+const spinnerVariants = /* @__PURE__ */ cva(
   "inline-block animate-spin rounded-full border-current border-t-transparent text-accent-deep motion-reduce:animate-none",
   {
     variants: {
@@ -30,17 +31,19 @@ export interface SpinnerProps
  * `prefers-reduced-motion`. It's a live `role="status"`; reach for `Progress`
  * instead when you know how far along the work is.
  */
-export const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ className, size, label = "Loading", ...props }, ref) => (
-    <div
-      ref={ref}
-      role="status"
-      aria-label={label}
-      className={cn(spinnerVariants({ size }), className)}
-      {...props}
-    />
+export const Spinner = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, SpinnerProps>(
+    ({ className, size, label = "Loading", ...props }, ref) => (
+      <div
+        ref={ref}
+        role="status"
+        aria-label={label}
+        className={cn(spinnerVariants({ size }), className)}
+        {...props}
+      />
+    ),
   ),
+  "Spinner",
 );
-Spinner.displayName = "Spinner";
 
 export { spinnerVariants };

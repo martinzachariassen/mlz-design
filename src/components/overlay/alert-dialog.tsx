@@ -1,6 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { ModalRoot, useModal, useModalPart } from "./modal-root";
 
 export interface AlertDialogProps {
@@ -82,99 +83,105 @@ export function AlertDialog({
 }
 
 /** The card surface. Narrower than `DialogContent` — a confirm is two sentences. */
-export const AlertDialogContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="alert-dialog-content"
-    className={cn(
-      "relative mx-auto w-full rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-      className,
-    )}
-    {...props}
-  />
-));
-AlertDialogContent.displayName = "AlertDialogContent";
+export const AlertDialogContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="alert-dialog-content"
+        className={cn(
+          "relative mx-auto w-full rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+          className,
+        )}
+        {...props}
+      />
+    ),
+  ),
+  "AlertDialogContent",
+);
 
 /** Title + description block. No close button to clear, so no right inset. */
-export const AlertDialogHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="alert-dialog-header"
-    className={cn("mb-4 flex flex-col gap-1.5", className)}
-    {...props}
-  />
-));
-AlertDialogHeader.displayName = "AlertDialogHeader";
+export const AlertDialogHeader = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="alert-dialog-header"
+        className={cn("mb-4 flex flex-col gap-1.5", className)}
+        {...props}
+      />
+    ),
+  ),
+  "AlertDialogHeader",
+);
 
 /** Names the dialog. Say what is about to happen, and to what. */
-export const AlertDialogTitle = React.forwardRef<
-  HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => {
-  const titleId = useModalPart("title");
-  return (
-    <h2
-      ref={ref}
-      id={titleId}
-      data-slot="alert-dialog-title"
-      className={cn(
-        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-});
-AlertDialogTitle.displayName = "AlertDialogTitle";
+export const AlertDialogTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+    ({ className, ...props }, ref) => {
+      const titleId = useModalPart("title");
+      return (
+        <h2
+          ref={ref}
+          id={titleId}
+          data-slot="alert-dialog-title"
+          className={cn(
+            "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+            className,
+          )}
+          {...props}
+        />
+      );
+    },
+  ),
+  "AlertDialogTitle",
+);
 
 /**
  * The consequence, spelled out. `role="alertdialog"` means this is read on
  * open, so it is the sentence that does the work — name the thing being
  * destroyed and say that it can't be undone.
  */
-export const AlertDialogDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const descriptionId = useModalPart("description");
-  return (
-    <p
-      ref={ref}
-      id={descriptionId}
-      data-slot="alert-dialog-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
-      {...props}
-    />
-  );
-});
-AlertDialogDescription.displayName = "AlertDialogDescription";
+export const AlertDialogDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => {
+    const descriptionId = useModalPart("description");
+    return (
+      <p
+        ref={ref}
+        id={descriptionId}
+        data-slot="alert-dialog-description"
+        className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+        {...props}
+      />
+    );
+  }),
+  "AlertDialogDescription",
+);
 
 /**
  * The action row. Write cancel first in the source: it reverses to a full-width
  * column on mobile so the confirm lands on top, then flows right-aligned from
  * `sm` up.
  */
-export const AlertDialogFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="alert-dialog-footer"
-    className={cn(
-      "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3",
-      className,
-    )}
-    {...props}
-  />
-));
-AlertDialogFooter.displayName = "AlertDialogFooter";
+export const AlertDialogFooter = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="alert-dialog-footer"
+        className={cn(
+          "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3",
+          className,
+        )}
+        {...props}
+      />
+    ),
+  ),
+  "AlertDialogFooter",
+);
 
 export interface AlertDialogActionProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Render the single child instead of a `<button>`, forwarding the close handler. */
@@ -185,57 +192,61 @@ export interface AlertDialogActionProps extends React.ButtonHTMLAttributes<HTMLB
  * The way out that does nothing. **Receives focus when the dialog opens**, so
  * Enter on a dialog someone hasn't read yet is safe.
  */
-export const AlertDialogCancel = React.forwardRef<HTMLButtonElement, AlertDialogActionProps>(
-  ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = useModal();
-    const localRef = React.useRef<HTMLButtonElement>(null);
-    React.useImperativeHandle(ref, () => localRef.current as HTMLButtonElement);
+export const AlertDialogCancel = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AlertDialogActionProps>(
+    ({ asChild, onClick, type, ...props }, ref) => {
+      const ctx = useModal();
+      const localRef = React.useRef<HTMLButtonElement>(null);
+      React.useImperativeHandle(ref, () => localRef.current as HTMLButtonElement);
 
-    // The platform focuses the first tabbable element, which is the confirm in
-    // source order — and source order is what puts confirm on top on mobile. So
-    // move focus here explicitly rather than reordering the DOM.
-    React.useEffect(() => {
-      localRef.current?.focus();
-    }, []);
+      // The platform focuses the first tabbable element, which is the confirm in
+      // source order — and source order is what puts confirm on top on mobile. So
+      // move focus here explicitly rather than reordering the DOM.
+      React.useEffect(() => {
+        localRef.current?.focus();
+      }, []);
 
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        ref={localRef}
-        data-slot="alert-dialog-cancel"
-        type={asChild ? type : (type ?? "button")}
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) ctx?.close();
-        }}
-        {...props}
-      />
-    );
-  },
+      const Comp = asChild ? Slot : "button";
+      return (
+        <Comp
+          ref={localRef}
+          data-slot="alert-dialog-cancel"
+          type={asChild ? type : (type ?? "button")}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onClick?.(event);
+            if (!event.defaultPrevented) ctx?.close();
+          }}
+          {...props}
+        />
+      );
+    },
+  ),
+  "AlertDialogCancel",
 );
-AlertDialogCancel.displayName = "AlertDialogCancel";
 
 /**
  * The confirm. Closes the dialog after your `onClick` runs — call
  * `event.preventDefault()` in the handler to keep it open (a failed request
  * that wants to show an error, say).
  */
-export const AlertDialogAction = React.forwardRef<HTMLButtonElement, AlertDialogActionProps>(
-  ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = useModal();
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        ref={ref}
-        data-slot="alert-dialog-action"
-        type={asChild ? type : (type ?? "button")}
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) ctx?.close();
-        }}
-        {...props}
-      />
-    );
-  },
+export const AlertDialogAction = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AlertDialogActionProps>(
+    ({ asChild, onClick, type, ...props }, ref) => {
+      const ctx = useModal();
+      const Comp = asChild ? Slot : "button";
+      return (
+        <Comp
+          ref={ref}
+          data-slot="alert-dialog-action"
+          type={asChild ? type : (type ?? "button")}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onClick?.(event);
+            if (!event.defaultPrevented) ctx?.close();
+          }}
+          {...props}
+        />
+      );
+    },
+  ),
+  "AlertDialogAction",
 );
-AlertDialogAction.displayName = "AlertDialogAction";

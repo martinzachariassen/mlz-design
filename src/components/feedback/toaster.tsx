@@ -69,7 +69,6 @@ export function Toaster({ className, toastOptions, ...props }: ToasterProps) {
     />
   );
 }
-Toaster.displayName = "Toaster";
 
 /**
  * Raise a toast from anywhere. Requires a `<Toaster />` mounted somewhere in the

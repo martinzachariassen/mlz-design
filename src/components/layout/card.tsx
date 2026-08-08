@@ -2,8 +2,9 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const cardVariants = cva(
+const cardVariants = /* @__PURE__ */ cva(
   "rounded-[var(--radius-lg)] text-card-foreground transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out)]",
   {
     variants: {
@@ -46,105 +47,119 @@ export interface CardProps
  * - **accent** — an accent-subtle wash inside an accent-tinted border, for callouts.
  * - **ghost** — no border or background, for nesting inside another surface.
  */
-export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, asChild, ...props }, ref) => {
-    const Comp = asChild ? Slot : "div";
-    return (
-      <Comp
-        ref={ref}
-        data-slot="card"
-        className={cn(cardVariants({ variant }), className)}
-        {...props}
-      />
-    );
-  },
+export const Card = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, CardProps>(
+    ({ className, variant, asChild, ...props }, ref) => {
+      const Comp = asChild ? Slot : "div";
+      return (
+        <Comp
+          ref={ref}
+          data-slot="card"
+          className={cn(cardVariants({ variant }), className)}
+          {...props}
+        />
+      );
+    },
+  ),
+  "Card",
 );
-Card.displayName = "Card";
 
 /**
  * The card's top block — title, description, and an optional `CardAction`. It's a
  * grid that grows a second column the moment a `CardAction` is present.
  */
-export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="card-header"
-      className={cn(
-        "grid auto-rows-min items-start gap-1.5 p-5 has-[[data-slot=card-action]]:grid-cols-[1fr_auto]",
-        className,
-      )}
-      {...props}
-    />
+export const CardHeader = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="card-header"
+        className={cn(
+          "grid auto-rows-min items-start gap-1.5 p-5 has-[[data-slot=card-action]]:grid-cols-[1fr_auto]",
+          className,
+        )}
+        {...props}
+      />
+    ),
   ),
+  "CardHeader",
 );
-CardHeader.displayName = "CardHeader";
 
 /**
  * The card's heading in tracked-out mono. It's an unopinionated `<div>` — wrap it
  * in (or render it as) the right heading level for the page's outline.
  */
-export const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="card-title"
-      className={cn(
-        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-        className,
-      )}
-      {...props}
-    />
+export const CardTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="card-title"
+        className={cn(
+          "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+          className,
+        )}
+        {...props}
+      />
+    ),
   ),
+  "CardTitle",
 );
-CardTitle.displayName = "CardTitle";
 
 /** The muted supporting paragraph under `CardTitle`. */
-export const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="card-description"
-    className={cn("text-sm leading-relaxed text-muted-foreground", className)}
-    {...props}
-  />
-));
-CardDescription.displayName = "CardDescription";
+export const CardDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="card-description"
+      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+      {...props}
+    />
+  )),
+  "CardDescription",
+);
 
 /** Top-right slot in the header (menu button, badge, switch…). */
-export const CardAction = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="card-action"
-      className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)}
-      {...props}
-    />
+export const CardAction = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="card-action"
+        className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)}
+        {...props}
+      />
+    ),
   ),
+  "CardAction",
 );
-CardAction.displayName = "CardAction";
 
 /** The card's body — padded to match the header, with the top padding removed. */
-export const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} data-slot="card-content" className={cn("p-5 pt-0", className)} {...props} />
+export const CardContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div ref={ref} data-slot="card-content" className={cn("p-5 pt-0", className)} {...props} />
+    ),
   ),
+  "CardContent",
 );
-CardContent.displayName = "CardContent";
 
 /** The bottom row, for actions. A flex row — set your own `gap`. */
-export const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="card-footer"
-      className={cn("flex items-center p-5 pt-0", className)}
-      {...props}
-    />
+export const CardFooter = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="card-footer"
+        className={cn("flex items-center p-5 pt-0", className)}
+        {...props}
+      />
+    ),
   ),
+  "CardFooter",
 );
-CardFooter.displayName = "CardFooter";
 
 export { cardVariants };

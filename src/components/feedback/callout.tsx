@@ -1,9 +1,10 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { StatusDot, type StatusDotProps } from "../data-display/status-dot";
 
-const calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
+const calloutVariants = /* @__PURE__ */ cva("flex gap-2.5 text-sm text-muted-foreground", {
   variants: {
     variant: {
       success: "",
@@ -39,25 +40,27 @@ export interface CalloutProps
  * <Callout variant="warning" title="VPN likely" description="Hosting ASN in use." />
  * ```
  */
-export const Callout = React.forwardRef<HTMLDivElement, CalloutProps>(
-  ({ variant, title, description, pulse, className, children, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="callout"
-      className={cn(calloutVariants({ variant }), className)}
-      {...props}
-    >
-      <StatusDot variant={variant as StatusDotProps["variant"]} pulse={pulse} className="mt-1" />
-      <div className="min-w-0">
-        <p className="font-medium text-foreground">{title}</p>
-        {description ? (
-          <p className="mt-0.5 text-[0.92em] text-muted-foreground">{description}</p>
-        ) : null}
-        {children}
+export const Callout = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, CalloutProps>(
+    ({ variant, title, description, pulse, className, children, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="callout"
+        className={cn(calloutVariants({ variant }), className)}
+        {...props}
+      >
+        <StatusDot variant={variant as StatusDotProps["variant"]} pulse={pulse} className="mt-1" />
+        <div className="min-w-0">
+          <p className="font-medium text-foreground">{title}</p>
+          {description ? (
+            <p className="mt-0.5 text-[0.92em] text-muted-foreground">{description}</p>
+          ) : null}
+          {children}
+        </div>
       </div>
-    </div>
+    ),
   ),
+  "Callout",
 );
-Callout.displayName = "Callout";
 
 export { calloutVariants };

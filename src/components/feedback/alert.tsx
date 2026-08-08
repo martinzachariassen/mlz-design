@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const alertVariants = cva(
+const alertVariants = /* @__PURE__ */ cva(
   "relative grid w-full grid-cols-[0_1fr] items-start gap-y-1 rounded-[var(--radius-md)] border border-l-2 px-4 py-3 text-sm transition-colors has-[>svg]:grid-cols-[1rem_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current",
   {
     variants: {
@@ -41,48 +42,54 @@ export interface AlertProps
  * </Alert>
  * ```
  */
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, variant, ...props }, ref) => (
-    <div
-      ref={ref}
-      role="alert"
-      data-slot="alert"
-      className={cn(alertVariants({ variant }), className)}
-      {...props}
-    />
+export const Alert = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, AlertProps>(
+    ({ className, variant, ...props }, ref) => (
+      <div
+        ref={ref}
+        role="alert"
+        data-slot="alert"
+        className={cn(alertVariants({ variant }), className)}
+        {...props}
+      />
+    ),
   ),
+  "Alert",
 );
-Alert.displayName = "Alert";
 
 /** The alert's headline — mono, uppercase, in the full-strength foreground. */
-export const AlertTitle = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="alert-title"
-    className={cn(
-      "col-start-2 font-mono text-xs font-bold uppercase tracking-[0.1em] text-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
-AlertTitle.displayName = "AlertTitle";
+export const AlertTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="alert-title"
+      className={cn(
+        "col-start-2 font-mono text-xs font-bold uppercase tracking-[0.1em] text-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "AlertTitle",
+);
 
 /** The supporting sentence under the title, set in muted body type. */
-export const AlertDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="alert-description"
-    className={cn("col-start-2 text-sm text-muted-foreground [&_p]:leading-relaxed", className)}
-    {...props}
-  />
-));
-AlertDescription.displayName = "AlertDescription";
+export const AlertDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="alert-description"
+      className={cn("col-start-2 text-sm text-muted-foreground [&_p]:leading-relaxed", className)}
+      {...props}
+    />
+  )),
+  "AlertDescription",
+);
 
 export { alertVariants };

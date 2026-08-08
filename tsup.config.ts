@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts", "src/tokens.ts"],
+  entry: ["src/index.ts", "src/tokens.ts", "src/toaster.ts"],
   format: ["esm"],
   dts: true,
   clean: true,

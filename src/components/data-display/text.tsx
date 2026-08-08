@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const textVariants = cva("", {
+const textVariants = /* @__PURE__ */ cva("", {
   variants: {
     variant: {
       body: "text-sm text-foreground",
@@ -43,19 +44,21 @@ export interface TextProps
  * <Text variant="lead">What sites can infer about your connection.</Text>
  * ```
  */
-export const Text = React.forwardRef<HTMLElement, TextProps>(
-  ({ as, variant, size, className, ...props }, ref) => {
-    const Component = as ?? "span";
-    return (
-      <Component
-        ref={ref}
-        data-slot="text"
-        className={cn(textVariants({ variant, size }), className)}
-        {...props}
-      />
-    );
-  },
+export const Text = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLElement, TextProps>(
+    ({ as, variant, size, className, ...props }, ref) => {
+      const Component = as ?? "span";
+      return (
+        <Component
+          ref={ref}
+          data-slot="text"
+          className={cn(textVariants({ variant, size }), className)}
+          {...props}
+        />
+      );
+    },
+  ),
+  "Text",
 );
-Text.displayName = "Text";
 
 export { textVariants };

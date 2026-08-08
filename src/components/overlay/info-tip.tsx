@@ -126,4 +126,3 @@ export function InfoTip({
     </PopoverPrimitive.Root>
   );
 }
-InfoTip.displayName = "InfoTip";

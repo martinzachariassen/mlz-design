@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CheckIcon, ChevronDownIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "../overlay/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../overlay/popover";
 import { useFieldControlProps } from "./field";
@@ -59,92 +60,94 @@ export interface ComboboxProps {
  * </Field>
  * ```
  */
-export const Combobox = React.forwardRef<HTMLButtonElement, ComboboxProps>(
-  (
-    {
-      options,
-      value: valueProp,
-      defaultValue,
-      onValueChange,
-      placeholder = "Select…",
-      searchPlaceholder = "Search…",
-      emptyMessage = "No results.",
-      disabled,
-      className,
-      contentClassName,
-      "aria-label": ariaLabel,
-    },
-    ref,
-  ) => {
-    const [open, setOpen] = React.useState(false);
-    const [uncontrolled, setUncontrolled] = React.useState(defaultValue ?? "");
-    const isControlled = valueProp !== undefined;
-    const value = isControlled ? valueProp : uncontrolled;
+export const Combobox = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, ComboboxProps>(
+    (
+      {
+        options,
+        value: valueProp,
+        defaultValue,
+        onValueChange,
+        placeholder = "Select…",
+        searchPlaceholder = "Search…",
+        emptyMessage = "No results.",
+        disabled,
+        className,
+        contentClassName,
+        "aria-label": ariaLabel,
+      },
+      ref,
+    ) => {
+      const [open, setOpen] = React.useState(false);
+      const [uncontrolled, setUncontrolled] = React.useState(defaultValue ?? "");
+      const isControlled = valueProp !== undefined;
+      const value = isControlled ? valueProp : uncontrolled;
 
-    const fieldProps = useFieldControlProps();
-    const selected = options.find((option) => option.value === value);
+      const fieldProps = useFieldControlProps();
+      const selected = options.find((option) => option.value === value);
 
-    const select = (next: string) => {
-      // Selecting the current value again clears it — the escape hatch a
-      // combobox otherwise lacks, since there is no "none" row.
-      const resolved = next === value ? "" : next;
-      if (!isControlled) setUncontrolled(resolved);
-      onValueChange?.(resolved);
-      setOpen(false);
-    };
+      const select = (next: string) => {
+        // Selecting the current value again clears it — the escape hatch a
+        // combobox otherwise lacks, since there is no "none" row.
+        const resolved = next === value ? "" : next;
+        if (!isControlled) setUncontrolled(resolved);
+        onValueChange?.(resolved);
+        setOpen(false);
+      };
 
-    return (
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button
-            ref={ref}
-            type="button"
-            role="combobox"
-            aria-expanded={open}
-            aria-label={ariaLabel}
-            data-slot="combobox"
-            className={cn(
-              "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
-              "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-              "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
-              !selected && "text-muted-foreground",
-              className,
-            )}
-            {...fieldProps}
-            disabled={disabled ?? fieldProps.disabled}
+      return (
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <button
+              ref={ref}
+              type="button"
+              role="combobox"
+              aria-expanded={open}
+              aria-label={ariaLabel}
+              data-slot="combobox"
+              className={cn(
+                "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+                "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+                "disabled:cursor-not-allowed disabled:opacity-50",
+                "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+                !selected && "text-muted-foreground",
+                className,
+              )}
+              {...fieldProps}
+              disabled={disabled ?? fieldProps.disabled}
+            >
+              <span className="truncate">{selected?.label ?? placeholder}</span>
+              <ChevronDownIcon className="size-4 shrink-0 opacity-60" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            sideOffset={4}
+            className={cn("w-[var(--radix-popover-trigger-width)] p-0", contentClassName)}
           >
-            <span className="truncate">{selected?.label ?? placeholder}</span>
-            <ChevronDownIcon className="size-4 shrink-0 opacity-60" />
-          </button>
-        </PopoverTrigger>
-        <PopoverContent
-          align="start"
-          sideOffset={4}
-          className={cn("w-[var(--radix-popover-trigger-width)] p-0", contentClassName)}
-        >
-          <Command>
-            <CommandInput placeholder={searchPlaceholder} />
-            <CommandList>
-              <CommandEmpty>{emptyMessage}</CommandEmpty>
-              {options.map((option) => (
-                <CommandItem
-                  key={option.value}
-                  value={option.label}
-                  disabled={option.disabled}
-                  onSelect={() => select(option.value)}
-                >
-                  <span className="flex-1 truncate">{option.label}</span>
-                  {option.value === value ? (
-                    <CheckIcon className="size-4 shrink-0 text-accent-deep" />
-                  ) : null}
-                </CommandItem>
-              ))}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    );
-  },
+            <Command>
+              <CommandInput placeholder={searchPlaceholder} />
+              <CommandList>
+                <CommandEmpty>{emptyMessage}</CommandEmpty>
+                {options.map((option) => (
+                  <CommandItem
+                    key={option.value}
+                    value={option.label}
+                    disabled={option.disabled}
+                    onSelect={() => select(option.value)}
+                  >
+                    <span className="flex-1 truncate">{option.label}</span>
+                    {option.value === value ? (
+                      <CheckIcon className="size-4 shrink-0 text-accent-deep" />
+                    ) : null}
+                  </CommandItem>
+                ))}
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+      );
+    },
+  ),
+  "Combobox",
 );
-Combobox.displayName = "Combobox";

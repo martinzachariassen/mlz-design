@@ -244,6 +244,12 @@
   --warning-subtle:     color-mix(in oklch, var(--warning) 16%, var(--background));
   --info-subtle:        color-mix(in oklch, var(--info) 12%, var(--background));
   --overlay:            color-mix(in oklch, var(--mlz-ink) 55%, transparent);
+
+  /* How a light-pooling decorative layer blends with the surface under it —
+     GridBackground's spotlight glow. On paper, pooled light reads as *denser*
+     ink, so the accent multiplies into the page. On an ink surface the same
+     operation reads as a shadow, so the dark block screens instead. */
+  --glow-blend:         multiply;
 }
 
 /* Dark theme — an ink-surface inversion that keeps the accent. Opt in with
@@ -301,6 +307,9 @@
   --glitch-2:              var(--mlz-danger-dark);
 
   --overlay:              color-mix(in oklch, oklch(0 0 0) 70%, transparent);
+
+  /* Multiply would darken an already-dark surface — a shadow, not a glow. */
+  --glow-blend:           screen;
 
   /* Recomputed here so the tints resolve against the dark `--background`
      (see the light-scope note above). */

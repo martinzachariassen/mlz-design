@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CheckIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 
 export type CodeProps = React.HTMLAttributes<HTMLElement>;
 
@@ -15,18 +16,20 @@ export type CodeProps = React.HTMLAttributes<HTMLElement>;
  * would style it. Using it inside `Prose` is harmless: the classes are the same
  * shape and `tailwind-merge` keeps the later win.
  */
-export const Code = React.forwardRef<HTMLElement, CodeProps>(({ className, ...props }, ref) => (
-  <code
-    ref={ref}
-    data-slot="code"
-    className={cn(
-      "rounded-[var(--radius-sm)] bg-secondary px-1.5 py-0.5 font-mono text-[0.85em] text-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
-Code.displayName = "Code";
+export const Code = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLElement, CodeProps>(({ className, ...props }, ref) => (
+    <code
+      ref={ref}
+      data-slot="code"
+      className={cn(
+        "rounded-[var(--radius-sm)] bg-secondary px-1.5 py-0.5 font-mono text-[0.85em] text-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "Code",
+);
 
 export interface CodeBlockProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   /** The code. A plain string — this component does not highlight or parse it. */
@@ -56,68 +59,70 @@ export interface CodeBlockProps extends Omit<React.HTMLAttributes<HTMLDivElement
  * <CodeBlock filename="app.css" copyable>{`@import "tailwindcss";`}</CodeBlock>
  * ```
  */
-export const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
-  ({ children, filename, copyable, copyLabel = "Copy code", className, ...props }, ref) => {
-    const [copied, setCopied] = React.useState(false);
+export const CodeBlock = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, CodeBlockProps>(
+    ({ children, filename, copyable, copyLabel = "Copy code", className, ...props }, ref) => {
+      const [copied, setCopied] = React.useState(false);
 
-    // Reset the confirmation, and cancel the timer if the block unmounts first.
-    React.useEffect(() => {
-      if (!copied) return;
-      const timer = setTimeout(() => setCopied(false), 2000);
-      return () => clearTimeout(timer);
-    }, [copied]);
+      // Reset the confirmation, and cancel the timer if the block unmounts first.
+      React.useEffect(() => {
+        if (!copied) return;
+        const timer = setTimeout(() => setCopied(false), 2000);
+        return () => clearTimeout(timer);
+      }, [copied]);
 
-    const copy = async () => {
-      try {
-        await navigator.clipboard.writeText(children);
-        setCopied(true);
-      } catch {
-        // Insecure context, or permission refused. Nothing useful to say — the
-        // code is selectable, which is the fallback the user already knows.
-      }
-    };
+      const copy = async () => {
+        try {
+          await navigator.clipboard.writeText(children);
+          setCopied(true);
+        } catch {
+          // Insecure context, or permission refused. Nothing useful to say — the
+          // code is selectable, which is the fallback the user already knows.
+        }
+      };
 
-    return (
-      <div
-        ref={ref}
-        data-slot="code-block"
-        className={cn(
-          "overflow-hidden rounded-[var(--radius-md)] border border-border bg-secondary",
-          className,
-        )}
-        {...props}
-      >
-        {filename || copyable ? (
-          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
-            <span className="truncate font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-              {filename}
-            </span>
-            {copyable ? (
-              <button
-                type="button"
-                onClick={copy}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
-              >
-                {copied ? <CheckIcon className="size-3.5 text-success-deep" /> : null}
-                {copied ? "Copied" : "Copy"}
-                <span className="sr-only">{copyLabel}</span>
-              </button>
-            ) : null}
-          </div>
-        ) : null}
-        {/* A scrollable box must be reachable by keyboard (WCAG 2.1.1, and axe's
+      return (
+        <div
+          ref={ref}
+          data-slot="code-block"
+          className={cn(
+            "overflow-hidden rounded-[var(--radius-md)] border border-border bg-secondary",
+            className,
+          )}
+          {...props}
+        >
+          {filename || copyable ? (
+            <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-2">
+              <span className="truncate font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                {filename}
+              </span>
+              {copyable ? (
+                <button
+                  type="button"
+                  onClick={copy}
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+                >
+                  {copied ? <CheckIcon className="size-3.5 text-success-deep" /> : null}
+                  {copied ? "Copied" : "Copy"}
+                  <span className="sr-only">{copyLabel}</span>
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+          {/* A scrollable box must be reachable by keyboard (WCAG 2.1.1, and axe's
             `scrollable-region-focusable`) — the same reasoning as `Table`'s
             container. Deliberately no `role="region"`: an unnamed landmark is
             worse than none, and `filename` is not always there to name it. */}
-        <pre
-          // biome-ignore lint/a11y/noNoninteractiveTabindex: making the scroll container focusable is the point — it's how a keyboard user reads a long line
-          tabIndex={0}
-          className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
-        >
-          <code>{children}</code>
-        </pre>
-      </div>
-    );
-  },
+          <pre
+            // biome-ignore lint/a11y/noNoninteractiveTabindex: making the scroll container focusable is the point — it's how a keyboard user reads a long line
+            tabIndex={0}
+            className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+          >
+            <code>{children}</code>
+          </pre>
+        </div>
+      );
+    },
+  ),
+  "CodeBlock",
 );
-CodeBlock.displayName = "CodeBlock";

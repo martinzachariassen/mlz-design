@@ -2,8 +2,9 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const buttonVariants = cva(
+const buttonVariants = /* @__PURE__ */ cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-[var(--dur-hover)] ease-[var(--ease-glide)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-[var(--dur-hover)] [&_svg]:ease-[var(--ease-glide)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
   {
     variants: {
@@ -56,21 +57,23 @@ export interface ButtonProps
  * it's scarce. Everything secondary is `default` or `ghost`, and `destructive`
  * is reserved for actions that lose data.
  */
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild, type, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        ref={ref}
-        // `type` is only meaningful on a real <button>; forcing it onto an <a>
-        // would emit an invalid attribute.
-        type={asChild ? type : (type ?? "button")}
-        className={cn(buttonVariants({ variant, size }), className)}
-        {...props}
-      />
-    );
-  },
+export const Button = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, ButtonProps>(
+    ({ className, variant, size, asChild, type, ...props }, ref) => {
+      const Comp = asChild ? Slot : "button";
+      return (
+        <Comp
+          ref={ref}
+          // `type` is only meaningful on a real <button>; forcing it onto an <a>
+          // would emit an invalid attribute.
+          type={asChild ? type : (type ?? "button")}
+          className={cn(buttonVariants({ variant, size }), className)}
+          {...props}
+        />
+      );
+    },
+  ),
+  "Button",
 );
-Button.displayName = "Button";
 
 export { buttonVariants };

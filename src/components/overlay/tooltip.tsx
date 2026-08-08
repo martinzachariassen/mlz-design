@@ -1,6 +1,7 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 /**
  * Wraps the part of the app that uses tooltips and shares their open/close
@@ -43,7 +44,6 @@ export type TooltipProps = React.ComponentPropsWithoutRef<typeof TooltipPrimitiv
 export function Tooltip(props: TooltipProps) {
   return <TooltipPrimitive.Root {...props} />;
 }
-Tooltip.displayName = "Tooltip";
 
 /** The element the tooltip describes. Pass `asChild` to use your own control. */
 export const TooltipTrigger = TooltipPrimitive.Trigger;
@@ -55,23 +55,25 @@ export interface TooltipContentProps
  * The label panel — ink-on-paper inverted, mono and tracked out, so it reads as
  * chrome rather than as page content. Keep it to a few words.
  */
-export const TooltipContent = React.forwardRef<
-  React.ComponentRef<typeof TooltipPrimitive.Content>,
-  TooltipContentProps
->(({ className, sideOffset = 6, ...props }, ref) => (
-  <TooltipPrimitive.Portal>
-    <TooltipPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      collisionPadding={8}
-      data-slot="tooltip-content"
-      className={cn(
-        "z-50 max-w-xs rounded-[var(--radius-sm)] bg-primary px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-primary-foreground shadow-[var(--shadow-md)]",
-        "motion-safe:animate-rise",
-        className,
-      )}
-      {...props}
-    />
-  </TooltipPrimitive.Portal>
-));
-TooltipContent.displayName = "TooltipContent";
+export const TooltipContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof TooltipPrimitive.Content>,
+    TooltipContentProps
+  >(({ className, sideOffset = 6, ...props }, ref) => (
+    <TooltipPrimitive.Portal>
+      <TooltipPrimitive.Content
+        ref={ref}
+        sideOffset={sideOffset}
+        collisionPadding={8}
+        data-slot="tooltip-content"
+        className={cn(
+          "z-50 max-w-xs rounded-[var(--radius-sm)] bg-primary px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-primary-foreground shadow-[var(--shadow-md)]",
+          "motion-safe:animate-rise",
+          className,
+        )}
+        {...props}
+      />
+    </TooltipPrimitive.Portal>
+  )),
+  "TooltipContent",
+);

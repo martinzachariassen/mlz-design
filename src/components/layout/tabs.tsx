@@ -1,6 +1,7 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Root> {}
 
@@ -29,33 +30,37 @@ export interface TabsProps extends React.ComponentPropsWithoutRef<typeof TabsPri
  * accordions don't. Inactive panels unmount, so don't put unsaved form state in
  * one without lifting it to the parent.
  */
-export const Tabs = React.forwardRef<React.ComponentRef<typeof TabsPrimitive.Root>, TabsProps>(
-  ({ className, ...props }, ref) => (
-    <TabsPrimitive.Root
-      ref={ref}
-      className={cn("flex flex-col gap-4 data-[orientation=vertical]:flex-row", className)}
-      {...props}
-    />
+export const Tabs = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<React.ComponentRef<typeof TabsPrimitive.Root>, TabsProps>(
+    ({ className, ...props }, ref) => (
+      <TabsPrimitive.Root
+        ref={ref}
+        className={cn("flex flex-col gap-4 data-[orientation=vertical]:flex-row", className)}
+        {...props}
+      />
+    ),
   ),
+  "Tabs",
 );
-Tabs.displayName = "Tabs";
 
 /** The `role="tablist"` rail the triggers sit on, ruled off from the panel beside it. */
-export const TabsList = React.forwardRef<
-  React.ComponentRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      "flex gap-1 border-b border-border",
-      "data-[orientation=vertical]:flex-col data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r",
-      className,
-    )}
-    {...props}
-  />
-));
-TabsList.displayName = "TabsList";
+export const TabsList = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof TabsPrimitive.List>,
+    React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+  >(({ className, ...props }, ref) => (
+    <TabsPrimitive.List
+      ref={ref}
+      className={cn(
+        "flex gap-1 border-b border-border",
+        "data-[orientation=vertical]:flex-col data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "TabsList",
+);
 
 export interface TabsTriggerProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> {
@@ -68,22 +73,24 @@ export interface TabsTriggerProps
  * is in the tab order — arrow keys and Home/End move between the rest, following
  * the list's `orientation` — and the active one is marked by an accent rule.
  */
-export const TabsTrigger = React.forwardRef<
-  React.ComponentRef<typeof TabsPrimitive.Trigger>,
-  TabsTriggerProps
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "-mb-px border-b-2 border-transparent px-3 pb-2 font-mono text-xs uppercase tracking-[0.1em] transition-colors duration-200 ease-[var(--ease-out)] hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50",
-      "text-muted-foreground data-[state=active]:border-accent data-[state=active]:text-foreground",
-      "data-[orientation=vertical]:-mr-px data-[orientation=vertical]:mb-0 data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r-2 data-[orientation=vertical]:pb-1.5 data-[orientation=vertical]:pr-3 data-[orientation=vertical]:text-left",
-      className,
-    )}
-    {...props}
-  />
-));
-TabsTrigger.displayName = "TabsTrigger";
+export const TabsTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof TabsPrimitive.Trigger>,
+    TabsTriggerProps
+  >(({ className, ...props }, ref) => (
+    <TabsPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        "-mb-px border-b-2 border-transparent px-3 pb-2 font-mono text-xs uppercase tracking-[0.1em] transition-colors duration-200 ease-[var(--ease-out)] hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50",
+        "text-muted-foreground data-[state=active]:border-accent data-[state=active]:text-foreground",
+        "data-[orientation=vertical]:-mr-px data-[orientation=vertical]:mb-0 data-[orientation=vertical]:border-b-0 data-[orientation=vertical]:border-r-2 data-[orientation=vertical]:pb-1.5 data-[orientation=vertical]:pr-3 data-[orientation=vertical]:text-left",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "TabsTrigger",
+);
 
 export interface TabsContentProps
   extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> {
@@ -95,14 +102,16 @@ export interface TabsContentProps
  * The panel for one tab. Inactive panels unmount rather than hide, so keep any
  * state you need to survive a tab switch in the parent.
  */
-export const TabsContent = React.forwardRef<
-  React.ComponentRef<typeof TabsPrimitive.Content>,
-  TabsContentProps
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.Content
-    ref={ref}
-    className={cn("text-sm text-muted-foreground focus-visible:outline-none", className)}
-    {...props}
-  />
-));
-TabsContent.displayName = "TabsContent";
+export const TabsContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof TabsPrimitive.Content>,
+    TabsContentProps
+  >(({ className, ...props }, ref) => (
+    <TabsPrimitive.Content
+      ref={ref}
+      className={cn("text-sm text-muted-foreground focus-visible:outline-none", className)}
+      {...props}
+    />
+  )),
+  "TabsContent",
+);

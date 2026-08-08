@@ -17,6 +17,25 @@ If you use [mise](https://mise.jdx.dev), `mise install && mise run setup` pins t
 
 Run `bun run lint && bun run typecheck && bun run test && bun run build` before opening a PR. Any PR that touches `src/` **must** refresh the committed `dist/` (`bun run build`) — it's the token-free fallback for `bun add github:...`, and CI fails the `verify` job if it's stale. See [architecture.md](architecture.md) for the token layering and repo layout.
 
+### Writing a component that can be tree-shaken
+
+The whole library is one entry file, so a consuming app ships only what it imports if — and only if — every top-level declaration is free of side effects. Two habits break that silently: nothing looks wrong, the build passes, and the cost lands in someone else's bundle. `src/treeshaking.test.ts` fails if either returns.
+
+**Attach `displayName` with `named()`, never as a statement.** A bare `Thing.displayName = "Thing"` is a property write on a module-level binding — an unconditional side effect that pins the component and everything it imports.
+
+**Annotate every top-level call, including the nested one.** Dropping a pure call still preserves its arguments' side effects, so the inner `forwardRef` needs its own annotation.
+
+```tsx
+export const Thing = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, ThingProps>((props, ref) => …),
+  "Thing",
+);
+```
+
+The same applies to `cva()`, `createContext()` and any other top-level `const X = someCall(…)`.
+
+**A dependency that isn't side-effect-free belongs behind a subpath.** `sonner` ships no `sideEffects: false` and injects a stylesheet at module scope, so no consumer can shake it out — that's why `Toaster` and `toast` live at `./toaster` rather than in the root entry. Check a new runtime dependency's `sideEffects` field before exporting a component that uses it from `src/index.ts`.
+
 ## Testing
 
 There are **two tiers**, and they check different things. Both gate `main`.
@@ -96,7 +115,7 @@ Automated with [Changesets](https://github.com/changesets/changesets) → GitHub
 
 3. **Merge the "version packages" PR** when you're ready to ship. That merge runs `bun run release` (build + `changeset publish`), which publishes to GitHub Packages and cuts the matching GitHub Release + tag.
 
-So the whole release surface is two merges: your change, then the version PR — no local tagging, no `publish` from a laptop. Publishing stays on **GitHub Packages**, so consumers keep the `.npmrc` + `read:packages` token from the README quick start. (No npm provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing / Sigstore attestation — that's a `registry.npmjs.org` feature.)
+So the whole release surface is two merges: your change, then the version PR — no local tagging, no `publish` from a laptop. Publishing stays on **GitHub Packages**, so consumers keep the `.npmrc` + `read:packages` token from the README quickstart. (No npm provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing / Sigstore attestation — that's a `registry.npmjs.org` feature.)
 
 ## Deployment (playground)
 

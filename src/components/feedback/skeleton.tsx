@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 /**
  * Placeholder shimmer for loading states. The `animate-pulse-soft` token is
@@ -16,13 +17,15 @@ import { cn } from "../../lib/cn";
  *
  * **Don't** animate a skeleton for sub-200ms waits; the flash reads as a glitch.
  */
-export const Skeleton = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-[var(--radius-sm)] bg-muted animate-pulse-soft", className)}
-      {...props}
-    />
+export const Skeleton = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        className={cn("rounded-[var(--radius-sm)] bg-muted animate-pulse-soft", className)}
+        {...props}
+      />
+    ),
   ),
+  "Skeleton",
 );
-Skeleton.displayName = "Skeleton";

@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const emptyStateVariants = cva(
+const emptyStateVariants = /* @__PURE__ */ cva(
   "flex flex-col items-center justify-center gap-4 rounded-[var(--radius-lg)] text-center",
   {
     variants: {
@@ -56,39 +57,42 @@ export interface EmptyStateProps
  * </EmptyState>
  * ```
  */
-export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
-  ({ className, variant, size, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="empty-state"
-      className={cn(emptyStateVariants({ variant, size }), className)}
-      {...props}
-    />
+export const EmptyState = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, EmptyStateProps>(
+    ({ className, variant, size, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="empty-state"
+        className={cn(emptyStateVariants({ variant, size }), className)}
+        {...props}
+      />
+    ),
   ),
+  "EmptyState",
 );
-EmptyState.displayName = "EmptyState";
 
 /**
  * The tile that holds an icon or brand mark. Decorative by definition — whatever
  * goes inside should be `aria-hidden`, because the title already carries the
  * meaning.
  */
-export const EmptyStateMedia = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    aria-hidden="true"
-    data-slot="empty-state-media"
-    className={cn(
-      "flex size-14 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-accent-subtle",
-      className,
-    )}
-    {...props}
-  />
-));
-EmptyStateMedia.displayName = "EmptyStateMedia";
+export const EmptyStateMedia = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        aria-hidden="true"
+        data-slot="empty-state-media"
+        className={cn(
+          "flex size-14 items-center justify-center rounded-[var(--radius-lg)] border border-border bg-accent-subtle",
+          className,
+        )}
+        {...props}
+      />
+    ),
+  ),
+  "EmptyStateMedia",
+);
 
 export interface EmptyStateTitleProps extends React.HTMLAttributes<HTMLParagraphElement> {
   /** Render as a real heading when the empty state owns a region of the page. */
@@ -102,47 +106,52 @@ export interface EmptyStateTitleProps extends React.HTMLAttributes<HTMLParagraph
  * region that already has a heading. Set `as` when it owns the region itself —
  * a whole-page empty state should be an `h2`, not a paragraph in disguise.
  */
-export const EmptyStateTitle = React.forwardRef<HTMLParagraphElement, EmptyStateTitleProps>(
-  ({ as: Comp = "p", className, ...props }, ref) => (
-    <Comp
-      ref={ref}
-      data-slot="empty-state-title"
-      className={cn(
-        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-        className,
-      )}
-      {...props}
-    />
+export const EmptyStateTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLParagraphElement, EmptyStateTitleProps>(
+    ({ as: Comp = "p", className, ...props }, ref) => (
+      <Comp
+        ref={ref}
+        data-slot="empty-state-title"
+        className={cn(
+          "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+          className,
+        )}
+        {...props}
+      />
+    ),
   ),
+  "EmptyStateTitle",
 );
-EmptyStateTitle.displayName = "EmptyStateTitle";
 
 /** One or two sentences: what would live here, and how it gets here. */
-export const EmptyStateDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    data-slot="empty-state-description"
-    className={cn("max-w-xs text-sm leading-relaxed text-muted-foreground", className)}
-    {...props}
-  />
-));
-EmptyStateDescription.displayName = "EmptyStateDescription";
+export const EmptyStateDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => (
+    <p
+      ref={ref}
+      data-slot="empty-state-description"
+      className={cn("max-w-xs text-sm leading-relaxed text-muted-foreground", className)}
+      {...props}
+    />
+  )),
+  "EmptyStateDescription",
+);
 
 /** The action row. One primary way out, at most one secondary beside it. */
-export const EmptyStateActions = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="empty-state-actions"
-    className={cn("flex flex-wrap items-center justify-center gap-3", className)}
-    {...props}
-  />
-));
-EmptyStateActions.displayName = "EmptyStateActions";
+export const EmptyStateActions = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="empty-state-actions"
+        className={cn("flex flex-wrap items-center justify-center gap-3", className)}
+        {...props}
+      />
+    ),
+  ),
+  "EmptyStateActions",
+);
 
 export { emptyStateVariants };
