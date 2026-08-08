@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -13,8 +14,8 @@ export type ProseProps = React.HTMLAttributes<HTMLDivElement>;
  * It's a descendant-styled container (the `@tailwindcss/typography` idea, done
  * with tokens), so it needs no plugin and re-themes with light/dark and accent.
  */
-export const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
-  ({ className, ...props }, ref) => (
+export const Prose = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, ProseProps>(({ className, ...props }, ref) => (
     <div
       ref={ref}
       data-slot="prose"
@@ -53,6 +54,6 @@ export const Prose = React.forwardRef<HTMLDivElement, ProseProps>(
       )}
       {...props}
     />
-  ),
+  )),
+  "Prose",
 );
-Prose.displayName = "Prose";

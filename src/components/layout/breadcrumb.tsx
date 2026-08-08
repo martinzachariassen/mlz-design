@@ -2,6 +2,7 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { ChevronRightIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 
 /**
  * The trail back up from where you are — an article to its section to the index.
@@ -26,49 +27,54 @@ import { ChevronRightIcon } from "../../lib/icons";
  * </Breadcrumb>
  * ```
  */
-export const Breadcrumb = React.forwardRef<
-  HTMLElement,
-  React.ComponentPropsWithoutRef<"nav"> & { separator?: React.ReactNode }
->(({ className, ...props }, ref) => (
-  <nav
-    ref={ref}
-    aria-label="Breadcrumb"
-    data-slot="breadcrumb"
-    className={cn(className)}
-    {...props}
-  />
-));
-Breadcrumb.displayName = "Breadcrumb";
-
-/** The `<ol>`. Wraps onto a second line rather than overflowing on narrow screens. */
-export const BreadcrumbList = React.forwardRef<
-  HTMLOListElement,
-  React.ComponentPropsWithoutRef<"ol">
->(({ className, ...props }, ref) => (
-  <ol
-    ref={ref}
-    data-slot="breadcrumb-list"
-    className={cn(
-      "flex flex-wrap items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
-BreadcrumbList.displayName = "BreadcrumbList";
-
-/** One step in the trail. */
-export const BreadcrumbItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
-  ({ className, ...props }, ref) => (
-    <li
+export const Breadcrumb = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLElement,
+    React.ComponentPropsWithoutRef<"nav"> & { separator?: React.ReactNode }
+  >(({ className, ...props }, ref) => (
+    <nav
       ref={ref}
-      data-slot="breadcrumb-item"
-      className={cn("inline-flex items-center gap-1.5", className)}
+      aria-label="Breadcrumb"
+      data-slot="breadcrumb"
+      className={cn(className)}
       {...props}
     />
-  ),
+  )),
+  "Breadcrumb",
 );
-BreadcrumbItem.displayName = "BreadcrumbItem";
+
+/** The `<ol>`. Wraps onto a second line rather than overflowing on narrow screens. */
+export const BreadcrumbList = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLOListElement, React.ComponentPropsWithoutRef<"ol">>(
+    ({ className, ...props }, ref) => (
+      <ol
+        ref={ref}
+        data-slot="breadcrumb-list"
+        className={cn(
+          "flex flex-wrap items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground",
+          className,
+        )}
+        {...props}
+      />
+    ),
+  ),
+  "BreadcrumbList",
+);
+
+/** One step in the trail. */
+export const BreadcrumbItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
+    ({ className, ...props }, ref) => (
+      <li
+        ref={ref}
+        data-slot="breadcrumb-item"
+        className={cn("inline-flex items-center gap-1.5", className)}
+        {...props}
+      />
+    ),
+  ),
+  "BreadcrumbItem",
+);
 
 export interface BreadcrumbLinkProps extends React.ComponentPropsWithoutRef<"a"> {
   /** Render your router's link component instead of an `<a>`. */
@@ -76,43 +82,46 @@ export interface BreadcrumbLinkProps extends React.ComponentPropsWithoutRef<"a">
 }
 
 /** A link to an ancestor. Use `asChild` to hand off to a router link. */
-export const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
-  ({ className, asChild, ...props }, ref) => {
-    const Comp = asChild ? Slot : "a";
-    return (
-      <Comp
-        ref={ref}
-        data-slot="breadcrumb-link"
-        className={cn(
-          "rounded-[var(--radius-sm)] transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-          className,
-        )}
-        {...props}
-      />
-    );
-  },
+export const BreadcrumbLink = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
+    ({ className, asChild, ...props }, ref) => {
+      const Comp = asChild ? Slot : "a";
+      return (
+        <Comp
+          ref={ref}
+          data-slot="breadcrumb-link"
+          className={cn(
+            "rounded-[var(--radius-sm)] transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+            className,
+          )}
+          {...props}
+        />
+      );
+    },
+  ),
+  "BreadcrumbLink",
 );
-BreadcrumbLink.displayName = "BreadcrumbLink";
 
 /**
  * The page you're on. Not a link — `aria-current="page"` is what tells assistive
  * tech this is the destination, and linking a page to itself is a dead end.
  */
-export const BreadcrumbPage = React.forwardRef<
-  HTMLSpanElement,
-  React.ComponentPropsWithoutRef<"span">
->(({ className, ...props }, ref) => (
-  <span
-    ref={ref}
-    // `role="link"` + `aria-disabled` is the shadcn idiom here; a plain span with
-    // aria-current says the same thing without pretending to be a link.
-    aria-current="page"
-    data-slot="breadcrumb-page"
-    className={cn("text-foreground", className)}
-    {...props}
-  />
-));
-BreadcrumbPage.displayName = "BreadcrumbPage";
+export const BreadcrumbPage = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLSpanElement, React.ComponentPropsWithoutRef<"span">>(
+    ({ className, ...props }, ref) => (
+      <span
+        ref={ref}
+        // `role="link"` + `aria-disabled` is the shadcn idiom here; a plain span with
+        // aria-current says the same thing without pretending to be a link.
+        aria-current="page"
+        data-slot="breadcrumb-page"
+        className={cn("text-foreground", className)}
+        {...props}
+      />
+    ),
+  ),
+  "BreadcrumbPage",
+);
 
 /**
  * The chevron between steps. Decorative — the list order already carries the

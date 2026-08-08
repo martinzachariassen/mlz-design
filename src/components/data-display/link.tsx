@@ -2,8 +2,9 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const linkVariants = cva(
+const linkVariants = /* @__PURE__ */ cva(
   "rounded-[var(--radius-sm)] transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
   {
     variants: {
@@ -62,39 +63,41 @@ export interface LinkProps
  * <Link asChild><RouterLink to="/about">About</RouterLink></Link>
  * ```
  */
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ className, variant, asChild, external, children, target, rel, ...props }, ref) => {
-    const Comp = asChild ? Slot : "a";
-    return (
-      <Comp
-        ref={ref}
-        data-slot="link"
-        target={external ? (target ?? "_blank") : target}
-        rel={external ? (rel ?? "noopener noreferrer") : rel}
-        className={cn(linkVariants({ variant }), className)}
-        {...props}
-      >
-        {/* `asChild` forwards a single child, so the note can't be appended there. */}
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {children}
-            {/* The separating space is its own text node: a leading space inside
+export const Link = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLAnchorElement, LinkProps>(
+    ({ className, variant, asChild, external, children, target, rel, ...props }, ref) => {
+      const Comp = asChild ? Slot : "a";
+      return (
+        <Comp
+          ref={ref}
+          data-slot="link"
+          target={external ? (target ?? "_blank") : target}
+          rel={external ? (rel ?? "noopener noreferrer") : rel}
+          className={cn(linkVariants({ variant }), className)}
+          {...props}
+        >
+          {/* `asChild` forwards a single child, so the note can't be appended there. */}
+          {asChild ? (
+            children
+          ) : (
+            <>
+              {children}
+              {/* The separating space is its own text node: a leading space inside
                 the span is collapsed away by accessible-name computation, and
                 the label comes out as "Sourceopens in a new tab". */}
-            {external ? (
-              <>
-                {" "}
-                <span className="sr-only">(opens in a new tab)</span>
-              </>
-            ) : null}
-          </>
-        )}
-      </Comp>
-    );
-  },
+              {external ? (
+                <>
+                  {" "}
+                  <span className="sr-only">(opens in a new tab)</span>
+                </>
+              ) : null}
+            </>
+          )}
+        </Comp>
+      );
+    },
+  ),
+  "Link",
 );
-Link.displayName = "Link";
 
 export { linkVariants };

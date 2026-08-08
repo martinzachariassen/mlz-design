@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export type KbdProps = React.HTMLAttributes<HTMLElement>;
 
@@ -22,14 +23,16 @@ export type KbdProps = React.HTMLAttributes<HTMLElement>;
  * </span>
  * ```
  */
-export const Kbd = React.forwardRef<HTMLElement, KbdProps>(({ className, ...props }, ref) => (
-  <kbd
-    ref={ref}
-    className={cn(
-      "inline-flex min-w-6 items-center justify-center rounded-[var(--radius-sm)] border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted-foreground",
-      className,
-    )}
-    {...props}
-  />
-));
-Kbd.displayName = "Kbd";
+export const Kbd = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLElement, KbdProps>(({ className, ...props }, ref) => (
+    <kbd
+      ref={ref}
+      className={cn(
+        "inline-flex min-w-6 items-center justify-center rounded-[var(--radius-sm)] border border-border bg-muted px-1.5 py-0.5 font-mono text-[11px] leading-none text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "Kbd",
+);

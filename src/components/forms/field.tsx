@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { Label } from "./label";
 
 interface FieldContextValue {
@@ -13,7 +14,7 @@ interface FieldContextValue {
   register: (part: "description" | "error", present: boolean) => void;
 }
 
-const FieldContext = React.createContext<FieldContextValue | null>(null);
+const FieldContext = /* @__PURE__ */ React.createContext<FieldContextValue | null>(null);
 
 /**
  * Read the field a control is sitting in. Returns `null` outside a `Field`, so a
@@ -95,50 +96,52 @@ export interface FieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "
  * </Field>
  * ```
  */
-export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
-  ({ id, invalid = false, disabled = false, className, children, ...props }, ref) => {
-    const reactId = React.useId();
-    const controlId = id ?? `${reactId}-control`;
+export const Field = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, FieldProps>(
+    ({ id, invalid = false, disabled = false, className, children, ...props }, ref) => {
+      const reactId = React.useId();
+      const controlId = id ?? `${reactId}-control`;
 
-    const [hasDescription, setHasDescription] = React.useState(false);
-    const [hasError, setHasError] = React.useState(false);
+      const [hasDescription, setHasDescription] = React.useState(false);
+      const [hasError, setHasError] = React.useState(false);
 
-    const register = React.useCallback((part: "description" | "error", present: boolean) => {
-      if (part === "description") setHasDescription(present);
-      else setHasError(present);
-    }, []);
+      const register = React.useCallback((part: "description" | "error", present: boolean) => {
+        if (part === "description") setHasDescription(present);
+        else setHasError(present);
+      }, []);
 
-    const ctx = React.useMemo<FieldContextValue>(
-      () => ({
-        controlId,
-        descriptionId: `${reactId}-description`,
-        errorId: `${reactId}-error`,
-        invalid,
-        disabled,
-        hasDescription,
-        hasError,
-        register,
-      }),
-      [controlId, reactId, invalid, disabled, hasDescription, hasError, register],
-    );
+      const ctx = React.useMemo<FieldContextValue>(
+        () => ({
+          controlId,
+          descriptionId: `${reactId}-description`,
+          errorId: `${reactId}-error`,
+          invalid,
+          disabled,
+          hasDescription,
+          hasError,
+          register,
+        }),
+        [controlId, reactId, invalid, disabled, hasDescription, hasError, register],
+      );
 
-    return (
-      <FieldContext.Provider value={ctx}>
-        <div
-          ref={ref}
-          data-slot="field"
-          data-invalid={invalid || undefined}
-          data-disabled={disabled || undefined}
-          className={cn("flex flex-col gap-1.5", className)}
-          {...props}
-        >
-          {children}
-        </div>
-      </FieldContext.Provider>
-    );
-  },
+      return (
+        <FieldContext.Provider value={ctx}>
+          <div
+            ref={ref}
+            data-slot="field"
+            data-invalid={invalid || undefined}
+            data-disabled={disabled || undefined}
+            className={cn("flex flex-col gap-1.5", className)}
+            {...props}
+          >
+            {children}
+          </div>
+        </FieldContext.Provider>
+      );
+    },
+  ),
+  "Field",
 );
-Field.displayName = "Field";
 
 export type FieldLabelProps = React.ComponentPropsWithoutRef<typeof Label>;
 
@@ -146,48 +149,52 @@ export type FieldLabelProps = React.ComponentPropsWithoutRef<typeof Label>;
  * The field's label. Picks up `htmlFor` from the surrounding `Field`, so you
  * never write an id. Outside a `Field` it is an ordinary `Label`.
  */
-export const FieldLabel = React.forwardRef<React.ComponentRef<typeof Label>, FieldLabelProps>(
-  ({ htmlFor, className, ...props }, ref) => {
-    const field = useField();
-    return (
-      <Label
-        ref={ref}
-        htmlFor={htmlFor ?? field?.controlId}
-        data-slot="field-label"
-        className={cn(field?.disabled && "cursor-not-allowed opacity-50", className)}
-        {...props}
-      />
-    );
-  },
+export const FieldLabel = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<React.ComponentRef<typeof Label>, FieldLabelProps>(
+    ({ htmlFor, className, ...props }, ref) => {
+      const field = useField();
+      return (
+        <Label
+          ref={ref}
+          htmlFor={htmlFor ?? field?.controlId}
+          data-slot="field-label"
+          className={cn(field?.disabled && "cursor-not-allowed opacity-50", className)}
+          {...props}
+        />
+      );
+    },
+  ),
+  "FieldLabel",
 );
-FieldLabel.displayName = "FieldLabel";
 
 /**
  * The quiet sentence under the control — what the field wants, or why it is
  * asked for. Registers itself so `aria-describedby` only points at it when it
  * is really on the page.
  */
-export const FieldDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const field = useField();
-  const register = field?.register;
-  React.useEffect(() => {
-    register?.("description", true);
-    return () => register?.("description", false);
-  }, [register]);
-  return (
-    <p
-      ref={ref}
-      id={field?.descriptionId}
-      data-slot="field-description"
-      className={cn("text-[13px] leading-relaxed text-muted-foreground", className)}
-      {...props}
-    />
-  );
-});
-FieldDescription.displayName = "FieldDescription";
+export const FieldDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => {
+    const field = useField();
+    const register = field?.register;
+    React.useEffect(() => {
+      register?.("description", true);
+      return () => register?.("description", false);
+    }, [register]);
+    return (
+      <p
+        ref={ref}
+        id={field?.descriptionId}
+        data-slot="field-description"
+        className={cn("text-[13px] leading-relaxed text-muted-foreground", className)}
+        {...props}
+      />
+    );
+  }),
+  "FieldDescription",
+);
 
 /**
  * The validation message. **Renders nothing when it has no children**, so you
@@ -197,31 +204,33 @@ FieldDescription.displayName = "FieldDescription";
  * is announced. Write what to do, not what failed: "Use your work address"
  * beats "Invalid email".
  */
-export const FieldError = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
-  const field = useField();
-  const register = field?.register;
-  const present = children !== undefined && children !== null && children !== false;
+export const FieldError = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, children, ...props }, ref) => {
+    const field = useField();
+    const register = field?.register;
+    const present = children !== undefined && children !== null && children !== false;
 
-  React.useEffect(() => {
-    register?.("error", present);
-    return () => register?.("error", false);
-  }, [register, present]);
+    React.useEffect(() => {
+      register?.("error", present);
+      return () => register?.("error", false);
+    }, [register, present]);
 
-  if (!present) return null;
-  return (
-    <p
-      ref={ref}
-      id={field?.errorId}
-      role="alert"
-      data-slot="field-error"
-      className={cn("text-[13px] leading-relaxed text-destructive-deep", className)}
-      {...props}
-    >
-      {children}
-    </p>
-  );
-});
-FieldError.displayName = "FieldError";
+    if (!present) return null;
+    return (
+      <p
+        ref={ref}
+        id={field?.errorId}
+        role="alert"
+        data-slot="field-error"
+        className={cn("text-[13px] leading-relaxed text-destructive-deep", className)}
+        {...props}
+      >
+        {children}
+      </p>
+    );
+  }),
+  "FieldError",
+);

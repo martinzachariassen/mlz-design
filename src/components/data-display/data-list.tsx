@@ -1,10 +1,11 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 /** How a `DataRow` lays out its term/description pair. */
 export type DataLayout = "justify" | "grid";
 
-const DataListContext = React.createContext<DataLayout>("justify");
+const DataListContext = /* @__PURE__ */ React.createContext<DataLayout>("justify");
 
 export interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
   /**
@@ -40,20 +41,22 @@ export interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
  * </DataList>
  * ```
  */
-export const DataList = React.forwardRef<HTMLDListElement, DataListProps>(
-  ({ layout = "justify", className, ...props }, ref) => (
-    <DataListContext.Provider value={layout}>
-      <dl
-        ref={ref}
-        data-slot="data-list"
-        data-layout={layout}
-        className={cn("flex flex-col", className)}
-        {...props}
-      />
-    </DataListContext.Provider>
+export const DataList = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDListElement, DataListProps>(
+    ({ layout = "justify", className, ...props }, ref) => (
+      <DataListContext.Provider value={layout}>
+        <dl
+          ref={ref}
+          data-slot="data-list"
+          data-layout={layout}
+          className={cn("flex flex-col", className)}
+          {...props}
+        />
+      </DataListContext.Provider>
+    ),
   ),
+  "DataList",
 );
-DataList.displayName = "DataList";
 
 export interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The row's key/term. */
@@ -78,45 +81,47 @@ export interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
  * <DataRow label="User agent" mono layout="grid">Mozilla/5.0 …</DataRow>
  * ```
  */
-export const DataRow = React.forwardRef<HTMLDivElement, DataRowProps>(
-  ({ label, mono, layout, className, children, ...props }, ref) => {
-    const inherited = React.useContext(DataListContext);
-    const resolved = layout ?? inherited;
-    const grid = resolved === "grid";
-    return (
-      <div
-        ref={ref}
-        data-slot="data-row"
-        data-layout={resolved}
-        className={cn(
-          "border-b border-border py-1.5 last:border-b-0",
-          grid
-            ? "grid grid-cols-[var(--mlz-data-label,8rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-1 max-[560px]:grid-cols-1 max-[560px]:gap-y-0.5"
-            : "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-dashed",
-          className,
-        )}
-        {...props}
-      >
-        <dt
+export const DataRow = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, DataRowProps>(
+    ({ label, mono, layout, className, children, ...props }, ref) => {
+      const inherited = React.useContext(DataListContext);
+      const resolved = layout ?? inherited;
+      const grid = resolved === "grid";
+      return (
+        <div
+          ref={ref}
+          data-slot="data-row"
+          data-layout={resolved}
           className={cn(
+            "border-b border-border py-1.5 last:border-b-0",
             grid
-              ? "font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
-              : "text-sm text-muted-foreground",
+              ? "grid grid-cols-[var(--mlz-data-label,8rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-1 max-[560px]:grid-cols-1 max-[560px]:gap-y-0.5"
+              : "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 border-dashed",
+            className,
           )}
+          {...props}
         >
-          {label}
-        </dt>
-        <dd
-          className={cn(
-            "m-0 break-words text-sm text-foreground",
-            grid ? "min-w-0" : "max-w-[64%] text-right",
-            mono && "font-mono text-[0.9em]",
-          )}
-        >
-          {children}
-        </dd>
-      </div>
-    );
-  },
+          <dt
+            className={cn(
+              grid
+                ? "font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+                : "text-sm text-muted-foreground",
+            )}
+          >
+            {label}
+          </dt>
+          <dd
+            className={cn(
+              "m-0 break-words text-sm text-foreground",
+              grid ? "min-w-0" : "max-w-[64%] text-right",
+              mono && "font-mono text-[0.9em]",
+            )}
+          >
+            {children}
+          </dd>
+        </div>
+      );
+    },
+  ),
+  "DataRow",
 );
-DataRow.displayName = "DataRow";

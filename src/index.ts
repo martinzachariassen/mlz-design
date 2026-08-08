@@ -101,7 +101,9 @@ export {
 export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
 export { Skeleton } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
-export { Toaster, type ToasterProps, toast } from "./components/feedback/toaster";
+// Toaster and toast live at "@martinzachariassen/design/toaster". sonner is not
+// side-effect-free and injects a <style> at module scope, so re-exporting it
+// here made every consumer ship and run it. See src/toaster.ts.
 export { Button, type ButtonProps, buttonVariants } from "./components/forms/button";
 export { Checkbox, type CheckboxProps } from "./components/forms/checkbox";
 export {

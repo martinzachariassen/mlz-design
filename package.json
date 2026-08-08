@@ -1,7 +1,7 @@
 {
   "name": "@martinzachariassen/design",
   "version": "0.4.0",
-  "description": "Martin Zachariassen's design system — colour, type, style and motion as an installable React + Tailwind v4 package.",
+  "description": "Martin Zachariassen's design system \u2014 colour, type, style and motion as an installable React + Tailwind v4 package.",
   "license": "MIT",
   "author": "Martin Zachariassen",
   "type": "module",
@@ -26,6 +26,10 @@
     "./tokens": {
       "types": "./dist/tokens.d.ts",
       "import": "./dist/tokens.js"
+    },
+    "./toaster": {
+      "types": "./dist/toaster.d.ts",
+      "import": "./dist/toaster.js"
     },
     "./styles/index.css": "./dist/styles/index.css",
     "./styles/index-self-hosted.css": "./dist/styles/index-self-hosted.css",

@@ -3,9 +3,10 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CloseIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 import { ModalRoot, useModal, useModalPart } from "./modal-root";
 
-const sheetVariants = cva(
+const sheetVariants = /* @__PURE__ */ cva(
   [
     "m-0 max-h-none border-border bg-card p-0 text-card-foreground shadow-[var(--shadow-lg)]",
     "backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
@@ -103,98 +104,107 @@ export function Sheet({
  * viewport. Keeping them separate is what lets `SheetHeader` stay put while a
  * long list moves underneath it.
  */
-export const SheetContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
-    const ctx = useModal();
-    return (
-      <div
-        ref={ref}
-        data-slot="sheet-content"
-        className={cn("relative flex h-full flex-col overflow-y-auto p-6", className)}
-        {...props}
-      >
-        {children}
-        <button
-          type="button"
-          onClick={() => ctx?.close()}
-          className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+export const SheetContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, children, ...props }, ref) => {
+      const ctx = useModal();
+      return (
+        <div
+          ref={ref}
+          data-slot="sheet-content"
+          className={cn("relative flex h-full flex-col overflow-y-auto p-6", className)}
+          {...props}
         >
-          <CloseIcon className="size-4" />
-          <span className="sr-only">Close</span>
-        </button>
-      </div>
-    );
-  },
+          {children}
+          <button
+            type="button"
+            onClick={() => ctx?.close()}
+            className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+          >
+            <CloseIcon className="size-4" />
+            <span className="sr-only">Close</span>
+          </button>
+        </div>
+      );
+    },
+  ),
+  "SheetContent",
 );
-SheetContent.displayName = "SheetContent";
 
 /** Title + description block, inset on the right to clear the close button. */
-export const SheetHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="sheet-header"
-      className={cn("mb-5 flex flex-col gap-1.5 pr-8", className)}
-      {...props}
-    />
+export const SheetHeader = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="sheet-header"
+        className={cn("mb-5 flex flex-col gap-1.5 pr-8", className)}
+        {...props}
+      />
+    ),
   ),
+  "SheetHeader",
 );
-SheetHeader.displayName = "SheetHeader";
 
 /** The sheet's `<h2>`. Names the sheet for assistive tech — always include one. */
-export const SheetTitle = React.forwardRef<
-  HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => {
-  const titleId = useModalPart("title");
-  return (
-    <h2
-      ref={ref}
-      id={titleId}
-      data-slot="sheet-title"
-      className={cn(
-        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-});
-SheetTitle.displayName = "SheetTitle";
+export const SheetTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+    ({ className, ...props }, ref) => {
+      const titleId = useModalPart("title");
+      return (
+        <h2
+          ref={ref}
+          id={titleId}
+          data-slot="sheet-title"
+          className={cn(
+            "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+            className,
+          )}
+          {...props}
+        />
+      );
+    },
+  ),
+  "SheetTitle",
+);
 
 /** The muted sentence under the title. */
-export const SheetDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const descriptionId = useModalPart("description");
-  return (
-    <p
-      ref={ref}
-      id={descriptionId}
-      data-slot="sheet-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
-      {...props}
-    />
-  );
-});
-SheetDescription.displayName = "SheetDescription";
+export const SheetDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => {
+    const descriptionId = useModalPart("description");
+    return (
+      <p
+        ref={ref}
+        id={descriptionId}
+        data-slot="sheet-description"
+        className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+        {...props}
+      />
+    );
+  }),
+  "SheetDescription",
+);
 
 /** The action row, pinned to the bottom of the panel. */
-export const SheetFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="sheet-footer"
-      className={cn(
-        "mt-auto flex flex-col-reverse gap-2 pt-6 sm:flex-row sm:justify-end",
-        className,
-      )}
-      {...props}
-    />
+export const SheetFooter = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="sheet-footer"
+        className={cn(
+          "mt-auto flex flex-col-reverse gap-2 pt-6 sm:flex-row sm:justify-end",
+          className,
+        )}
+        {...props}
+      />
+    ),
   ),
+  "SheetFooter",
 );
-SheetFooter.displayName = "SheetFooter";
 
 export interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Render the single child as the trigger instead of a `<button>`. */
@@ -202,21 +212,23 @@ export interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 /** Closes the sheet. Wrap your own control with `asChild`. */
-export const SheetClose = React.forwardRef<HTMLButtonElement, SheetCloseProps>(
-  ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = useModal();
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        ref={ref}
-        type={asChild ? type : (type ?? "button")}
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) ctx?.close();
-        }}
-        {...props}
-      />
-    );
-  },
+export const SheetClose = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, SheetCloseProps>(
+    ({ asChild, onClick, type, ...props }, ref) => {
+      const ctx = useModal();
+      const Comp = asChild ? Slot : "button";
+      return (
+        <Comp
+          ref={ref}
+          type={asChild ? type : (type ?? "button")}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onClick?.(event);
+            if (!event.defaultPrevented) ctx?.close();
+          }}
+          {...props}
+        />
+      );
+    },
+  ),
+  "SheetClose",
 );
-SheetClose.displayName = "SheetClose";

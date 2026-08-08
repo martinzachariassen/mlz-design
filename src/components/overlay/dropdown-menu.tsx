@@ -2,15 +2,16 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CheckIcon, ChevronRightIcon, DotIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 
 /** Shared by the menu surface and its submenus so they can't drift apart. */
-const surface = cn(
+const surface = /* @__PURE__ */ cn(
   "z-50 min-w-[10rem] overflow-hidden rounded-[var(--radius-lg)] border border-border bg-popover p-1 text-popover-foreground shadow-[var(--shadow-lg)]",
   "motion-safe:animate-rise",
 );
 
 /** Shared by every row: item, checkbox item, radio item, submenu trigger. */
-const row = cn(
+const row = /* @__PURE__ */ cn(
   "relative flex cursor-pointer select-none items-center gap-2 rounded-[var(--radius-sm)] px-2 py-1.5 text-sm outline-none transition-colors",
   "focus:bg-accent-subtle focus:text-foreground data-[highlighted]:bg-accent-subtle data-[highlighted]:text-foreground",
   "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
@@ -49,7 +50,6 @@ export type DropdownMenuProps = React.ComponentPropsWithoutRef<typeof DropdownMe
 export function DropdownMenu(props: DropdownMenuProps) {
   return <DropdownMenuPrimitive.Root {...props} />;
 }
-DropdownMenu.displayName = "DropdownMenu";
 
 /** The control that opens the menu. Pass `asChild` to use a `Button`. */
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -64,22 +64,24 @@ export interface DropdownMenuContentProps
   extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> {}
 
 /** The menu surface. Portalled, so no ancestor `overflow: hidden` can clip it. */
-export const DropdownMenuContent = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.Content>,
-  DropdownMenuContentProps
->(({ className, sideOffset = 6, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      collisionPadding={8}
-      data-slot="dropdown-menu-content"
-      className={cn(surface, className)}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-));
-DropdownMenuContent.displayName = "DropdownMenuContent";
+export const DropdownMenuContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.Content>,
+    DropdownMenuContentProps
+  >(({ className, sideOffset = 6, ...props }, ref) => (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.Content
+        ref={ref}
+        sideOffset={sideOffset}
+        collisionPadding={8}
+        data-slot="dropdown-menu-content"
+        className={cn(surface, className)}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  )),
+  "DropdownMenuContent",
+);
 
 export interface DropdownMenuItemProps
   extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> {
@@ -90,67 +92,73 @@ export interface DropdownMenuItemProps
 }
 
 /** One action. Use `onSelect`, not `onClick` — it fires for Enter and Space too. */
-export const DropdownMenuItem = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
-  DropdownMenuItemProps
->(({ className, variant = "default", inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    data-slot="dropdown-menu-item"
-    data-variant={variant}
-    className={cn(
-      row,
-      inset && "pl-8",
-      variant === "destructive" &&
-        "text-destructive-deep focus:bg-destructive/10 focus:text-destructive-deep data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive-deep",
-      className,
-    )}
-    {...props}
-  />
-));
-DropdownMenuItem.displayName = "DropdownMenuItem";
+export const DropdownMenuItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.Item>,
+    DropdownMenuItemProps
+  >(({ className, variant = "default", inset, ...props }, ref) => (
+    <DropdownMenuPrimitive.Item
+      ref={ref}
+      data-slot="dropdown-menu-item"
+      data-variant={variant}
+      className={cn(
+        row,
+        inset && "pl-8",
+        variant === "destructive" &&
+          "text-destructive-deep focus:bg-destructive/10 focus:text-destructive-deep data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive-deep",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "DropdownMenuItem",
+);
 
 /** A row that toggles. The tick occupies a reserved column, so rows stay aligned. */
-export const DropdownMenuCheckboxItem = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
->(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.CheckboxItem
-    ref={ref}
-    data-slot="dropdown-menu-checkbox-item"
-    className={cn(row, "pl-8", className)}
-    {...props}
-  >
-    <span className="absolute left-2 flex size-4 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <CheckIcon className="size-3.5 text-accent-deep" />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-    {children}
-  </DropdownMenuPrimitive.CheckboxItem>
-));
-DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
+export const DropdownMenuCheckboxItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.CheckboxItem>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.CheckboxItem>
+  >(({ className, children, ...props }, ref) => (
+    <DropdownMenuPrimitive.CheckboxItem
+      ref={ref}
+      data-slot="dropdown-menu-checkbox-item"
+      className={cn(row, "pl-8", className)}
+      {...props}
+    >
+      <span className="absolute left-2 flex size-4 items-center justify-center">
+        <DropdownMenuPrimitive.ItemIndicator>
+          <CheckIcon className="size-3.5 text-accent-deep" />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.CheckboxItem>
+  )),
+  "DropdownMenuCheckboxItem",
+);
 
 /** One choice within a `DropdownMenuRadioGroup`. */
-export const DropdownMenuRadioItem = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
->(({ className, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.RadioItem
-    ref={ref}
-    data-slot="dropdown-menu-radio-item"
-    className={cn(row, "pl-8", className)}
-    {...props}
-  >
-    <span className="absolute left-2 flex size-4 items-center justify-center">
-      <DropdownMenuPrimitive.ItemIndicator>
-        <DotIcon className="text-accent-deep" />
-      </DropdownMenuPrimitive.ItemIndicator>
-    </span>
-    {children}
-  </DropdownMenuPrimitive.RadioItem>
-));
-DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
+export const DropdownMenuRadioItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.RadioItem>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.RadioItem>
+  >(({ className, children, ...props }, ref) => (
+    <DropdownMenuPrimitive.RadioItem
+      ref={ref}
+      data-slot="dropdown-menu-radio-item"
+      className={cn(row, "pl-8", className)}
+      {...props}
+    >
+      <span className="absolute left-2 flex size-4 items-center justify-center">
+        <DropdownMenuPrimitive.ItemIndicator>
+          <DotIcon className="text-accent-deep" />
+        </DropdownMenuPrimitive.ItemIndicator>
+      </span>
+      {children}
+    </DropdownMenuPrimitive.RadioItem>
+  )),
+  "DropdownMenuRadioItem",
+);
 
 export interface DropdownMenuLabelProps
   extends React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label> {
@@ -159,36 +167,40 @@ export interface DropdownMenuLabelProps
 }
 
 /** A section heading in the mlz eyebrow voice. Not selectable. */
-export const DropdownMenuLabel = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
-  DropdownMenuLabelProps
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Label
-    ref={ref}
-    data-slot="dropdown-menu-label"
-    className={cn(
-      "px-2 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground",
-      inset && "pl-8",
-      className,
-    )}
-    {...props}
-  />
-));
-DropdownMenuLabel.displayName = "DropdownMenuLabel";
+export const DropdownMenuLabel = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.Label>,
+    DropdownMenuLabelProps
+  >(({ className, inset, ...props }, ref) => (
+    <DropdownMenuPrimitive.Label
+      ref={ref}
+      data-slot="dropdown-menu-label"
+      className={cn(
+        "px-2 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground",
+        inset && "pl-8",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "DropdownMenuLabel",
+);
 
 /** A hairline rule between groups of rows. */
-export const DropdownMenuSeparator = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Separator
-    ref={ref}
-    data-slot="dropdown-menu-separator"
-    className={cn("-mx-1 my-1 h-px bg-border", className)}
-    {...props}
-  />
-));
-DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
+export const DropdownMenuSeparator = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.Separator>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
+  >(({ className, ...props }, ref) => (
+    <DropdownMenuPrimitive.Separator
+      ref={ref}
+      data-slot="dropdown-menu-separator"
+      className={cn("-mx-1 my-1 h-px bg-border", className)}
+      {...props}
+    />
+  )),
+  "DropdownMenuSeparator",
+);
 
 /**
  * The keyboard hint pushed to the right of a row — purely decorative, so it's
@@ -215,35 +227,39 @@ export function DropdownMenuShortcut({
 export const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 
 /** The row that opens a submenu. Carries its own caret. */
-export const DropdownMenuSubTrigger = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }
->(({ className, inset, children, ...props }, ref) => (
-  <DropdownMenuPrimitive.SubTrigger
-    ref={ref}
-    data-slot="dropdown-menu-sub-trigger"
-    className={cn(row, "data-[state=open]:bg-accent-subtle", inset && "pl-8", className)}
-    {...props}
-  >
-    {children}
-    <ChevronRightIcon className="ml-auto text-muted-foreground" />
-  </DropdownMenuPrimitive.SubTrigger>
-));
-DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
+export const DropdownMenuSubTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.SubTrigger>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger> & { inset?: boolean }
+  >(({ className, inset, children, ...props }, ref) => (
+    <DropdownMenuPrimitive.SubTrigger
+      ref={ref}
+      data-slot="dropdown-menu-sub-trigger"
+      className={cn(row, "data-[state=open]:bg-accent-subtle", inset && "pl-8", className)}
+      {...props}
+    >
+      {children}
+      <ChevronRightIcon className="ml-auto text-muted-foreground" />
+    </DropdownMenuPrimitive.SubTrigger>
+  )),
+  "DropdownMenuSubTrigger",
+);
 
 /** The submenu surface. */
-export const DropdownMenuSubContent = React.forwardRef<
-  React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
->(({ className, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal>
-    <DropdownMenuPrimitive.SubContent
-      ref={ref}
-      collisionPadding={8}
-      data-slot="dropdown-menu-sub-content"
-      className={cn(surface, className)}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-));
-DropdownMenuSubContent.displayName = "DropdownMenuSubContent";
+export const DropdownMenuSubContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof DropdownMenuPrimitive.SubContent>,
+    React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubContent>
+  >(({ className, ...props }, ref) => (
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        ref={ref}
+        collisionPadding={8}
+        data-slot="dropdown-menu-sub-content"
+        className={cn(surface, className)}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  )),
+  "DropdownMenuSubContent",
+);

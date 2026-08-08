@@ -51,7 +51,7 @@ interface ThemeContextValue {
   setAccent: (accent: AccentName) => void;
 }
 
-const ThemeContext = React.createContext<ThemeContextValue | null>(null);
+const ThemeContext = /* @__PURE__ */ React.createContext<ThemeContextValue | null>(null);
 
 const isBrowser = typeof window !== "undefined";
 

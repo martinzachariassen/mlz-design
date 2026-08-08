@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export type GlitchTrigger = "ambient" | "hover";
 
@@ -35,88 +36,90 @@ function prefersReducedMotion(): boolean {
  * Styling lives on the wrapper — pass a `className` with the type family, size
  * and tracking you want.
  */
-export const GlitchText = React.forwardRef<HTMLSpanElement, GlitchTextProps>(
-  ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
-    const containerRef = React.useRef<HTMLSpanElement | null>(null);
+export const GlitchText = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLSpanElement, GlitchTextProps>(
+    ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
+      const containerRef = React.useRef<HTMLSpanElement | null>(null);
 
-    const setRefs = React.useCallback(
-      (node: HTMLSpanElement | null) => {
-        containerRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) (ref as React.MutableRefObject<HTMLSpanElement | null>).current = node;
-      },
-      [ref],
-    );
+      const setRefs = React.useCallback(
+        (node: HTMLSpanElement | null) => {
+          containerRef.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as React.MutableRefObject<HTMLSpanElement | null>).current = node;
+        },
+        [ref],
+      );
 
-    // Stable keys (avoids array-index keys; text is static per render).
-    const segments = React.useMemo(
-      () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
-      [text],
-    );
+      // Stable keys (avoids array-index keys; text is static per render).
+      const segments = React.useMemo(
+        () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
+        [text],
+      );
 
-    const burst = React.useCallback(() => {
-      const root = containerRef.current;
-      if (!root) return;
-      const chars = root.querySelectorAll<HTMLElement>("[data-glitch-char]");
-      if (chars.length === 0) return;
-      const count = 1 + Math.floor(Math.random() * Math.min(4, chars.length));
-      for (let i = 0; i < count; i++) {
-        const el = chars[Math.floor(Math.random() * chars.length)];
-        if (!el) continue;
-        el.classList.remove("animate-glitch");
-        void el.offsetWidth; // reflow so the animation restarts if re-picked
-        el.classList.add("animate-glitch");
-        el.addEventListener("animationend", () => el.classList.remove("animate-glitch"), {
-          once: true,
-        });
-      }
-    }, []);
+      const burst = React.useCallback(() => {
+        const root = containerRef.current;
+        if (!root) return;
+        const chars = root.querySelectorAll<HTMLElement>("[data-glitch-char]");
+        if (chars.length === 0) return;
+        const count = 1 + Math.floor(Math.random() * Math.min(4, chars.length));
+        for (let i = 0; i < count; i++) {
+          const el = chars[Math.floor(Math.random() * chars.length)];
+          if (!el) continue;
+          el.classList.remove("animate-glitch");
+          void el.offsetWidth; // reflow so the animation restarts if re-picked
+          el.classList.add("animate-glitch");
+          el.addEventListener("animationend", () => el.classList.remove("animate-glitch"), {
+            once: true,
+          });
+        }
+      }, []);
 
-    React.useEffect(() => {
-      if (trigger !== "ambient" || prefersReducedMotion()) return;
-      const [min, max] = interval;
-      let timer: ReturnType<typeof setTimeout>;
-      const schedule = () => {
-        timer = setTimeout(
-          () => {
-            if (!document.hidden) burst();
-            schedule();
-          },
-          min + Math.random() * (max - min),
-        );
-      };
-      schedule();
-      return () => clearTimeout(timer);
-    }, [trigger, interval, burst]);
+      React.useEffect(() => {
+        if (trigger !== "ambient" || prefersReducedMotion()) return;
+        const [min, max] = interval;
+        let timer: ReturnType<typeof setTimeout>;
+        const schedule = () => {
+          timer = setTimeout(
+            () => {
+              if (!document.hidden) burst();
+              schedule();
+            },
+            min + Math.random() * (max - min),
+          );
+        };
+        schedule();
+        return () => clearTimeout(timer);
+      }, [trigger, interval, burst]);
 
-    const handlePointerEnter =
-      trigger === "hover"
-        ? () => {
-            if (!prefersReducedMotion()) burst();
-          }
-        : undefined;
+      const handlePointerEnter =
+        trigger === "hover"
+          ? () => {
+              if (!prefersReducedMotion()) burst();
+            }
+          : undefined;
 
-    return (
-      <span
-        ref={setRefs}
-        className={cn("inline-block", className)}
-        onPointerEnter={handlePointerEnter}
-        {...props}
-      >
-        <span className="sr-only">{text}</span>
-        <span aria-hidden="true">
-          {segments.map(({ char, key }) =>
-            char === " " ? (
-              <span key={key}> </span>
-            ) : (
-              <span key={key} data-glitch-char className="inline-block will-change-transform">
-                {char}
-              </span>
-            ),
-          )}
+      return (
+        <span
+          ref={setRefs}
+          className={cn("inline-block", className)}
+          onPointerEnter={handlePointerEnter}
+          {...props}
+        >
+          <span className="sr-only">{text}</span>
+          <span aria-hidden="true">
+            {segments.map(({ char, key }) =>
+              char === " " ? (
+                <span key={key}> </span>
+              ) : (
+                <span key={key} data-glitch-char className="inline-block will-change-transform">
+                  {char}
+                </span>
+              ),
+            )}
+          </span>
         </span>
-      </span>
-    );
-  },
+      );
+    },
+  ),
+  "GlitchText",
 );
-GlitchText.displayName = "GlitchText";

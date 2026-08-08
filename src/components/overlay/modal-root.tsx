@@ -22,7 +22,7 @@ interface ModalContextValue {
   setHasDescription: (present: boolean) => void;
 }
 
-const ModalContext = React.createContext<ModalContextValue | null>(null);
+const ModalContext = /* @__PURE__ */ React.createContext<ModalContextValue | null>(null);
 
 /** Read the modal a part is inside. `null` outside one. */
 export function useModal(): ModalContextValue | null {

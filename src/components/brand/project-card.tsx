@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { Badge } from "../data-display/badge";
 import { BrandMark } from "./brand-mark";
 import { GridBackground } from "./grid-background";
@@ -48,109 +49,113 @@ function DefaultCover() {
  *
  * With `href`, the whole card becomes one link (the title anchor stretches over it).
  */
-export const ProjectCard = React.forwardRef<HTMLElement, ProjectCardProps>(
-  (
-    {
-      className,
-      title,
-      description,
-      tags,
-      meta,
-      href,
-      cover,
-      featured = false,
-      cta = "View project",
-      ...props
-    },
-    ref,
-  ) => {
-    const titleId = React.useId();
-    return (
-      <article
-        ref={ref}
-        data-slot="project-card"
-        aria-labelledby={titleId}
-        className={cn(
-          "group relative flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card text-card-foreground transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out)]",
-          "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-accent hover:shadow-[6px_6px_0_0_var(--accent)]",
-          "focus-within:-translate-x-0.5 focus-within:-translate-y-0.5 focus-within:border-accent focus-within:shadow-[6px_6px_0_0_var(--accent)]",
-          featured && "md:grid md:grid-cols-2 md:items-stretch",
-          className,
-        )}
-        {...props}
-      >
-        <div
+export const ProjectCard = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLElement, ProjectCardProps>(
+    (
+      {
+        className,
+        title,
+        description,
+        tags,
+        meta,
+        href,
+        cover,
+        featured = false,
+        cta = "View project",
+        ...props
+      },
+      ref,
+    ) => {
+      const titleId = React.useId();
+      return (
+        <article
+          ref={ref}
+          data-slot="project-card"
+          aria-labelledby={titleId}
           className={cn(
-            "relative shrink-0 border-b border-border",
-            featured ? "aspect-[16/10] md:aspect-auto md:border-r md:border-b-0" : "aspect-[16/10]",
+            "group relative flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-card text-card-foreground transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-out)]",
+            "hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-accent hover:shadow-[6px_6px_0_0_var(--accent)]",
+            "focus-within:-translate-x-0.5 focus-within:-translate-y-0.5 focus-within:border-accent focus-within:shadow-[6px_6px_0_0_var(--accent)]",
+            featured && "md:grid md:grid-cols-2 md:items-stretch",
+            className,
           )}
+          {...props}
         >
-          {cover ?? <DefaultCover />}
-        </div>
-
-        <div
-          className={cn("flex flex-1 flex-col gap-3 p-5", featured && "md:justify-center md:p-8")}
-        >
-          {meta ? (
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              {meta}
-            </p>
-          ) : null}
-
-          <h3
-            id={titleId}
+          <div
             className={cn(
-              "font-grotesk font-bold leading-tight tracking-tight text-foreground",
-              featured ? "text-2xl md:text-3xl" : "text-xl",
+              "relative shrink-0 border-b border-border",
+              featured
+                ? "aspect-[16/10] md:aspect-auto md:border-r md:border-b-0"
+                : "aspect-[16/10]",
             )}
           >
-            {href ? (
-              <a
-                href={href}
-                className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent-deep focus-visible:underline-offset-4"
-              >
-                {title}
-              </a>
-            ) : (
-              title
-            )}
-          </h3>
+            {cover ?? <DefaultCover />}
+          </div>
 
-          {description ? (
-            <p
+          <div
+            className={cn("flex flex-1 flex-col gap-3 p-5", featured && "md:justify-center md:p-8")}
+          >
+            {meta ? (
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {meta}
+              </p>
+            ) : null}
+
+            <h3
+              id={titleId}
               className={cn(
-                "text-sm leading-relaxed text-muted-foreground",
-                featured ? "md:max-w-prose md:text-[15px]" : "line-clamp-3",
+                "font-grotesk font-bold leading-tight tracking-tight text-foreground",
+                featured ? "text-2xl md:text-3xl" : "text-xl",
               )}
             >
-              {description}
-            </p>
-          ) : null}
+              {href ? (
+                <a
+                  href={href}
+                  className="outline-none after:absolute after:inset-0 after:content-[''] focus-visible:underline focus-visible:decoration-accent-deep focus-visible:underline-offset-4"
+                >
+                  {title}
+                </a>
+              ) : (
+                title
+              )}
+            </h3>
 
-          {tags?.length ? (
-            <div className="mt-1 flex flex-wrap gap-1.5">
-              {tags.map((tag) => (
-                <Badge key={tag} variant="outline">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          ) : null}
-
-          {href ? (
-            <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors group-hover:text-accent-deep">
-              {cta}
-              <span
-                aria-hidden
-                className="transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-0.5"
+            {description ? (
+              <p
+                className={cn(
+                  "text-sm leading-relaxed text-muted-foreground",
+                  featured ? "md:max-w-prose md:text-[15px]" : "line-clamp-3",
+                )}
               >
-                →
+                {description}
+              </p>
+            ) : null}
+
+            {tags?.length ? (
+              <div className="mt-1 flex flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <Badge key={tag} variant="outline">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+
+            {href ? (
+              <span className="mt-2 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors group-hover:text-accent-deep">
+                {cta}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-0.5"
+                >
+                  →
+                </span>
               </span>
-            </span>
-          ) : null}
-        </div>
-      </article>
-    );
-  },
+            ) : null}
+          </div>
+        </article>
+      );
+    },
+  ),
+  "ProjectCard",
 );
-ProjectCard.displayName = "ProjectCard";

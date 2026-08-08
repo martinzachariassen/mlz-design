@@ -3,8 +3,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 
-const pageVariants = cva(
+const pageVariants = /* @__PURE__ */ cva(
   "inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 [&_svg]:size-3.5",
   {
     variants: {
@@ -54,26 +55,29 @@ export function Pagination({ className, ...props }: React.ComponentPropsWithoutR
 }
 
 /** The list of pages. */
-export const PaginationContent = React.forwardRef<
-  HTMLUListElement,
-  React.ComponentPropsWithoutRef<"ul">
->(({ className, ...props }, ref) => (
-  <ul
-    ref={ref}
-    data-slot="pagination-content"
-    className={cn("flex flex-wrap items-center gap-1", className)}
-    {...props}
-  />
-));
-PaginationContent.displayName = "PaginationContent";
+export const PaginationContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLUListElement, React.ComponentPropsWithoutRef<"ul">>(
+    ({ className, ...props }, ref) => (
+      <ul
+        ref={ref}
+        data-slot="pagination-content"
+        className={cn("flex flex-wrap items-center gap-1", className)}
+        {...props}
+      />
+    ),
+  ),
+  "PaginationContent",
+);
 
 /** One slot in the list — a page link, an arrow, or an ellipsis. */
-export const PaginationItem = React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
-  ({ className, ...props }, ref) => (
-    <li ref={ref} data-slot="pagination-item" className={cn(className)} {...props} />
+export const PaginationItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLLIElement, React.ComponentPropsWithoutRef<"li">>(
+    ({ className, ...props }, ref) => (
+      <li ref={ref} data-slot="pagination-item" className={cn(className)} {...props} />
+    ),
   ),
+  "PaginationItem",
 );
-PaginationItem.displayName = "PaginationItem";
 
 export interface PaginationLinkProps
   extends React.ComponentPropsWithoutRef<"a">,
@@ -85,23 +89,25 @@ export interface PaginationLinkProps
 }
 
 /** A numbered page link. */
-export const PaginationLink = React.forwardRef<HTMLAnchorElement, PaginationLinkProps>(
-  ({ className, isActive, asChild, ...props }, ref) => {
-    const Comp = asChild ? Slot : "a";
-    return (
-      <Comp
-        ref={ref}
-        // The current page still needs to be a link — it's where you are, and
-        // `aria-current` is what distinguishes it, not a disabled state.
-        aria-current={isActive ? "page" : undefined}
-        data-slot="pagination-link"
-        className={cn(pageVariants({ active: Boolean(isActive) }), className)}
-        {...props}
-      />
-    );
-  },
+export const PaginationLink = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLAnchorElement, PaginationLinkProps>(
+    ({ className, isActive, asChild, ...props }, ref) => {
+      const Comp = asChild ? Slot : "a";
+      return (
+        <Comp
+          ref={ref}
+          // The current page still needs to be a link — it's where you are, and
+          // `aria-current` is what distinguishes it, not a disabled state.
+          aria-current={isActive ? "page" : undefined}
+          data-slot="pagination-link"
+          className={cn(pageVariants({ active: Boolean(isActive) }), className)}
+          {...props}
+        />
+      );
+    },
+  ),
+  "PaginationLink",
 );
-PaginationLink.displayName = "PaginationLink";
 
 /**
  * The back arrow. Omit `href` on the first page — a link that goes nowhere is

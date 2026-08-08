@@ -1,6 +1,7 @@
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export type CollapsibleProps = React.ComponentPropsWithoutRef<typeof CollapsiblePrimitive.Root>;
 
@@ -29,7 +30,6 @@ export type CollapsibleProps = React.ComponentPropsWithoutRef<typeof Collapsible
 export function Collapsible(props: CollapsibleProps) {
   return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />;
 }
-Collapsible.displayName = "Collapsible";
 
 export type CollapsibleTriggerProps = React.ComponentPropsWithoutRef<
   typeof CollapsiblePrimitive.Trigger
@@ -40,21 +40,23 @@ export type CollapsibleTriggerProps = React.ComponentPropsWithoutRef<
  * own. Keep the label constant — the open state lives in `aria-expanded`, and a
  * label that flips between "Show" and "Hide" contradicts it.
  */
-export const CollapsibleTrigger = React.forwardRef<
-  React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
-  CollapsibleTriggerProps
->(({ className, ...props }, ref) => (
-  <CollapsiblePrimitive.Trigger
-    ref={ref}
-    data-slot="collapsible-trigger"
-    className={cn(
-      "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] py-2 text-left font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:text-accent-deep focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-      className,
-    )}
-    {...props}
-  />
-));
-CollapsibleTrigger.displayName = "CollapsibleTrigger";
+export const CollapsibleTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof CollapsiblePrimitive.Trigger>,
+    CollapsibleTriggerProps
+  >(({ className, ...props }, ref) => (
+    <CollapsiblePrimitive.Trigger
+      ref={ref}
+      data-slot="collapsible-trigger"
+      className={cn(
+        "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] py-2 text-left font-mono text-xs uppercase tracking-[0.1em] text-foreground transition-colors hover:text-accent-deep focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+        className,
+      )}
+      {...props}
+    />
+  )),
+  "CollapsibleTrigger",
+);
 
 export type CollapsibleContentProps = React.ComponentPropsWithoutRef<
   typeof CollapsiblePrimitive.Content
@@ -65,21 +67,23 @@ export type CollapsibleContentProps = React.ComponentPropsWithoutRef<
  * technique, the same as `Accordion` — height stays fluid with no JS measuring
  * and no fixed `max-height` to outgrow.
  */
-export const CollapsibleContent = React.forwardRef<
-  React.ComponentRef<typeof CollapsiblePrimitive.Content>,
-  CollapsibleContentProps
->(({ className, children, ...props }, ref) => (
-  <CollapsiblePrimitive.Content
-    ref={ref}
-    data-slot="collapsible-content"
-    className={cn(
-      "grid transition-[grid-template-rows] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
-      "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]",
-      className,
-    )}
-    {...props}
-  >
-    <div className="overflow-hidden">{children}</div>
-  </CollapsiblePrimitive.Content>
-));
-CollapsibleContent.displayName = "CollapsibleContent";
+export const CollapsibleContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof CollapsiblePrimitive.Content>,
+    CollapsibleContentProps
+  >(({ className, children, ...props }, ref) => (
+    <CollapsiblePrimitive.Content
+      ref={ref}
+      data-slot="collapsible-content"
+      className={cn(
+        "grid transition-[grid-template-rows] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
+        "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]",
+        className,
+      )}
+      {...props}
+    >
+      <div className="overflow-hidden">{children}</div>
+    </CollapsiblePrimitive.Content>
+  )),
+  "CollapsibleContent",
+);

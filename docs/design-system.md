@@ -1,6 +1,6 @@
 # Design system
 
-The heart of the package: a three-layer token system, runtime theming, and a component set that reads only semantic tokens — so everything re-themes together. Browse it all live in [Storybook](https://github.com/martinzachariassen/mlz-design#playground).
+The heart of the package: a three-layer token system, runtime theming, and a component set that reads only semantic tokens — so everything re-themes together. Browse it all live in [Storybook](https://design.mlz.no).
 
 See [architecture.md](architecture.md) for the token layering and repo layout.
 
@@ -79,7 +79,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `ScrollArea` (+ `ScrollBar`) | a bounded scrolling panel with a scrollbar that matches the system. Scrolling stays native — only the bar is restyled — so use it where the bar is part of the design, never around the document |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |
-| `Toaster` (+ `toast()`) | transient confirmations, Sonner re-dressed in MLZ tokens. **The only non-Radix third-party dependency in the system.** Never for anything the reader must act on — that's `Alert` |
+| `Toaster` (+ `toast()`) | transient confirmations, Sonner re-dressed in MLZ tokens. **Imported from `@martinzachariassen/design/toaster`, not the root** — sonner declares no `sideEffects: false` and injects a `<style>` at module scope, so behind a subpath only apps that want toasts ship it. Never for anything the reader must act on — that's `Alert` |
 | `EmptyState` (+ `Media`/`Title`/`Description`/`Actions`) | what a list shows when it holds nothing — `dashed`/`outline`/`plain`. Not for errors (that's `Alert`) and not for pending data (that's `Skeleton`) |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
@@ -111,7 +111,7 @@ Storybook also ships composed references — the top-level **Patterns** section 
 For the times you need the values outside CSS (charts, canvas, email, framer-motion):
 
 ```ts
-import { tokens, accents, colors, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
+import { accents, accentFill, onDark, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
 
 accents.rust.base; // "oklch(0.74 0.138 45)"  — the fill rung
 accents.rust.deep; // "oklch(0.50 0.138 45)"  — text/icons/rings on paper

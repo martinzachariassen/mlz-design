@@ -1,6 +1,7 @@
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { ModalRoot, useModal, useModalPart } from "./modal-root";
 
 export interface DialogProps {
@@ -64,107 +65,116 @@ export function Dialog({ open, defaultOpen = false, onOpenChange, children }: Di
  * The card surface inside the dialog, and where the ✕ close button lives. Caps at
  * 85% of the viewport height and scrolls its own overflow.
  */
-export const DialogContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, children, ...props }, ref) => {
-    const ctx = useModal();
-    return (
-      <div
-        ref={ref}
-        data-slot="dialog-content"
-        className={cn(
-          "relative mx-auto max-h-[85dvh] w-full overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        <button
-          type="button"
-          onClick={() => ctx?.close()}
-          className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+export const DialogContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, children, ...props }, ref) => {
+      const ctx = useModal();
+      return (
+        <div
+          ref={ref}
+          data-slot="dialog-content"
+          className={cn(
+            "relative mx-auto max-h-[85dvh] w-full overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+            className,
+          )}
+          {...props}
         >
-          <span aria-hidden className="text-base leading-none">
-            ✕
-          </span>
-          <span className="sr-only">Close</span>
-        </button>
-      </div>
-    );
-  },
+          {children}
+          <button
+            type="button"
+            onClick={() => ctx?.close()}
+            className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+          >
+            <span aria-hidden className="text-base leading-none">
+              ✕
+            </span>
+            <span className="sr-only">Close</span>
+          </button>
+        </div>
+      );
+    },
+  ),
+  "DialogContent",
 );
-DialogContent.displayName = "DialogContent";
 
 /** Title + description block, inset on the right to clear the close button. */
-export const DialogHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="dialog-header"
-      className={cn("mb-4 flex flex-col gap-1.5 pr-8", className)}
-      {...props}
-    />
+export const DialogHeader = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="dialog-header"
+        className={cn("mb-4 flex flex-col gap-1.5 pr-8", className)}
+        {...props}
+      />
+    ),
   ),
+  "DialogHeader",
 );
-DialogHeader.displayName = "DialogHeader";
 
 /** The dialog's `<h2>` heading, in tracked-out mono. Names the dialog for AT. */
-export const DialogTitle = React.forwardRef<
-  HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => {
-  const titleId = useModalPart("title");
-  return (
-    <h2
-      ref={ref}
-      id={titleId}
-      data-slot="dialog-title"
-      className={cn(
-        "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
-        className,
-      )}
-      {...props}
-    />
-  );
-});
-DialogTitle.displayName = "DialogTitle";
+export const DialogTitle = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+    ({ className, ...props }, ref) => {
+      const titleId = useModalPart("title");
+      return (
+        <h2
+          ref={ref}
+          id={titleId}
+          data-slot="dialog-title"
+          className={cn(
+            "font-mono text-sm font-bold uppercase tracking-[0.1em] text-foreground",
+            className,
+          )}
+          {...props}
+        />
+      );
+    },
+  ),
+  "DialogTitle",
+);
 
 /** The muted sentence under the title — say what's about to happen. */
-export const DialogDescription = React.forwardRef<
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => {
-  const descriptionId = useModalPart("description");
-  return (
-    <p
-      ref={ref}
-      id={descriptionId}
-      data-slot="dialog-description"
-      className={cn("text-sm leading-relaxed text-muted-foreground", className)}
-      {...props}
-    />
-  );
-});
-DialogDescription.displayName = "DialogDescription";
+export const DialogDescription = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    HTMLParagraphElement,
+    React.HTMLAttributes<HTMLParagraphElement>
+  >(({ className, ...props }, ref) => {
+    const descriptionId = useModalPart("description");
+    return (
+      <p
+        ref={ref}
+        id={descriptionId}
+        data-slot="dialog-description"
+        className={cn("text-sm leading-relaxed text-muted-foreground", className)}
+        {...props}
+      />
+    );
+  }),
+  "DialogDescription",
+);
 
 /**
  * The action row. Write the buttons in reading order (cancel first, confirm
  * last): it reverses to a full-width column on mobile so the confirm lands on
  * top, then flows right-aligned from `sm` up.
  */
-export const DialogFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      data-slot="dialog-footer"
-      className={cn(
-        "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3",
-        className,
-      )}
-      {...props}
-    />
+export const DialogFooter = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+    ({ className, ...props }, ref) => (
+      <div
+        ref={ref}
+        data-slot="dialog-footer"
+        className={cn(
+          "mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-3",
+          className,
+        )}
+        {...props}
+      />
+    ),
   ),
+  "DialogFooter",
 );
-DialogFooter.displayName = "DialogFooter";
 
 export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Render the single child as the trigger (forwarding the close handler) instead of a <button>. */
@@ -172,21 +182,23 @@ export interface DialogCloseProps extends React.ButtonHTMLAttributes<HTMLButtonE
 }
 
 /** Closes the dialog. Wrap your own control with `asChild`. */
-export const DialogClose = React.forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = useModal();
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        ref={ref}
-        type={asChild ? type : (type ?? "button")}
-        onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) ctx?.close();
-        }}
-        {...props}
-      />
-    );
-  },
+export const DialogClose = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, DialogCloseProps>(
+    ({ asChild, onClick, type, ...props }, ref) => {
+      const ctx = useModal();
+      const Comp = asChild ? Slot : "button";
+      return (
+        <Comp
+          ref={ref}
+          type={asChild ? type : (type ?? "button")}
+          onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
+            onClick?.(event);
+            if (!event.defaultPrevented) ctx?.close();
+          }}
+          {...props}
+        />
+      );
+    },
+  ),
+  "DialogClose",
 );
-DialogClose.displayName = "DialogClose";

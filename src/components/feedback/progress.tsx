@@ -2,8 +2,9 @@ import * as ProgressPrimitive from "@radix-ui/react-progress";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
-const indicatorVariants = cva(
+const indicatorVariants = /* @__PURE__ */ cva(
   "h-full rounded-full transition-[width] duration-500 ease-[var(--ease-out)]",
   {
     variants: {
@@ -31,30 +32,32 @@ export interface ProgressProps
  * `aria-label` (or `aria-labelledby`) when you have a real label, otherwise it
  * falls back to a generic "Progress".
  */
-export const Progress = React.forwardRef<
-  React.ComponentRef<typeof ProgressPrimitive.Root>,
-  ProgressProps
->(({ className, value = 0, variant, ...props }, ref) => {
-  const pct = Math.min(100, Math.max(0, value));
-  // A progressbar must carry an accessible name; fall back to a generic one
-  // when the consumer hasn't supplied aria-label / aria-labelledby.
-  const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
-  return (
-    <ProgressPrimitive.Root
-      ref={ref}
-      value={pct}
-      max={100}
-      aria-label={hasLabel ? undefined : "Progress"}
-      className={cn("h-2 w-full overflow-hidden rounded-full bg-muted", className)}
-      {...props}
-    >
-      <ProgressPrimitive.Indicator
-        className={cn(indicatorVariants({ variant }))}
-        style={{ width: `${pct}%` }}
-      />
-    </ProgressPrimitive.Root>
-  );
-});
-Progress.displayName = "Progress";
+export const Progress = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof ProgressPrimitive.Root>,
+    ProgressProps
+  >(({ className, value = 0, variant, ...props }, ref) => {
+    const pct = Math.min(100, Math.max(0, value));
+    // A progressbar must carry an accessible name; fall back to a generic one
+    // when the consumer hasn't supplied aria-label / aria-labelledby.
+    const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
+    return (
+      <ProgressPrimitive.Root
+        ref={ref}
+        value={pct}
+        max={100}
+        aria-label={hasLabel ? undefined : "Progress"}
+        className={cn("h-2 w-full overflow-hidden rounded-full bg-muted", className)}
+        {...props}
+      >
+        <ProgressPrimitive.Indicator
+          className={cn(indicatorVariants({ variant }))}
+          style={{ width: `${pct}%` }}
+        />
+      </ProgressPrimitive.Root>
+    );
+  }),
+  "Progress",
+);
 
 export { indicatorVariants };

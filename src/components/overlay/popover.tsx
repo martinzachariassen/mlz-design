@@ -1,6 +1,7 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 
 export type PopoverProps = React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Root>;
 
@@ -37,7 +38,6 @@ export type PopoverProps = React.ComponentPropsWithoutRef<typeof PopoverPrimitiv
 export function Popover(props: PopoverProps) {
   return <PopoverPrimitive.Root {...props} />;
 }
-Popover.displayName = "Popover";
 
 /** The control that opens the popover. Use `asChild` to hand off to a `Button`. */
 export const PopoverTrigger = PopoverPrimitive.Trigger;
@@ -58,24 +58,26 @@ export type PopoverContentProps = React.ComponentPropsWithoutRef<typeof PopoverP
  * viewport padding; `side` and `align` are *preferences* — collision handling
  * stays on, so it can never end up off-screen.
  */
-export const PopoverContent = React.forwardRef<
-  React.ComponentRef<typeof PopoverPrimitive.Content>,
-  PopoverContentProps
->(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => (
-  <PopoverPrimitive.Portal>
-    <PopoverPrimitive.Content
-      ref={ref}
-      align={align}
-      side={side}
-      sideOffset={sideOffset}
-      collisionPadding={8}
-      data-slot="popover-content"
-      className={cn(
-        "z-50 w-72 max-w-[calc(100vw-1rem)] rounded-[var(--radius-lg)] border border-border bg-popover p-4 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
-        className,
-      )}
-      {...props}
-    />
-  </PopoverPrimitive.Portal>
-));
-PopoverContent.displayName = "PopoverContent";
+export const PopoverContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof PopoverPrimitive.Content>,
+    PopoverContentProps
+  >(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => (
+    <PopoverPrimitive.Portal>
+      <PopoverPrimitive.Content
+        ref={ref}
+        align={align}
+        side={side}
+        sideOffset={sideOffset}
+        collisionPadding={8}
+        data-slot="popover-content"
+        className={cn(
+          "z-50 w-72 max-w-[calc(100vw-1rem)] rounded-[var(--radius-lg)] border border-border bg-popover p-4 text-popover-foreground shadow-[var(--shadow-lg)] outline-none motion-safe:animate-rise",
+          className,
+        )}
+        {...props}
+      />
+    </PopoverPrimitive.Portal>
+  )),
+  "PopoverContent",
+);

@@ -37,32 +37,34 @@ function strokeIcon(path: React.ReactNode, viewBox = "0 0 24 24") {
   };
 }
 
-export const ChevronDownIcon = strokeIcon(<path d="m6 9 6 6 6-6" />);
-export const ChevronUpIcon = strokeIcon(<path d="m18 15-6-6-6 6" />);
-export const ChevronRightIcon = strokeIcon(<path d="m9 18 6-6-6-6" />);
-export const ChevronLeftIcon = strokeIcon(<path d="m15 18-6-6 6-6" />);
+export const ChevronDownIcon = /* @__PURE__ */ strokeIcon(<path d="m6 9 6 6 6-6" />);
+export const ChevronUpIcon = /* @__PURE__ */ strokeIcon(<path d="m18 15-6-6-6 6" />);
+export const ChevronRightIcon = /* @__PURE__ */ strokeIcon(<path d="m9 18 6-6-6-6" />);
+export const ChevronLeftIcon = /* @__PURE__ */ strokeIcon(<path d="m15 18-6-6 6-6" />);
 
 /** The dismiss glyph, for overlays that carry their own close button. */
-export const CloseIcon = strokeIcon(<path d="M18 6 6 18M6 6l12 12" />);
+export const CloseIcon = /* @__PURE__ */ strokeIcon(<path d="M18 6 6 18M6 6l12 12" />);
 
 /** The same tick the `Checkbox` draws, so selection reads identically everywhere. */
-export const CheckIcon = strokeIcon(<path d="M3.5 8.5l3 3 6-7" />, "0 0 16 16");
+export const CheckIcon = /* @__PURE__ */ strokeIcon(<path d="M3.5 8.5l3 3 6-7" />, "0 0 16 16");
 
 /** The three theme choices, for `ThemeToggle`. */
-export const SearchIcon = strokeIcon(
+export const SearchIcon = /* @__PURE__ */ strokeIcon(
   <>
     <circle cx="11" cy="11" r="7" />
     <path d="m20 20-3.5-3.5" />
   </>,
 );
-export const SunIcon = strokeIcon(
+export const SunIcon = /* @__PURE__ */ strokeIcon(
   <>
     <circle cx="12" cy="12" r="4" />
     <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
   </>,
 );
-export const MoonIcon = strokeIcon(<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />);
-export const MonitorIcon = strokeIcon(
+export const MoonIcon = /* @__PURE__ */ strokeIcon(
+  <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />,
+);
+export const MonitorIcon = /* @__PURE__ */ strokeIcon(
   <>
     <rect x="2" y="4" width="20" height="13" rx="2" />
     <path d="M8 21h8M12 17v4" />

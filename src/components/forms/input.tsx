@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn";
+import { named } from "../../lib/named";
 import { useFieldControlProps } from "./field";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
@@ -13,19 +14,21 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
  * `disabled` automatically; an explicit prop still wins. Outside one it is a
  * plain input.
  */
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => (
-    <input
-      ref={ref}
-      type={type}
-      className={cn(
-        "flex h-11 w-full rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
-        className,
-      )}
-      // Field-derived first so an explicit prop on the call site always wins.
-      {...useFieldControlProps()}
-      {...props}
-    />
+export const Input = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLInputElement, InputProps>(
+    ({ className, type, ...props }, ref) => (
+      <input
+        ref={ref}
+        type={type}
+        className={cn(
+          "flex h-11 w-full rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+          className,
+        )}
+        // Field-derived first so an explicit prop on the call site always wins.
+        {...useFieldControlProps()}
+        {...props}
+      />
+    ),
   ),
+  "Input",
 );
-Input.displayName = "Input";

@@ -2,6 +2,7 @@ import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { DotIcon } from "../../lib/icons";
+import { named } from "../../lib/named";
 
 export interface RadioGroupProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {}
@@ -32,18 +33,20 @@ export interface RadioGroupProps
  * </RadioGroup>
  * ```
  */
-export const RadioGroup = React.forwardRef<
-  React.ComponentRef<typeof RadioGroupPrimitive.Root>,
-  RadioGroupProps
->(({ className, ...props }, ref) => (
-  <RadioGroupPrimitive.Root
-    ref={ref}
-    data-slot="radio-group"
-    className={cn("grid gap-2.5", className)}
-    {...props}
-  />
-));
-RadioGroup.displayName = "RadioGroup";
+export const RadioGroup = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof RadioGroupPrimitive.Root>,
+    RadioGroupProps
+  >(({ className, ...props }, ref) => (
+    <RadioGroupPrimitive.Root
+      ref={ref}
+      data-slot="radio-group"
+      className={cn("grid gap-2.5", className)}
+      {...props}
+    />
+  )),
+  "RadioGroup",
+);
 
 export interface RadioGroupItemProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {}
@@ -52,26 +55,28 @@ export interface RadioGroupItemProps
  * One choice. Give it an `id` and point a `Label`'s `htmlFor` at it — the dot
  * alone is a 16px target, and the label makes the whole phrase clickable.
  */
-export const RadioGroupItem = React.forwardRef<
-  React.ComponentRef<typeof RadioGroupPrimitive.Item>,
-  RadioGroupItemProps
->(({ className, ...props }, ref) => (
-  <RadioGroupPrimitive.Item
-    ref={ref}
-    data-slot="radio-group-item"
-    className={cn(
-      // size-5 matches Checkbox — the two sit side by side in real forms.
-      "flex size-5 shrink-0 items-center justify-center rounded-full border-[1.5px] border-input bg-background transition-colors duration-200 ease-[var(--ease-out)]",
-      "data-[state=checked]:border-primary",
-      "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
-    {...props}
-  >
-    <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-      <DotIcon className="size-2.5 text-primary" />
-    </RadioGroupPrimitive.Indicator>
-  </RadioGroupPrimitive.Item>
-));
-RadioGroupItem.displayName = "RadioGroupItem";
+export const RadioGroupItem = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<
+    React.ComponentRef<typeof RadioGroupPrimitive.Item>,
+    RadioGroupItemProps
+  >(({ className, ...props }, ref) => (
+    <RadioGroupPrimitive.Item
+      ref={ref}
+      data-slot="radio-group-item"
+      className={cn(
+        // size-5 matches Checkbox — the two sit side by side in real forms.
+        "flex size-5 shrink-0 items-center justify-center rounded-full border-[1.5px] border-input bg-background transition-colors duration-200 ease-[var(--ease-out)]",
+        "data-[state=checked]:border-primary",
+        "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className,
+      )}
+      {...props}
+    >
+      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
+        <DotIcon className="size-2.5 text-primary" />
+      </RadioGroupPrimitive.Indicator>
+    </RadioGroupPrimitive.Item>
+  )),
+  "RadioGroupItem",
+);
