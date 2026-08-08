@@ -20,7 +20,7 @@
 import { describe, expect, it } from "vitest";
 import { contrastRatio, inSrgbGamut, toHex } from "./lib/contrast";
 import { parseTheme, readFromRepo, resolveColour, resolvedScope, scopeFor } from "./theme-css";
-import { accents, colors, onDark, signals, signalsDeep } from "./tokens";
+import { accentFill, accents, colors, onDark, signalFill, signals, signalsDeep } from "./tokens";
 
 const blocks = parseTheme();
 
@@ -203,6 +203,22 @@ describe("theme.css — accent families swap without changing weight", () => {
       `${family} fill vs its foreground`,
     ).toBeGreaterThanOrEqual(AA);
     expect(contrastRatio(ring, background), `${family} ring vs paper`).toBeGreaterThanOrEqual(3);
+  });
+
+  it.each(FAMILIES)("data-accent=%s takes the foreground its fill mode dictates", (family) => {
+    // Ties `accentFill` in the mirror to the CSS. Contrast alone would catch a
+    // wrong pairing, but only as a number — this says which of the two rules
+    // was broken, and stops `accentFill` becoming decorative metadata that
+    // nothing checks.
+    const merged = scopeFor(blocks, LIGHT, new RegExp(`^\\[data-accent="${family}"\\]$`));
+    const foreground = resolveColour("var(--accent-foreground)", merged);
+    const mode = accentFill[family as keyof typeof accentFill];
+    expect(foreground).toBe(mode === "tint" ? colors.ink : colors.paper);
+  });
+
+  it.each(Object.entries(signalFill))("--%s-foreground follows its %s fill mode", (role, mode) => {
+    const name = role === "danger" ? "destructive" : role;
+    expect(light.get(`--${name}-foreground`)).toBe(mode === "tint" ? colors.ink : colors.paper);
   });
 
   it.each(FAMILIES)("data-accent=%s stays legible in dark mode", (family) => {
