@@ -76,6 +76,7 @@ export {
 export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
 export { Skeleton } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
+export { Toaster, type ToasterProps, toast } from "./components/feedback/toaster";
 export { Button, type ButtonProps, buttonVariants } from "./components/forms/button";
 export { Checkbox, type CheckboxProps } from "./components/forms/checkbox";
 export { Input, type InputProps } from "./components/forms/input";

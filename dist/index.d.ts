@@ -5,6 +5,8 @@ import { AccentName } from './tokens.js';
 export { Breakpoint, Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './tokens.js';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { Toaster as Toaster$1 } from 'sonner';
+export { toast } from 'sonner';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import * as SelectPrimitive from '@radix-ui/react-select';
@@ -644,6 +646,40 @@ interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement>, VariantProp
  * instead when you know how far along the work is.
  */
 declare const Spinner: React.ForwardRefExoticComponent<SpinnerProps & React.RefAttributes<HTMLDivElement>>;
+
+type ToasterProps = React.ComponentProps<typeof Toaster$1>;
+/**
+ * The mount point for toasts. Render it **once**, near the root of the app;
+ * `toast()` from anywhere then finds it.
+ *
+ * A toast is a transient, low-stakes confirmation — "Copied", "Saved",
+ * "Deployment queued". It disappears on its own, so **nothing that requires
+ * action belongs in one**: a reader may never see it, may not be able to reach
+ * it before it goes, and can't get it back. **Reach for `Alert`** when the
+ * message must persist and be acted on, `Callout` for an inline finding, and a
+ * `Dialog` when the app genuinely needs an answer.
+ *
+ * Errors are the common mistake. "Failed to save" in a toast means the user's
+ * work is gone and the notice has already faded — put that next to the thing
+ * that failed.
+ *
+ * Styling is MLZ throughout: Sonner's own CSS is switched off (`unstyled`) and
+ * every part is re-dressed from semantic tokens, so toasts re-theme with the
+ * `class="dark"` / `data-accent` switches like everything else.
+ *
+ * ```tsx
+ * // once, at the root
+ * <Toaster />
+ *
+ * // anywhere
+ * import { toast } from "@martinzachariassen/design";
+ * toast.success("Deployment queued");
+ * ```
+ */
+declare function Toaster({ className, toastOptions, ...props }: ToasterProps): React.JSX.Element;
+declare namespace Toaster {
+    var displayName: string;
+}
 
 declare const buttonVariants: (props?: ({
     variant?: "link" | "solid" | "default" | "accent" | "destructive" | "ghost" | "sketch" | null | undefined;
@@ -1606,4 +1642,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toaster, type ToasterProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };

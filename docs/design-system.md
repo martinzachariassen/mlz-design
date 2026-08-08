@@ -67,6 +67,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |
+| `Toaster` (+ `toast()`) | transient confirmations, Sonner re-dressed in MLZ tokens. **The only non-Radix third-party dependency in the system.** Never for anything the reader must act on — that's `Alert` |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
 

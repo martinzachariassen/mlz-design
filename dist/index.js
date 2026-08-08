@@ -11,6 +11,8 @@ import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as ReactDOM from 'react-dom';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { Toaster as Toaster$1 } from 'sonner';
+export { toast } from 'sonner';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
@@ -1797,6 +1799,40 @@ var Spinner = React45.forwardRef(
   )
 );
 Spinner.displayName = "Spinner";
+function Toaster({ className, toastOptions, ...props }) {
+  return /* @__PURE__ */ jsx(
+    Toaster$1,
+    {
+      toastOptions: {
+        unstyled: true,
+        ...toastOptions,
+        classNames: {
+          toast: cn(
+            "flex w-full items-start gap-3 rounded-[var(--radius-lg)] border border-border bg-popover p-4 text-popover-foreground shadow-[var(--shadow-lg)]",
+            "font-sans text-sm"
+          ),
+          title: "font-mono text-xs font-bold uppercase tracking-[0.1em] text-foreground",
+          description: "mt-1 text-[13px] leading-relaxed text-muted-foreground",
+          icon: "mt-0.5 shrink-0",
+          content: "flex-1",
+          // The signal colours come from the same tokens Alert and Callout use,
+          // so a success toast and a success alert are the same green.
+          success: "[&_[data-icon]]:text-success",
+          error: "[&_[data-icon]]:text-destructive",
+          warning: "[&_[data-icon]]:text-warning",
+          info: "[&_[data-icon]]:text-info",
+          actionButton: "ml-auto shrink-0 rounded-[var(--radius-sm)] bg-primary px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary-foreground",
+          cancelButton: "shrink-0 rounded-[var(--radius-sm)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground hover:text-foreground",
+          closeButton: "rounded-[var(--radius-sm)] border border-border bg-popover text-muted-foreground hover:text-foreground",
+          ...toastOptions?.classNames
+        }
+      },
+      className: cn("font-sans", className),
+      ...props
+    }
+  );
+}
+Toaster.displayName = "Toaster";
 var buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-[var(--dur-hover)] ease-[var(--ease-glide)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-[var(--dur-hover)] [&_svg]:ease-[var(--ease-glide)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
   {
@@ -3176,6 +3212,6 @@ var TooltipContent = React45.forwardRef(({ className, sideOffset = 6, ...props }
 ) }));
 TooltipContent.displayName = "TooltipContent";
 
-export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, SocialCard, Spinner, Stack, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle3 as Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };
+export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, SocialCard, Spinner, Stack, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toaster, Toggle3 as Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

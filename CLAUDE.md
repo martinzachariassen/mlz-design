@@ -73,6 +73,11 @@ Three tiers — know which one you're touching before adding a dependency:
   elements — **Radix has no Button primitive**.
 - **Presentational** — no behaviour at all, nothing to adopt.
 
+`sonner` is the one runtime dependency that is **not** Radix — it backs
+`Toaster`, with its own styling switched off and every slot re-dressed from
+semantic tokens. If that trade ever stops being worth it, the component is
+self-contained enough to drop.
+
 Radix is depended on **granularly** (`@radix-ui/react-tabs`, …), never via the
 unified `radix-ui` meta-package: this ships as a library, and the meta-package
 would force every consumer to install ~40 primitives to use one.
