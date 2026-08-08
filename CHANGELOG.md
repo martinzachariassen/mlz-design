@@ -1,5 +1,473 @@
 # @martinzachariassen/design
 
+## 0.4.0
+
+### Minor Changes
+
+- ce65967: feat(tokens): rebuild the palette on a contrast-anchored OKLCH ladder
+
+  Every chromatic token is regularised onto three rungs, and the rung — not the
+  hue — now decides what a colour may be used for. Lightness is fixed per rung, so
+  switching `data-accent` changes hue without changing perceived weight: all four
+  tint accents carry ink text between 7.2:1 and 8.0:1.
+
+  This fixes contrast failures that were shipping:
+
+  - **Focus rings.** `--ring` was the base accent, measuring **1.82:1** against
+    paper — short of the 3:1 WCAG 2.1 SC 1.4.11 requires of a focus indicator, and
+    not something axe checks. It now takes the `-deep` rung (5.49:1).
+  - **Filled controls.** Paper text on the `rust` (2.75:1), `blue`/`info` (3.04:1)
+    and `success` (3.12:1) solids was below AA. Those solids sat in the
+    mid-lightness dead zone where _neither_ ink nor paper text reaches 4.5:1; they
+    move to the tint rung and pair with ink.
+  - **Icons and status dots.** Components coloured check marks, dots and toast
+    icons with fill values (`text-accent`, `text-success`, …), which measure about
+    1.9:1 on paper. They now use the `-deep` rung, which maps back to the fill in
+    dark mode and so is correct in both themes.
+  - **Gamut.** Five values (including the house cyan and `--warning-deep`) sat
+    outside sRGB and were silently clipped, so they did not measure what they
+    claimed on every display. All values are now inside sRGB.
+  - **`data-accent` in dark mode.** The accent rules and the `.dark` block had
+    equal specificity, and the accent rules came later — so a dark page with a
+    non-default accent got the paper-tuned rung. Restated at higher specificity.
+
+  Two gates now hold the palette together. `src/tokens.contrast.test.ts` asserts
+  the ladder's shape against the JS mirror; `src/theme-css.test.ts` parses
+  `theme.css` itself — resolving `var()` and `color-mix()` — checks the mirror
+  against it value-for-value, fails on any colour primitive the mirror does not
+  know about, and re-runs the contracts on the resolved semantic roles in both
+  themes and all five accent families. The second is what makes theme/mirror drift
+  impossible rather than merely discouraged.
+
+  `--muted-foreground` and the `--overlay` mix move to OKLCH (losslessly:
+  `--muted-foreground` still resolves to `#63615a`), leaving the seven neutral
+  brand primitives as the only hex in `theme.css` — now asserted.
+
+  Adds `@types/node` as a devDependency: the drift gate reads `theme.css` from
+  disk, because Vitest's `css: false` stubs any `.css` import — `?raw` included —
+  to an empty string, which would make every assertion pass vacuously.
+
+  **Visible changes.** `blue`, `info` and `success` shift most (they were deepest
+  in the dead zone); `rust` and `warning` shift moderately; the house `cyan` and
+  `danger` are near-identical to before. `danger` and the `ink` accent stay bold
+  fills — a destructive action must not read as decorative.
+
+  **New exports.** `accentFill`, `signalFill` and `onDark`, plus the `FillMode`
+  type, describing which foreground a fill pairs with and how the bold roles flip
+  on dark surfaces. Foundations → Colour model documents the whole ladder.
+
+- 1f5e647: Add **`Command`** (+ `CommandDialog`) and **`Combobox`**, backed by `cmdk`.
+
+  `CommandDialog` runs on this system's **native `<dialog>`**, not on cmdk's own
+  `Command.Dialog` — that one wraps Radix Dialog, which would put two modal
+  implementations with different focus-trap and top-layer behaviour in one
+  package. It shares the engine `Dialog`, `Sheet` and `AlertDialog` already use.
+
+  `Combobox` is `Command` inside a `Popover`, and joins a surrounding `Field`
+  automatically. Re-picking the current value clears it — a combobox has no
+  "none" row, so that is the only route back to empty.
+
+  Two accessibility fixes to cmdk's markup, both of which a screen reader would
+  otherwise notice. Its internal `[cmdk-list-sizer]` wrapper carries no role and
+  was the listbox's only child, which severs the groups and options from it
+  entirely; it is now presentational. And its separator defaults to
+  `role="separator"`, which a `listbox` may not own — that is presentational too,
+  since the group headings already carry the structure.
+
+  `cmdk` is the second non-Radix runtime dependency after `sonner`. It adds
+  exactly one package to a consumer's tree that wasn't already there
+  (`@radix-ui/react-dialog`, 120 KB); everything else it needs, the existing Radix
+  components already pull in.
+
+- 13e9763: Add **`AlertDialog`** — a confirmation before something irreversible.
+
+  It runs the same native `<dialog>` engine as `Dialog` and `Sheet`, with three
+  deliberate differences: `role="alertdialog"` so assistive tech announces it as a
+  decision and reads the description on open, **no backdrop dismissal** so a stray
+  click can't answer a question about deleting something, and **no ✕** so the two
+  ways out are both in the footer. Cancel takes focus, which makes Enter safe on a
+  dialog nobody has read yet. Esc still cancels — that is the platform's, and
+  removing it would trap someone who opened the dialog by mistake.
+
+  Internally, the `<dialog>` engine that `Dialog` and `Sheet` each carried a
+  character-for-character copy of is now one implementation
+  (`overlay/modal-root.tsx`, internal, never exported). Behaviour of both is
+  unchanged — their tests pass untouched.
+
+- 08a4a19: Add `Breadcrumb`, `Pagination` and `Sheet`.
+
+  The site-and-blog set. **No new dependency** — `Breadcrumb` and `Pagination` are
+  plain markup, and `Sheet` reuses the platform.
+
+  - **`Breadcrumb`** (+ `List`/`Item`/`Link`/`Page`/`Separator`/`Ellipsis`) — a
+    `<nav>` around an `<ol>`, because the order _is_ the meaning. The current page
+    is marked with `aria-current="page"`, never linked to itself. `asChild` on the
+    links hands off to a router.
+  - **`Pagination`** (+ `Content`/`Item`/`Link`/`Previous`/`Next`/`Ellipsis`) —
+    every page is a real URL, which is the whole reason to prefer it over "load
+    more": infinite scroll has no address for page 4. The current page stays a
+    link; `aria-current` is what distinguishes it.
+  - **`Sheet`** (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) — a
+    panel sliding in from any of the four edges, for mobile navigation or a filter
+    drawer.
+
+  `Sheet` is built on the **native `<dialog>` element**, the same as `Dialog`,
+  rather than adding `@radix-ui/react-dialog`. That keeps one modal implementation
+  instead of two, and focus-trapping, Esc, background inerting and the top layer
+  all come from the platform.
+
+  Its slide-in is **progressive enhancement**: it needs `@starting-style` and
+  `transition-behavior: allow-discrete`, both current-browser-only. Where they're
+  missing the sheet simply appears in place, fully usable — and
+  `prefers-reduced-motion` skips the movement too.
+
+- d8f9fa3: Adopt Radix as the behaviour backbone, and retire the Templates stories.
+
+  Interaction behaviour now comes from Radix primitives — the same backbone
+  shadcn/ui uses — while all styling stays MLZ. Public APIs are unchanged.
+
+  - **`Tabs`, `Accordion`, `InfoTip`** rebuilt on Radix, removing ~700 lines of
+    hand-rolled WAI-ARIA code and two real defects: both `Tabs` and `Accordion`
+    located sibling elements with a _global_ `document.querySelector`, so two
+    instances sharing a `value` on one page cross-talked. `Tabs` also gains
+    Home/End and now respects `orientation` (vertical arrows no longer drive a
+    horizontal tablist). The accordion keeps its fluid `grid-template-rows`
+    open/close animation.
+  - **`Avatar`, `Progress`, `Separator`, `Label`** adopt the matching primitives.
+    `Avatar` gains Radix's image loading states and a `delayMs` on the fallback;
+    `Label` no longer selects its own text on double-click.
+  - **`asChild`** (via `@radix-ui/react-slot`) added to `Button`, `Badge` and
+    `Card`, and `DialogClose` now uses `Slot` instead of `cloneElement` — so
+    `<Button asChild><a href="…">…</a></Button>` works.
+  - **`Dialog`** stays on the native `<dialog>` element, where focus-trapping, Esc,
+    inerting and the top layer are free. Two fixes: `DialogTitle` and
+    `DialogDescription` are now wired to the dialog via `aria-labelledby` /
+    `aria-describedby` (they previously named nothing), and `defaultOpen` allows
+    uncontrolled use. A backdrop press that starts inside the dialog no longer
+    dismisses it, so releasing a text selection is safe.
+  - `Checkbox` and `Switch` deliberately stay native, zero-JS inputs; no icon
+    library was added.
+  - **Removed** the `Templates/Portfolio` and `Templates/Blog` Storybook stories.
+    They were never exported from the package.
+
+- 92c8fc9: Add `Tooltip`, `DropdownMenu`, `Select` and `RadioGroup`.
+
+  The four primitives the system was missing, all on the Radix backbone adopted in
+  0.4.0 and styled from semantic tokens only — so they re-theme with the
+  `class="dark"` / `data-accent` switches like everything else.
+
+  - **`Tooltip`** (+ `Provider`/`Trigger`/`Content`) — a short hover/focus hint in
+    inverted chrome. It attaches as the trigger's **description**
+    (`aria-describedby`), not its name, so an icon-only button still needs its own
+    `aria-label`.
+  - **`DropdownMenu`** (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/
+    `Label`/`Separator`/`Shortcut`/`Group`/`Sub*`) — a menu of actions, with
+    `variant="destructive"`, submenus, type-ahead and full keyboard support.
+  - **`Select`** (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`)
+    — one value from many, wearing `Input`'s border, height and focus ring. It's a
+    custom listbox rather than a native `<select>`: pass `name` inside a `<form>`
+    to get a hidden native control that submits.
+  - **`RadioGroup`** (+ `Item`) — two to five exclusive choices, sized to match
+    `Checkbox`. The group is one tab stop with the arrows moving inside it, per the
+    WAI-ARIA pattern.
+
+  Each component's JSDoc says when to reach for a sibling instead — `Select` vs
+  `RadioGroup` vs `DropdownMenu`, and `Tooltip` vs `InfoTip` vs `Dialog`.
+
+  No icon library was added. The few glyphs these need live in `src/lib/icons.tsx`,
+  which is internal and deliberately not exported; consumers still bring their own.
+
+- f22dad7: Remove the icon system, the SwiftUI native token layer, and the brand-assets generator — trimming the package to the web component/token system.
+
+  **Breaking:**
+
+  - Removed `Icon`, `IconProps`, `iconVariants`, `houseIcons`, `IconName`, `iconNames`, and the re-exported `addCollection`/`addIcon`/`IconifyIcon` Iconify helpers.
+  - Removed `InfoTip`'s `icon` prop — its trigger now renders a single fixed glyph.
+  - Removed the `./brand-assets` subpath export (`defineBrandAssets`, `BrandAssetsConfig`) and the `gen:assets`/`gen:banner`/`gen:icons`/`gen:swift` scripts.
+  - Removed the generated `swift/` SwiftPM package (`MLZDesign`) — no more native iOS/macOS token layer.
+  - Removed this repo's own generated brand assets (`assets/banner.svg`, `public/assets/*`, `public/favicon.ico`); the README and Storybook playground no longer ship a custom banner/favicon.
+
+  `Accordion`'s chevron and `InfoTip`'s trigger glyph are now inline SVG, so neither depends on the icon set anymore.
+
+- 58e3804: Add `Table`.
+
+  `Table` (+ `Header`/`Body`/`Footer`/`Row`/`Head`/`Cell`/`Caption`) — the same
+  fields across many rows, in the mlz voice: mono column headers in the eyebrow
+  style matching what `Prose` already gives raw `<table>` markup, hairline row
+  rules, and a row tint on hover. **No new dependency** — this is styling on real
+  table elements, not a behavioural primitive.
+
+  It closes a gap the 0.4.x docs opened: `DataList`'s guidance told readers to
+  "reach for a `<table>`" that the system didn't style. That line now names
+  `Table`, and `Table` returns the favour — use it when fields repeat across rows,
+  use `DataList` for the facts about one thing.
+
+  Two accessibility details worth knowing:
+
+  - It wraps itself in a **focusable** horizontal scroll container, so a wide
+    table scrolls inside its own box and a keyboard user can reach the far
+    columns. Deliberately _not_ a `role="region"` landmark, since an unnamed
+    landmark is worse than none.
+  - `TableHead` defaults to `scope="col"`; pass `scope="row"` to make the first
+    column row headers.
+
+- b83ec29: Six new components, none of which needs a new dependency.
+
+  - **`Field`** (+ `FieldLabel` / `FieldDescription` / `FieldError`) — a labelled
+    control with its description and error, wired together. One generated id
+    becomes the control's `id`, the label's `htmlFor` and the `aria-describedby`
+    target, and only the parts actually rendered are advertised. `Input` and
+    `Textarea` join automatically through the exported `useFieldControlProps`.
+  - **`Popover`** — the general non-modal panel. `@radix-ui/react-popover` was
+    already a dependency; only `InfoTip` could reach it.
+  - **`EmptyState`**, **`Stat`**, **`Link`**, **`Code`** / **`CodeBlock`**.
+
+  Adds the **`-deep` signal roles** to the token layer: `--success-deep`,
+  `--warning-deep`, `--info-deep`, `--destructive-deep`, mirroring the existing
+  `--accent-deep`, plus a `signalsDeep` export from `./tokens`. The solids are
+  fill colours — as small text on paper, `--warning` measures 1.6:1 and
+  `--success` 3.1:1, both short of AA. The deep variants are the same hues
+  darkened until they clear 4.5:1, and in dark mode they map straight back to the
+  solids, which already pass there.
+
+  `Link variant="subtle"` reads from `--accent-deep` rather than `--accent` for
+  the same reason (cyan is 1.8:1 as text), matching how `Prose` colours links.
+
+- 83e7bf2: Four new components, one granular Radix dependency each.
+
+  - **`Slider`** — single or range. Takes `thumbLabels`, which a range needs: the
+    element carrying `role="slider"` is the _thumb_, so an `aria-label` on the
+    root never reaches it, and two thumbs with the same name are
+    indistinguishable to a screen reader. A single-thumb slider gets its root
+    label copied down automatically.
+  - **`Collapsible`** — one thing that opens and closes. Reach for `Accordion`
+    the moment several belong together.
+  - **`HoverCard`** — a rich preview on hover, with a deliberate 700ms open delay.
+    Always an enhancement: it never opens on click or touch.
+  - **`ScrollArea`** — a bounded scrolling panel with a scrollbar that matches the
+    system. Scrolling stays native; only the bar is restyled.
+
+  `Link variant="subtle"` is now documented as unsuitable inside running text —
+  without an underline the link is distinguishable only by colour, which fails
+  WCAG 1.4.1. Use `default` there. No behaviour change.
+
+- dd5b237: Add `Toaster` and `toast()`.
+
+  Transient confirmations — "Copied", "Deployment queued" — backed by Sonner.
+
+  **This adds `sonner`, the only non-Radix third-party runtime dependency in the
+  system.** It's kept in its own component so the trade stays reversible: Sonner's
+  own styling is switched off (`unstyled`) and every slot re-dressed from semantic
+  tokens, so toasts re-theme with the `class="dark"` / `data-accent` switches like
+  everything else, and the signal colours are the same tokens `Alert` and
+  `Callout` use.
+
+  Mount `<Toaster />` once near the root; call `toast()` from anywhere.
+
+  The JSDoc is explicit about when _not_ to use it. A toast disappears on its own,
+  so nothing requiring action belongs in one — a reader may never see it, may not
+  reach it in time, and can't get it back. Errors are the common mistake: "Failed
+  to save" in a toast means the work is gone and the notice has already faded.
+  That's an `Alert`, next to the thing that failed.
+
+- 51a78f0: Add `Toggle`, `ToggleGroup` and `ThemeToggle` / `AccentPicker`.
+
+  Adds one dependency, `@radix-ui/react-toggle-group`.
+
+  - **`Toggle`** — a button that stays pressed, reporting state through
+    `aria-pressed` so the label can stay constant. `default` and `outline`
+    variants, `sm`/`default`/`icon` sizes.
+  - **`ToggleGroup`** (+ `Item`) — `type="single"` is a segmented control,
+    `type="multiple"` a filter bar. The group sets `variant`/`size` once through
+    context, and Radix owns the roving focus, so it's one tab stop.
+  - **`ThemeToggle`** and **`AccentPicker`** — the light/dark/system switch and
+    the five accent swatches, built on the existing `useTheme()`. The system's
+    headline feature is runtime theming, but until now every consuming app had to
+    rebuild the control for it; these make `ThemeProvider` turnkey.
+
+  `AccentPicker` is built on the system's own `RadioGroup`, so arrow-key
+  navigation and the single tab stop come from Radix rather than being
+  hand-rolled. Every swatch is named — colour never carries the meaning alone.
+
+  `ThemeToggle` also guards against a single-select group being emptied by
+  re-pressing the active item, which would otherwise leave the app with no theme.
+
+### Patch Changes
+
+- 1e05639: Pin `playwright` to the version `@storybook/test-runner` drives (1.61.1) so the
+  a11y gate installs a browser from the lockfile rather than whatever the registry
+  serves that day.
+
+  No runtime change — the rest of this bump is workflow hardening (pinned Bun,
+  bounded job runtimes, concurrency groups) and repository templates.
+
+- f06c2e1: Tests only — no behaviour change. Every component in the library now has
+  coverage.
+
+  The gaps closed were `Container`/`Stack`/`Grid` (three exported primitives with
+  zero tests), `Textarea`, `Label`, `Kbd`, `Prose`, `Skeleton`, `Spinner`, and the
+  `brand/` components. The ones worth having: `Grid`'s auto-fitting track
+  expression including the `min(100%, …)` cap that stops a wide track overflowing
+  a phone, `FloatingMarks` rendering identically across mounts (it hashes each
+  mark's index rather than calling `Math.random`, which is what keeps it
+  SSR-safe), and the locked aspect ratios of `RepoBanner` and `SocialCard`, which
+  are export templates where the ratio is the contract.
+
+- 2c2ace1: fix(components): put every ink-position colour on the `-deep` rung, and gate it
+
+  `StatusDot`, `Toaster`, `FieldError`, `DropdownMenuItem` and the destructive
+  `Button` painted `text-destructive` — a fill token in a text position. It passed
+  AA by luck (destructive is the one bold signal, so it lands at 5.00:1 on paper),
+  but it left `destructive` as the only signal in the set not on the `-deep` rung:
+  `StatusDot` used `-deep` for success, warning, info and accent, and the base fill
+  for destructive. All five now use `-deep`, which is the documented rule and
+  raises the light-mode figure to 5.45:1. Dark mode is unchanged — `-deep` maps
+  back to the fill there.
+
+  Four `BrandMark` glyphs and a Typography label were genuinely below the bar:
+  `text-accent`/`text-success` on paper is 1.83:1, under even the 3:1 icon
+  threshold. Those move to `-deep` (5.38–5.49:1). One of them was inside
+  `EmptyState`'s JSDoc example, so the wrong rung was being taught to consumers.
+
+  `Slider`'s thumb moves to `border-accent-deep` for a different reason: the thumb
+  _is_ the control, so its outline is the only thing marking where it sits. On the
+  filled half of the track an accent border sat on an accent range — 1.00:1, an
+  invisible edge — and the thumb's paper fill is only 1.83:1 against that same
+  range, so in light mode neither channel reached the 3:1 of SC 1.4.11. The deep
+  border now carries it at 3.00:1. Dark mode was never affected: the border is
+  equally invisible there, but the thumb's dark fill separates from the light
+  accent range at 8.26:1.
+
+  Adds `src/colour-usage.test.ts`, which fails the build if a chromatic fill
+  appears in a text, icon, ring or underline position anywhere in `src/`. The
+  existing contrast tests read _tokens_ and so could never catch this — the
+  palette was correct the whole time; the call sites were not.
+
+- 46e16f6: Declare `@radix-ui/react-toggle` as a direct dependency.
+
+  `Toggle` imported it while only `@radix-ui/react-toggle-group` was declared, so
+  it resolved transitively. Two things followed from that: tsup externalises
+  exactly `dependencies` + `peerDependencies`, so the Radix toggle runtime was
+  **bundled into `dist/index.js`** instead of imported — while `dist/index.d.ts`
+  still referenced the package by name, breaking typecheck for consumers on
+  pnpm's strict layout or Yarn PnP. And because `ToggleGroupItem` loaded the
+  primitive from its own copy, `Toggle` and `ToggleGroupItem` were running two
+  separate module instances of the same code.
+
+  Declaring it externalises the runtime and de-duplicates the primitive.
+
+- 879387a: Bump dev dependencies, and stop hardcoding a version in the docs examples.
+
+  - `@biomejs/biome` 2.5.5 → 2.5.7 (plus the `biome migrate` schema bump),
+    `vite` 8.1.5 → 8.2.1, `@types/react`, `@types/react-dom`,
+    `@vitejs/plugin-react`, `concurrently`. All patch/minor.
+  - **TypeScript stays at 6.0.3.** 7.0.2 is available but a major compiler bump
+    deserves its own PR rather than riding along with routine maintenance.
+  - `README.md` and the Storybook **Installation** page showed
+    `<Badge variant="accent">v0.3.0</Badge>` in their example snippet, which goes
+    stale on the next release — and would have, since several releases are pending.
+    Now `Production`, which suits the surrounding Deploy / Ship it example better
+    anyway.
+
+  No runtime dependency or API changes.
+
+- 0e80c4b: Give `Kbd` the component prose every other component already has — what it is,
+  and when a `<code>` element is the right call instead. Docgen lifts it into the
+  docs page and the consumer's editor tooltip.
+
+  Documentation only otherwise: two new playground pages (**Get started →
+  Accessibility**, **Reference → Tokens**, **Reference → Changelog**) and a
+  corrected architecture map.
+
+- 2357f61: Fill in the Storybook Docs page for every component.
+
+  Component JSDoc was attached to the `cva` variants object or the props interface rather than the exported component, so `react-docgen-typescript` never picked it up and each autodocs page rendered with a blank description. The comments now sit directly above the components they describe — which also means editors show them on hover for consumers — and every sub-component (`CardHeader`, `TabsTrigger`, `DialogFooter`, `AvatarFallback`, …) gained one too.
+
+  Alongside that: every remaining prop on an exported `*Props` interface is documented, `argTypes` carry descriptions for the CVA-driven props (`variant`, `size`, `tone`) that the docgen prop filter drops, and each story has a line explaining what it demonstrates. The Dialog and Project Card stories previously produced empty docs pages — Dialog now sets an explicit `docs.description.component` and Project Card declares its `component`, so it renders a props table.
+
+  No runtime or API change.
+
+- b52fc14: Storybook only — no package change. The single `Patterns/Overview` story is now
+  four named recipes: **Application shell**, **Dashboard**, **Forms**, and
+  **Feedback and states**, thirteen stories between them.
+
+  Each one is individually linkable, and the odd `Patterns → Overview → Overview`
+  nesting is gone. The recipes now use the components that were extracted from
+  them — `Stat`, `EmptyState`, `Field`, `Command`, `Collapsible`, `AlertDialog` —
+  rather than hand-rolling the same shapes inline.
+
+- 67e601e: Restructure Storybook and deepen the component docs.
+
+  No runtime API changes — the only `src/` edits are JSDoc, which now also reaches
+  consumers' editor tooltips.
+
+  - **New information architecture:** `Get started` (Introduction, Installation,
+    Theming) · `Foundations` · `Brand` · `Components` · `Patterns`. `Brand` is
+    promoted to its own top-level section, and `src/foundations/` stops being a
+    junk drawer — `RepoBanner` and `SocialCard` stories now colocate with their
+    source in `src/components/brand/`.
+  - **New Installation and Theming pages** covering the GitHub Packages registry
+    setup, the two-line CSS import, `ThemeProvider` / `useTheme`, and
+    `themeInitScript()` for avoiding the theme flash.
+  - **`storySort` now enumerates every level.** It previously listed four of ten
+    `Foundations` children, so the rest fell through to definition order.
+  - **Component docs gained "when to reach for a sibling instead"** — Tabs↔
+    Accordion, Checkbox↔Switch, Badge↔StatusDot, Dialog↔InfoTip,
+    Skeleton↔Spinner↔Progress, DataList↔`<table>`, and button-vs-link.
+  - **`subcomponents`** on the compound APIs (Card, Dialog, Tabs, Accordion,
+    Avatar, Alert, DataList, Container) so each part gets its own props table.
+  - Every story meta now sets `tags` explicitly instead of relying on the global
+    default, and the Dialog docs page no longer carries a hand-copied description
+    that had already gone stale.
+  - Added a Storybook favicon built from the Block-M mark.
+
+  Manager chrome theming is **not** included: on Storybook 10.5.7 the mere
+  presence of a `.storybook/manager.ts` crashes the manager, even when empty. See
+  `docs/architecture.md` for the bisect and what to retry after an upgrade.
+
+- da64d5c: Brand the Storybook manager chrome, and fix silently-broken MDX tables.
+
+  Both were blocked by bugs that a successful build reported nothing about.
+
+  - **The manager is now MLZ-branded** — brand title, paper/ink palette and Space
+    Grotesk, every value read from `src/tokens.ts` so the chrome can't drift from
+    the system it documents. This was previously abandoned as an unfixable
+    Storybook bug; it turned out to be narrower than it looked. A _built_ manager
+    goes blank only when **two addons and a `manager.ts` both exist** — one addon
+    is fine, either order is fine, and `storybook dev` is unaffected.
+    `@storybook/addon-a11y` is therefore registered outside the build only. The
+    a11y **gate** is untouched: it runs on `axe-playwright`, never the addon, and
+    all 161 checks still pass.
+  - **Markdown tables in `.mdx` pages now render.** Storybook's MDX pipeline ships
+    no GFM, so the tables on the Theming page were displaying as literal `|`
+    characters with no build warning. `remark-gfm` is now wired through
+    `addon-docs`.
+
+  Storybook-only; no runtime API change.
+
+- 78f585e: Extend test coverage, and make the a11y gate audit open components.
+
+  Three changes, all to tests and Storybook config — no runtime code touched.
+
+  - **Unit tests for nine previously untested components**: `Progress`,
+    `Separator`, `Checkbox`, `Switch`, `Input`, `Textarea`, `Alert`, `Avatar` and
+    `Card`. 92 → 129 tests. `Progress` and `Separator` were the priority: 0.4.0
+    swapped both to Radix internals with nothing standing guard.
+  - **The a11y gate now sees open components.** `play` functions open the
+    dropdown menu, select listbox, dialog and tooltip, and exercise the accordion
+    and tabs — and axe is scoped to the preview `body` rather than
+    `#storybook-root`, because every overlay portals outside that root. Until now
+    the gate had only ever audited _closed_ menus and dialogs.
+  - **Storybook viewports are generated from `tokens.breakpoints`**, so responsive
+    checks happen at the widths the components actually switch at.
+
+  One rule, `aria-hidden-focus`, is disabled on the two stories that open a
+  **modal** Radix overlay. Radix marks the rest of the page `aria-hidden` while
+  one is open and axe flags the still-focusable trigger beneath it; focus is moved
+  into the overlay, so screen readers behave correctly. Notably the `Dialog` story
+  does not trip it — the native `<dialog>` element uses the top layer and inerting
+  instead.
+
 ## 0.3.0
 
 ### Minor Changes
