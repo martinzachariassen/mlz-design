@@ -11,10 +11,16 @@ on:
 permissions:
   contents: read
 
+# Superseded PR pushes are cancelled; main and the weekly scan run to completion.
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       security-events: write
       actions: read

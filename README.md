@@ -6,7 +6,7 @@ Martin Zachariassen's design system — colour, type, style and motion as an ins
 [![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?label=version)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
 [![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design)](LICENSE)
 
-**Status:** Stable, actively maintained · Published as `@martinzachariassen/design` on GitHub Packages · Requires React 19
+**Status:** Stable, actively maintained · Published as `@martinzachariassen/design` on GitHub Packages · Requires React 18 or newer
 
 ## What it does
 

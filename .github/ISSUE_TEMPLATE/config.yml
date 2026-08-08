@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/martinzachariassen/mlz-design/security/advisories/new
+    about: Report privately through a GitHub security advisory — never in a public issue. See docs/SECURITY.md.
+  - name: Browse the components
+    url: https://design.mlz.no
+    about: The live Storybook playground — check whether the thing you need already exists.
