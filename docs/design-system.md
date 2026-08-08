@@ -42,6 +42,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Input` · `Textarea` | accent focus ring, technical mono field         |
 | `Label`    | mono, uppercase field label with `peer-disabled` states |
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
+| `Slider` | a value picked by dragging — pass an array of two or more for a range. Radix owns arrows / PageUp-Down / Home-End, and each thumb is its own tab stop. Pair it with a number field: a slider alone makes an exact value slow to reach |
 | `Toggle` · `ToggleGroup` (+ `Item`) | a button that stays pressed (`aria-pressed`); the group is a segmented control (`single`) or a filter bar (`multiple`) |
 | `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
 | `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
@@ -62,6 +63,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Sheet` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | a panel sliding in from any edge — mobile nav, filter drawer. Native `<dialog>` like `Dialog`, so one modal implementation, not two |
 | `Popover` (+ `Trigger`/`Content`/`Anchor`/`Close`) | a non-modal panel anchored to its trigger — filter menus, small forms. Portals out, collision-aware, Esc-dismissing, and unlike `Dialog` it never traps focus or inerts the page |
 | `InfoTip`  | accessible inline help popover (glossary/hints) — the same primitive with a fixed inline trigger and a narrower API |
+| `HoverCard` (+ `Trigger`/`Content`) | a rich preview on hover — a user card behind an @mention. Opens on hover and focus but never on click or touch, so it is always an enhancement: nothing inside may be the only route to that information |
 | `Tooltip` (+ `Provider`/`Trigger`/`Content`) | short hover/focus hint. Attaches as the trigger's *description*, so an icon button still needs its own `aria-label` |
 | `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
@@ -71,6 +73,8 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Stat` (+ `Label`/`Value`/`Delta`) | one headline measurement. The label reads first to assistive tech, the number dominates visually; `Delta` colours by direction on tabular figures |
 | `Table` (+ `Header`/`Body`/`Footer`/`Row`/`Head`/`Cell`/`Caption`) | the same fields across many rows — mono column headers, hairline rules, hover tint; scrolls inside its own focusable box when wider than its container |
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
+| `Collapsible` (+ `Trigger`/`Content`) | one thing that opens and closes — a "show more", a nav section. Reach for `Accordion` the moment there are several that belong together: a row of independent collapsibles is an accordion with the keyboard support left out |
+| `ScrollArea` (+ `ScrollBar`) | a bounded scrolling panel with a scrollbar that matches the system. Scrolling stays native — only the bar is restyled — so use it where the bar is part of the design, never around the document |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |
 | `Toaster` (+ `toast()`) | transient confirmations, Sonner re-dressed in MLZ tokens. **The only non-Radix third-party dependency in the system.** Never for anything the reader must act on — that's `Alert` |

@@ -12,8 +12,13 @@ const linkVariants = cva(
         default:
           "text-foreground underline decoration-border underline-offset-4 hover:decoration-accent hover:text-accent",
         /**
-         * Accent-coloured, underline only on hover — for links that already sit
-         * apart. Uses `--accent-deep`, not `--accent`: the plain accent is a
+         * Accent-coloured, underline only on hover — **for links that stand
+         * alone**, not for links inside a paragraph. In running text the
+         * underline is the only thing distinguishing a link from its
+         * surroundings, and colour alone fails WCAG 1.4.1 (axe flags it as
+         * `link-in-text-block`). Use `default` there.
+         *
+         * Uses `--accent-deep`, not `--accent`: the plain accent is a
          * fill-and-border colour (cyan measures 1.8:1 on paper) and fails AA as
          * text. `Prose` colours its links the same way.
          */
