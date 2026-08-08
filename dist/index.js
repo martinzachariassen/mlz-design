@@ -1,6 +1,6 @@
 export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens } from './chunk-AMCCIDMK.js';
 import { cva } from 'class-variance-authority';
-import * as React32 from 'react';
+import * as React33 from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
@@ -32,7 +32,7 @@ var brandMarkVariants = cva("inline-block shrink-0 align-middle", {
   },
   defaultVariants: { variant: "tile" }
 });
-var BrandMark = React32.forwardRef(
+var BrandMark = React33.forwardRef(
   ({ variant = "tile", size = 32, tile = "var(--foreground)", glyph, className, ...props }, ref) => {
     const isTile = variant === "tile";
     const letter = glyph ?? (isTile ? "var(--background)" : "currentColor");
@@ -57,7 +57,7 @@ var BrandMark = React32.forwardRef(
   }
 );
 BrandMark.displayName = "BrandMark";
-var BrandWordmark = React32.forwardRef(
+var BrandWordmark = React33.forwardRef(
   ({ size = 24, period, className, style, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -80,7 +80,7 @@ var BrandWordmark = React32.forwardRef(
   )
 );
 BrandWordmark.displayName = "BrandWordmark";
-var BrandLockup = React32.forwardRef(
+var BrandLockup = React33.forwardRef(
   ({ tagline = "", size = 40, orientation = "horizontal", className, ...props }, ref) => {
     const stacked = orientation === "stacked";
     const wordmarkSize = size / 1.45;
@@ -151,9 +151,9 @@ function Mark({ shape, size }) {
       return /* @__PURE__ */ jsx("span", { className: "block border border-current", style: s });
   }
 }
-var FloatingMarks = React32.forwardRef(
+var FloatingMarks = React33.forwardRef(
   ({ count = 14, className, ...props }, ref) => {
-    const marks = React32.useMemo(
+    const marks = React33.useMemo(
       () => Array.from({ length: count }, (_, i) => {
         const a = rand(i + 1);
         const b = rand(i + 7);
@@ -209,10 +209,10 @@ FloatingMarks.displayName = "FloatingMarks";
 function prefersReducedMotion() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
-var GlitchText = React32.forwardRef(
+var GlitchText = React33.forwardRef(
   ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
-    const containerRef = React32.useRef(null);
-    const setRefs = React32.useCallback(
+    const containerRef = React33.useRef(null);
+    const setRefs = React33.useCallback(
       (node) => {
         containerRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -220,11 +220,11 @@ var GlitchText = React32.forwardRef(
       },
       [ref]
     );
-    const segments = React32.useMemo(
+    const segments = React33.useMemo(
       () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
       [text]
     );
-    const burst = React32.useCallback(() => {
+    const burst = React33.useCallback(() => {
       const root = containerRef.current;
       if (!root) return;
       const chars = root.querySelectorAll("[data-glitch-char]");
@@ -241,7 +241,7 @@ var GlitchText = React32.forwardRef(
         });
       }
     }, []);
-    React32.useEffect(() => {
+    React33.useEffect(() => {
       if (trigger !== "ambient" || prefersReducedMotion()) return;
       const [min, max] = interval;
       let timer;
@@ -278,10 +278,10 @@ var GlitchText = React32.forwardRef(
   }
 );
 GlitchText.displayName = "GlitchText";
-var GridBackground = React32.forwardRef(
+var GridBackground = React33.forwardRef(
   ({ cell = 30, interactive = false, glow = true, spotlight = 340, className, style, ...props }, ref) => {
-    const rootRef = React32.useRef(null);
-    const setRefs = React32.useCallback(
+    const rootRef = React33.useRef(null);
+    const setRefs = React33.useCallback(
       (node) => {
         rootRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -289,7 +289,7 @@ var GridBackground = React32.forwardRef(
       },
       [ref]
     );
-    React32.useEffect(() => {
+    React33.useEffect(() => {
       if (!interactive) return;
       const move = (event) => {
         const root = rootRef.current;
@@ -378,7 +378,7 @@ function DefaultCover() {
     )
   ] });
 }
-var ProjectCard = React32.forwardRef(
+var ProjectCard = React33.forwardRef(
   ({
     className,
     title,
@@ -391,7 +391,7 @@ var ProjectCard = React32.forwardRef(
     cta = "View project",
     ...props
   }, ref) => {
-    const titleId = React32.useId();
+    const titleId = React33.useId();
     return /* @__PURE__ */ jsxs(
       "article",
       {
@@ -483,7 +483,7 @@ function Lockup({ size }) {
     /* @__PURE__ */ jsx(BrandWordmark, { size: size / 1.45 })
   ] });
 }
-var RepoBanner = React32.forwardRef(
+var RepoBanner = React33.forwardRef(
   ({
     project,
     eyebrow = "MLZ \xB7 Design System",
@@ -628,7 +628,7 @@ var RepoBanner = React32.forwardRef(
 RepoBanner.displayName = "RepoBanner";
 var BASE_W2 = 1200;
 var BASE_H2 = 630;
-var SocialCard = React32.forwardRef(
+var SocialCard = React33.forwardRef(
   ({
     title,
     eyebrow = "Martin Zachariassen",
@@ -716,7 +716,7 @@ var statusColor = {
   busy: "bg-destructive",
   offline: "bg-[var(--muted-foreground)]"
 };
-var Avatar = React32.forwardRef(
+var Avatar = React33.forwardRef(
   ({ className, size, shape = "circle", status, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "span",
     {
@@ -751,7 +751,7 @@ var Avatar = React32.forwardRef(
   )
 );
 Avatar.displayName = "Avatar";
-var AvatarImage = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AvatarImage = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   AvatarPrimitive.Image,
   {
     ref,
@@ -774,7 +774,7 @@ var fallbackVariants = cva(
     defaultVariants: { tone: "default" }
   }
 );
-var AvatarFallback = React32.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
+var AvatarFallback = React33.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
   AvatarPrimitive.Fallback,
   {
     ref,
@@ -784,9 +784,9 @@ var AvatarFallback = React32.forwardRef(({ className, tone, ...props }, ref) => 
   }
 ));
 AvatarFallback.displayName = "AvatarFallback";
-var AvatarGroup = React32.forwardRef(
+var AvatarGroup = React33.forwardRef(
   ({ className, max, size = "default", children, ...props }, ref) => {
-    const items = React32.Children.toArray(children).filter(React32.isValidElement);
+    const items = React33.Children.toArray(children).filter(React33.isValidElement);
     const shown = typeof max === "number" ? items.slice(0, max) : items;
     const overflow = items.length - shown.length;
     return /* @__PURE__ */ jsxs(
@@ -811,8 +811,8 @@ var AvatarGroup = React32.forwardRef(
   }
 );
 AvatarGroup.displayName = "AvatarGroup";
-var DataListContext = React32.createContext("justify");
-var DataList = React32.forwardRef(
+var DataListContext = React33.createContext("justify");
+var DataList = React33.forwardRef(
   ({ layout = "justify", className, ...props }, ref) => /* @__PURE__ */ jsx(DataListContext.Provider, { value: layout, children: /* @__PURE__ */ jsx(
     "dl",
     {
@@ -825,9 +825,9 @@ var DataList = React32.forwardRef(
   ) })
 );
 DataList.displayName = "DataList";
-var DataRow = React32.forwardRef(
+var DataRow = React33.forwardRef(
   ({ label, mono, layout, className, children, ...props }, ref) => {
-    const inherited = React32.useContext(DataListContext);
+    const inherited = React33.useContext(DataListContext);
     const resolved = layout ?? inherited;
     const grid = resolved === "grid";
     return /* @__PURE__ */ jsxs(
@@ -869,7 +869,7 @@ var DataRow = React32.forwardRef(
   }
 );
 DataRow.displayName = "DataRow";
-var Kbd = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var Kbd = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "kbd",
   {
     ref,
@@ -881,7 +881,7 @@ var Kbd = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ j
   }
 ));
 Kbd.displayName = "Kbd";
-var Prose = React32.forwardRef(
+var Prose = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -938,7 +938,7 @@ var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
   },
   defaultVariants: { variant: "muted" }
 });
-var StatusDot = React32.forwardRef(
+var StatusDot = React33.forwardRef(
   ({ variant, pulse, label, className, ...props }, ref) => {
     const a11y = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
     return /* @__PURE__ */ jsxs(
@@ -958,6 +958,100 @@ var StatusDot = React32.forwardRef(
   }
 );
 StatusDot.displayName = "StatusDot";
+var Table = React33.forwardRef(
+  ({ className, containerClassName, ...props }, ref) => (
+    // A scrollable box must be reachable by keyboard (WCAG 2.1.1, and axe's
+    // `scrollable-region-focusable`), or someone who can't drag horizontally
+    // simply can't read the far columns. Deliberately no `role="region"`: that
+    // would be a landmark, and a landmark with no accessible name is worse than
+    // none. The table names itself, via `TableCaption` or `aria-label`.
+    /* @__PURE__ */ jsx(
+      "div",
+      {
+        "data-slot": "table-container",
+        className: cn("relative w-full overflow-x-auto", containerClassName),
+        tabIndex: 0,
+        children: /* @__PURE__ */ jsx(
+          "table",
+          {
+            ref,
+            "data-slot": "table",
+            className: cn("w-full caption-bottom border-collapse text-sm", className),
+            ...props
+          }
+        )
+      }
+    )
+  )
+);
+Table.displayName = "Table";
+var TableHeader = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("thead", { ref, "data-slot": "table-header", className: cn(className), ...props }));
+TableHeader.displayName = "TableHeader";
+var TableBody = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("tbody", { ref, "data-slot": "table-body", className: cn(className), ...props }));
+TableBody.displayName = "TableBody";
+var TableFooter = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "tfoot",
+  {
+    ref,
+    "data-slot": "table-footer",
+    className: cn("border-t border-border font-medium [&>tr]:border-0", className),
+    ...props
+  }
+));
+TableFooter.displayName = "TableFooter";
+var TableRow = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "tr",
+  {
+    ref,
+    "data-slot": "table-row",
+    className: cn(
+      "border-b border-border transition-colors",
+      "hover:bg-secondary/50 data-[state=selected]:bg-accent-subtle",
+      className
+    ),
+    ...props
+  }
+));
+TableRow.displayName = "TableRow";
+var TableHead = React33.forwardRef(({ className, scope = "col", ...props }, ref) => /* @__PURE__ */ jsx(
+  "th",
+  {
+    ref,
+    scope,
+    "data-slot": "table-head",
+    className: cn(
+      "border-b border-border py-2 pr-4 text-left align-middle font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-muted-foreground",
+      "[&[align=right]]:text-right [&[align=center]]:text-center",
+      className
+    ),
+    ...props
+  }
+));
+TableHead.displayName = "TableHead";
+var TableCell = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "td",
+  {
+    ref,
+    "data-slot": "table-cell",
+    className: cn(
+      "py-2 pr-4 align-middle",
+      "[&[align=right]]:text-right [&[align=center]]:text-center",
+      className
+    ),
+    ...props
+  }
+));
+TableCell.displayName = "TableCell";
+var TableCaption = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  "caption",
+  {
+    ref,
+    "data-slot": "table-caption",
+    className: cn("mt-3 text-left text-sm text-muted-foreground", className),
+    ...props
+  }
+));
+TableCaption.displayName = "TableCaption";
 var textVariants = cva("", {
   variants: {
     variant: {
@@ -976,7 +1070,7 @@ var textVariants = cva("", {
   },
   defaultVariants: { variant: "body" }
 });
-var Text = React32.forwardRef(
+var Text = React33.forwardRef(
   ({ as, variant, size, className, ...props }, ref) => {
     const Component = as ?? "span";
     return /* @__PURE__ */ jsx(
@@ -1006,7 +1100,7 @@ var alertVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Alert = React32.forwardRef(
+var Alert = React33.forwardRef(
   ({ className, variant, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1019,7 +1113,7 @@ var Alert = React32.forwardRef(
   )
 );
 Alert.displayName = "Alert";
-var AlertTitle = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertTitle = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1032,7 +1126,7 @@ var AlertTitle = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 AlertTitle.displayName = "AlertTitle";
-var AlertDescription = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AlertDescription = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1055,7 +1149,7 @@ var calloutVariants = cva("flex gap-2.5 text-sm text-muted-foreground", {
   },
   defaultVariants: { variant: "muted" }
 });
-var Callout = React32.forwardRef(
+var Callout = React33.forwardRef(
   ({ variant, title, description, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     "div",
     {
@@ -1087,7 +1181,7 @@ var indicatorVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Progress = React32.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
+var Progress = React33.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
   const pct = Math.min(100, Math.max(0, value));
   const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
   return /* @__PURE__ */ jsx(
@@ -1110,7 +1204,7 @@ var Progress = React32.forwardRef(({ className, value = 0, variant, ...props }, 
   );
 });
 Progress.displayName = "Progress";
-var Skeleton = React32.forwardRef(
+var Skeleton = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1134,7 +1228,7 @@ var spinnerVariants = cva(
     defaultVariants: { size: "default" }
   }
 );
-var Spinner = React32.forwardRef(
+var Spinner = React33.forwardRef(
   ({ className, size, label = "Loading", ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1170,7 +1264,7 @@ var buttonVariants = cva(
     defaultVariants: { variant: "default", size: "default" }
   }
 );
-var Button = React32.forwardRef(
+var Button = React33.forwardRef(
   ({ className, variant, size, asChild, type, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return /* @__PURE__ */ jsx(
@@ -1185,9 +1279,9 @@ var Button = React32.forwardRef(
   }
 );
 Button.displayName = "Button";
-var Checkbox = React32.forwardRef(
+var Checkbox = React33.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React32.useId();
+    const generatedId = React33.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -1219,7 +1313,7 @@ var Checkbox = React32.forwardRef(
   }
 );
 Checkbox.displayName = "Checkbox";
-var Input = React32.forwardRef(
+var Input = React33.forwardRef(
   ({ className, type, ...props }, ref) => /* @__PURE__ */ jsx(
     "input",
     {
@@ -1234,7 +1328,7 @@ var Input = React32.forwardRef(
   )
 );
 Input.displayName = "Input";
-var Label = React32.forwardRef(
+var Label = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     LabelPrimitive.Root,
     {
@@ -1284,7 +1378,7 @@ function DotIcon({ className, ...props }) {
     }
   );
 }
-var RadioGroup = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var RadioGroup = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   RadioGroupPrimitive.Root,
   {
     ref,
@@ -1294,7 +1388,7 @@ var RadioGroup = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE
   }
 ));
 RadioGroup.displayName = "RadioGroup";
-var RadioGroupItem = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var RadioGroupItem = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   RadioGroupPrimitive.Item,
   {
     ref,
@@ -1318,7 +1412,7 @@ function Select(props) {
 Select.displayName = "Select";
 var SelectValue = SelectPrimitive.Value;
 var SelectGroup = SelectPrimitive.Group;
-var SelectTrigger = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var SelectTrigger = React33.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   SelectPrimitive.Trigger,
   {
     ref,
@@ -1339,7 +1433,7 @@ var SelectTrigger = React32.forwardRef(({ className, children, ...props }, ref) 
   }
 ));
 SelectTrigger.displayName = "SelectTrigger";
-var SelectContent = React32.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
+var SelectContent = React33.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
   SelectPrimitive.Content,
   {
     ref,
@@ -1362,7 +1456,7 @@ var SelectContent = React32.forwardRef(({ className, children, position = "poppe
   }
 ) }));
 SelectContent.displayName = "SelectContent";
-var SelectItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var SelectItem = React33.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   SelectPrimitive.Item,
   {
     ref,
@@ -1381,7 +1475,7 @@ var SelectItem = React32.forwardRef(({ className, children, ...props }, ref) => 
   }
 ));
 SelectItem.displayName = "SelectItem";
-var SelectLabel = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var SelectLabel = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   SelectPrimitive.Label,
   {
     ref,
@@ -1394,7 +1488,7 @@ var SelectLabel = React32.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 SelectLabel.displayName = "SelectLabel";
-var SelectSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var SelectSeparator = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   SelectPrimitive.Separator,
   {
     ref,
@@ -1404,9 +1498,9 @@ var SelectSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 SelectSeparator.displayName = "SelectSeparator";
-var Switch = React32.forwardRef(
+var Switch = React33.forwardRef(
   ({ className, id, ...props }, ref) => {
-    const generatedId = React32.useId();
+    const generatedId = React33.useId();
     const inputId = id ?? generatedId;
     return /* @__PURE__ */ jsxs(Fragment, { children: [
       /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -1425,7 +1519,7 @@ var Switch = React32.forwardRef(
   }
 );
 Switch.displayName = "Switch";
-var Textarea = React32.forwardRef(
+var Textarea = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "textarea",
     {
@@ -1439,7 +1533,7 @@ var Textarea = React32.forwardRef(
   )
 );
 Textarea.displayName = "Textarea";
-var Accordion = React32.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
+var Accordion = React33.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Root,
   {
     ref,
@@ -1449,7 +1543,7 @@ var Accordion = React32.forwardRef(({ className, type = "single", ...props }, re
   }
 ));
 Accordion.displayName = "Accordion";
-var AccordionItem = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var AccordionItem = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Item,
   {
     ref,
@@ -1459,7 +1553,7 @@ var AccordionItem = React32.forwardRef(({ className, ...props }, ref) => /* @__P
   }
 ));
 AccordionItem.displayName = "AccordionItem";
-var AccordionTrigger = React32.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
+var AccordionTrigger = React33.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
   AccordionPrimitive.Trigger,
   {
     ref,
@@ -1489,7 +1583,7 @@ var AccordionTrigger = React32.forwardRef(({ className, children, hideIndicator,
   }
 ) }));
 AccordionTrigger.displayName = "AccordionTrigger";
-var AccordionContent = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+var AccordionContent = React33.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
   AccordionPrimitive.Content,
   {
     forceMount: true,
@@ -1517,7 +1611,7 @@ var cardVariants = cva(
     defaultVariants: { variant: "default" }
   }
 );
-var Card = React32.forwardRef(
+var Card = React33.forwardRef(
   ({ className, variant, asChild, ...props }, ref) => {
     const Comp = asChild ? Slot : "div";
     return /* @__PURE__ */ jsx(
@@ -1532,7 +1626,7 @@ var Card = React32.forwardRef(
   }
 );
 Card.displayName = "Card";
-var CardHeader = React32.forwardRef(
+var CardHeader = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1547,7 +1641,7 @@ var CardHeader = React32.forwardRef(
   )
 );
 CardHeader.displayName = "CardHeader";
-var CardTitle = React32.forwardRef(
+var CardTitle = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1562,7 +1656,7 @@ var CardTitle = React32.forwardRef(
   )
 );
 CardTitle.displayName = "CardTitle";
-var CardDescription = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var CardDescription = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   "p",
   {
     ref,
@@ -1572,7 +1666,7 @@ var CardDescription = React32.forwardRef(({ className, ...props }, ref) => /* @_
   }
 ));
 CardDescription.displayName = "CardDescription";
-var CardAction = React32.forwardRef(
+var CardAction = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1584,11 +1678,11 @@ var CardAction = React32.forwardRef(
   )
 );
 CardAction.displayName = "CardAction";
-var CardContent = React32.forwardRef(
+var CardContent = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "card-content", className: cn("p-5 pt-0", className), ...props })
 );
 CardContent.displayName = "CardContent";
-var CardFooter = React32.forwardRef(
+var CardFooter = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1621,7 +1715,7 @@ var containerVariants = cva("mx-auto w-full", {
   },
   defaultVariants: { size: "lg", gutter: "md" }
 });
-var Container = React32.forwardRef(
+var Container = React33.forwardRef(
   ({ className, size, gutter, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1670,7 +1764,7 @@ var stackVariants = cva("flex", {
   },
   defaultVariants: { direction: "col", gap: "md", align: "stretch", justify: "start" }
 });
-var Stack = React32.forwardRef(
+var Stack = React33.forwardRef(
   ({ className, direction, gap, align, justify, wrap, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1698,7 +1792,7 @@ var gapMap = {
   lg: "gap-6",
   xl: "gap-10"
 };
-var Grid = React32.forwardRef(
+var Grid = React33.forwardRef(
   ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
     const auto = min != null;
     const minW = typeof min === "number" ? `${min}px` : min;
@@ -1718,7 +1812,7 @@ var Grid = React32.forwardRef(
   }
 );
 Grid.displayName = "Grid";
-var Separator2 = React32.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
+var Separator2 = React33.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
   if (label != null && orientation === "horizontal") {
     return /* @__PURE__ */ jsxs(
       SeparatorPrimitive.Root,
@@ -1753,7 +1847,7 @@ var Separator2 = React32.forwardRef(({ className, orientation = "horizontal", de
   );
 });
 Separator2.displayName = "Separator";
-var Tabs = React32.forwardRef(
+var Tabs = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     TabsPrimitive.Root,
     {
@@ -1764,7 +1858,7 @@ var Tabs = React32.forwardRef(
   )
 );
 Tabs.displayName = "Tabs";
-var TabsList = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsList = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.List,
   {
     ref,
@@ -1777,7 +1871,7 @@ var TabsList = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__
   }
 ));
 TabsList.displayName = "TabsList";
-var TabsTrigger = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsTrigger = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.Trigger,
   {
     ref,
@@ -1791,7 +1885,7 @@ var TabsTrigger = React32.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 TabsTrigger.displayName = "TabsTrigger";
-var TabsContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var TabsContent = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   TabsPrimitive.Content,
   {
     ref,
@@ -1800,34 +1894,34 @@ var TabsContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PUR
   }
 ));
 TabsContent.displayName = "TabsContent";
-var DialogContext = React32.createContext(null);
+var DialogContext = React33.createContext(null);
 function Dialog({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
   children
 }) {
-  const ref = React32.useRef(null);
-  const pressStartedOnBackdrop = React32.useRef(false);
-  const reactId = React32.useId();
+  const ref = React33.useRef(null);
+  const pressStartedOnBackdrop = React33.useRef(false);
+  const reactId = React33.useId();
   const titleId = `${reactId}-title`;
   const descriptionId = `${reactId}-description`;
-  const [uncontrolledOpen, setUncontrolledOpen] = React32.useState(defaultOpen);
+  const [uncontrolledOpen, setUncontrolledOpen] = React33.useState(defaultOpen);
   const isControlled = openProp !== void 0;
   const open = isControlled ? openProp : uncontrolledOpen;
-  const [hasTitle, setHasTitle] = React32.useState(false);
-  const [hasDescription, setHasDescription] = React32.useState(false);
-  React32.useEffect(() => {
+  const [hasTitle, setHasTitle] = React33.useState(false);
+  const [hasDescription, setHasDescription] = React33.useState(false);
+  React33.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (open && !el.open) el.showModal();
     else if (!open && el.open) el.close();
   }, [open]);
-  const close = React32.useCallback(() => {
+  const close = React33.useCallback(() => {
     if (!isControlled) setUncontrolledOpen(false);
     onOpenChange?.(false);
   }, [isControlled, onOpenChange]);
-  const ctx = React32.useMemo(
+  const ctx = React33.useMemo(
     () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
     [close, titleId, descriptionId]
   );
@@ -1853,9 +1947,9 @@ function Dialog({
     )
   );
 }
-var DialogContent = React32.forwardRef(
+var DialogContent = React33.forwardRef(
   ({ className, children, ...props }, ref) => {
-    const ctx = React32.useContext(DialogContext);
+    const ctx = React33.useContext(DialogContext);
     return /* @__PURE__ */ jsxs(
       "div",
       {
@@ -1886,7 +1980,7 @@ var DialogContent = React32.forwardRef(
   }
 );
 DialogContent.displayName = "DialogContent";
-var DialogHeader = React32.forwardRef(
+var DialogHeader = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1898,10 +1992,10 @@ var DialogHeader = React32.forwardRef(
   )
 );
 DialogHeader.displayName = "DialogHeader";
-var DialogTitle = React32.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React32.useContext(DialogContext);
+var DialogTitle = React33.forwardRef(({ className, ...props }, ref) => {
+  const ctx = React33.useContext(DialogContext);
   const setHasTitle = ctx?.setHasTitle;
-  React32.useEffect(() => {
+  React33.useEffect(() => {
     setHasTitle?.(true);
     return () => setHasTitle?.(false);
   }, [setHasTitle]);
@@ -1920,10 +2014,10 @@ var DialogTitle = React32.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogTitle.displayName = "DialogTitle";
-var DialogDescription = React32.forwardRef(({ className, ...props }, ref) => {
-  const ctx = React32.useContext(DialogContext);
+var DialogDescription = React33.forwardRef(({ className, ...props }, ref) => {
+  const ctx = React33.useContext(DialogContext);
   const setHasDescription = ctx?.setHasDescription;
-  React32.useEffect(() => {
+  React33.useEffect(() => {
     setHasDescription?.(true);
     return () => setHasDescription?.(false);
   }, [setHasDescription]);
@@ -1939,7 +2033,7 @@ var DialogDescription = React32.forwardRef(({ className, ...props }, ref) => {
   );
 });
 DialogDescription.displayName = "DialogDescription";
-var DialogFooter = React32.forwardRef(
+var DialogFooter = React33.forwardRef(
   ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
@@ -1954,9 +2048,9 @@ var DialogFooter = React32.forwardRef(
   )
 );
 DialogFooter.displayName = "DialogFooter";
-var DialogClose = React32.forwardRef(
+var DialogClose = React33.forwardRef(
   ({ asChild, onClick, type, ...props }, ref) => {
-    const ctx = React32.useContext(DialogContext);
+    const ctx = React33.useContext(DialogContext);
     const Comp = asChild ? Slot : "button";
     return /* @__PURE__ */ jsx(
       Comp,
@@ -1990,7 +2084,7 @@ DropdownMenu.displayName = "DropdownMenu";
 var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 var DropdownMenuGroup = DropdownMenuPrimitive.Group;
 var DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
-var DropdownMenuContent = React32.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var DropdownMenuContent = React33.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Content,
   {
     ref,
@@ -2002,7 +2096,7 @@ var DropdownMenuContent = React32.forwardRef(({ className, sideOffset = 6, ...pr
   }
 ) }));
 DropdownMenuContent.displayName = "DropdownMenuContent";
-var DropdownMenuItem = React32.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuItem = React33.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Item,
   {
     ref,
@@ -2018,7 +2112,7 @@ var DropdownMenuItem = React32.forwardRef(({ className, variant = "default", ins
   }
 ));
 DropdownMenuItem.displayName = "DropdownMenuItem";
-var DropdownMenuCheckboxItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuCheckboxItem = React33.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.CheckboxItem,
   {
     ref,
@@ -2032,7 +2126,7 @@ var DropdownMenuCheckboxItem = React32.forwardRef(({ className, children, ...pro
   }
 ));
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
-var DropdownMenuRadioItem = React32.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuRadioItem = React33.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.RadioItem,
   {
     ref,
@@ -2046,7 +2140,7 @@ var DropdownMenuRadioItem = React32.forwardRef(({ className, children, ...props 
   }
 ));
 DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
-var DropdownMenuLabel = React32.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuLabel = React33.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Label,
   {
     ref,
@@ -2060,7 +2154,7 @@ var DropdownMenuLabel = React32.forwardRef(({ className, inset, ...props }, ref)
   }
 ));
 DropdownMenuLabel.displayName = "DropdownMenuLabel";
-var DropdownMenuSeparator = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+var DropdownMenuSeparator = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.Separator,
   {
     ref,
@@ -2088,7 +2182,7 @@ function DropdownMenuShortcut({
   );
 }
 var DropdownMenuSub = DropdownMenuPrimitive.Sub;
-var DropdownMenuSubTrigger = React32.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+var DropdownMenuSubTrigger = React33.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
   DropdownMenuPrimitive.SubTrigger,
   {
     ref,
@@ -2102,7 +2196,7 @@ var DropdownMenuSubTrigger = React32.forwardRef(({ className, inset, children, .
   }
 ));
 DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
-var DropdownMenuSubContent = React32.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var DropdownMenuSubContent = React33.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   DropdownMenuPrimitive.SubContent,
   {
     ref,
@@ -2125,7 +2219,7 @@ function InfoTip({
   className,
   contentClassName
 }) {
-  const titleId = React32.useId();
+  const titleId = React33.useId();
   return /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open, onOpenChange, children: [
     /* @__PURE__ */ jsx(
       PopoverPrimitive.Trigger,
@@ -2193,7 +2287,7 @@ function Tooltip(props) {
 }
 Tooltip.displayName = "Tooltip";
 var TooltipTrigger = TooltipPrimitive.Trigger;
-var TooltipContent = React32.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+var TooltipContent = React33.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
   TooltipPrimitive.Content,
   {
     ref,
@@ -2211,7 +2305,7 @@ var TooltipContent = React32.forwardRef(({ className, sideOffset = 6, ...props }
 TooltipContent.displayName = "TooltipContent";
 var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
-var ThemeContext = React32.createContext(null);
+var ThemeContext = React33.createContext(null);
 var isBrowser = typeof window !== "undefined";
 function prefersDark() {
   return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -2251,16 +2345,16 @@ function ThemeProvider({
   enableSystem = true,
   attribute = "class"
 }) {
-  const [theme, setThemeState] = React32.useState(
+  const [theme, setThemeState] = React33.useState(
     () => readStored(storageKey, defaultTheme, THEMES)
   );
-  const [accent, setAccentState] = React32.useState(
+  const [accent, setAccentState] = React33.useState(
     () => readStored(accentStorageKey, defaultAccent, ACCENTS)
   );
-  const [systemDark, setSystemDark] = React32.useState(() => prefersDark());
+  const [systemDark, setSystemDark] = React33.useState(() => prefersDark());
   const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
-  React32.useEffect(() => {
+  React33.useEffect(() => {
     if (!isBrowser || !enableSystem) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setSystemDark(mql.matches);
@@ -2268,31 +2362,31 @@ function ThemeProvider({
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [enableSystem]);
-  React32.useEffect(() => {
+  React33.useEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
-  const setTheme = React32.useCallback(
+  const setTheme = React33.useCallback(
     (next) => {
       setThemeState(next);
       writeStored(storageKey, next);
     },
     [storageKey]
   );
-  const setAccent = React32.useCallback(
+  const setAccent = React33.useCallback(
     (next) => {
       setAccentState(next);
       writeStored(accentStorageKey, next);
     },
     [accentStorageKey]
   );
-  const value = React32.useMemo(
+  const value = React33.useMemo(
     () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
     [theme, setTheme, resolvedTheme, accent, setAccent]
   );
   return /* @__PURE__ */ jsx(ThemeContext.Provider, { value, children });
 }
 function useTheme() {
-  const ctx = React32.useContext(ThemeContext);
+  const ctx = React33.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme must be used within a <ThemeProvider>.");
   }
@@ -2311,6 +2405,6 @@ function themeInitScript(options = {}) {
   return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
 }
 
-export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Skeleton, SocialCard, Spinner, Stack, StatusDot, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Container, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, GlitchText, Grid, GridBackground, InfoTip, Input, Kbd, Label, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, RepoBanner, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Skeleton, SocialCard, Spinner, Stack, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, useTheme };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

@@ -61,6 +61,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
 | `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
+| `Table` (+ `Header`/`Body`/`Footer`/`Row`/`Head`/`Cell`/`Caption`) | the same fields across many rows — mono column headers, hairline rules, hover tint; scrolls inside its own focusable box when wider than its container |
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |

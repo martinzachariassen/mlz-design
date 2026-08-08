@@ -43,6 +43,17 @@ export {
   type StatusDotProps,
   statusDotVariants,
 } from "./components/data-display/status-dot";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  type TableProps,
+  TableRow,
+} from "./components/data-display/table";
 export { Text, type TextProps, textVariants } from "./components/data-display/text";
 export {
   Alert,
