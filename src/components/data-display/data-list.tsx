@@ -25,7 +25,7 @@ export interface DataListProps extends React.HTMLAttributes<HTMLDListElement> {
  * and copy-pastable.
  *
  * **Use it** for the facts *about one thing* — a spec panel, a metadata block, a
- * receipt. **Reach for a `<table>`** the moment you have the same fields across
+ * receipt. **Reach for `Table`** the moment you have the same fields across
  * several rows: a definition list has no column headers and no row semantics, so
  * it can't express a grid of data accessibly.
  *
