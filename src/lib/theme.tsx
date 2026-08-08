@@ -200,6 +200,12 @@ export interface ThemeInitScriptOptions {
  * ```
  *
  * Keep the options identical to the matching `<ThemeProvider>` props.
+ *
+ * **Under a strict `script-src`** — no `'unsafe-inline'`, and no server to mint
+ * a nonce or hash — that inline tag is refused and the theme flashes on every
+ * load. Emit this string as a hashed same-origin asset at build time instead;
+ * the recipe is in `docs/architecture.md`, "Pre-paint theming under a strict
+ * CSP".
  */
 export function themeInitScript(options: ThemeInitScriptOptions = {}): string {
   const {

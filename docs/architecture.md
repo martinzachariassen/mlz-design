@@ -125,6 +125,54 @@ Radix packages are depended on **granularly** (`@radix-ui/react-tabs`, …), not
 
 `asChild` (via `@radix-ui/react-slot`) is wired by hand on `Button`, `Badge`, `Card`, `BreadcrumbLink`, `PaginationLink`, `DialogClose` and `SheetClose` — render a router link or any other element while keeping the component's styling and props. The Radix-backed components (`Select`, `DropdownMenu`, `Tooltip`…) get `asChild` from the primitive itself, so it works there without us doing anything.
 
+## Pre-paint theming under a strict CSP
+
+`themeInitScript()` has to run **before the first paint**, or a reader who chose dark mode gets a white flash on every load. Its JSDoc says to inline it with `dangerouslySetInnerHTML`, and for most apps that is right.
+
+It is wrong for an app whose `script-src` has no `'unsafe-inline'`. A static-asset host — Cloudflare Workers' static assets, S3 + CDN, GitHub Pages — has no server to mint a per-request nonce, and no hash you can pin either, because the script's content changes with its options. The browser refuses the tag and the flash comes back.
+
+The fix is to stop inlining and start **emitting**: generate the string at build time, write it as a content-hashed asset, and reference it with a classic `<script src>`. Same-origin satisfies `script-src 'self'`, and a classic (non-module) script still blocks the parser, so `<html>` is themed before anything renders. As a Vite plugin, splicing into a marker comment in each HTML entry:
+
+```ts
+import { themeInitScript } from "@martinzachariassen/design";
+import type { Plugin } from "vite";
+
+export function themeInit(): Plugin {
+  const source = themeInitScript();
+  let src = "/@mlz-theme-init.js"; // dev URL; build replaces it with the hashed name
+
+  return {
+    name: "mlz:theme-init",
+    renderStart() {
+      // An asset's final hashed name is available as soon as its source is set,
+      // and renderStart runs before vite:build-html rewrites the HTML.
+      const ref = this.emitFile({ type: "asset", name: "theme-init.js", source });
+      src = `/${this.getFileName(ref)}`;
+    },
+    configureServer(server) {
+      server.middlewares.use("/@mlz-theme-init.js", (_req, res) => {
+        res.setHeader("Content-Type", "text/javascript; charset=utf-8");
+        res.end(source);
+      });
+    },
+    transformIndexHtml: {
+      order: "post", // after renderStart has resolved the hashed name
+      handler: (html) => html.replace("<!--theme-init-->", `<script src="${src}"></script>`),
+    },
+  };
+}
+```
+
+Then `<!--theme-init-->` goes in each document's `<head>`, ahead of the stylesheet, and `<ThemeProvider>` is rendered **with no props** so its defaults stay identical to the generated script's. Generating from the installed package on every build is the point: the two cannot drift.
+
+Three things that bite:
+
+- **`build.rolldownOptions` replaces `build.rollupOptions`**, it does not merge. Setting it to reach `treeshake` silently dropped a second HTML entry from a multi-page build.
+- The plugin makes `vite.config.ts` import this package, so Node evaluates the whole ESM entry at config-load time. That is fine — nothing here touches the DOM at module scope — but it is the least conventional part. The fallback is a codegen script that writes the file into `public/`, with a CI `git diff --exit-code` guard against staleness.
+- `style-src 'self'` does **not** block React's `style={{}}`: React writes through CSSOM, which CSP does not govern. It *does* block a `<style>` element inserted at runtime — the element lands in the DOM with `element.sheet === null`. That asymmetry is why `Toaster` lives behind the `./toaster` subpath (see Distribution).
+
+Reference implementation: `vite/theme-init.ts` in [mlz-no](https://github.com/martinzachariassen/mlz-no).
+
 ## Conventions that bite
 
 - **Biome is scoped to JS/TS.** CSS formatting/linting is disabled on purpose — `theme.css` is hand-column-aligned; don't let a tool reflow it.
