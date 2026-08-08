@@ -942,6 +942,58 @@ declare const AccordionTrigger: React.ForwardRefExoticComponent<AccordionTrigger
  */
 declare const AccordionContent: React.ForwardRefExoticComponent<Omit<AccordionPrimitive.AccordionContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
+/**
+ * The trail back up from where you are — an article to its section to the index.
+ *
+ * It's a `<nav>` wrapping an ordered list, because the order *is* the meaning.
+ * The last item is the current page: mark it with `BreadcrumbPage`, not a link
+ * to itself.
+ *
+ * **Use it when the hierarchy is real and more than two levels deep.** A
+ * two-level trail is a back link wearing a costume, and on a flat site a
+ * breadcrumb invents a structure that doesn't exist. It's orientation, not
+ * navigation — it tells someone where they are, so it shouldn't be the only way
+ * to reach a section.
+ *
+ * ```tsx
+ * <Breadcrumb>
+ *   <BreadcrumbList>
+ *     <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
+ *     <BreadcrumbSeparator />
+ *     <BreadcrumbItem><BreadcrumbPage>Colour</BreadcrumbPage></BreadcrumbItem>
+ *   </BreadcrumbList>
+ * </Breadcrumb>
+ * ```
+ */
+declare const Breadcrumb: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
+    separator?: React.ReactNode;
+} & React.RefAttributes<HTMLElement>>;
+/** The `<ol>`. Wraps onto a second line rather than overflowing on narrow screens. */
+declare const BreadcrumbList: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>, "ref"> & React.RefAttributes<HTMLOListElement>>;
+/** One step in the trail. */
+declare const BreadcrumbItem: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "ref"> & React.RefAttributes<HTMLLIElement>>;
+interface BreadcrumbLinkProps extends React.ComponentPropsWithoutRef<"a"> {
+    /** Render your router's link component instead of an `<a>`. */
+    asChild?: boolean;
+}
+/** A link to an ancestor. Use `asChild` to hand off to a router link. */
+declare const BreadcrumbLink: React.ForwardRefExoticComponent<BreadcrumbLinkProps & React.RefAttributes<HTMLAnchorElement>>;
+/**
+ * The page you're on. Not a link — `aria-current="page"` is what tells assistive
+ * tech this is the destination, and linking a page to itself is a dead end.
+ */
+declare const BreadcrumbPage: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & React.RefAttributes<HTMLSpanElement>>;
+/**
+ * The chevron between steps. Decorative — the list order already carries the
+ * relationship, so it's hidden from assistive tech.
+ */
+declare function BreadcrumbSeparator({ children, className, ...props }: React.ComponentPropsWithoutRef<"li">): React.JSX.Element;
+/**
+ * A collapsed run of middle steps, for a deep trail on a narrow screen. Pair it
+ * with a `DropdownMenu` if the hidden steps need to stay reachable.
+ */
+declare function BreadcrumbEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<"span">): React.JSX.Element;
+
 declare const cardVariants: (props?: ({
     variant?: "default" | "interactive" | "accent" | "ghost" | "elevated" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
@@ -1053,6 +1105,57 @@ interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
  * steps up at `sm`/`lg`. `min` wins if you set both.
  */
 declare const Grid: React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>>;
+
+declare const pageVariants: (props?: ({
+    active?: boolean | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+/**
+ * Page-by-page navigation for a long list — a blog index, search results.
+ *
+ * It's a `<nav>` around a list of links, so each page is a real URL someone can
+ * bookmark, share and open in a new tab. That's the whole reason to prefer it
+ * over "load more": infinite scroll has no address for page 4, and no end.
+ *
+ * **Use it when the reader might want to come back to a position, or when the
+ * total matters.** For a feed nobody returns to, "load more" is friendlier. For
+ * a handful of items, don't paginate at all.
+ *
+ * Wire the arrows to real URLs too, and drop `href` on `PaginationPrevious` /
+ * `PaginationNext` at the ends rather than rendering a dead link.
+ *
+ * ```tsx
+ * <Pagination>
+ *   <PaginationContent>
+ *     <PaginationItem><PaginationPrevious href="/blog?page=1" /></PaginationItem>
+ *     <PaginationItem><PaginationLink href="/blog?page=1">1</PaginationLink></PaginationItem>
+ *     <PaginationItem><PaginationLink href="/blog?page=2" isActive>2</PaginationLink></PaginationItem>
+ *     <PaginationItem><PaginationNext href="/blog?page=3" /></PaginationItem>
+ *   </PaginationContent>
+ * </Pagination>
+ * ```
+ */
+declare function Pagination({ className, ...props }: React.ComponentPropsWithoutRef<"nav">): React.JSX.Element;
+/** The list of pages. */
+declare const PaginationContent: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>, "ref"> & React.RefAttributes<HTMLUListElement>>;
+/** One slot in the list — a page link, an arrow, or an ellipsis. */
+declare const PaginationItem: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "ref"> & React.RefAttributes<HTMLLIElement>>;
+interface PaginationLinkProps extends React.ComponentPropsWithoutRef<"a">, VariantProps<typeof pageVariants> {
+    /** Marks the page you're on — sets `aria-current="page"`. */
+    isActive?: boolean;
+    /** Render your router's link component instead of an `<a>`. */
+    asChild?: boolean;
+}
+/** A numbered page link. */
+declare const PaginationLink: React.ForwardRefExoticComponent<PaginationLinkProps & React.RefAttributes<HTMLAnchorElement>>;
+/**
+ * The back arrow. Omit `href` on the first page — a link that goes nowhere is
+ * worse than no link.
+ */
+declare function PaginationPrevious({ className, children, ...props }: PaginationLinkProps): React.JSX.Element;
+/** The forward arrow. Omit `href` on the last page. */
+declare function PaginationNext({ className, children, ...props }: PaginationLinkProps): React.JSX.Element;
+/** A gap in the page run. Decorative, but keeps a name for screen readers. */
+declare function PaginationEllipsis({ className, ...props }: React.ComponentPropsWithoutRef<"span">): React.JSX.Element;
 
 interface SeparatorProps extends React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> {
     /** Horizontal fills its container's width; vertical fills its height (give the parent one). */
@@ -1319,6 +1422,68 @@ declare namespace InfoTip {
     var displayName: string;
 }
 
+declare const sheetVariants: (props?: ({
+    side?: "left" | "right" | "bottom" | "top" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface SheetProps extends VariantProps<typeof sheetVariants> {
+    /** Whether the sheet is showing. Pass it to control the sheet yourself. */
+    open?: boolean;
+    /** Initial open state when uncontrolled. Ignored if `open` is provided. */
+    defaultOpen?: boolean;
+    /** Called with `false` on Esc, the ✕ button, a `SheetClose`, or a backdrop click. */
+    onOpenChange?: (open: boolean) => void;
+    /** Extra classes for the sheet panel itself. */
+    className?: string;
+    /** Usually a single `SheetContent`. Only mounted while open. */
+    children: React.ReactNode;
+}
+/**
+ * A panel that slides in from an edge — mobile navigation, a filter drawer, a
+ * detail pane beside a list.
+ *
+ * Built on the **native `<dialog>` element**, the same as `Dialog`, so
+ * focus-trapping, Esc, background inerting and the top layer come from the
+ * platform rather than from JavaScript. One modal implementation, not two.
+ *
+ * **A sheet is a `Dialog` that came from the side.** Reach for it when the
+ * content is a list to scan or navigate — it can be tall, and the edge anchoring
+ * reads as "somewhere else in the app". Use `Dialog` when the content is a
+ * decision to make; use a page when it's neither. **Don't** put a sheet inside a
+ * sheet: on a phone that's a trapdoor with no visible way back.
+ *
+ * The slide-in is progressive enhancement (`@starting-style` +
+ * `transition-behavior: allow-discrete`). Where a browser lacks them the sheet
+ * appears in place, fully usable — and `prefers-reduced-motion` skips it too.
+ *
+ * ```tsx
+ * <Sheet open={open} onOpenChange={setOpen} side="left">
+ *   <SheetContent>
+ *     <SheetHeader>
+ *       <SheetTitle>Menu</SheetTitle>
+ *     </SheetHeader>
+ *     <nav>…</nav>
+ *   </SheetContent>
+ * </Sheet>
+ * ```
+ */
+declare function Sheet({ open: openProp, defaultOpen, onOpenChange, side, className, children, }: SheetProps): React.JSX.Element;
+/** The scrolling body of the sheet, and where the ✕ button lives. */
+declare const SheetContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** Title + description block, inset on the right to clear the close button. */
+declare const SheetHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+/** The sheet's `<h2>`. Names the sheet for assistive tech — always include one. */
+declare const SheetTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>>;
+/** The muted sentence under the title. */
+declare const SheetDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
+/** The action row, pinned to the bottom of the panel. */
+declare const SheetFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Render the single child as the trigger instead of a `<button>`. */
+    asChild?: boolean;
+}
+/** Closes the sheet. Wrap your own control with `asChild`. */
+declare const SheetClose: React.ForwardRefExoticComponent<SheetCloseProps & React.RefAttributes<HTMLButtonElement>>;
+
 /**
  * Wraps the part of the app that uses tooltips and shares their open/close
  * timing, so moving between neighbouring triggers doesn't re-run the delay.
@@ -1441,4 +1606,4 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, fallbackVariants, indicatorVariants, spinnerVariants, stackVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useTheme };

@@ -57,6 +57,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Avatar` (+ `Image`/`Fallback`/`Group`) | initials-first; `xs`–`xl`, circle/square, presence `status`, overlap group with `+N` |
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
+| `Sheet` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | a panel sliding in from any edge — mobile nav, filter drawer. Native `<dialog>` like `Dialog`, so one modal implementation, not two |
 | `InfoTip`  | accessible inline help popover (glossary/hints) — Radix-positioned, keyboard + Esc, collision-aware |
 | `Tooltip` (+ `Provider`/`Trigger`/`Content`) | short hover/focus hint. Attaches as the trigger's *description*, so an icon button still needs its own `aria-label` |
 | `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
@@ -76,6 +77,8 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Container` | centred max-width page frame with responsive gutters (`sm`…`xl`/`prose`/`full`) |
 | `Stack`    | flex row/column with a token gap; `direction="responsive"` stacks on mobile, flows to a row at `sm` |
 | `Grid`     | responsive grid — auto-fitting (`min`) or fixed responsive `cols` (1–6) |
+| `Breadcrumb` (+ `List`/`Item`/`Link`/`Page`/`Separator`/`Ellipsis`) | the trail back up — a `<nav>` around an `<ol>`; the current page is marked with `aria-current`, not linked |
+| `Pagination` (+ `Content`/`Item`/`Link`/`Previous`/`Next`/`Ellipsis`) | page-by-page navigation where every page is a real, bookmarkable URL |
 
 ### Brand & marketing
 

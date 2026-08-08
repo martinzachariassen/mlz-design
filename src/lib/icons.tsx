@@ -40,6 +40,10 @@ function strokeIcon(path: React.ReactNode, viewBox = "0 0 24 24") {
 export const ChevronDownIcon = strokeIcon(<path d="m6 9 6 6 6-6" />);
 export const ChevronUpIcon = strokeIcon(<path d="m18 15-6-6-6 6" />);
 export const ChevronRightIcon = strokeIcon(<path d="m9 18 6-6-6-6" />);
+export const ChevronLeftIcon = strokeIcon(<path d="m15 18-6-6 6-6" />);
+
+/** The dismiss glyph, for overlays that carry their own close button. */
+export const CloseIcon = strokeIcon(<path d="M18 6 6 18M6 6l12 12" />);
 
 /** The same tick the `Checkbox` draws, so selection reads identically everywhere. */
 export const CheckIcon = strokeIcon(<path d="M3.5 8.5l3 3 6-7" />, "0 0 16 16");

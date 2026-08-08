@@ -118,6 +118,16 @@ export {
   type AccordionTriggerProps,
 } from "./components/layout/accordion";
 export {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  type BreadcrumbLinkProps,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/layout/breadcrumb";
+export {
   Card,
   CardAction,
   CardContent,
@@ -138,6 +148,16 @@ export {
   type StackProps,
   stackVariants,
 } from "./components/layout/layout";
+export {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  type PaginationLinkProps,
+  PaginationNext,
+  PaginationPrevious,
+} from "./components/layout/pagination";
 export { Separator, type SeparatorProps } from "./components/layout/separator";
 export {
   Tabs,
@@ -180,6 +200,17 @@ export {
   DropdownMenuTrigger,
 } from "./components/overlay/dropdown-menu";
 export { InfoTip, type InfoTipProps } from "./components/overlay/info-tip";
+export {
+  Sheet,
+  SheetClose,
+  type SheetCloseProps,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  type SheetProps,
+  SheetTitle,
+} from "./components/overlay/sheet";
 export {
   Tooltip,
   TooltipContent,
