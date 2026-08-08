@@ -32,7 +32,7 @@ const meta = {
     DropdownMenuLabel,
     DropdownMenuSeparator,
   },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {
     defaultOpen: { control: "boolean", description: "Start open — handy for screenshots." },

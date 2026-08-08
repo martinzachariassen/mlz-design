@@ -7,7 +7,7 @@ const meta = {
   title: "Components/Forms/Toggle",
   component: Toggle,
   subcomponents: { ToggleGroup, ToggleGroupItem },
-  tags: ["autodocs"],
+  tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {
     variant: {

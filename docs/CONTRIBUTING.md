@@ -53,6 +53,31 @@ Prefer the per-rule form. A blanket `disable` hides every future regression in t
 
 **What to write for a new component.** A story is not optional — the a11y gate only sees what has a story, so an unstoried component is an unaudited one. Beyond that: a unit test for anything with state, a variant, or a prop that changes markup; a `LightDark` story (see `theme-split.tsx`) for anything whose colours could break in one theme; and an interaction test for anything with a keyboard pattern of its own.
 
+### The story ladder
+
+Stories appear in source order, so the order *is* the reading order. Follow this shape — `button.stories.tsx` is the reference implementation:
+
+1. **`Playground`** — every prop wired to a control, driven by the meta's `args`. Use **`Default`** instead when the first story is a fixed composition with nothing meaningful to knob (compound components like `Dialog`, `Separator`). The two names are a signal, not a synonym: `Playground` promises working controls.
+2. **`Variants`**, then **`Sizes`** — the CVA axes, one story each, all values side by side.
+3. **States and cases** — `Disabled`, `WithLabel`, `Collapsed`, `Destructive`… whatever the component actually has.
+4. **`LightDark`** — last, always. Wrap in `ThemeSplit` and set `parameters: { layout: "fullscreen" }`.
+
+Every story carries a one-line JSDoc above the export; it becomes the story's description on the docs page.
+
+Four components legitimately have no `LightDark`, and the reason is the same in each case — **skip it only if one of these applies to yours**. `Toaster` portals to `document.body`, so nothing it renders can be contained by a split pane. `ThemeToggle` *is* the theme switcher, and forcing a theme around it contradicts what the story is showing. `RepoBanner` and `SocialCard` are fixed-size export templates where light/dark isn't the axis — `RepoBanner` already ships `Asset` and `AssetDark` for that. `Dialog` and `Sheet` show the pattern for overlays that *can*: render the content component inline instead of opening a real one, since a live modal sits in the top layer and escapes the pane.
+
+### Sidebar status badges
+
+The sidebar draws a badge from a namespaced tag on the meta, rendered by `renderLabel` in `.storybook/manager.tsx`:
+
+```tsx
+tags: ["autodocs", "status:new"],
+```
+
+`status:new` · `status:experimental` · `status:deprecated`. **Untagged means stable** — that is the common case and must stay free, so don't add a `status:stable`. Badges are drawn on the component node only, never on the stories under it.
+
+`status:new` is the one that needs pruning: **clear it when cutting a minor release**, or everything stays permanently new and the badge stops meaning anything. The other two describe an API contract rather than a date and look after themselves.
+
 ## Releasing
 
 Automated with [Changesets](https://github.com/changesets/changesets) → GitHub Packages. There's no manual version bump or tag — you only ever describe changes; `release.yml` does the rest on merge to `main`.

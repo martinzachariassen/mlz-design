@@ -81,35 +81,6 @@ export const Default: Story = {
   },
 };
 
-/**
- * The trigger and dialog surface across both themes. The content is rendered
- * inline (not as a live modal) so both panes show the card styling at a glance.
- */
-export const LightDark: Story = {
-  parameters: { layout: "fullscreen" },
-  render: () => (
-    <ThemeSplit>
-      <div className="flex w-full max-w-sm flex-col gap-6">
-        <Button variant="solid">New project</Button>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>New project</DialogTitle>
-            <DialogDescription>Give it a name — you can change everything later.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-1.5">
-            <Label htmlFor="ld-project-name">Name</Label>
-            <Input id="ld-project-name" placeholder="aurora" />
-          </div>
-          <DialogFooter>
-            <Button variant="ghost">Cancel</Button>
-            <Button variant="solid">Create</Button>
-          </DialogFooter>
-        </DialogContent>
-      </div>
-    </ThemeSplit>
-  ),
-};
-
 /** A confirm step. Say what will be destroyed in the description, and keep Cancel first in the source — the footer reverses on mobile so the confirm lands on top. */
 export const Destructive: Story = {
   render: () => {
@@ -141,4 +112,33 @@ export const Destructive: Story = {
       </>
     );
   },
+};
+
+/**
+ * The trigger and dialog surface across both themes. The content is rendered
+ * inline (not as a live modal) so both panes show the card styling at a glance.
+ */
+export const LightDark: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <ThemeSplit>
+      <div className="flex w-full max-w-sm flex-col gap-6">
+        <Button variant="solid">New project</Button>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New project</DialogTitle>
+            <DialogDescription>Give it a name — you can change everything later.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-1.5">
+            <Label htmlFor="ld-project-name">Name</Label>
+            <Input id="ld-project-name" placeholder="aurora" />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="solid">Create</Button>
+          </DialogFooter>
+        </DialogContent>
+      </div>
+    </ThemeSplit>
+  ),
 };
