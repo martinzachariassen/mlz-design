@@ -15,6 +15,12 @@ var signals = {
   warning: "oklch(0.80 0.15 78)",
   info: "oklch(0.62 0.15 250)"
 };
+var signalsDeep = {
+  danger: "oklch(0.53 0.22 18)",
+  success: "oklch(0.48 0.12 150)",
+  warning: "oklch(0.50 0.11 78)",
+  info: "oklch(0.50 0.14 250)"
+};
 var accents = {
   cyan: { base: "oklch(0.74 0.13 195)", deep: "oklch(0.48 0.10 200)" },
   blue: { base: "oklch(0.62 0.15 250)", deep: "oklch(0.46 0.13 255)" },
@@ -57,6 +63,7 @@ var breakpoints = {
 var tokens = {
   colors,
   signals,
+  signalsDeep,
   accents,
   fonts,
   motion,
@@ -65,6 +72,6 @@ var tokens = {
   breakpoints
 };
 
-export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens };
-//# sourceMappingURL=chunk-AMCCIDMK.js.map
-//# sourceMappingURL=chunk-AMCCIDMK.js.map
+export { accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens };
+//# sourceMappingURL=chunk-EYYGHWPE.js.map
+//# sourceMappingURL=chunk-EYYGHWPE.js.map

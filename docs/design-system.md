@@ -38,6 +38,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | Component  | Notes                                                |
 | ---------- | ---------------------------------------------------- |
 | `Button`   | `default` · `solid` · `accent` · `ghost` · `sketch` · `destructive` · `link`; sizes `sm`/`default`/`lg`/`icon`. The signature ghost that lifts on hover with an offset accent shadow. `asChild` renders a link (or anything else) with the button's styling. |
+| `Field` (+ `Label`/`Description`/`Error`) | a labelled control with its description and error message, wired together — one generated id becomes the control's `id`, the label's `htmlFor` and the `aria-describedby` target, and only the parts actually rendered are advertised. `Input` and `Textarea` join automatically |
 | `Input` · `Textarea` | accent focus ring, technical mono field         |
 | `Label`    | mono, uppercase field label with `peer-disabled` states |
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
@@ -58,16 +59,21 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
 | `Sheet` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | a panel sliding in from any edge — mobile nav, filter drawer. Native `<dialog>` like `Dialog`, so one modal implementation, not two |
-| `InfoTip`  | accessible inline help popover (glossary/hints) — Radix-positioned, keyboard + Esc, collision-aware |
+| `Popover` (+ `Trigger`/`Content`/`Anchor`/`Close`) | a non-modal panel anchored to its trigger — filter menus, small forms. Portals out, collision-aware, Esc-dismissing, and unlike `Dialog` it never traps focus or inerts the page |
+| `InfoTip`  | accessible inline help popover (glossary/hints) — the same primitive with a fixed inline trigger and a narrower API |
 | `Tooltip` (+ `Provider`/`Trigger`/`Content`) | short hover/focus hint. Attaches as the trigger's *description*, so an icon button still needs its own `aria-label` |
 | `DropdownMenu` (+ `Trigger`/`Content`/`Item`/`CheckboxItem`/`RadioItem`/`Label`/`Separator`/`Shortcut`/`Sub*`) | a menu of **actions**; `variant="destructive"`, submenus, type-ahead |
 | `Prose` | token-styled long-form typography (blog/article) — no plugin |
 | `Text`     | inline typography primitive — `body`/`lead`/`muted`/`mono`/`eyebrow` for the small everyday type roles |
+| `Code` · `CodeBlock` | inline `<code>`, and a `<pre>` block with an optional filename header and copy button. Deliberately unhighlighted — a grammar bundle plus a scheme reconciled against two themes and five accents is a lot of weight for decoration |
+| `Link`     | a real anchor with the system focus ring — `default`/`subtle`/`quiet`, `external` for a new tab with `rel="noopener noreferrer"` and a screen-reader note. If it changes a URL it's a `Link`; if it *does* something it's `Button variant="link"` |
+| `Stat` (+ `Label`/`Value`/`Delta`) | one headline measurement. The label reads first to assistive tech, the number dominates visually; `Delta` colours by direction on tabular figures |
 | `Table` (+ `Header`/`Body`/`Footer`/`Row`/`Head`/`Cell`/`Caption`) | the same fields across many rows — mono column headers, hairline rules, hover tint; scrolls inside its own focusable box when wider than its container |
 | `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
 | `Tabs` (+ `List`/`Trigger`/`Content`) | tabs on Radix — roving focus, arrows + Home/End, `orientation`-aware |
 | `Toaster` (+ `toast()`) | transient confirmations, Sonner re-dressed in MLZ tokens. **The only non-Radix third-party dependency in the system.** Never for anything the reader must act on — that's `Alert` |
+| `EmptyState` (+ `Media`/`Title`/`Description`/`Actions`) | what a list shows when it holds nothing — `dashed`/`outline`/`plain`. Not for errors (that's `Alert`) and not for pending data (that's `Skeleton`) |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
 

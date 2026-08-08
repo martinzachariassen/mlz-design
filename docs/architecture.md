@@ -10,7 +10,15 @@ How `@martinzachariassen/design` is put together. The README is the landing page
 2. **Semantic** — shadcn/ui-standard role names (`--background`, `--foreground`, `--primary`, `--accent`, `--border`, `--ring`…), every surface paired with a `-foreground`, plus signal roles (`destructive`/`success`/`warning`/`info`) each with a solid, a foreground and a subtle tint. Light, dark (`.dark` / `data-theme`) and every `data-accent` family live here. **This is the only layer to read or override.**
 3. **`@theme inline`** — re-exports the semantic layer to Tailwind so tokens and utilities are the same thing, and runtime theme/accent swaps keep working.
 
-Beyond the core roles, the semantic layer also ships **subtle tints** for every accent/signal (`bg-accent-subtle`, `bg-warning-subtle`…, built with `color-mix`, so they follow the current theme and accent), a warm-tinted **elevation scale** (`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl` off `--radius`), and `--accent-deep`, `--overlay` and `--glitch-1/2` for hovers, scrims and the cyberpunk glitch motion.
+Beyond the core roles, the semantic layer also ships **subtle tints** for every accent/signal (`bg-accent-subtle`, `bg-warning-subtle`…, built with `color-mix`, so they follow the current theme and accent), a warm-tinted **elevation scale** (`shadow-xs · sm · md · lg`), a **radius scale** (`rounded-sm · md · lg · xl` off `--radius`), and `--overlay` and `--glitch-1/2` for scrims and the cyberpunk glitch motion.
+
+### Solids fill, `-deep` reads
+
+Every accent and signal has a **`-deep`** partner — `--accent-deep`, `--success-deep`, `--warning-deep`, `--info-deep`, `--destructive-deep` — and the split is not decorative. The solids are chosen for presence in fills, borders and dots, which only needs 3:1. As *text* on the light paper surface most of them fail AA outright: cyan `--accent` measures **1.8:1**, `--warning` **1.6:1**, `--success` **3.1:1**. The `-deep` variants are the same hues darkened until they clear 4.5:1.
+
+**Colour text with `-deep`; fill shapes with the solid.** `Prose` links, `Link variant="subtle"` and `StatDelta` all read from `-deep` for exactly this reason. In dark mode the solids already clear AA against the ink background (5.1–11.0), so `-deep` maps straight back to them — which means a component can reach for `-deep` unconditionally and never branch on theme.
+
+`--destructive-deep` is the solid unchanged; at 4.9:1 it had nothing to darken. It exists so the set is complete and callers don't have to remember which signals happen to be dark enough.
 
 `theme.css` is the source of truth; `src/tokens.ts` is a hand-maintained JS mirror that must match it value-for-value — **when you touch a token value, update both.** One naming quirk the mirror carries: the CSS `--destructive` role is exported as `signals.danger` in JS.
 
