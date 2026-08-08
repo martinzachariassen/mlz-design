@@ -1,6 +1,6 @@
 {
   "name": "@martinzachariassen/design",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Martin Zachariassen's design system — colour, type, style and motion as an installable React + Tailwind v4 package.",
   "license": "MIT",
   "author": "Martin Zachariassen",
