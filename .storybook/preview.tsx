@@ -133,6 +133,7 @@ const preview: Preview = {
             ],
           ],
           "Patterns",
+          ["Application shell", "Dashboard", "Forms", "Feedback and states"],
           "Reference",
           ["Tokens", "Changelog"],
         ],

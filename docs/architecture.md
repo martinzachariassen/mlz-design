@@ -54,7 +54,9 @@ src/
                         modal-test-env.ts — the jsdom stub, test-only
   foundations/          Storybook-only: Introduction, Installation, Theming,
                         Colours, Colour usage, Typography, Motion, Responsive,
-                        Logo, Favicon, Patterns + theme-split.tsx
+                        Logo, Favicon + theme-split.tsx
+    foundations/patterns/ composed screens: application shell, dashboard,
+                        forms, feedback and states
   styles/
     index.css           the one-import bundle                → ./styles/index.css
     index-self-hosted.css  same, with bundled WOFF2 fonts    → ./styles/index-self-hosted.css

@@ -104,7 +104,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `ThemeToggle` · `AccentPicker` | the light/dark/system switch and the five accent swatches, wired to `ThemeProvider` — so an app gets the system's headline feature without rebuilding the control |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
-Storybook also ships composed references — the top-level **Patterns** section (dashboard, forms, alerts…) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
+Storybook also ships composed references — the top-level **Patterns** section (application shell, dashboard, forms, feedback and states) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
 
 ## Tokens in JS
 
