@@ -89,6 +89,14 @@ dependency by the back door: `rg -n 'from "lucide-react"' src/` must stay empty.
 
 - **Biome is scoped to JS/TS.** CSS formatting/linting is disabled on purpose —
   `theme.css` is hand-column-aligned; don't let a tool reflow it.
+- **`@storybook/addon-a11y` is dev-only, gated on `MLZ_STORYBOOK_BUILD=1`.**
+  Storybook 10.5.7 renders a *built* manager blank when two addons and a
+  `.storybook/manager.ts` both exist — don't "fix" this by re-adding it to the
+  build. The a11y gate is `axe-playwright` in `test-runner.ts` and doesn't need
+  the addon. See docs/architecture.md.
+- **MDX has no GFM unless wired.** `remark-gfm` is passed through `addon-docs`
+  in `main.ts`; without it markdown tables in `.mdx` render as literal `|`, with
+  no build warning.
 - **Tailwind v4 in Storybook uses PostCSS** (`@tailwindcss/postcss` +
   `postcss.config.mjs`), NOT `@tailwindcss/vite` (open export-compat bug with
   Storybook's builder). `tsup` does not process CSS.
