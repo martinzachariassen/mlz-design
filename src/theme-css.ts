@@ -24,7 +24,12 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { mixColours } from "./lib/contrast";
 
-const THEME_PATH = join(dirname(fileURLToPath(import.meta.url)), "styles", "theme.css");
+const SRC = dirname(fileURLToPath(import.meta.url));
+const THEME_PATH = join(SRC, "styles", "theme.css");
+
+/** Reads a file relative to the repo root, for the docs-drift check. */
+export const readFromRepo = (...segments: string[]) =>
+  readFileSync(join(SRC, "..", ...segments), "utf8");
 
 export type Block = { selector: string; declarations: Map<string, string> };
 

@@ -1,5 +1,5 @@
-import { accents } from './chunk-VGU7LGIZ.js';
-export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-VGU7LGIZ.js';
+import { accents } from './chunk-2DUXDNAX.js';
+export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-2DUXDNAX.js';
 import { cva } from 'class-variance-authority';
 import * as React35 from 'react';
 import { clsx } from 'clsx';

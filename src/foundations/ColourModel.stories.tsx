@@ -346,7 +346,7 @@ export const ColourModel: Story = {
           lead={
             <p>
               Nearly every colour mistake in a component is a rung mistake: a fill used as a text or
-              icon colour. The base accent measures 1.82:1 against paper — invisible as text, and
+              icon colour. The base accent measures 1.83:1 against paper — invisible as text, and
               short of the 3:1 that WCAG 2.1 SC 1.4.11 asks of a focus indicator.
             </p>
           }

@@ -78,8 +78,8 @@ Beyond the components, the token values are exported as typed JS for the times y
 ```ts
 import { accents, signals, fonts, motion, radius, breakpoints } from "@martinzachariassen/design/tokens";
 
-accents.rust.base; // "oklch(0.66 0.15 45)"
-signals.warning;   // "oklch(0.80 0.15 78)"
+accents.rust.base; // "oklch(0.74 0.138 45)"  — the fill rung
+signals.warning;   // "oklch(0.74 0.138 75)"
 motion.easeOut;    // "cubic-bezier(.22, .61, .36, 1)"
 breakpoints.lg;    // "64rem" — the min-width ladder, for matchMedia etc.
 ```

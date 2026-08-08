@@ -79,8 +79,11 @@
      where the previous blue/rust/success solids sat, which is why paper text on
      them measured 2.75–3.12:1.)
 
-     Numbers verified by src/tokens.contrast.test.ts — change a value and
-     the test tells you which promise you broke. */
+     Numbers verified by src/theme-css.test.ts, which parses THIS file and
+     re-measures every resolved role, and by src/tokens.contrast.test.ts, which
+     holds the same contract against the JS mirror. Change a value and they tell
+     you which promise you broke — and, if you edit only one of the two files,
+     that the pair has drifted. */
 
   /* Accent families — { base = fill, deep = on-light }. Cyan is the house colour.
      `slate` is the neutral family (it backs data-accent="ink"): it is the one
@@ -177,7 +180,7 @@
   --input:                 var(--mlz-line);
   /* The focus ring is drawn ON the paper surface, so it takes the on-light rung,
      not the fill. WCAG 2.1 SC 1.4.11 wants ≥3:1 for a focus indicator; the base
-     accent manages only 1.82:1 against paper (a tint fill cannot also contrast
+     accent manages only 1.83:1 against paper (a tint fill cannot also contrast
      with a light surface — that is the whole point of the two rungs). Deep
      measures 5.49:1. Dark mode overrides this back to the base, which is light
      against the ink surface. */

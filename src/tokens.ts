@@ -54,7 +54,7 @@ export const signalFill = {
 /**
  * The on-light rung: the same hues, placed so they clear WCAG AA (4.5:1) against
  * **every** paper surface — `paper`, `paper2` and `paper3` alike, measuring
- * 5.32:1–5.49:1 on `paper` and never dropping below 4.54:1 on `paper3`.
+ * 5.34:1–5.48:1 on `paper` and never dropping below 4.55:1 on `paper3`.
  *
  * **Colour text, icons and focus rings with these; fill shapes with
  * {@link signals}.** Mirrors `--success-deep` and friends in `theme.css`, which

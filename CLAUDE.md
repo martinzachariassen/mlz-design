@@ -62,15 +62,16 @@ is exported as `signals.danger` in JS.
 
 Every chromatic token sits on a **rung**, and the rung — not the hue — decides
 what it may be used for. Getting this wrong is the single most common colour bug
-here, and it is invisible until measured: the base accent is **1.82:1** against
+here, and it is invisible until measured: the base accent is **1.83:1** against
 paper. Two test files hold this together, and the split matters:
 
 - `src/tokens.contrast.test.ts` — the ladder's **shape**, run against the
   `tokens.ts` mirror.
 - `src/theme-css.test.ts` — **reality**: it parses `theme.css`, resolving `var()`
   and `color-mix()`, asserts the mirror matches it value-for-value, fails on any
-  colour primitive the mirror has never heard of, and re-runs the contrast
-  contracts on the resolved semantic roles in both themes.
+  colour primitive the mirror has never heard of, re-runs the contrast contracts
+  on the resolved semantic roles in both themes and every accent family, and
+  fails if any doc or story quotes a value the palette no longer ships.
 
 The second exists because the first cannot catch drift: it reads the mirror, so
 editing `theme.css` alone leaves it passing while the two files disagree. **If

@@ -6,18 +6,20 @@
  * they hold for what actually ships, because it reads `tokens.ts` — a
  * hand-maintained mirror. Change a value in `theme.css` alone and that test
  * still passes while the two files quietly disagree. So this file reads the CSS
- * and checks three things:
+ * and checks four things:
  *
  *   1. every chromatic primitive in `theme.css` has an identical mirror entry;
  *   2. no chromatic primitive exists that the mirror has never heard of (the
  *      case a value-by-value comparison misses — a token added to CSS only);
- *   3. the resolved semantic roles, in both themes, meet the same contrast
- *      contract the ladder promises.
+ *   3. the resolved semantic roles, in both themes and every accent family,
+ *      meet the same contrast contract the ladder promises;
+ *   4. no doc or story quotes a token value the palette no longer ships —
+ *      prose is a mirror too, and drifts the same way.
  */
 
 import { describe, expect, it } from "vitest";
 import { contrastRatio, inSrgbGamut, toHex } from "./lib/contrast";
-import { parseTheme, resolveColour, resolvedScope, scopeFor } from "./theme-css";
+import { parseTheme, readFromRepo, resolveColour, resolvedScope, scopeFor } from "./theme-css";
 import { accents, colors, onDark, signals, signalsDeep } from "./tokens";
 
 const blocks = parseTheme();
@@ -155,7 +157,8 @@ describe("theme.css — resolved semantic roles", () => {
     });
 
     it(`${themeName}: --ring clears the 3:1 SC 1.4.11 asks of a focus indicator`, () => {
-      // The bug this whole ladder came from: --ring was a fill value, 1.82:1.
+      // The bug this whole ladder came from: --ring was a fill value, which
+      // measured 1.82:1 against paper before the rungs existed.
       const ring = scope.get("--ring") as string;
       const background = scope.get("--background") as string;
       expect(contrastRatio(ring, background)).toBeGreaterThanOrEqual(3);
@@ -202,13 +205,83 @@ describe("theme.css — accent families swap without changing weight", () => {
     expect(contrastRatio(ring, background), `${family} ring vs paper`).toBeGreaterThanOrEqual(3);
   });
 
+  it.each(FAMILIES)("data-accent=%s stays legible in dark mode", (family) => {
+    // `<html class="dark" data-accent="rust">` — the combination that was
+    // broken: the accent rules sit after the `.dark` block at equal
+    // specificity, so without the restatement below a dark page silently got
+    // the paper-tuned rung. Build the scope the way the cascade does, then
+    // measure, rather than trusting that the override exists.
+    const merged = scopeFor(
+      blocks,
+      LIGHT,
+      DARK,
+      new RegExp(`^\\[data-accent="${family}"\\]$`),
+      /^\.dark \[data-accent\](,|$)/,
+      new RegExp(`^\\.dark \\[data-accent="${family}"\\](,|$)`),
+    );
+
+    const accent = resolveColour("var(--accent)", merged) as string;
+    const foreground = resolveColour("var(--accent-foreground)", merged) as string;
+    const deep = resolveColour("var(--accent-deep)", merged) as string;
+    const ring = resolveColour("var(--ring)", merged) as string;
+    const background = resolveColour("var(--background)", merged) as string;
+
+    expect(
+      contrastRatio(accent, foreground),
+      `${family} fill vs foreground`,
+    ).toBeGreaterThanOrEqual(AA);
+    expect(contrastRatio(deep, background), `${family} deep as text on ink`).toBeGreaterThanOrEqual(
+      AA,
+    );
+    expect(contrastRatio(ring, background), `${family} ring on ink`).toBeGreaterThanOrEqual(3);
+  });
+
   it("restates the dark-mode flip at a specificity that actually wins", () => {
-    // The accent rules sit after the .dark block with equal specificity, so
-    // without this restatement a dark page with a non-default accent silently
-    // gets the paper-tuned rung. Assert the override exists and is more specific.
     const restated = blocks.filter((b) => /^\.dark \[data-accent\]/.test(b.selector));
     expect(restated.length).toBeGreaterThan(0);
     expect(restated[0]?.declarations.get("--accent-deep")).toBe("var(--accent)");
+  });
+});
+
+describe("documentation quotes real token values", () => {
+  /**
+   * Prose that quotes a token value is a mirror too, and drifts the same way —
+   * three files were still advertising pre-ladder values when this was written.
+   * Every `oklch()` literal in the docs below must therefore be a value the
+   * palette actually ships.
+   */
+  const DOCS = [
+    "README.md",
+    "docs/design-system.md",
+    "docs/architecture.md",
+    "src/foundations/Installation.mdx",
+    "src/foundations/Theming.mdx",
+    "src/foundations/Logo.stories.tsx",
+  ];
+
+  /**
+   * Literals that are deliberately *not* MLZ tokens. The override examples show
+   * a consuming app picking its own house accent, and would be pointless if they
+   * used ours.
+   */
+  const ILLUSTRATIVE = new Set(["oklch(0.70 0.15 300)"]);
+
+  const shipped = new Set(
+    [
+      ...Object.values(signals),
+      ...Object.values(signalsDeep),
+      ...Object.values(onDark),
+      ...Object.values(accents).flatMap((a) => [a.base, a.deep]),
+      ...[...light.values(), ...dark.values()],
+    ].map(normalise),
+  );
+
+  it.each(DOCS)("%s quotes no stale token value", (file) => {
+    const literals = [...readFromRepo(file).matchAll(/oklch\(\s*[\d.]+[^)]*\)/g)].map((m) =>
+      normalise(m[0]),
+    );
+    const stale = literals.filter((value) => !ILLUSTRATIVE.has(value) && !shipped.has(value));
+    expect(stale).toEqual([]);
   });
 });
 
