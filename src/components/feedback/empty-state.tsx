@@ -43,7 +43,7 @@ export interface EmptyStateProps
  * ```tsx
  * <EmptyState>
  *   <EmptyStateMedia>
- *     <BrandMark variant="glyph" size={28} className="text-accent" />
+ *     <BrandMark variant="glyph" size={28} className="text-accent-deep" />
  *   </EmptyStateMedia>
  *   <EmptyStateTitle>No projects yet</EmptyStateTitle>
  *   <EmptyStateDescription>

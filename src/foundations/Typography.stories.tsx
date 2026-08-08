@@ -105,13 +105,13 @@ function Row({
     <div className="grid grid-cols-[9rem_1fr_1fr] gap-x-6 border-b border-border py-4 text-sm max-sm:grid-cols-1 max-sm:gap-y-1">
       <div className={className}>{role}</div>
       <div className="text-foreground">
-        <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.14em] text-success">
+        <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.14em] text-success-deep">
           Use for
         </span>
         {use}
       </div>
       <div className="text-muted-foreground">
-        <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.14em] text-destructive">
+        <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.14em] text-destructive-deep">
           Avoid for
         </span>
         {avoid}

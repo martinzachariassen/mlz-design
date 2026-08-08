@@ -71,7 +71,7 @@ export const EmptyStates: Story = {
     <div className="flex w-full max-w-xl flex-col gap-8">
       <EmptyState>
         <EmptyStateMedia>
-          <BrandMark variant="glyph" size={28} className="text-accent" />
+          <BrandMark variant="glyph" size={28} className="text-accent-deep" />
         </EmptyStateMedia>
         <EmptyStateTitle>No projects yet</EmptyStateTitle>
         <EmptyStateDescription>

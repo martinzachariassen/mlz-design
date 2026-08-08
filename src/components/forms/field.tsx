@@ -217,7 +217,7 @@ export const FieldError = React.forwardRef<
       id={field?.errorId}
       role="alert"
       data-slot="field-error"
-      className={cn("text-[13px] leading-relaxed text-destructive", className)}
+      className={cn("text-[13px] leading-relaxed text-destructive-deep", className)}
       {...props}
     >
       {children}

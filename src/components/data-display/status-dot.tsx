@@ -7,7 +7,7 @@ const statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
     variant: {
       success: "text-success-deep",
       warning: "text-warning-deep",
-      destructive: "text-destructive",
+      destructive: "text-destructive-deep",
       info: "text-info-deep",
       accent: "text-accent-deep",
       muted: "text-muted-foreground",
