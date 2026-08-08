@@ -16,13 +16,33 @@ export const colors = {
   glitchRed: "oklch(0.53 0.22 18)",
 } as const;
 
-/** Meaning-carrying signal colours, harmonised with the palette. */
+/**
+ * Meaning-carrying signal colours, harmonised with the palette. These are the
+ * **solids** — tuned for fills, borders and dots.
+ */
 export const signals = {
   danger: "oklch(0.53 0.22 18)",
   success: "oklch(0.60 0.13 150)",
   warning: "oklch(0.80 0.15 78)",
   info: "oklch(0.62 0.15 250)",
 } as const;
+
+/**
+ * The text-safe partners of {@link signals} — the same hues darkened until they
+ * clear WCAG AA (4.5:1) against the light paper background. On paper the solids
+ * measure 3.1:1 for `success` and 1.6:1 for `warning`, so **colour small text
+ * with these and fill shapes with the solids**. `danger` needs no darkening; it
+ * is listed so the set is complete and a caller can reach for it unconditionally.
+ *
+ * Mirrors `--success-deep` and friends in `theme.css`, which in dark mode map
+ * straight back to the solids — those already clear AA on the ink surface.
+ */
+export const signalsDeep = {
+  danger: "oklch(0.53 0.22 18)",
+  success: "oklch(0.48 0.12 150)",
+  warning: "oklch(0.50 0.11 78)",
+  info: "oklch(0.50 0.14 250)",
+} as const satisfies Record<keyof typeof signals, string>;
 
 export type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
 
@@ -90,6 +110,7 @@ export type Breakpoint = keyof typeof breakpoints;
 export const tokens = {
   colors,
   signals,
+  signalsDeep,
   accents,
   fonts,
   motion,

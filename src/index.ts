@@ -36,6 +36,12 @@ export {
 } from "./components/data-display/avatar";
 export { Badge, type BadgeProps, badgeVariants } from "./components/data-display/badge";
 export {
+  Code,
+  CodeBlock,
+  type CodeBlockProps,
+  type CodeProps,
+} from "./components/data-display/code";
+export {
   type DataLayout,
   DataList,
   type DataListProps,
@@ -43,7 +49,16 @@ export {
   type DataRowProps,
 } from "./components/data-display/data-list";
 export { Kbd, type KbdProps } from "./components/data-display/kbd";
+export { Link, type LinkProps, linkVariants } from "./components/data-display/link";
 export { Prose, type ProseProps } from "./components/data-display/prose";
+export {
+  Stat,
+  StatDelta,
+  type StatDeltaProps,
+  StatLabel,
+  StatValue,
+  statDeltaVariants,
+} from "./components/data-display/stat";
 export {
   StatusDot,
   type StatusDotProps,
@@ -73,12 +88,32 @@ export {
   type CalloutProps,
   calloutVariants,
 } from "./components/feedback/callout";
+export {
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateDescription,
+  EmptyStateMedia,
+  type EmptyStateProps,
+  EmptyStateTitle,
+  type EmptyStateTitleProps,
+  emptyStateVariants,
+} from "./components/feedback/empty-state";
 export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
 export { Skeleton } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
 export { Toaster, type ToasterProps, toast } from "./components/feedback/toaster";
 export { Button, type ButtonProps, buttonVariants } from "./components/forms/button";
 export { Checkbox, type CheckboxProps } from "./components/forms/checkbox";
+export {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  type FieldLabelProps,
+  type FieldProps,
+  useField,
+  useFieldControlProps,
+} from "./components/forms/field";
 export { Input, type InputProps } from "./components/forms/input";
 export { Label, type LabelProps } from "./components/forms/label";
 export {
@@ -202,6 +237,15 @@ export {
 } from "./components/overlay/dropdown-menu";
 export { InfoTip, type InfoTipProps } from "./components/overlay/info-tip";
 export {
+  Popover,
+  PopoverAnchor,
+  PopoverClose,
+  PopoverContent,
+  type PopoverContentProps,
+  type PopoverProps,
+  PopoverTrigger,
+} from "./components/overlay/popover";
+export {
   Sheet,
   SheetClose,
   type SheetCloseProps,
@@ -230,5 +274,4 @@ export {
   themeInitScript,
   useTheme,
 } from "./lib/theme";
-
 export * from "./tokens";

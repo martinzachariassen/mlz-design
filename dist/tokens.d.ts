@@ -14,12 +14,31 @@ declare const colors: {
     readonly line: "#cbc9be";
     readonly glitchRed: "oklch(0.53 0.22 18)";
 };
-/** Meaning-carrying signal colours, harmonised with the palette. */
+/**
+ * Meaning-carrying signal colours, harmonised with the palette. These are the
+ * **solids** — tuned for fills, borders and dots.
+ */
 declare const signals: {
     readonly danger: "oklch(0.53 0.22 18)";
     readonly success: "oklch(0.60 0.13 150)";
     readonly warning: "oklch(0.80 0.15 78)";
     readonly info: "oklch(0.62 0.15 250)";
+};
+/**
+ * The text-safe partners of {@link signals} — the same hues darkened until they
+ * clear WCAG AA (4.5:1) against the light paper background. On paper the solids
+ * measure 3.1:1 for `success` and 1.6:1 for `warning`, so **colour small text
+ * with these and fill shapes with the solids**. `danger` needs no darkening; it
+ * is listed so the set is complete and a caller can reach for it unconditionally.
+ *
+ * Mirrors `--success-deep` and friends in `theme.css`, which in dark mode map
+ * straight back to the solids — those already clear AA on the ink surface.
+ */
+declare const signalsDeep: {
+    readonly danger: "oklch(0.53 0.22 18)";
+    readonly success: "oklch(0.48 0.12 150)";
+    readonly warning: "oklch(0.50 0.11 78)";
+    readonly info: "oklch(0.50 0.14 250)";
 };
 type AccentName = "cyan" | "blue" | "green" | "rust" | "ink";
 declare const accents: {
@@ -107,6 +126,12 @@ declare const tokens: {
         readonly warning: "oklch(0.80 0.15 78)";
         readonly info: "oklch(0.62 0.15 250)";
     };
+    readonly signalsDeep: {
+        readonly danger: "oklch(0.53 0.22 18)";
+        readonly success: "oklch(0.48 0.12 150)";
+        readonly warning: "oklch(0.50 0.11 78)";
+        readonly info: "oklch(0.50 0.14 250)";
+    };
     readonly accents: {
         readonly cyan: {
             readonly base: "oklch(0.74 0.13 195)";
@@ -164,4 +189,4 @@ declare const tokens: {
 };
 type Tokens = typeof tokens;
 
-export { type AccentName, type Breakpoint, type Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, tokens };
+export { type AccentName, type Breakpoint, type Tokens, accents, animations, breakpoints, colors, fonts, motion, radius, signals, signalsDeep, tokens };
