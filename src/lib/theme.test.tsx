@@ -2,59 +2,11 @@ import "@testing-library/jest-dom/vitest";
 import { act, render, renderHook, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider, themeInitScript, useTheme } from "./theme";
+import { installThemeTestEnv } from "./theme-test-env";
 
-// jsdom ships no matchMedia — install a controllable stub so "system" is testable.
-let prefersDark = false;
-const listeners = new Set<() => void>();
+const env = installThemeTestEnv();
 
-function setSystemDark(value: boolean) {
-  prefersDark = value;
-  for (const fn of listeners) fn();
-}
-
-// jsdom's default opaque origin exposes no localStorage — back it with a Map.
-const store = new Map<string, string>();
-const localStorageMock: Storage = {
-  getItem: (key) => store.get(key) ?? null,
-  setItem: (key, value) => void store.set(key, String(value)),
-  removeItem: (key) => void store.delete(key),
-  clear: () => store.clear(),
-  key: (index) => [...store.keys()][index] ?? null,
-  get length() {
-    return store.size;
-  },
-};
-Object.defineProperty(window, "localStorage", {
-  value: localStorageMock,
-  configurable: true,
-  writable: true,
-});
-
-beforeEach(() => {
-  prefersDark = false;
-  listeners.clear();
-  window.localStorage.clear();
-  document.documentElement.className = "";
-  document.documentElement.removeAttribute("data-accent");
-  document.documentElement.removeAttribute("data-theme");
-  vi.stubGlobal(
-    "matchMedia",
-    (query: string) =>
-      ({
-        get matches() {
-          return query.includes("dark") ? prefersDark : false;
-        },
-        media: query,
-        addEventListener: (_: string, fn: () => void) => listeners.add(fn),
-        removeEventListener: (_: string, fn: () => void) => listeners.delete(fn),
-        // legacy API some libs still call
-        addListener: (fn: () => void) => listeners.add(fn),
-        removeListener: (fn: () => void) => listeners.delete(fn),
-        dispatchEvent: () => true,
-        onchange: null,
-      }) as unknown as MediaQueryList,
-  );
-});
+beforeEach(() => env.reset());
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -99,12 +51,12 @@ describe("ThemeProvider / useTheme", () => {
   });
 
   it("follows prefers-color-scheme under 'system'", () => {
-    prefersDark = true;
+    env.setSystemDark(true);
     const { result } = renderHook(() => useTheme(), {
       wrapper: wrapper({ defaultTheme: "system" }),
     });
     expect(result.current.resolvedTheme).toBe("dark");
-    act(() => setSystemDark(false));
+    act(() => env.setSystemDark(false));
     expect(result.current.resolvedTheme).toBe("light");
     expect(document.documentElement).not.toHaveClass("dark");
   });

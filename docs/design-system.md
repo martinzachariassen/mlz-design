@@ -41,6 +41,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Input` · `Textarea` | accent focus ring, technical mono field         |
 | `Label`    | mono, uppercase field label with `peer-disabled` states |
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
+| `Toggle` · `ToggleGroup` (+ `Item`) | a button that stays pressed (`aria-pressed`); the group is a segmented control (`single`) or a filter bar (`multiple`) |
 | `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
 | `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
 
@@ -83,6 +84,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `BrandMark` · `BrandWordmark` · `BrandLockup` | the logo — the solid Block-M mark (`tile`/`glyph`), the `mlz.` wordmark (accent period), and their `horizontal`/`stacked` lockup — backs favicons; see Brand → Logo |
 | `RepoBanner` | the README header banner — `standard` · `minimal` · `terminal` · `split` layouts, sized for GitHub's README width; one structure, per-project copy |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
+| `ThemeToggle` · `AccentPicker` | the light/dark/system switch and the five accent swatches, wired to `ThemeProvider` — so an app gets the system's headline feature without rebuilding the control |
 | `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
 
 Storybook also ships composed references — the top-level **Patterns** section (dashboard, forms, alerts…) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
