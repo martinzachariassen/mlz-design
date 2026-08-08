@@ -19,6 +19,14 @@ updates:
       # fills Storybook's props tables. Drop this once both support TS 7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # `playwright` is pinned to whatever `@storybook/test-runner` resolves, so
+      # the a11y gate installs a browser the runner can actually launch. Bumping
+      # it on its own doesn't work: bun keeps the runner's nested
+      # `playwright@<old>`, `bunx playwright install` fetches the browser for the
+      # new top-level version, and the gate dies with "Executable doesn't exist"
+      # (#64). It moves deliberately, together with the test runner.
+      - dependency-name: "playwright"
+      - dependency-name: "playwright-core"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
