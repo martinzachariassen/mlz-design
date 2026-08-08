@@ -273,14 +273,22 @@ describe("documentation quotes real token values", () => {
     "src/foundations/Installation.mdx",
     "src/foundations/Theming.mdx",
     "src/foundations/Logo.stories.tsx",
+    "src/foundations/ColourModel.stories.tsx",
   ];
 
   /**
    * Literals that are deliberately *not* MLZ tokens. The override examples show
    * a consuming app picking its own house accent, and would be pointless if they
-   * used ours.
+   * used ours; the dead-zone swatches in ColourModel are the counter-example the
+   * page exists to draw — values no fill may ever take, so they must stay
+   * un-shipped for that section to keep meaning what it says.
    */
-  const ILLUSTRATIVE = new Set(["oklch(0.70 0.15 300)"]);
+  const ILLUSTRATIVE = new Set([
+    "oklch(0.70 0.15 300)",
+    "oklch(0.62 0.14 250)",
+    "oklch(0.62 0.14 148)",
+    "oklch(0.62 0.14 45)",
+  ]);
 
   const shipped = new Set(
     [

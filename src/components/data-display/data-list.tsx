@@ -64,6 +64,20 @@ export interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
   layout?: DataLayout;
 }
 
+/**
+ * One `<dt>`/`<dd>` pair inside a `DataList` — the label on the left, the value
+ * as children.
+ *
+ * Layout is inherited from the parent `DataList`; set `layout` here only to
+ * break one row out of it, typically because the value is long enough that
+ * `justify` would crush it against the label. Set `mono` for values the reader
+ * may need to compare character by character — IPs, hashes, headers, IDs.
+ *
+ * ```tsx
+ * <DataRow label="IP" mono>203.0.113.7</DataRow>
+ * <DataRow label="User agent" mono layout="grid">Mozilla/5.0 …</DataRow>
+ * ```
+ */
 export const DataRow = React.forwardRef<HTMLDivElement, DataRowProps>(
   ({ label, mono, layout, className, children, ...props }, ref) => {
     const inherited = React.useContext(DataListContext);

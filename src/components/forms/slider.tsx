@@ -78,7 +78,11 @@ export const Slider = React.forwardRef<
           // that has to be named — a label on the root is not inherited.
           aria-label={thumbLabels?.[i] ?? (thumbCount === 1 ? rootLabel : undefined)}
           data-slot="slider-thumb"
-          className="block size-4 shrink-0 rounded-full border-[1.5px] border-accent bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
+          // `-deep`, not the base accent: the thumb *is* the control, so its
+          // outline is the only thing marking where it sits. The base fill is
+          // 1.83:1 on paper — under SC 1.4.11 — and, worse, identical to the
+          // range it slides over, so the border vanished on the filled half.
+          className="block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
         />
       ))}
     </SliderPrimitive.Root>

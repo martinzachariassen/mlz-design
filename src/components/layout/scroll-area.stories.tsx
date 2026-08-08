@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Badge } from "../data-display/badge";
-import { ScrollArea } from "./scroll-area";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 import { Separator } from "./separator";
 
 const meta = {
   title: "Components/Layout/ScrollArea",
   component: ScrollArea,
+  subcomponents: { ScrollBar },
   tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {

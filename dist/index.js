@@ -1417,7 +1417,7 @@ var statusDotVariants = cva("relative inline-flex size-2 shrink-0", {
     variant: {
       success: "text-success-deep",
       warning: "text-warning-deep",
-      destructive: "text-destructive",
+      destructive: "text-destructive-deep",
       info: "text-info-deep",
       accent: "text-accent-deep",
       muted: "text-muted-foreground"
@@ -1828,7 +1828,7 @@ function Toaster({ className, toastOptions, ...props }) {
           // The signal colours come from the same tokens Alert and Callout use,
           // so a success toast and a success alert are the same green.
           success: "[&_[data-icon]]:text-success-deep",
-          error: "[&_[data-icon]]:text-destructive",
+          error: "[&_[data-icon]]:text-destructive-deep",
           warning: "[&_[data-icon]]:text-warning-deep",
           info: "[&_[data-icon]]:text-info-deep",
           actionButton: "ml-auto shrink-0 rounded-[var(--radius-sm)] bg-primary px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-primary-foreground",
@@ -1853,7 +1853,7 @@ var buttonVariants = cva(
         accent: "bg-accent text-accent-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--primary)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--primary)]",
         ghost: "bg-transparent text-foreground hover:bg-muted",
         sketch: "border-[1.5px] border-dashed border-primary bg-transparent text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:-rotate-[0.75deg] hover:border-accent hover:shadow-[4px_4px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:-rotate-[0.75deg] focus-visible:border-accent focus-visible:shadow-[4px_4px_0_0_var(--accent)]",
-        destructive: "border-[1.5px] border-destructive bg-transparent text-destructive hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--destructive)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--destructive)]",
+        destructive: "border-[1.5px] border-destructive bg-transparent text-destructive-deep hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--destructive)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--destructive)]",
         link: "text-foreground underline-offset-4 hover:text-[var(--accent-deep)] hover:underline"
       },
       size: {
@@ -2279,7 +2279,7 @@ var FieldError = React35.forwardRef(({ className, children, ...props }, ref) => 
       id: field?.errorId,
       role: "alert",
       "data-slot": "field-error",
-      className: cn("text-[13px] leading-relaxed text-destructive", className),
+      className: cn("text-[13px] leading-relaxed text-destructive-deep", className),
       ...props,
       children
     }
@@ -2511,7 +2511,7 @@ var Slider = React35.forwardRef(({ className, thumbLabels, ...props }, ref) => {
           {
             "aria-label": thumbLabels?.[i] ?? (thumbCount === 1 ? rootLabel : void 0),
             "data-slot": "slider-thumb",
-            className: "block size-4 shrink-0 rounded-full border-[1.5px] border-accent bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
+            className: "block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
           },
           i
         ))
@@ -3476,7 +3476,7 @@ var DropdownMenuItem = React35.forwardRef(({ className, variant = "default", ins
     className: cn(
       row,
       inset && "pl-8",
-      variant === "destructive" && "text-destructive focus:bg-destructive/10 focus:text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive",
+      variant === "destructive" && "text-destructive-deep focus:bg-destructive/10 focus:text-destructive-deep data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive-deep",
       className
     ),
     ...props

@@ -463,6 +463,20 @@ interface DataRowProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Override the layout inherited from the parent `DataList`. */
     layout?: DataLayout;
 }
+/**
+ * One `<dt>`/`<dd>` pair inside a `DataList` — the label on the left, the value
+ * as children.
+ *
+ * Layout is inherited from the parent `DataList`; set `layout` here only to
+ * break one row out of it, typically because the value is long enough that
+ * `justify` would crush it against the label. Set `mono` for values the reader
+ * may need to compare character by character — IPs, hashes, headers, IDs.
+ *
+ * ```tsx
+ * <DataRow label="IP" mono>203.0.113.7</DataRow>
+ * <DataRow label="User agent" mono layout="grid">Mozilla/5.0 …</DataRow>
+ * ```
+ */
 declare const DataRow: React.ForwardRefExoticComponent<DataRowProps & React.RefAttributes<HTMLDivElement>>;
 
 type KbdProps = React.HTMLAttributes<HTMLElement>;
@@ -763,7 +777,7 @@ interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement>, VariantP
  * ```tsx
  * <EmptyState>
  *   <EmptyStateMedia>
- *     <BrandMark variant="glyph" size={28} className="text-accent" />
+ *     <BrandMark variant="glyph" size={28} className="text-accent-deep" />
  *   </EmptyStateMedia>
  *   <EmptyStateTitle>No projects yet</EmptyStateTitle>
  *   <EmptyStateDescription>
@@ -2337,6 +2351,15 @@ interface SheetProps extends VariantProps<typeof sheetVariants> {
  * ```
  */
 declare function Sheet({ open, defaultOpen, onOpenChange, side, className, children, }: SheetProps): React.JSX.Element;
+/**
+ * The scrolling body of a `Sheet` — every sheet needs exactly one, wrapping all
+ * of its content.
+ *
+ * `Sheet` itself is the panel and owns the edge anchoring and the slide-in;
+ * this is the column inside it that scrolls when the content outgrows the
+ * viewport. Keeping them separate is what lets `SheetHeader` stay put while a
+ * long list moves underneath it.
+ */
 declare const SheetContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 /** Title + description block, inset on the right to clear the close button. */
 declare const SheetHeader: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
@@ -2452,6 +2475,26 @@ interface ThemeContextValue {
     accent: AccentName;
     setAccent: (accent: AccentName) => void;
 }
+/**
+ * Owns the theme + accent state and writes both to `<html>`, so every semantic
+ * token below it re-resolves. Put it once at the root of the app.
+ *
+ * It persists each choice to `localStorage` and, while the theme is `"system"`,
+ * follows `prefers-color-scheme` live. State is read on mount, not during
+ * render, so it is safe under SSR — but that also means the first paint uses
+ * the defaults. **Pair it with `themeInitScript()`** in your document head to
+ * apply the stored values before paint; without that, a returning dark-mode
+ * reader gets a flash of light.
+ *
+ * `ThemeToggle` and `AccentPicker` are prebuilt controls that drive it, and
+ * `useTheme` reads it from anywhere underneath.
+ *
+ * ```tsx
+ * <ThemeProvider defaultTheme="system" defaultAccent="cyan">
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ */
 declare function ThemeProvider({ children, defaultTheme, defaultAccent, storageKey, accentStorageKey, enableSystem, attribute, }: ThemeProviderProps): React.JSX.Element;
 /** Read + control the current theme and accent. Must be used under `<ThemeProvider>`. */
 declare function useTheme(): ThemeContextValue;

@@ -94,6 +94,15 @@ export function Sheet({
   );
 }
 
+/**
+ * The scrolling body of a `Sheet` — every sheet needs exactly one, wrapping all
+ * of its content.
+ *
+ * `Sheet` itself is the panel and owns the edge anchoring and the slide-in;
+ * this is the column inside it that scrolls when the content outgrows the
+ * viewport. Keeping them separate is what lets `SheetHeader` stay put while a
+ * long list moves underneath it.
+ */
 export const SheetContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => {
     const ctx = useModal();

@@ -93,6 +93,26 @@ function applyToDocument(
   root.setAttribute("data-accent", accent);
 }
 
+/**
+ * Owns the theme + accent state and writes both to `<html>`, so every semantic
+ * token below it re-resolves. Put it once at the root of the app.
+ *
+ * It persists each choice to `localStorage` and, while the theme is `"system"`,
+ * follows `prefers-color-scheme` live. State is read on mount, not during
+ * render, so it is safe under SSR — but that also means the first paint uses
+ * the defaults. **Pair it with `themeInitScript()`** in your document head to
+ * apply the stored values before paint; without that, a returning dark-mode
+ * reader gets a flash of light.
+ *
+ * `ThemeToggle` and `AccentPicker` are prebuilt controls that drive it, and
+ * `useTheme` reads it from anywhere underneath.
+ *
+ * ```tsx
+ * <ThemeProvider defaultTheme="system" defaultAccent="cyan">
+ *   <App />
+ * </ThemeProvider>
+ * ```
+ */
 export function ThemeProvider({
   children,
   defaultTheme = "system",

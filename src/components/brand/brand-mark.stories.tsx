@@ -5,6 +5,7 @@ import { BrandLockup, BrandMark, BrandWordmark } from "./brand-mark";
 const meta = {
   title: "Brand/BrandMark",
   component: BrandMark,
+  subcomponents: { BrandWordmark, BrandLockup },
   tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {

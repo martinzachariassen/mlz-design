@@ -102,7 +102,7 @@ export const DropdownMenuItem = React.forwardRef<
       row,
       inset && "pl-8",
       variant === "destructive" &&
-        "text-destructive focus:bg-destructive/10 focus:text-destructive data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive",
+        "text-destructive-deep focus:bg-destructive/10 focus:text-destructive-deep data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive-deep",
       className,
     )}
     {...props}

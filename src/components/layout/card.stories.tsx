@@ -131,7 +131,7 @@ export const Feature: Story = {
     <Card className="w-80">
       <CardHeader>
         <div className="mb-2 flex size-11 items-center justify-center rounded-[var(--radius-md)] border border-border bg-accent-subtle">
-          <BrandMark variant="glyph" size={22} className="text-accent" />
+          <BrandMark variant="glyph" size={22} className="text-accent-deep" />
         </div>
         <CardTitle>Token-driven</CardTitle>
         <CardDescription>
