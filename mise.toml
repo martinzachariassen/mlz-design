@@ -51,10 +51,13 @@ run = "bun run build:storybook"
 [tasks.dist-check]
 description = "Fail if committed dist/ is stale (mirrors the ci.yml step)"
 depends = ["build"]
+# Excludes the .d.ts: TypeScript's union member ordering is not stable across
+# rebuilds, so comparing it fails at random. See the note in ci.yml.
 run = '''
-if [ -n "$(git status --porcelain -- dist)" ]; then
+stale=$(git status --porcelain -- dist ':(exclude)dist/*.d.ts')
+if [ -n "$stale" ]; then
   echo "dist/ is stale — run 'bun run build' and commit the result." >&2
-  git status --porcelain -- dist
+  echo "$stale"
   exit 1
 fi
 '''
