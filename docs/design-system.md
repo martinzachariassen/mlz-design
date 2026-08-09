@@ -44,6 +44,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Checkbox` · `Switch` | accessible native controls with styled indicators |
 | `Slider` | a value picked by dragging — pass an array of two or more for a range. Radix owns arrows / PageUp-Down / Home-End, and each thumb is its own tab stop. Pair it with a number field: a slider alone makes an exact value slow to reach |
 | `Toggle` · `ToggleGroup` (+ `Item`) | a button that stays pressed (`aria-pressed`); the group is a segmented control (`single`) or a filter bar (`multiple`) |
+| `CopyButton` | a `Button` that puts a string on the clipboard and says so — the label swaps to a check plus "Copied" and returns on its own. A refused copy leaves the label alone rather than claiming success. `useCopyToClipboard` is the same behaviour without the button |
 | `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
 | `Combobox` | a `Select` you can type into — one value from a list long enough that scrolling it is a hunt (~15 options up). `Command` inside a `Popover`; joins a `Field` automatically. Below that line, `Select` costs one click instead of a click plus recall |
 | `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
@@ -57,6 +58,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Alert` (+ `Title`/`Description`) | `default` · `info` · `success` · `warning` · `destructive` signal panels |
 | `Callout`  | compact, dot-led inline note (lighter than `Alert`) for dense lists of findings/checks; semantic `tone` |
 | `StatusDot` | semantic status dot (`success`/`warning`/`destructive`/`info`/`accent`/`muted`) with an optional pulsing ring |
+| `StatusChip` | one live finding as a dot-led pill on a `*-subtle` wash, in sentence case and the reading face — a row of them is a status stripe. `Badge` labels what something *is*; a chip reports how it *is right now* |
 | `Avatar` (+ `Image`/`Fallback`/`Group`) | initials-first; `xs`–`xl`, circle/square, presence `status`, overlap group with `+N` |
 | `ProjectCard` | portfolio card — on-brand cover, tags, whole-card link, `featured` horizontal layout |
 | `Dialog` (+ `Content`/`Header`/`Title`/`Description`/`Footer`/`Close`) | modal on the native `<dialog>` — focus-trap, Esc, no dependency |
@@ -102,7 +104,8 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `RepoBanner` | the README header banner — `standard` · `minimal` · `terminal` · `split` layouts, sized for GitHub's README width; one structure, per-project copy |
 | `SocialCard` | a 1200×630 Open-Graph template, ready for Satori / `@vercel/og` |
 | `ThemeToggle` · `AccentPicker` | the light/dark/system switch and the five accent swatches, wired to `ThemeProvider` — so an app gets the system's headline feature without rebuilding the control |
-| `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers |
+| `GridBackground` · `FloatingMarks` · `GlitchText` | the signature decorative layers. `GlitchText` bursts on `ambient`, on `hover`, or on demand via `burstRef` when `trigger="manual"` — for when the glitch is feedback rather than atmosphere |
+| `MarginNote` | the hand-written aside, optionally with a sketched arrow pointing at what it annotates. Once per view: it's the remark you'd pencil next to a printout, never something the reader has to act on |
 
 Storybook also ships composed references — the top-level **Patterns** section (application shell, dashboard, forms, feedback and states) — showing how to build real UIs in the system's voice, responsive by default. `cn()` (clsx + tailwind-merge) is exported for your own composition.
 

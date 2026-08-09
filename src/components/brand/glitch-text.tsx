@@ -2,7 +2,12 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { named } from "../../lib/named";
 
-export type GlitchTrigger = "ambient" | "hover";
+export type GlitchTrigger = "ambient" | "hover" | "manual";
+
+export interface GlitchTextHandle {
+  /** Fire one burst now. A no-op under `prefers-reduced-motion`. */
+  burst: () => void;
+}
 
 export interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
   /** The text to render and glitch. */
@@ -11,6 +16,12 @@ export interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanEleme
   trigger?: GlitchTrigger;
   /** Ambient burst cadence, `[minMs, maxMs]`. */
   interval?: readonly [number, number];
+  /**
+   * A handle for firing bursts yourself, for `trigger="manual"`. Separate from
+   * `ref`, which stays the wrapper element — so reaching for one never costs you
+   * the other.
+   */
+  burstRef?: React.Ref<GlitchTextHandle>;
 }
 
 function prefersReducedMotion(): boolean {
@@ -32,13 +43,23 @@ function prefersReducedMotion(): boolean {
  * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
  *   loop, paused when the tab is hidden — its resting state.
  * - `trigger="hover"`: a single burst each time the pointer enters.
+ * - `trigger="manual"`: nothing fires on its own; you call `burst()` through
+ *   `burstRef` when something happens worth marking — a value being copied, a
+ *   reading coming back changed. Reach for it when the glitch is *feedback*
+ *   rather than atmosphere.
+ *
+ * ```tsx
+ * const glitch = React.useRef<GlitchTextHandle>(null);
+ * <GlitchText text={ip} trigger="manual" burstRef={glitch} />;
+ * // …later: glitch.current?.burst();
+ * ```
  *
  * Styling lives on the wrapper — pass a `className` with the type family, size
  * and tracking you want.
  */
 export const GlitchText = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLSpanElement, GlitchTextProps>(
-    ({ text, trigger = "ambient", interval = [900, 3600], className, ...props }, ref) => {
+    ({ text, trigger = "ambient", interval = [900, 3600], burstRef, className, ...props }, ref) => {
       const containerRef = React.useRef<HTMLSpanElement | null>(null);
 
       const setRefs = React.useCallback(
@@ -73,6 +94,16 @@ export const GlitchText = /* @__PURE__ */ named(
           });
         }
       }, []);
+
+      React.useImperativeHandle(
+        burstRef,
+        () => ({
+          burst: () => {
+            if (!prefersReducedMotion()) burst();
+          },
+        }),
+        [burst],
+      );
 
       React.useEffect(() => {
         if (trigger !== "ambient" || prefersReducedMotion()) return;

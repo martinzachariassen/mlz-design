@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CheckIcon } from "../../lib/icons";
 import { named } from "../../lib/named";
+import { useCopyToClipboard } from "../../lib/use-copy-to-clipboard";
 
 export type CodeProps = React.HTMLAttributes<HTMLElement>;
 
@@ -62,24 +63,7 @@ export interface CodeBlockProps extends Omit<React.HTMLAttributes<HTMLDivElement
 export const CodeBlock = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, CodeBlockProps>(
     ({ children, filename, copyable, copyLabel = "Copy code", className, ...props }, ref) => {
-      const [copied, setCopied] = React.useState(false);
-
-      // Reset the confirmation, and cancel the timer if the block unmounts first.
-      React.useEffect(() => {
-        if (!copied) return;
-        const timer = setTimeout(() => setCopied(false), 2000);
-        return () => clearTimeout(timer);
-      }, [copied]);
-
-      const copy = async () => {
-        try {
-          await navigator.clipboard.writeText(children);
-          setCopied(true);
-        } catch {
-          // Insecure context, or permission refused. Nothing useful to say — the
-          // code is selectable, which is the fallback the user already knows.
-        }
-      };
+      const { copied, copy } = useCopyToClipboard();
 
       return (
         <div
@@ -99,7 +83,7 @@ export const CodeBlock = /* @__PURE__ */ named(
               {copyable ? (
                 <button
                   type="button"
-                  onClick={copy}
+                  onClick={() => void copy(children)}
                   className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
                 >
                   {copied ? <CheckIcon className="size-3.5 text-success-deep" /> : null}

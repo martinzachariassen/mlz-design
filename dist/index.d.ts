@@ -103,7 +103,11 @@ interface FloatingMarksProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 declare const FloatingMarks: React.ForwardRefExoticComponent<FloatingMarksProps & React.RefAttributes<HTMLDivElement>>;
 
-type GlitchTrigger = "ambient" | "hover";
+type GlitchTrigger = "ambient" | "hover" | "manual";
+interface GlitchTextHandle {
+    /** Fire one burst now. A no-op under `prefers-reduced-motion`. */
+    burst: () => void;
+}
 interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
     /** The text to render and glitch. */
     text: string;
@@ -111,6 +115,12 @@ interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "c
     trigger?: GlitchTrigger;
     /** Ambient burst cadence, `[minMs, maxMs]`. */
     interval?: readonly [number, number];
+    /**
+     * A handle for firing bursts yourself, for `trigger="manual"`. Separate from
+     * `ref`, which stays the wrapper element — so reaching for one never costs you
+     * the other.
+     */
+    burstRef?: React.Ref<GlitchTextHandle>;
 }
 /**
  * The MLZ cyberpunk text effect: text is split per character and random chars
@@ -123,6 +133,16 @@ interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "c
  * - `trigger="ambient"` (default): random 1–4 char bursts on a self-scheduling
  *   loop, paused when the tab is hidden — its resting state.
  * - `trigger="hover"`: a single burst each time the pointer enters.
+ * - `trigger="manual"`: nothing fires on its own; you call `burst()` through
+ *   `burstRef` when something happens worth marking — a value being copied, a
+ *   reading coming back changed. Reach for it when the glitch is *feedback*
+ *   rather than atmosphere.
+ *
+ * ```tsx
+ * const glitch = React.useRef<GlitchTextHandle>(null);
+ * <GlitchText text={ip} trigger="manual" burstRef={glitch} />;
+ * // …later: glitch.current?.burst();
+ * ```
  *
  * Styling lives on the wrapper — pass a `className` with the type family, size
  * and tracking you want.
@@ -151,6 +171,40 @@ interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
  * Render it as the first child of a `relative` container; it fills that box.
  */
 declare const GridBackground: React.ForwardRefExoticComponent<GridBackgroundProps & React.RefAttributes<HTMLDivElement>>;
+
+type MarginNoteArrow = "none" | "up-left" | "up-right" | "down-left" | "down-right";
+interface MarginNoteProps extends React.HTMLAttributes<HTMLElement> {
+    /**
+     * Draw a hand-sketched arrow pointing from the note at whatever it annotates.
+     * The four directions are the same stroke mirrored, so they stay one hand.
+     */
+    arrow?: MarginNoteArrow;
+    /** The element to render. Defaults to `<aside>`. */
+    as?: React.ElementType;
+}
+/**
+ * One stroke of the same pen: the hand-written note in the margin is where the
+ * system stops explaining and starts talking. Set in `--font-hand` at a muted
+ * weight, optionally with a sketched arrow pointing at what it's about.
+ *
+ * **Use it once per view, for an aside the interface can't say in its own voice**
+ * — the remark you'd pencil next to a printout. It is decoration around meaning,
+ * never the meaning itself: anything a reader must act on belongs in `Callout` or
+ * `Alert`, and anything they must *read* belongs in `Text` or `Prose`, which are
+ * set in the reading face. The hand is deliberately hard to skim, so a paragraph
+ * of it is a bug.
+ *
+ * The arrow is inline SVG in `currentColor` and `aria-hidden`, so it inherits the
+ * note's colour and says nothing to a screen reader — the sentence carries the
+ * whole message.
+ *
+ * ```tsx
+ * <MarginNote arrow="up-left">
+ *   this is the address every site you visit sees
+ * </MarginNote>
+ * ```
+ */
+declare const MarginNote: React.ForwardRefExoticComponent<MarginNoteProps & React.RefAttributes<HTMLElement>>;
 
 interface ProjectCardProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
     /** The project name — the card's heading. */
@@ -599,6 +653,49 @@ interface StatDeltaProps extends React.HTMLAttributes<HTMLParagraphElement>, Var
  */
 declare const StatDelta: React.ForwardRefExoticComponent<StatDeltaProps & React.RefAttributes<HTMLParagraphElement>>;
 
+/**
+ * The wash and the hairline are both drawn from the same fill role: `bg-*-subtle`
+ * is a ~12–16% mix over the page, and the border is a 40% mix that reads as a
+ * tinted hairline rather than an outline. Both are surface positions, so the fill
+ * rung is the right one here — the dot inside takes `-deep` via `StatusDot`.
+ */
+declare const statusChipVariants: (props?: ({
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+interface StatusChipProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusChipVariants> {
+    /** Show the leading `StatusDot`. Turn it off for a chip that is pure label. */
+    dot?: boolean;
+    /** Pulse the leading dot, for a state that is being measured right now. */
+    pulse?: boolean;
+}
+/**
+ * A dot-led pill for one live finding, written the way you'd say it: sentence
+ * case, in the reading face, on a tinted wash. The status stripe across the top
+ * of a diagnostic page is a row of these.
+ *
+ * **Reach for `Badge` instead** when the value is a stable attribute of the thing
+ * beside it — a category, a version, a tag. A badge is tracked-out uppercase mono
+ * because it's a *label*; a chip is a short sentence about state, so it stays in
+ * `--font-sans` and normal case. **Reach for `StatusDot`** when the dot alone is
+ * the whole message next to existing text, and for **`Callout` or `Alert`** when
+ * the reader has to do something about it — a chip reports, it doesn't instruct.
+ *
+ * Colour never carries the meaning on its own: the wash is a tint of the same
+ * role as the dot, and the text says which it is.
+ *
+ * There is no `asChild` here on purpose. A chip reports a reading; it is not a
+ * control, and the dot it injects has nowhere to go inside someone else's
+ * element. If you want a pill the reader can press — a filter, a toggle — that's
+ * `Toggle`, which is built to be one.
+ *
+ * ```tsx
+ * <StatusChip variant="success">No proxy or VPN detected</StatusChip>
+ * <StatusChip variant="warning">Timezone differs from your IP</StatusChip>
+ * <StatusChip variant="accent" pulse>Measuring…</StatusChip>
+ * ```
+ */
+declare const StatusChip: React.ForwardRefExoticComponent<StatusChipProps & React.RefAttributes<HTMLSpanElement>>;
+
 declare const statusDotVariants: (props?: ({
     variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
@@ -964,6 +1061,40 @@ interface ComboboxProps {
  * ```
  */
 declare const Combobox: React.ForwardRefExoticComponent<ComboboxProps & React.RefAttributes<HTMLButtonElement>>;
+
+interface CopyButtonProps extends Omit<ButtonProps, "children" | "onClick" | "asChild"> {
+    /** The text handed to the clipboard, verbatim. */
+    value: string;
+    /** Resting label. */
+    label?: React.ReactNode;
+    /** Label shown for `resetMs` after a successful copy. */
+    copiedLabel?: React.ReactNode;
+    /** How long the confirmation stays up, in ms. */
+    resetMs?: number;
+    /** Called with whether the copy actually landed. */
+    onCopied?: (ok: boolean) => void;
+}
+/**
+ * A `Button` that puts a string on the clipboard and says so — the label swaps to
+ * a check plus "Copied" and returns on its own.
+ *
+ * Reach for it any time the point of the control is "give me that value": an IP,
+ * a token, a command, an ID. It exists because the alternative is every app
+ * re-writing the same `writeText` + `setTimeout` pair, each with a slightly
+ * different failure story. **Reach for `CodeBlock copyable`** when the thing being
+ * copied is a visible block of code — that already has one of these in its header.
+ *
+ * The copy can be refused (insecure context, denied permission). When it is, the
+ * label stays put rather than claiming success, and `onCopied(false)` fires — the
+ * value is still selectable, which is the fallback people already know. The
+ * button is otherwise a plain `Button`, so every `variant` and `size` applies.
+ *
+ * ```tsx
+ * <CopyButton value={ip} label="Copy IP" />
+ * <CopyButton value={report} variant="ghost" size="sm" copiedLabel="Saved" />
+ * ```
+ */
+declare const CopyButton: React.ForwardRefExoticComponent<CopyButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
 type LabelProps = React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
 /**
@@ -2473,4 +2604,27 @@ interface ThemeInitScriptOptions {
  */
 declare function themeInitScript(options?: ThemeInitScriptOptions): string;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useField, useFieldControlProps, useTheme };
+interface UseCopyToClipboard {
+    /** True from a successful copy until `resetMs` has passed. */
+    copied: boolean;
+    /** Writes `text` to the clipboard. Resolves to whether it landed. */
+    copy: (text: string) => Promise<boolean>;
+}
+/**
+ * Clipboard copy with a self-clearing confirmation flag — the "Copied ✓" that
+ * fades back to "Copy" on its own.
+ *
+ * `navigator.clipboard` needs a secure context and can be refused outright, so
+ * `copy` reports whether it worked rather than throwing: a failed copy leaves the
+ * label alone, which is honest, and the content is still selectable by hand. The
+ * reset timer is cancelled on unmount, so a component that disappears mid-flash
+ * doesn't set state afterwards.
+ *
+ * ```tsx
+ * const { copied, copy } = useCopyToClipboard();
+ * <button onClick={() => copy(value)}>{copied ? "Copied" : "Copy"}</button>
+ * ```
+ */
+declare function useCopyToClipboard(resetMs?: number): UseCopyToClipboard;
+
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, CopyButton, type CopyButtonProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextHandle, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, MarginNote, type MarginNoteArrow, type MarginNoteProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusChip, type StatusChipProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, type UseCopyToClipboard, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };

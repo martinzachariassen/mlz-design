@@ -9,10 +9,16 @@ export {
 export { FloatingMarks, type FloatingMarksProps } from "./components/brand/floating-marks";
 export {
   GlitchText,
+  type GlitchTextHandle,
   type GlitchTextProps,
   type GlitchTrigger,
 } from "./components/brand/glitch-text";
 export { GridBackground, type GridBackgroundProps } from "./components/brand/grid-background";
+export {
+  MarginNote,
+  type MarginNoteArrow,
+  type MarginNoteProps,
+} from "./components/brand/margin-note";
 export { ProjectCard, type ProjectCardProps } from "./components/brand/project-card";
 export { RepoBanner, type RepoBannerProps } from "./components/brand/repo-banner";
 export { SocialCard, type SocialCardProps } from "./components/brand/social-card";
@@ -59,6 +65,11 @@ export {
   StatValue,
   statDeltaVariants,
 } from "./components/data-display/stat";
+export {
+  StatusChip,
+  type StatusChipProps,
+  statusChipVariants,
+} from "./components/data-display/status-chip";
 export {
   StatusDot,
   type StatusDotProps,
@@ -111,6 +122,7 @@ export {
   type ComboboxOption,
   type ComboboxProps,
 } from "./components/forms/combobox";
+export { CopyButton, type CopyButtonProps } from "./components/forms/copy-button";
 export {
   Field,
   FieldDescription,
@@ -334,4 +346,8 @@ export {
   themeInitScript,
   useTheme,
 } from "./lib/theme";
+export {
+  type UseCopyToClipboard,
+  useCopyToClipboard,
+} from "./lib/use-copy-to-clipboard";
 export * from "./tokens";
