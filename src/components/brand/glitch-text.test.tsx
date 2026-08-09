@@ -1,7 +1,8 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
+import * as React from "react";
 import { describe, expect, it } from "vitest";
-import { GlitchText } from "./glitch-text";
+import { GlitchText, type GlitchTextHandle } from "./glitch-text";
 
 describe("GlitchText", () => {
   it("exposes the full text to assistive tech", () => {
@@ -21,5 +22,23 @@ describe("GlitchText", () => {
   it("keeps a custom className on the wrapper", () => {
     const { container } = render(<GlitchText text="x" className="font-hand" />);
     expect(container.firstChild).toHaveClass("font-hand");
+  });
+
+  it("fires a burst on demand through burstRef, and not before", () => {
+    const handle = React.createRef<GlitchTextHandle>();
+    const { container } = render(
+      <GlitchText text="203.0.113.7" trigger="manual" burstRef={handle} />,
+    );
+
+    expect(container.querySelector(".animate-glitch")).not.toBeInTheDocument();
+
+    act(() => handle.current?.burst());
+    expect(container.querySelector(".animate-glitch")).toBeInTheDocument();
+  });
+
+  it("still hands the wrapper element to a plain ref", () => {
+    const ref = React.createRef<HTMLSpanElement>();
+    render(<GlitchText text="x" trigger="manual" ref={ref} />);
+    expect(ref.current).toBeInstanceOf(HTMLSpanElement);
   });
 });

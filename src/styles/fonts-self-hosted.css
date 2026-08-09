@@ -9,17 +9,26 @@
 
        @import "@martinzachariassen/design/styles/fonts-self-hosted.css";
 
-   Currently ships the two workhorse UI families:
-     Space Grotesk (400, 500, 600, 700)  → sans / grotesk (body, UI & prose — the
-                                            reading face and the default; maps to
-                                            --font-sans and --font-grotesk)
-     Space Mono    (400, 700)            → mono           (data, code, IDs &
-                                            tracked eyebrows — never long prose;
-                                            maps to --font-mono)
+   Ships all four families the `--font-*` roles name, so nothing in the system
+   silently falls back to a system face under a strict CSP:
 
-   The display families (Architects Daughter → hand, Instrument Serif → serif)
-   are not bundled here yet; use fonts.css or self-host them separately if needed.
-   The `--font-*` stacks in theme.css carry robust system fallbacks regardless.
+     Space Grotesk       (400, 500, 600, 700)  → sans / grotesk (body, UI & prose —
+                                                  the reading face and the default;
+                                                  maps to --font-sans and
+                                                  --font-grotesk)
+     Space Mono          (400, 700)            → mono   (data, code, IDs & tracked
+                                                  eyebrows — never long prose; maps
+                                                  to --font-mono)
+     Architects Daughter (400)                 → hand   (display only — margin notes
+                                                  and annotations; maps to
+                                                  --font-hand)
+     Instrument Serif    (400, 400 italic)     → serif  (editorial display, opt-in;
+                                                  maps to --font-serif)
+
+   Every face is the `latin` subset (U+0000–00FF and friends), matching what the
+   system's own components and copy need; reach for fonts.css if you need
+   latin-ext. The `--font-*` stacks in theme.css still carry robust system
+   fallbacks regardless.
    ============================================================================= */
 
 /* Space Mono — data / code / IDs & tracked eyebrows (maps to --font-mono). */
@@ -67,4 +76,31 @@
   font-weight: 700;
   font-display: swap;
   src: url("./fonts/space-grotesk-700.woff2") format("woff2");
+}
+
+/* Architects Daughter — the hand: margin notes and annotations, never body copy
+   (maps to --font-hand). */
+@font-face {
+  font-family: "Architects Daughter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/architects-daughter-400.woff2") format("woff2");
+}
+
+/* Instrument Serif — editorial display, opt-in (maps to --font-serif). The
+   italic is a real cut, so numerals and asides don't get a synthesised oblique. */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/instrument-serif-400.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/instrument-serif-400-italic.woff2") format("woff2");
 }
