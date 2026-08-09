@@ -76,7 +76,9 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Link`     | a real anchor with the system focus ring — `default`/`subtle`/`quiet`, `external` for a new tab with `rel="noopener noreferrer"` and a screen-reader note. If it changes a URL it's a `Link`; if it *does* something it's `Button variant="link"` |
 | `Stat` (+ `Label`/`Value`/`Delta`) | one headline measurement. The label reads first to assistive tech, the number dominates visually; `Delta` colours by direction on tabular figures |
 | `Table` (+ `Header`/`Body`/`Footer`/`Row`/`Head`/`Cell`/`Caption`) | the same fields across many rows — mono column headers, hairline rules, hover tint; scrolls inside its own focusable box when wider than its container |
-| `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value) or `layout="grid"` (eyebrow-label column, collapses below 560px), optional `mono` value |
+| `DataList` (+ `DataRow`) | definition list for key/value facts; `layout="justify"` (dashed rows, right-aligned value), `layout="grid"` (eyebrow-label column, collapses below 560px) or `layout="ledger"` (grid plus the ruled margin — rules down the left edge and between label and value, so several lists sit straight on the page unboxed), optional `mono` value |
+| `Readout` (+ `ReadoutCell`) | the band of headline readings across the top of a page — a `<dl>` of equal, hairline-divided cells, ruled top and bottom, each an eyebrow label over a one-line value with an optional dot. It never wraps: below 720px it becomes a snap-scroller, and values clip rather than reflow. `DataList` is the detail it summarises; `Stat` is one number at display scale |
+| `FindingList` (+ `FindingItem`) | a run of checks and their results — dot, finding, and a sentence explaining it, hanging off one rule. Sits between `Callout` (one thing, and you must act on it) and `StatusChip` (short enough to need no explanation) |
 | `Collapsible` (+ `Trigger`/`Content`) | one thing that opens and closes — a "show more", a nav section. Reach for `Accordion` the moment there are several that belong together: a row of independent collapsibles is an accordion with the keyboard support left out |
 | `ScrollArea` (+ `ScrollBar`) | a bounded scrolling panel with a scrollbar that matches the system. Scrolling stays native — only the bar is restyled — so use it where the bar is part of the design, never around the document |
 | `Accordion` (+ `Item`/`Trigger`/`Content`) | disclosure on Radix — WAI-ARIA keyboard pattern, `type="single"`/`"multiple"`, `collapsible`, fluid `grid-rows` open/close |
@@ -85,6 +87,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `EmptyState` (+ `Media`/`Title`/`Description`/`Actions`) | what a list shows when it holds nothing — `dashed`/`outline`/`plain`. Not for errors (that's `Alert`) and not for pending data (that's `Skeleton`) |
 | `Progress` · `Skeleton` · `Spinner` | determinate bar · loading placeholder · reduced-motion-aware ring |
 | `Separator` · `Kbd` | hairline rule (optional label) · keyboard key   |
+| `SectionHeading` | a tracked-out mono section label whose hairline runs from the words to the edge of the column, with optional `actions` past the rule. What lets a long page be legible without boxing every section |
 
 ### Layout & responsive
 

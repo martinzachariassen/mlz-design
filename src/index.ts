@@ -58,6 +58,11 @@ export { Kbd, type KbdProps } from "./components/data-display/kbd";
 export { Link, type LinkProps, linkVariants } from "./components/data-display/link";
 export { Prose, type ProseProps } from "./components/data-display/prose";
 export {
+  Readout,
+  ReadoutCell,
+  type ReadoutCellProps,
+} from "./components/data-display/readout";
+export {
   Stat,
   StatDelta,
   type StatDeltaProps,
@@ -109,6 +114,11 @@ export {
   type EmptyStateTitleProps,
   emptyStateVariants,
 } from "./components/feedback/empty-state";
+export {
+  FindingItem,
+  type FindingItemProps,
+  FindingList,
+} from "./components/feedback/finding-list";
 export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
 export { Skeleton } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
@@ -228,6 +238,7 @@ export {
   ScrollBar,
   type ScrollBarProps,
 } from "./components/layout/scroll-area";
+export { SectionHeading, type SectionHeadingProps } from "./components/layout/section-heading";
 export { Separator, type SeparatorProps } from "./components/layout/separator";
 export {
   Tabs,

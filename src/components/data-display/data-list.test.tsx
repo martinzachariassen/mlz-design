@@ -76,4 +76,21 @@ describe("DataList", () => {
       "justify",
     );
   });
+
+  it("draws the ruled margin in the ledger layout", () => {
+    const { container } = render(
+      <DataList layout="ledger">
+        <DataRow label="k">v</DataRow>
+      </DataList>,
+    );
+    expect(container.querySelector('[data-slot="data-list"]')?.className).toContain("border-l");
+    const row = container.querySelector('[data-slot="data-row"]');
+    // Ledger keeps the grid's columns …
+    expect(row?.className).toContain("grid-cols-[var(--mlz-data-label,8rem)_minmax(0,1fr)]");
+    // … but rules the top of each row instead of the bottom, so the run reads as
+    // one block hanging off the list's edge.
+    expect(row?.className).toContain("border-t");
+    expect(row?.className).not.toContain("border-b");
+    expect(container.querySelector("dd")?.className).toContain("border-l");
+  });
 });
