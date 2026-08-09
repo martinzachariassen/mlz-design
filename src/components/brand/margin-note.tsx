@@ -30,10 +30,15 @@ export interface MarginNoteProps extends React.HTMLAttributes<HTMLElement> {
  * note's colour and says nothing to a screen reader — the sentence carries the
  * whole message.
  *
+ * The measure is 24ch — a margin's width. Widen it with `--mlz-note-measure`
+ * when the note sits in the main column under a headline rather than beside it.
+ *
  * ```tsx
  * <MarginNote arrow="up-left">
  *   this is the address every site you visit sees
  * </MarginNote>
+ *
+ * <MarginNote arrow="up-left" style={{ "--mlz-note-measure": "44ch" }}>…</MarginNote>
  * ```
  */
 export const MarginNote = /* @__PURE__ */ named(
@@ -76,7 +81,11 @@ export const MarginNote = /* @__PURE__ */ named(
           {...props}
         >
           {below ? null : sketch}
-          <p className="m-0 max-w-[24ch]">{children}</p>
+          {/* A note in a true margin wants a narrow measure; one sitting under a
+              headline in the main column wants a wider one. The measure is a
+              variable rather than a prop so it can be set from a class, and the
+              default is the narrow case. */}
+          <p className="m-0 max-w-[var(--mlz-note-measure,24ch)]">{children}</p>
           {below ? sketch : null}
         </Component>
       );

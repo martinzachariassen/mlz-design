@@ -12,9 +12,9 @@ const meta = {
   argTypes: {
     layout: {
       description:
-        "Cascaded to every `DataRow`. `justify` right-aligns short values against a dashed rule; `grid` gives each row a fixed eyebrow-label column.",
+        "Cascaded to every `DataRow`. `justify` right-aligns short values against a dashed rule; `grid` gives each row a fixed eyebrow-label column; `ledger` is `grid` plus the ruled margin.",
       control: "inline-radio",
-      options: ["justify", "grid"],
+      options: ["justify", "grid", "ledger"],
     },
   },
 } satisfies Meta<typeof DataList>;
@@ -79,6 +79,29 @@ export const GridWideLabels: Story = {
       <DataRow label="Reverse DNS" mono>
         no-ptr.example.net
       </DataRow>
+    </DataList>
+  ),
+};
+
+/**
+ * `layout="ledger"` keeps the grid's columns and adds the rules: one down the
+ * left edge of the list, one between label and value, and lighter hairlines
+ * between rows. It's how several lists can sit straight on the page without
+ * being boxed — the rules do the work the card borders would have done. Pair it
+ * with `SectionHeading`, whose own rule closes the top of the block.
+ */
+export const Ledger: Story = {
+  render: () => (
+    <DataList layout="ledger" className="w-96">
+      <DataRow label="IPv4 exit" mono>
+        203.0.113.7
+      </DataRow>
+      <DataRow label="IPv6 exit">not detected — IPv4-only or blocked</DataRow>
+      <DataRow label="Operator">Telenor Norge AS</DataRow>
+      <DataRow label="ASN" mono>
+        AS2119
+      </DataRow>
+      <DataRow label="Type">consumer line</DataRow>
     </DataList>
   ),
 };
