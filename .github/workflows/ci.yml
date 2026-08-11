@@ -34,6 +34,9 @@ jobs:
       - run: bun run lint
       - run: bun run typecheck
       - run: bun run test
+      # Fails when a component or token is added without regenerating the
+      # skill's references — same drift guard as the dist-check below.
+      - run: bun run skill:check
       - run: bun run build
       # A `major` changeset must be deliberate: the versioning policy
       # (docs/VERSIONING.md) keeps this package on 0.x, so a major bump merged

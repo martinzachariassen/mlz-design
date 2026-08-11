@@ -38,6 +38,26 @@ run = "bun run typecheck"
 description = "Vitest + Testing Library"
 run = "bun run test"
 
+[tasks.skill-check]
+description = "Fail if the mlz-design skill's generated references are stale"
+run = "bun run skill:check"
+
+[tasks.skill-inventory]
+description = "Regenerate the skill's component + token references from src/"
+run = "bun run skill:inventory"
+
+# `.claude/` is gitignored local agent state, so the skill and the subagent are
+# committed at skills/ and agents/ (which is also what npm publishes) and linked
+# in from there. Run once per clone.
+[tasks.agent-link]
+description = "Symlink the committed skill + subagent into .claude/ for this clone"
+run = '''
+mkdir -p .claude/skills .claude/agents
+ln -sfn ../../skills/mlz-design .claude/skills/mlz-design
+ln -sfn ../../agents/design-review.md .claude/agents/design-review.md
+echo "linked: .claude/skills/mlz-design, .claude/agents/design-review.md"
+'''
+
 # ── Build ────────────────────────────────────────────────────────────────────
 [tasks.build]
 description = "Build the package to dist/ (ESM + d.ts + styles)"
@@ -73,8 +93,8 @@ bunx concurrently -k -s first -n "SB,A11Y" -c "magenta,blue" \
 
 # ── Aggregates ───────────────────────────────────────────────────────────────
 [tasks.check]
-description = "Run all fast checks (lint · typecheck · test)"
-depends = ["lint", "typecheck", "test"]
+description = "Run all fast checks (lint · typecheck · test · skill-check)"
+depends = ["lint", "typecheck", "test", "skill-check"]
 
 # Mirrors ci.yml exactly, including the two gates a plain build misses: the
 # stale-dist check and the axe pass. Without them a green local run could still
