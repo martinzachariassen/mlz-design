@@ -26,4 +26,21 @@ describe("Alert", () => {
     );
     expect(screen.getByRole("alert").className).toContain("destructive");
   });
+
+  // The colour ladder: signal *fills* are ~1.9:1 on paper and may never carry
+  // text or icons — the root's currentColor feeds both bare text children and
+  // the icon slot, so it has to sit on the `-deep` rung.
+  it.each(["info", "success", "warning", "destructive"] as const)(
+    "colours the %s variant's text with the -deep rung, not the fill",
+    (variant) => {
+      render(
+        <Alert variant={variant}>
+          <AlertTitle>Signal</AlertTitle>
+        </Alert>,
+      );
+      const className = screen.getByRole("alert").className;
+      expect(className).toContain(`text-${variant}-deep`);
+      expect(className).not.toContain(`text-[var(--${variant})]`);
+    },
+  );
 });

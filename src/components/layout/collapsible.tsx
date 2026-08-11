@@ -65,7 +65,9 @@ export type CollapsibleContentProps = React.ComponentPropsWithoutRef<
 /**
  * The part that opens. Animates with the `grid-template-rows: 0fr → 1fr`
  * technique, the same as `Accordion` — height stays fluid with no JS measuring
- * and no fixed `max-height` to outgrow.
+ * and no fixed `max-height` to outgrow. The trick needs the panel to stay
+ * mounted, hence `forceMount`; `visibility` is transitioned alongside the grid
+ * track so a closed panel still leaves the accessibility tree and the tab order.
  */
 export const CollapsibleContent = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<
@@ -73,16 +75,18 @@ export const CollapsibleContent = /* @__PURE__ */ named(
     CollapsibleContentProps
   >(({ className, children, ...props }, ref) => (
     <CollapsiblePrimitive.Content
+      forceMount
       ref={ref}
       data-slot="collapsible-content"
       className={cn(
-        "grid transition-[grid-template-rows] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
-        "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]",
+        "grid transition-[grid-template-rows,visibility] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
+        "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr] data-[state=closed]:invisible",
         className,
       )}
       {...props}
     >
-      <div className="overflow-hidden">{children}</div>
+      {/* min-h-0 + overflow-hidden lets the 0fr track fully collapse. */}
+      <div className="min-h-0 overflow-hidden">{children}</div>
     </CollapsiblePrimitive.Content>
   )),
   "CollapsibleContent",

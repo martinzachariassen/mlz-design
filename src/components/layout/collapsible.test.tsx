@@ -63,4 +63,16 @@ describe("Collapsible", () => {
     expect(content?.className).toContain("grid-rows-[0fr]");
     expect(content?.firstElementChild?.className).toContain("overflow-hidden");
   });
+
+  // The 0fr→1fr transition can only run against a mounted panel (forceMount) —
+  // Radix's default unmount made both directions snap. `invisible` is what
+  // keeps the closed panel out of the accessibility tree and the tab order.
+  it("keeps closed content mounted but invisible", () => {
+    const { container } = render(<Example />);
+    const content = container.querySelector('[data-slot="collapsible-content"]');
+    expect(content).toHaveAttribute("data-state", "closed");
+    expect(content).toHaveTextContent("Region, retries, timeout.");
+    expect(content?.className).toContain("data-[state=closed]:invisible");
+    expect(content?.className).toContain("transition-[grid-template-rows,visibility]");
+  });
 });

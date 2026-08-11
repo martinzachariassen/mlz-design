@@ -24,6 +24,10 @@ export interface GlitchTextProps extends Omit<React.HTMLAttributes<HTMLSpanEleme
   burstRef?: React.Ref<GlitchTextHandle>;
 }
 
+// Module-level so the default keeps one identity across renders — an inline
+// default would re-trigger the ambient effect on every parent render.
+const DEFAULT_INTERVAL: readonly [number, number] = [900, 3600];
+
 function prefersReducedMotion(): boolean {
   return (
     typeof window !== "undefined" &&
@@ -59,7 +63,18 @@ function prefersReducedMotion(): boolean {
  */
 export const GlitchText = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLSpanElement, GlitchTextProps>(
-    ({ text, trigger = "ambient", interval = [900, 3600], burstRef, className, ...props }, ref) => {
+    (
+      {
+        text,
+        trigger = "ambient",
+        interval = DEFAULT_INTERVAL,
+        burstRef,
+        className,
+        onPointerEnter,
+        ...props
+      },
+      ref,
+    ) => {
       const containerRef = React.useRef<HTMLSpanElement | null>(null);
 
       const setRefs = React.useCallback(
@@ -105,9 +120,12 @@ export const GlitchText = /* @__PURE__ */ named(
         [burst],
       );
 
+      // Depend on the two numbers, not the tuple — a caller writing
+      // `interval={[500, 2000]}` inline would otherwise reset the timer on
+      // every render, so the ambient burst never fires.
+      const [minMs, maxMs] = interval;
       React.useEffect(() => {
         if (trigger !== "ambient" || prefersReducedMotion()) return;
-        const [min, max] = interval;
         let timer: ReturnType<typeof setTimeout>;
         const schedule = () => {
           timer = setTimeout(
@@ -115,19 +133,19 @@ export const GlitchText = /* @__PURE__ */ named(
               if (!document.hidden) burst();
               schedule();
             },
-            min + Math.random() * (max - min),
+            minMs + Math.random() * (maxMs - minMs),
           );
         };
         schedule();
         return () => clearTimeout(timer);
-      }, [trigger, interval, burst]);
+      }, [trigger, minMs, maxMs, burst]);
 
-      const handlePointerEnter =
-        trigger === "hover"
-          ? () => {
-              if (!prefersReducedMotion()) burst();
-            }
-          : undefined;
+      // Composed with the consumer's own handler — a caller's `onPointerEnter`
+      // must not silently replace the hover trigger, or vice versa.
+      const handlePointerEnter = (event: React.PointerEvent<HTMLSpanElement>) => {
+        onPointerEnter?.(event);
+        if (trigger === "hover" && !prefersReducedMotion()) burst();
+      };
 
       return (
         <span

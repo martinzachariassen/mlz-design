@@ -1,5 +1,4 @@
 import * as React from "react";
-import { cn } from "../../lib/cn";
 import { MonitorIcon, MoonIcon, SunIcon } from "../../lib/icons";
 import { named } from "../../lib/named";
 import { type Theme, useTheme } from "../../lib/theme";
@@ -47,7 +46,7 @@ export const ThemeToggle = /* @__PURE__ */ named(
       const options = hideSystem ? THEMES.filter((t) => t.value !== "system") : THEMES;
 
       return (
-        <div ref={ref} data-slot="theme-toggle" {...props}>
+        <div ref={ref} data-slot="theme-toggle" className={className} {...props}>
           <ToggleGroup
             type="single"
             variant="outline"
@@ -57,14 +56,19 @@ export const ThemeToggle = /* @__PURE__ */ named(
             value={theme}
             onValueChange={(next) => next && setTheme(next as Theme)}
             aria-label="Colour theme"
-            className={cn("gap-0 [&>*:not(:first-child)]:-ml-px", className)}
+            // The overlap must equal the border width exactly, or the seam
+            // between buttons doubles up (and rounds unevenly on fractional DPR).
+            className="gap-0 [&>*:not(:first-child)]:-ml-[1.5px]"
           >
             {options.map(({ value, label, Icon }) => (
               <ToggleGroupItem
                 key={value}
                 value={value}
                 aria-label={iconOnly ? label : undefined}
-                className="rounded-none first:rounded-l-[var(--radius-sm)] last:rounded-r-[var(--radius-sm)]"
+                // Overlapping siblings paint in DOM order, so the pressed /
+                // hovered / focused item is lifted — without this the next
+                // button's neutral border paints over the accent edge.
+                className="relative rounded-none first:rounded-l-[var(--radius-sm)] last:rounded-r-[var(--radius-sm)] hover:z-10 focus-visible:z-10 data-[state=on]:z-10"
               >
                 <Icon />
                 {iconOnly ? null : label}
@@ -102,14 +106,14 @@ export const AccentPicker = /* @__PURE__ */ named(
       const { accent, setAccent } = useTheme();
 
       return (
-        <div ref={ref} data-slot="accent-picker" {...props}>
+        <div ref={ref} data-slot="accent-picker" className={className} {...props}>
           {/* Built on the system's own RadioGroup rather than hand-rolled buttons,
             so the roving focus and arrow-key navigation come from Radix. */}
           <RadioGroup
             value={accent}
             onValueChange={(next) => setAccent(next as AccentName)}
             aria-label="Accent family"
-            className={cn("flex items-center gap-2", className)}
+            className="flex items-center gap-2"
           >
             {families.map((name) => (
               <RadioGroupItem

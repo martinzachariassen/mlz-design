@@ -20,6 +20,10 @@ export function stubNativeDialog(): void {
 
   HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
     this.setAttribute("open", "");
+    // The one slice of the platform's dialog focusing steps our components rely
+    // on: an `autofocus` descendant wins initial focus (AlertDialogCancel sets
+    // it). Still no trap/inert simulation — see the module comment.
+    this.querySelector<HTMLElement>("[autofocus]")?.focus();
   };
   HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
     this.removeAttribute("open");

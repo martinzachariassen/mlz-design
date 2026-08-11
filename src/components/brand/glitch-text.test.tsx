@@ -1,8 +1,12 @@
 import "@testing-library/jest-dom/vitest";
-import { act, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import * as React from "react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { GlitchText, type GlitchTextHandle } from "./glitch-text";
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 describe("GlitchText", () => {
   it("exposes the full text to assistive tech", () => {
@@ -40,5 +44,28 @@ describe("GlitchText", () => {
     const ref = React.createRef<HTMLSpanElement>();
     render(<GlitchText text="x" trigger="manual" ref={ref} />);
     expect(ref.current).toBeInstanceOf(HTMLSpanElement);
+  });
+
+  // A ticking parent (a live readout next to the text) re-renders constantly;
+  // the ambient timer must ride through instead of resetting each time — even
+  // when `interval` is written inline and gets a new identity per render.
+  it("keeps the ambient timer across parent re-renders", () => {
+    vi.useFakeTimers();
+    const { container, rerender } = render(<GlitchText text="mlz" interval={[100, 100]} />);
+    act(() => vi.advanceTimersByTime(60));
+    rerender(<GlitchText text="mlz" interval={[100, 100]} />);
+    act(() => vi.advanceTimersByTime(60));
+    expect(container.querySelector(".animate-glitch")).toBeInTheDocument();
+  });
+
+  // A consumer's own handler must compose with the hover trigger, not replace it.
+  it("composes a consumer onPointerEnter with the hover burst", () => {
+    const onPointerEnter = vi.fn();
+    const { container } = render(
+      <GlitchText text="ab" trigger="hover" onPointerEnter={onPointerEnter} />,
+    );
+    fireEvent.pointerEnter(container.firstChild as Element);
+    expect(onPointerEnter).toHaveBeenCalledTimes(1);
+    expect(container.querySelector(".animate-glitch")).toBeInTheDocument();
   });
 });

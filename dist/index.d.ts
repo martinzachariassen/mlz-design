@@ -452,8 +452,9 @@ type CodeProps = React.HTMLAttributes<HTMLElement>;
  *
  * Inside `Prose`, plain `<code>` elements are already styled by the descendant
  * rules there — this is for code outside long-form copy, where nothing else
- * would style it. Using it inside `Prose` is harmless: the classes are the same
- * shape and `tailwind-merge` keeps the later win.
+ * would style it. Using it inside `Prose` is harmless because the two styles
+ * agree — but note `Prose`'s descendant selectors win on specificity, so a
+ * `className` override on a `Code` inside `Prose` won't take.
  */
 declare const Code: React.ForwardRefExoticComponent<CodeProps & React.RefAttributes<HTMLElement>>;
 interface CodeBlockProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
@@ -618,7 +619,7 @@ type ProseProps = React.HTMLAttributes<HTMLDivElement>;
 declare const Prose: React.ForwardRefExoticComponent<ProseProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const statusDotVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusDotVariants> {
     /** Add a soft pulsing ring in the dot's colour to signal live/active state. */
@@ -747,7 +748,7 @@ declare const StatDelta: React.ForwardRefExoticComponent<StatDeltaProps & React.
  * rung is the right one here — the dot inside takes `-deep` via `StatusDot`.
  */
 declare const statusChipVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusChipProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusChipVariants> {
     /** Show the leading `StatusDot`. Turn it off for a chip that is pure label. */
@@ -870,7 +871,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<type
 declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
 
 declare const alertVariants: (props?: ({
-    variant?: "default" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "default" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
 }
@@ -897,7 +898,7 @@ declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<H
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const calloutVariants: (props?: ({
-    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
+    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
     /** The headline — the finding itself, in full-strength foreground. */
@@ -1026,7 +1027,7 @@ declare const FindingItem: React.ForwardRefExoticComponent<FindingItemProps & Re
 declare const indicatorVariants: (props?: ({
     variant?: "default" | "accent" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value">, VariantProps<typeof indicatorVariants> {
+interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value" | "max">, VariantProps<typeof indicatorVariants> {
     /** Completion as a percentage, clamped to 0–100. */
     value?: number;
 }
@@ -1725,7 +1726,9 @@ type CollapsibleContentProps = React.ComponentPropsWithoutRef<typeof Collapsible
 /**
  * The part that opens. Animates with the `grid-template-rows: 0fr → 1fr`
  * technique, the same as `Accordion` — height stays fluid with no JS measuring
- * and no fixed `max-height` to outgrow.
+ * and no fixed `max-height` to outgrow. The trick needs the panel to stay
+ * mounted, hence `forceMount`; `visibility` is transitioned alongside the grid
+ * track so a closed panel still leaves the accessibility tree and the tab order.
  */
 declare const CollapsibleContent: React.ForwardRefExoticComponent<Omit<CollapsiblePrimitive.CollapsibleContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 

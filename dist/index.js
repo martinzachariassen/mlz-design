@@ -232,12 +232,21 @@ var FloatingMarks = /* @__PURE__ */ named(
   ),
   "FloatingMarks"
 );
+var DEFAULT_INTERVAL = [900, 3600];
 function prefersReducedMotion() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 var GlitchText = /* @__PURE__ */ named(
   /* @__PURE__ */ React40.forwardRef(
-    ({ text, trigger = "ambient", interval = [900, 3600], burstRef, className, ...props }, ref) => {
+    ({
+      text,
+      trigger = "ambient",
+      interval = DEFAULT_INTERVAL,
+      burstRef,
+      className,
+      onPointerEnter,
+      ...props
+    }, ref) => {
       const containerRef = React40.useRef(null);
       const setRefs = React40.useCallback(
         (node) => {
@@ -277,9 +286,9 @@ var GlitchText = /* @__PURE__ */ named(
         }),
         [burst]
       );
+      const [minMs, maxMs] = interval;
       React40.useEffect(() => {
         if (trigger !== "ambient" || prefersReducedMotion()) return;
-        const [min, max] = interval;
         let timer;
         const schedule = () => {
           timer = setTimeout(
@@ -287,15 +296,16 @@ var GlitchText = /* @__PURE__ */ named(
               if (!document.hidden) burst();
               schedule();
             },
-            min + Math.random() * (max - min)
+            minMs + Math.random() * (maxMs - minMs)
           );
         };
         schedule();
         return () => clearTimeout(timer);
-      }, [trigger, interval, burst]);
-      const handlePointerEnter = trigger === "hover" ? () => {
-        if (!prefersReducedMotion()) burst();
-      } : void 0;
+      }, [trigger, minMs, maxMs, burst]);
+      const handlePointerEnter = (event) => {
+        onPointerEnter?.(event);
+        if (trigger === "hover" && !prefersReducedMotion()) burst();
+      };
       return /* @__PURE__ */ jsxs(
         "span",
         {
@@ -982,8 +992,14 @@ var toggleVariants = /* @__PURE__ */ cva(
       variant: {
         /** Text only until pressed — the quiet default, for a row of them. */
         default: "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground",
-        /** Carries a hairline border, so a lone toggle still reads as a control. */
-        outline: "border-[1.5px] border-input bg-transparent text-muted-foreground hover:border-accent hover:text-foreground data-[state=on]:border-accent data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground"
+        /**
+         * Carries a hairline border, so a lone toggle still reads as a control.
+         * Hover borders use `--ring` (the `-deep` rung), not the base accent —
+         * the base is 1.83:1 on paper, *below* `border-input`, so hovering would
+         * make the control's boundary fainter. The pressed border keeps the base
+         * accent: there the state is carried by the tinted fill, not the border.
+         */
+        outline: "border-[1.5px] border-input bg-transparent text-muted-foreground hover:border-ring hover:text-foreground data-[state=on]:border-accent data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground"
       },
       size: {
         sm: "h-9 px-3 text-[11px]",
@@ -1053,7 +1069,7 @@ var ThemeToggle = /* @__PURE__ */ named(
     ({ className, iconOnly, hideSystem, ...props }, ref) => {
       const { theme, setTheme } = useTheme();
       const options = hideSystem ? THEMES2.filter((t) => t.value !== "system") : THEMES2;
-      return /* @__PURE__ */ jsx("div", { ref, "data-slot": "theme-toggle", ...props, children: /* @__PURE__ */ jsx(
+      return /* @__PURE__ */ jsx("div", { ref, "data-slot": "theme-toggle", className, ...props, children: /* @__PURE__ */ jsx(
         ToggleGroup,
         {
           type: "single",
@@ -1062,13 +1078,13 @@ var ThemeToggle = /* @__PURE__ */ named(
           value: theme,
           onValueChange: (next) => next && setTheme(next),
           "aria-label": "Colour theme",
-          className: cn("gap-0 [&>*:not(:first-child)]:-ml-px", className),
+          className: "gap-0 [&>*:not(:first-child)]:-ml-[1.5px]",
           children: options.map(({ value, label, Icon: Icon2 }) => /* @__PURE__ */ jsxs(
             ToggleGroupItem,
             {
               value,
               "aria-label": iconOnly ? label : void 0,
-              className: "rounded-none first:rounded-l-[var(--radius-sm)] last:rounded-r-[var(--radius-sm)]",
+              className: "relative rounded-none first:rounded-l-[var(--radius-sm)] last:rounded-r-[var(--radius-sm)] hover:z-10 focus-visible:z-10 data-[state=on]:z-10",
               children: [
                 /* @__PURE__ */ jsx(Icon2, {}),
                 iconOnly ? null : label
@@ -1087,13 +1103,13 @@ var AccentPicker = /* @__PURE__ */ named(
   /* @__PURE__ */ React40.forwardRef(
     ({ className, families = ALL_ACCENTS, ...props }, ref) => {
       const { accent, setAccent } = useTheme();
-      return /* @__PURE__ */ jsx("div", { ref, "data-slot": "accent-picker", ...props, children: /* @__PURE__ */ jsx(
+      return /* @__PURE__ */ jsx("div", { ref, "data-slot": "accent-picker", className, ...props, children: /* @__PURE__ */ jsx(
         RadioGroup,
         {
           value: accent,
           onValueChange: (next) => setAccent(next),
           "aria-label": "Accent family",
-          className: cn("flex items-center gap-2", className),
+          className: "flex items-center gap-2",
           children: families.map((name) => /* @__PURE__ */ jsx(
             RadioGroupItem,
             {
@@ -1222,7 +1238,10 @@ var AvatarGroup = /* @__PURE__ */ named(
           ref,
           "data-slot": "avatar-group",
           className: cn(
-            "flex items-center -space-x-2 [&_[data-slot=avatar-frame]]:ring-2 [&_[data-slot=avatar-frame]]:ring-background",
+            // Members are elevated on focus-within so that when a consumer makes
+            // them focusable (avatars as links), the focus ring isn't painted
+            // over by the next overlapping sibling.
+            "flex items-center -space-x-2 [&>*]:relative [&>*:focus-within]:z-10 [&_[data-slot=avatar-frame]]:ring-2 [&_[data-slot=avatar-frame]]:ring-background",
             className
           ),
           ...props,
@@ -1293,12 +1312,12 @@ var CodeBlock = /* @__PURE__ */ named(
                 "button",
                 {
                   type: "button",
+                  "aria-label": copyLabel,
                   onClick: () => void copy(children),
                   className: "inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
                   children: [
                     copied ? /* @__PURE__ */ jsx(CheckIcon, { className: "size-3.5 text-success-deep" }) : null,
-                    copied ? "Copied" : "Copy",
-                    /* @__PURE__ */ jsx("span", { className: "sr-only", children: copyLabel })
+                    copied ? "Copied" : "Copy"
                   ]
                 }
               ) : null
@@ -1307,7 +1326,7 @@ var CodeBlock = /* @__PURE__ */ named(
               "pre",
               {
                 tabIndex: 0,
-                className: "overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+                className: "overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-ring/30",
                 children: /* @__PURE__ */ jsx("code", { children })
               }
             )
@@ -1843,10 +1862,10 @@ var alertVariants = /* @__PURE__ */ cva(
     variants: {
       variant: {
         default: "border-border bg-card text-card-foreground",
-        info: "border-[var(--info)]/25 border-l-[var(--info)] bg-info-subtle text-[var(--info)]",
-        success: "border-[var(--success)]/25 border-l-[var(--success)] bg-success-subtle text-[var(--success)]",
-        warning: "border-[var(--warning)]/30 border-l-[var(--warning)] bg-warning-subtle text-[var(--warning)]",
-        destructive: "border-[var(--destructive)]/25 border-l-[var(--destructive)] bg-destructive-subtle text-[var(--destructive)]"
+        info: "border-[var(--info)]/25 border-l-[var(--info)] bg-info-subtle text-info-deep",
+        success: "border-[var(--success)]/25 border-l-[var(--success)] bg-success-subtle text-success-deep",
+        warning: "border-[var(--warning)]/30 border-l-[var(--warning)] bg-warning-subtle text-warning-deep",
+        destructive: "border-[var(--destructive)]/25 border-l-[var(--destructive)] bg-destructive-subtle text-destructive-deep"
       }
     },
     defaultVariants: { variant: "default" }
@@ -2089,11 +2108,11 @@ var Progress = /* @__PURE__ */ named(
       ProgressPrimitive.Root,
       {
         ref,
-        value: pct,
-        max: 100,
         "aria-label": hasLabel ? void 0 : "Progress",
         className: cn("h-2 w-full overflow-hidden rounded-full bg-muted", className),
         ...props,
+        value: pct,
+        max: 100,
         children: /* @__PURE__ */ jsx(
           ProgressPrimitive.Indicator,
           {
@@ -2148,7 +2167,7 @@ var Spinner = /* @__PURE__ */ named(
   "Spinner"
 );
 var buttonVariants = /* @__PURE__ */ cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-[var(--dur-hover)] ease-[var(--ease-glide)] focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-[var(--dur-hover)] [&_svg]:ease-[var(--ease-glide)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] font-mono text-xs uppercase tracking-[0.14em] transition-[transform,box-shadow,border-color,color] duration-[var(--dur-hover)] ease-[var(--ease-glide)] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:transition-transform [&_svg]:duration-[var(--dur-hover)] [&_svg]:ease-[var(--ease-glide)] hover:[&_svg]:-translate-x-px hover:[&_svg]:-rotate-[4deg] focus-visible:[&_svg]:-translate-x-px focus-visible:[&_svg]:-rotate-[4deg]",
   {
     variants: {
       variant: {
@@ -2895,7 +2914,7 @@ var Slider = /* @__PURE__ */ named(
               {
                 "aria-label": thumbLabels?.[i] ?? (thumbCount === 1 ? rootLabel : void 0),
                 "data-slot": "slider-thumb",
-                className: "block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
+                className: "block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 data-[disabled]:pointer-events-none"
               },
               i
             ))
@@ -3263,15 +3282,16 @@ var CollapsibleContent = /* @__PURE__ */ named(
   /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
     CollapsiblePrimitive.Content,
     {
+      forceMount: true,
       ref,
       "data-slot": "collapsible-content",
       className: cn(
-        "grid transition-[grid-template-rows] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
-        "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr]",
+        "grid transition-[grid-template-rows,visibility] duration-[var(--dur-base)] ease-[var(--ease-out)] motion-reduce:transition-none",
+        "grid-rows-[0fr] data-[state=open]:grid-rows-[1fr] data-[state=closed]:invisible",
         className
       ),
       ...props,
-      children: /* @__PURE__ */ jsx("div", { className: "overflow-hidden", children })
+      children: /* @__PURE__ */ jsx("div", { className: "min-h-0 overflow-hidden", children })
     }
   )),
   "CollapsibleContent"
@@ -3509,7 +3529,9 @@ var ScrollArea = /* @__PURE__ */ named(
             "data-slot": "scroll-area-viewport",
             tabIndex: 0,
             className: cn(
-              "size-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+              // The ring is inset because the root's `overflow-hidden` would clip
+              // anything painted outside the viewport, which fills it exactly.
+              "size-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-ring/30",
               viewportClassName
             ),
             children
@@ -3653,7 +3675,10 @@ var TabsContent = /* @__PURE__ */ named(
     TabsPrimitive.Content,
     {
       ref,
-      className: cn("text-sm text-muted-foreground focus-visible:outline-none", className),
+      className: cn(
+        "rounded-[var(--radius-sm)] text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+        className
+      ),
       ...props
     }
   )),
@@ -3771,7 +3796,7 @@ var AlertDialogCancel = /* @__PURE__ */ named(
       const localRef = React40.useRef(null);
       React40.useImperativeHandle(ref, () => localRef.current);
       React40.useEffect(() => {
-        localRef.current?.focus();
+        localRef.current?.setAttribute("autofocus", "");
       }, []);
       const Comp = asChild ? Slot : "button";
       return /* @__PURE__ */ jsx(
@@ -3990,7 +4015,7 @@ var DropdownMenuItem = /* @__PURE__ */ named(
       className: cn(
         row,
         inset && "pl-8",
-        variant === "destructive" && "text-destructive-deep focus:bg-destructive/10 focus:text-destructive-deep data-[highlighted]:bg-destructive/10 data-[highlighted]:text-destructive-deep",
+        variant === "destructive" && "text-destructive-deep focus:bg-destructive-subtle focus:text-destructive-deep data-[highlighted]:bg-destructive-subtle data-[highlighted]:text-destructive-deep",
         className
       ),
       ...props
