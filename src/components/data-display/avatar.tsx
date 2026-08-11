@@ -111,7 +111,7 @@ export const AvatarImage = /* @__PURE__ */ named(
   "AvatarImage",
 );
 
-const fallbackVariants = /* @__PURE__ */ cva(
+const avatarFallbackVariants = /* @__PURE__ */ cva(
   "flex size-full items-center justify-center font-mono uppercase tracking-[0.08em]",
   {
     variants: {
@@ -127,7 +127,7 @@ const fallbackVariants = /* @__PURE__ */ cva(
 
 export interface AvatarFallbackProps
   extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>,
-    VariantProps<typeof fallbackVariants> {}
+    VariantProps<typeof avatarFallbackVariants> {}
 
 /**
  * What fills the frame while there's no loaded image — initials, in tracked-out
@@ -143,7 +143,7 @@ export const AvatarFallback = /* @__PURE__ */ named(
     <AvatarPrimitive.Fallback
       ref={ref}
       data-slot="avatar-fallback"
-      className={cn(fallbackVariants({ tone }), className)}
+      className={cn(avatarFallbackVariants({ tone }), className)}
       {...props}
     />
   )),
@@ -193,4 +193,7 @@ export const AvatarGroup = /* @__PURE__ */ named(
   "AvatarGroup",
 );
 
-export { avatarVariants, fallbackVariants };
+export { avatarFallbackVariants, avatarVariants };
+
+/** @deprecated Renamed to `avatarFallbackVariants`, so the export names its component. */
+export const fallbackVariants = avatarFallbackVariants;

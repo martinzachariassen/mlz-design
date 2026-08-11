@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { named } from "../../lib/named";
 
-const indicatorVariants = /* @__PURE__ */ cva(
+const progressIndicatorVariants = /* @__PURE__ */ cva(
   "h-full rounded-full transition-[width] duration-500 ease-[var(--ease-out)]",
   {
     variants: {
@@ -22,7 +22,7 @@ export interface ProgressProps
   // percentage, so a caller-supplied `max` would make aria-valuemax disagree
   // with what's painted.
   extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value" | "max">,
-    VariantProps<typeof indicatorVariants> {
+    VariantProps<typeof progressIndicatorVariants> {
   /** Completion as a percentage, clamped to 0–100. */
   value?: number;
 }
@@ -60,7 +60,7 @@ export const Progress = /* @__PURE__ */ named(
         max={100}
       >
         <ProgressPrimitive.Indicator
-          className={cn(indicatorVariants({ variant }))}
+          className={cn(progressIndicatorVariants({ variant }))}
           style={{ width: `${pct}%` }}
         />
       </ProgressPrimitive.Root>
@@ -69,4 +69,7 @@ export const Progress = /* @__PURE__ */ named(
   "Progress",
 );
 
-export { indicatorVariants };
+export { progressIndicatorVariants };
+
+/** @deprecated Renamed to `progressIndicatorVariants`, so the export names its component. */
+export const indicatorVariants = progressIndicatorVariants;

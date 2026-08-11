@@ -125,28 +125,88 @@ export const TableRow = /* @__PURE__ */ named(
   "TableRow",
 );
 
+export interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Current sort state of this column. Sets `aria-sort` so assistive tech hears
+   * which column orders the table — the sorting *logic* stays in the app; wrap
+   * the header text in a `TableSortButton` to make it operable.
+   */
+  sort?: "asc" | "desc" | "none";
+}
+
 /**
  * A column header. Mono, uppercase and tracked out, matching the eyebrow voice
  * `Prose` already gives raw `<th>` markup. Pass `scope="row"` for a row header.
  */
 export const TableHead = /* @__PURE__ */ named(
-  /* @__PURE__ */ React.forwardRef<
-    HTMLTableCellElement,
-    React.ThHTMLAttributes<HTMLTableCellElement>
-  >(({ className, scope = "col", ...props }, ref) => (
-    <th
-      ref={ref}
-      scope={scope}
-      data-slot="table-head"
-      className={cn(
-        "border-b border-border py-2 pr-4 text-left align-middle font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-muted-foreground",
-        "[&[align=right]]:text-right [&[align=center]]:text-center",
-        className,
-      )}
-      {...props}
-    />
-  )),
+  /* @__PURE__ */ React.forwardRef<HTMLTableCellElement, TableHeadProps>(
+    ({ className, scope = "col", sort, ...props }, ref) => (
+      <th
+        ref={ref}
+        scope={scope}
+        aria-sort={sort === "asc" ? "ascending" : sort === "desc" ? "descending" : undefined}
+        data-slot="table-head"
+        className={cn(
+          "border-b border-border py-2 pr-4 text-left align-middle font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-muted-foreground",
+          "[&[align=right]]:text-right [&[align=center]]:text-center",
+          className,
+        )}
+        {...props}
+      />
+    ),
+  ),
   "TableHead",
+);
+
+export interface TableSortButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** The state this column is in — drives which chevron is emphasised. */
+  sort?: "asc" | "desc" | "none";
+}
+
+/**
+ * The clickable header content for a sortable column. Put it inside a
+ * `TableHead` that carries the matching `sort` prop; your `onClick` cycles the
+ * order. The chevrons are decorative — state reaches assistive tech through
+ * `aria-sort` on the `<th>`, not through the glyph.
+ *
+ * ```tsx
+ * <TableHead sort={sort}>
+ *   <TableSortButton sort={sort} onClick={cycleSort}>Age</TableSortButton>
+ * </TableHead>
+ * ```
+ */
+export const TableSortButton = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, TableSortButtonProps>(
+    ({ className, sort = "none", children, type, ...props }, ref) => (
+      <button
+        ref={ref}
+        type={type ?? "button"}
+        data-slot="table-sort-button"
+        className={cn(
+          "-my-1 inline-flex items-center gap-1 rounded-[var(--radius-sm)] py-1 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          sort !== "none" ? "text-foreground" : "text-muted-foreground",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="size-3 shrink-0"
+        >
+          <path d="m7 10 5-5 5 5" className={sort === "asc" ? "" : "opacity-30"} />
+          <path d="m7 14 5 5 5-5" className={sort === "desc" ? "" : "opacity-30"} />
+        </svg>
+      </button>
+    ),
+  ),
+  "TableSortButton",
 );
 
 /** A data cell. */

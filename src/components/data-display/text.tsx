@@ -16,6 +16,8 @@ const textVariants = /* @__PURE__ */ cva("", {
       xs: "text-xs",
       sm: "text-sm",
       base: "text-base",
+      /** Alias for `base`, so the control-scale word works here too. */
+      default: "text-base",
       lg: "text-lg",
     },
   },

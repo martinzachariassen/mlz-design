@@ -57,3 +57,19 @@ describe("Button", () => {
     },
   );
 });
+
+describe("Button shadcn-vocabulary aliases", () => {
+  // Pasted shadcn snippets and LLM-written call sites use these names; they
+  // must compile and render the intended look.
+  it("renders outline as the MLZ outline (same as default)", () => {
+    render(<Button variant="outline">Ghosted</Button>);
+    const className = screen.getByRole("button").className;
+    expect(className).toContain("border-primary");
+    expect(className).toContain("bg-transparent");
+  });
+
+  it("renders secondary as the quiet filled companion", () => {
+    render(<Button variant="secondary">Quiet</Button>);
+    expect(screen.getByRole("button").className).toContain("bg-secondary");
+  });
+});

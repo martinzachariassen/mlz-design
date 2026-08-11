@@ -343,7 +343,10 @@ declare const SocialCard: React.ForwardRefExoticComponent<SocialCardProps & Reac
 interface ThemeToggleProps extends React.HTMLAttributes<HTMLDivElement> {
     /** Drop the text labels and show only the icons. */
     iconOnly?: boolean;
-    /** Hide "System", leaving a straight light/dark choice. */
+    /**
+     * Hide "System", leaving a straight light/dark choice. Defaults to following
+     * the provider: `<ThemeProvider enableSystem={false}>` hides it automatically.
+     */
     hideSystem?: boolean;
 }
 /**
@@ -385,7 +388,7 @@ interface AccentPickerProps extends React.HTMLAttributes<HTMLDivElement> {
 declare const AccentPicker: React.ForwardRefExoticComponent<AccentPickerProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const avatarVariants: (props?: ({
-    size?: "default" | "sm" | "xs" | "lg" | "xl" | null | undefined;
+    size?: "default" | "sm" | "lg" | "xs" | "xl" | null | undefined;
     shape?: "square" | "circle" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 declare const statusColor: {
@@ -422,10 +425,10 @@ type AvatarImageProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Im
  * broken-image icon, no state to manage. Always pass an `alt`.
  */
 declare const AvatarImage: React.ForwardRefExoticComponent<Omit<AvatarPrimitive.AvatarImageProps & React.RefAttributes<HTMLImageElement>, "ref"> & React.RefAttributes<HTMLImageElement>>;
-declare const fallbackVariants: (props?: ({
+declare const avatarFallbackVariants: (props?: ({
     tone?: "default" | "accent" | "muted" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface AvatarFallbackProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>, VariantProps<typeof fallbackVariants> {
+interface AvatarFallbackProps extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>, VariantProps<typeof avatarFallbackVariants> {
 }
 /**
  * What fills the frame while there's no loaded image — initials, in tracked-out
@@ -446,8 +449,13 @@ interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 declare const AvatarGroup: React.ForwardRefExoticComponent<AvatarGroupProps & React.RefAttributes<HTMLDivElement>>;
 
+/** @deprecated Renamed to `avatarFallbackVariants`, so the export names its component. */
+declare const fallbackVariants: (props?: ({
+    tone?: "default" | "accent" | "muted" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+
 declare const badgeVariants: (props?: ({
-    variant?: "default" | "accent" | "outline" | "muted" | "destructive" | null | undefined;
+    variant?: "default" | "accent" | "outline" | "muted" | "secondary" | "destructive" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
     /** Render the single child instead of a `<span>` — e.g. a link for a tag chip. */
@@ -863,11 +871,36 @@ declare const TableBody: React.ForwardRefExoticComponent<React.HTMLAttributes<HT
 declare const TableFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableSectionElement> & React.RefAttributes<HTMLTableSectionElement>>;
 /** One row. Tints on hover, and marks itself when `data-state="selected"`. */
 declare const TableRow: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLTableRowElement> & React.RefAttributes<HTMLTableRowElement>>;
+interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> {
+    /**
+     * Current sort state of this column. Sets `aria-sort` so assistive tech hears
+     * which column orders the table — the sorting *logic* stays in the app; wrap
+     * the header text in a `TableSortButton` to make it operable.
+     */
+    sort?: "asc" | "desc" | "none";
+}
 /**
  * A column header. Mono, uppercase and tracked out, matching the eyebrow voice
  * `Prose` already gives raw `<th>` markup. Pass `scope="row"` for a row header.
  */
-declare const TableHead: React.ForwardRefExoticComponent<React.ThHTMLAttributes<HTMLTableCellElement> & React.RefAttributes<HTMLTableCellElement>>;
+declare const TableHead: React.ForwardRefExoticComponent<TableHeadProps & React.RefAttributes<HTMLTableCellElement>>;
+interface TableSortButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** The state this column is in — drives which chevron is emphasised. */
+    sort?: "asc" | "desc" | "none";
+}
+/**
+ * The clickable header content for a sortable column. Put it inside a
+ * `TableHead` that carries the matching `sort` prop; your `onClick` cycles the
+ * order. The chevrons are decorative — state reaches assistive tech through
+ * `aria-sort` on the `<th>`, not through the glyph.
+ *
+ * ```tsx
+ * <TableHead sort={sort}>
+ *   <TableSortButton sort={sort} onClick={cycleSort}>Age</TableSortButton>
+ * </TableHead>
+ * ```
+ */
+declare const TableSortButton: React.ForwardRefExoticComponent<TableSortButtonProps & React.RefAttributes<HTMLButtonElement>>;
 /** A data cell. */
 declare const TableCell: React.ForwardRefExoticComponent<React.TdHTMLAttributes<HTMLTableCellElement> & React.RefAttributes<HTMLTableCellElement>>;
 /**
@@ -878,7 +911,7 @@ declare const TableCaption: React.ForwardRefExoticComponent<React.HTMLAttributes
 
 declare const textVariants: (props?: ({
     variant?: "body" | "muted" | "eyebrow" | "mono" | "lead" | null | undefined;
-    size?: "base" | "sm" | "xs" | "lg" | null | undefined;
+    size?: "default" | "base" | "sm" | "lg" | "xs" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof textVariants> {
     /** The element to render. Defaults to `<span>`. */
@@ -1055,10 +1088,10 @@ interface FindingItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "ti
  */
 declare const FindingItem: React.ForwardRefExoticComponent<FindingItemProps & React.RefAttributes<HTMLLIElement>>;
 
-declare const indicatorVariants: (props?: ({
+declare const progressIndicatorVariants: (props?: ({
     variant?: "default" | "accent" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
-interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value" | "max">, VariantProps<typeof indicatorVariants> {
+interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value" | "max">, VariantProps<typeof progressIndicatorVariants> {
     /** Completion as a percentage, clamped to 0–100. */
     value?: number;
 }
@@ -1076,6 +1109,11 @@ interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof Progr
  */
 declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.RefAttributes<HTMLDivElement>>;
 
+/** @deprecated Renamed to `progressIndicatorVariants`, so the export names its component. */
+declare const indicatorVariants: (props?: ({
+    variant?: "default" | "accent" | null | undefined;
+} & class_variance_authority_types.ClassProp) | undefined) => string;
+
 /**
  * Placeholder shimmer for loading states. The `animate-pulse-soft` token is
  * already `prefers-reduced-motion` guarded, so motion needs no extra handling.
@@ -1091,6 +1129,7 @@ declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.Re
  *
  * **Don't** animate a skeleton for sub-200ms waits; the flash reads as a glitch.
  */
+type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
 declare const Skeleton: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 
 declare const spinnerVariants: (props?: ({
@@ -1110,7 +1149,7 @@ interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement>, VariantProp
 declare const Spinner: React.ForwardRefExoticComponent<SpinnerProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const buttonVariants: (props?: ({
-    variant?: "link" | "solid" | "default" | "accent" | "destructive" | "ghost" | "sketch" | null | undefined;
+    variant?: "link" | "solid" | "default" | "accent" | "outline" | "secondary" | "destructive" | "ghost" | "sketch" | null | undefined;
     size?: "default" | "icon" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
@@ -1163,6 +1202,20 @@ interface ComboboxProps {
     /** Initial value when uncontrolled. */
     defaultValue?: string;
     onValueChange?: (value: string) => void;
+    /** Controlled open state. Provide `onOpenChange` alongside it. */
+    open?: boolean;
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    /**
+     * Submits the chosen value with a surrounding `<form>` via a hidden input —
+     * the combobox's trigger is a `<button>`, so without this it posts nothing.
+     */
+    name?: string;
+    /** Id for the trigger, when you label it yourself outside a `Field`. */
+    id?: string;
+    /** Trigger height. `sm` (h-9) lines up with `Button size="sm"`. */
+    size?: "sm" | "default";
     /** Shown on the trigger when nothing is chosen. */
     placeholder?: string;
     /** Placeholder inside the search field. */
@@ -1342,11 +1395,26 @@ declare const FieldDescription: React.ForwardRefExoticComponent<React.HTMLAttrib
  */
 declare const FieldError: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
+    /** Control height. `sm` (h-9) lines up with `Button size="sm"`. */
+    size?: "sm" | "default";
+    /**
+     * Leading slot inside the frame — a search icon, a currency sign. Rendered
+     * decorative; mark icons `aria-hidden`. Interactive children stay clickable.
+     */
+    prefix?: React.ReactNode;
+    /** Trailing slot inside the frame — a unit, a reveal button, a spinner. */
+    suffix?: React.ReactNode;
+}
 /**
  * A single-line text field. Mono type, a 1.5px `--input` border that turns to the
  * ring colour on focus with a soft `ring/30` halo. Takes every native `<input>`
  * attribute, so `type`, `required` and the rest behave exactly as you expect.
+ *
+ * `prefix`/`suffix` render *inside* the frame, so a search icon or a unit
+ * doesn't force you to rebuild the border and focus styling around your own
+ * wrapper. With a slot present the input gains a positioning wrapper — size the
+ * field from its parent in that case, not via `className` width utilities.
  *
  * Inside a `Field` it picks up its `id`, `aria-describedby`, `aria-invalid` and
  * `disabled` automatically; an explicit prop still wins. Outside one it is a
@@ -1398,9 +1466,8 @@ type SelectProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>;
  *
  * Reach for it from about **six options upward**; below that a `RadioGroup`
  * shows every choice at once and costs one click instead of two. Above roughly
- * fifteen, a select becomes a scroll hunt — that wants a searchable combobox,
- * which this system doesn't ship yet. For *actions* rather than values, use
- * `DropdownMenu`.
+ * fifteen, a select becomes a scroll hunt — that wants `Combobox`, the
+ * searchable sibling. For *actions* rather than values, use `DropdownMenu`.
  *
  * It renders a custom listbox rather than a native `<select>`, which buys
  * consistent styling and grouping but means it does **not** post a value with a
@@ -1423,6 +1490,8 @@ declare const SelectValue: React.ForwardRefExoticComponent<SelectPrimitive.Selec
 /** Groups related options. Pair with a `SelectLabel`. */
 declare const SelectGroup: React.ForwardRefExoticComponent<SelectPrimitive.SelectGroupProps & React.RefAttributes<HTMLDivElement>>;
 interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+    /** Control height. `sm` (h-9) lines up with `Button size="sm"`. */
+    size?: "sm" | "default";
 }
 /** The closed field. Wears the same border, height and focus ring as `Input`. */
 declare const SelectTrigger: React.ForwardRefExoticComponent<SelectTriggerProps & React.RefAttributes<HTMLButtonElement>>;
@@ -1486,7 +1555,10 @@ type SwitchProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
  */
 declare const Switch: React.ForwardRefExoticComponent<SwitchProps & React.RefAttributes<HTMLInputElement>>;
 
-type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+    /** Vertical scale. `sm` starts at four lines with the compact type size. */
+    size?: "sm" | "default";
+}
 /**
  * A multi-line text field — `Input`'s longer sibling, sharing its border, focus
  * ring and mono type. Starts at six lines' worth of height and resizes
@@ -1499,7 +1571,7 @@ declare const Textarea: React.ForwardRefExoticComponent<TextareaProps & React.Re
 
 declare const toggleVariants: (props?: ({
     variant?: "default" | "outline" | null | undefined;
-    size?: "default" | "icon" | "sm" | null | undefined;
+    size?: "default" | "icon" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>, VariantProps<typeof toggleVariants> {
 }
@@ -1555,7 +1627,7 @@ type ToggleGroupItemProps = React.ComponentPropsWithoutRef<typeof ToggleGroupPri
 /** One choice in a `ToggleGroup`. Inherits the group's `variant` and `size`. */
 declare const ToggleGroupItem: React.ForwardRefExoticComponent<Omit<ToggleGroupPrimitive.ToggleGroupItemProps & React.RefAttributes<HTMLButtonElement>, "ref"> & VariantProps<(props?: ({
     variant?: "default" | "outline" | null | undefined;
-    size?: "default" | "icon" | "sm" | null | undefined;
+    size?: "default" | "icon" | "sm" | "lg" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string> & React.RefAttributes<HTMLButtonElement>>;
 
 type SingleProps = Omit<React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
@@ -1652,9 +1724,11 @@ declare const AccordionContent: React.ForwardRefExoticComponent<Omit<AccordionPr
  * </Breadcrumb>
  * ```
  */
-declare const Breadcrumb: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & {
+interface BreadcrumbProps extends React.ComponentPropsWithoutRef<"nav"> {
+    /** Default glyph for every `BreadcrumbSeparator` below — a `/`, a `·`, an icon. */
     separator?: React.ReactNode;
-} & React.RefAttributes<HTMLElement>>;
+}
+declare const Breadcrumb: React.ForwardRefExoticComponent<BreadcrumbProps & React.RefAttributes<HTMLElement>>;
 /** The `<ol>`. Wraps onto a second line rather than overflowing on narrow screens. */
 declare const BreadcrumbList: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.OlHTMLAttributes<HTMLOListElement>, HTMLOListElement>, "ref"> & React.RefAttributes<HTMLOListElement>>;
 /** One step in the trail. */
@@ -1672,7 +1746,8 @@ declare const BreadcrumbLink: React.ForwardRefExoticComponent<BreadcrumbLinkProp
 declare const BreadcrumbPage: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>, "ref"> & React.RefAttributes<HTMLSpanElement>>;
 /**
  * The chevron between steps. Decorative — the list order already carries the
- * relationship, so it's hidden from assistive tech.
+ * relationship, so it's hidden from assistive tech. `children` wins, then the
+ * root's `separator` prop, then the default chevron.
  */
 declare function BreadcrumbSeparator({ children, className, ...props }: React.ComponentPropsWithoutRef<"li">): React.JSX.Element;
 /**
@@ -1785,7 +1860,7 @@ interface ContainerProps extends React.HTMLAttributes<HTMLDivElement>, VariantPr
 declare const Container: React.ForwardRefExoticComponent<ContainerProps & React.RefAttributes<HTMLDivElement>>;
 declare const stackVariants: (props?: ({
     direction?: "row" | "col" | "responsive" | null | undefined;
-    gap?: "none" | "sm" | "xs" | "lg" | "xl" | "md" | null | undefined;
+    gap?: "none" | "sm" | "lg" | "xs" | "xl" | "md" | null | undefined;
     align?: "end" | "baseline" | "start" | "stretch" | "center" | null | undefined;
     justify?: "end" | "start" | "center" | "between" | "around" | null | undefined;
     wrap?: boolean | null | undefined;
@@ -1834,7 +1909,7 @@ interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 declare const Grid: React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>>;
 
-declare const pageVariants: (props?: ({
+declare const paginationLinkVariants: (props?: ({
     active?: boolean | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 /**
@@ -1867,7 +1942,7 @@ declare function Pagination({ className, ...props }: React.ComponentPropsWithout
 declare const PaginationContent: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>, "ref"> & React.RefAttributes<HTMLUListElement>>;
 /** One slot in the list — a page link, an arrow, or an ellipsis. */
 declare const PaginationItem: React.ForwardRefExoticComponent<Omit<React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>, "ref"> & React.RefAttributes<HTMLLIElement>>;
-interface PaginationLinkProps extends React.ComponentPropsWithoutRef<"a">, VariantProps<typeof pageVariants> {
+interface PaginationLinkProps extends React.ComponentPropsWithoutRef<"a">, VariantProps<typeof paginationLinkVariants> {
     /** Marks the page you're on — sets `aria-current="page"`. */
     isActive?: boolean;
     /** Render your router's link component instead of an `<a>`. */
@@ -2024,6 +2099,11 @@ interface TabsContentProps extends React.ComponentPropsWithoutRef<typeof TabsPri
  */
 declare const TabsContent: React.ForwardRefExoticComponent<TabsContentProps & React.RefAttributes<HTMLDivElement>>;
 
+interface ModalTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Render the single child as the trigger (forwarding the open handler) instead of a <button>. */
+    asChild?: boolean;
+}
+
 interface AlertDialogProps {
     /** Whether the dialog is showing. Pass it to control the dialog yourself. */
     open?: boolean;
@@ -2081,6 +2161,9 @@ interface AlertDialogProps {
  * ```
  */
 declare function AlertDialog({ open, defaultOpen, onOpenChange, children, }: AlertDialogProps): React.JSX.Element;
+type AlertDialogTriggerProps = ModalTriggerProps;
+/** Opens the alert dialog. Wrap the provoking control with `asChild`. */
+declare const AlertDialogTrigger: React.ForwardRefExoticComponent<ModalTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 /** The card surface. Narrower than `DialogContent` — a confirm is two sentences. */
 declare const AlertDialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 /** Title + description block. No close button to clear, so no right inset. */
@@ -2295,9 +2378,9 @@ interface DialogProps {
     open?: boolean;
     /** Initial open state when uncontrolled. Ignored if `open` is provided. */
     defaultOpen?: boolean;
-    /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
+    /** Called on Esc, the ✕ button, a `DialogClose`/`DialogTrigger`, or a backdrop click. */
     onOpenChange?: (open: boolean) => void;
-    /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
+    /** Usually a `DialogTrigger` and a `DialogContent`. The content mounts only while open. */
     children: React.ReactNode;
 }
 /**
@@ -2318,7 +2401,8 @@ interface DialogProps {
  * Always give it a `DialogTitle`, or it reaches assistive tech unnamed.
  *
  * ```tsx
- * <Dialog open={open} onOpenChange={setOpen}>
+ * <Dialog>
+ *   <DialogTrigger asChild><Button>New project</Button></DialogTrigger>
  *   <DialogContent>
  *     <DialogHeader>
  *       <DialogTitle>Delete project</DialogTitle>
@@ -2333,9 +2417,14 @@ interface DialogProps {
  * ```
  */
 declare function Dialog({ open, defaultOpen, onOpenChange, children }: DialogProps): React.JSX.Element;
+type DialogTriggerProps = ModalTriggerProps;
+/** Opens the dialog. Wrap your own control with `asChild` — mirrors `DialogClose`. */
+declare const DialogTrigger: React.ForwardRefExoticComponent<ModalTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 /**
- * The card surface inside the dialog, and where the ✕ close button lives. Caps at
- * 85% of the viewport height and scrolls its own overflow.
+ * The card surface inside the dialog, and where the ✕ close button lives. Caps
+ * at 85% of the viewport height and scrolls its own overflow. This part *is*
+ * the native `<dialog>` element — `className` styles the card, so a
+ * `max-w-2xl` here is how a dialog gets wider.
  */
 declare const DialogContent: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
 /** Title + description block, inset on the right to clear the close button. */
@@ -2480,6 +2569,8 @@ interface InfoTipProps {
     side?: "top" | "bottom" | "auto";
     /** Controlled open state. Provide `onOpenChange` alongside it. */
     open?: boolean;
+    /** Initial open state when uncontrolled — an onboarding hint that starts visible. */
+    defaultOpen?: boolean;
     /** Notified whenever the open state should change (controlled or not). */
     onOpenChange?: (open: boolean) => void;
     /** Extra classes for the trigger button. */
@@ -2517,7 +2608,7 @@ interface InfoTipProps {
  * </p>
  * ```
  */
-declare function InfoTip({ label, title, children, side, open, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
+declare function InfoTip({ label, title, children, side, open, defaultOpen, onOpenChange, className, contentClassName, }: InfoTipProps): React.JSX.Element;
 
 type PopoverProps = React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Root>;
 /**
@@ -2602,7 +2693,8 @@ interface SheetProps extends VariantProps<typeof sheetVariants> {
  * appears in place, fully usable — and `prefers-reduced-motion` skips it too.
  *
  * ```tsx
- * <Sheet open={open} onOpenChange={setOpen} side="left">
+ * <Sheet side="left">
+ *   <SheetTrigger asChild><Button>Menu</Button></SheetTrigger>
  *   <SheetContent>
  *     <SheetHeader>
  *       <SheetTitle>Menu</SheetTitle>
@@ -2613,6 +2705,9 @@ interface SheetProps extends VariantProps<typeof sheetVariants> {
  * ```
  */
 declare function Sheet({ open, defaultOpen, onOpenChange, side, className, children, }: SheetProps): React.JSX.Element;
+type SheetTriggerProps = ModalTriggerProps;
+/** Opens the sheet. Wrap your own control with `asChild` — mirrors `SheetClose`. */
+declare const SheetTrigger: React.ForwardRefExoticComponent<ModalTriggerProps & React.RefAttributes<HTMLButtonElement>>;
 /**
  * The scrolling body of a `Sheet` — every sheet needs exactly one, wrapping all
  * of its content.
@@ -2631,6 +2726,7 @@ declare const SheetTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<H
 declare const SheetDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 /** The action row, pinned to the bottom of the panel. */
 declare const SheetFooter: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLDivElement> & React.RefAttributes<HTMLDivElement>>;
+
 interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     /** Render the single child as the trigger instead of a `<button>`. */
     asChild?: boolean;
@@ -2733,6 +2829,12 @@ interface ThemeContextValue {
     resolvedTheme: ResolvedTheme;
     accent: AccentName;
     setAccent: (accent: AccentName) => void;
+    /**
+     * Whether the provider honours `"system"` — mirrors the `enableSystem` prop,
+     * so controls like `ThemeToggle` can hide the System option automatically
+     * instead of offering a choice the provider would silently coerce to light.
+     */
+    enableSystem: boolean;
 }
 /**
  * Owns the theme + accent state and writes both to `<html>`, so every semantic
@@ -2806,4 +2908,4 @@ interface UseCopyToClipboard {
  */
 declare function useCopyToClipboard(resetMs?: number): UseCopyToClipboard;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, CopyButton, type CopyButtonProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FindingItem, type FindingItemProps, FindingList, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextHandle, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, MarginNote, type MarginNoteArrow, type MarginNoteProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, Readout, ReadoutCell, type ReadoutCellProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, SectionHeading, type SectionHeadingProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, Skeleton, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusChip, type StatusChipProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, type TableProps, TableRow, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, type UseCopyToClipboard, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, AlertDialogTrigger, type AlertDialogTriggerProps, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, type BreadcrumbProps, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, CopyButton, type CopyButtonProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DialogTrigger, type DialogTriggerProps, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FindingItem, type FindingItemProps, FindingList, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextHandle, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, MarginNote, type MarginNoteArrow, type MarginNoteProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, Readout, ReadoutCell, type ReadoutCellProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, SectionHeading, type SectionHeadingProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, SheetTrigger, type SheetTriggerProps, Skeleton, type SkeletonProps, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusChip, type StatusChipProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, type TableHeadProps, TableHeader, type TableProps, TableRow, TableSortButton, type TableSortButtonProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, type UseCopyToClipboard, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };

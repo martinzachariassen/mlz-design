@@ -21,3 +21,10 @@ describe("Badge", () => {
     expect(el.className).toContain("bg-primary");
   });
 });
+
+describe("Badge shadcn-vocabulary aliases", () => {
+  it("accepts secondary as an alias for muted", () => {
+    render(<Badge variant="secondary">Beta</Badge>);
+    expect(screen.getByText("Beta").className).toContain("bg-muted");
+  });
+});

@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { SearchIcon } from "../../lib/icons";
 import { named } from "../../lib/named";
-import { ModalRoot } from "./modal-root";
+import { ModalDialog, ModalProvider } from "./modal-root";
 
 export type CommandProps = React.ComponentPropsWithoutRef<typeof CommandPrimitive>;
 
@@ -291,23 +291,22 @@ export function CommandDialog({
   ...props
 }: CommandDialogProps) {
   return (
-    <ModalRoot
-      open={open}
-      defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}
-      slot="command-dialog"
-      className="m-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
-    >
-      <Command
-        aria-label={label}
-        className={cn(
-          "border border-border shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-          className,
-        )}
-        {...props}
+    <ModalProvider open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+      <ModalDialog
+        slot="command-dialog"
+        className="m-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
       >
-        {children}
-      </Command>
-    </ModalRoot>
+        <Command
+          aria-label={label}
+          className={cn(
+            "border border-border shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </Command>
+      </ModalDialog>
+    </ModalProvider>
   );
 }

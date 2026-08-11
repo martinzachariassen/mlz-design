@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import * as React from "react";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Badge } from "./badge";
 import { StatusDot } from "./status-dot";
@@ -11,6 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableSortButton,
 } from "./table";
 
 const meta = {
@@ -194,6 +196,46 @@ export const Overflowing: Story = {
       </Table>
     </div>
   ),
+};
+
+/**
+ * The sorting *affordance* — the order itself stays in the app. `sort` on the
+ * `TableHead` announces the order through `aria-sort`; `TableSortButton` makes
+ * the header operable and shows which direction is active.
+ */
+export const Sortable: Story = {
+  render: function SortableStory() {
+    type Order = "asc" | "desc" | "none";
+    const [sort, setSort] = React.useState<Order>("asc");
+    const cycle = () => setSort(sort === "asc" ? "desc" : "asc");
+    const rows = [
+      { name: "aurora", age: 3 },
+      { name: "ip-speil", age: 1 },
+      { name: "mlz-design", age: 2 },
+    ].sort((a, b) => (sort === "desc" ? b.age - a.age : a.age - b.age));
+    return (
+      <Table containerClassName="max-w-md">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Project</TableHead>
+            <TableHead sort={sort}>
+              <TableSortButton sort={sort} onClick={cycle}>
+                Age
+              </TableSortButton>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.name}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.age} yr</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
 };
 
 export const LightDark: Story = {

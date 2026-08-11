@@ -12,9 +12,8 @@ export type SelectProps = React.ComponentPropsWithoutRef<typeof SelectPrimitive.
  *
  * Reach for it from about **six options upward**; below that a `RadioGroup`
  * shows every choice at once and costs one click instead of two. Above roughly
- * fifteen, a select becomes a scroll hunt — that wants a searchable combobox,
- * which this system doesn't ship yet. For *actions* rather than values, use
- * `DropdownMenu`.
+ * fifteen, a select becomes a scroll hunt — that wants `Combobox`, the
+ * searchable sibling. For *actions* rather than values, use `DropdownMenu`.
  *
  * It renders a custom listbox rather than a native `<select>`, which buys
  * consistent styling and grouping but means it does **not** post a value with a
@@ -42,19 +41,23 @@ export const SelectValue = SelectPrimitive.Value;
 export const SelectGroup = SelectPrimitive.Group;
 
 export interface SelectTriggerProps
-  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {}
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  /** Control height. `sm` (h-9) lines up with `Button size="sm"`. */
+  size?: "sm" | "default";
+}
 
 /** The closed field. Wears the same border, height and focus ring as `Input`. */
 export const SelectTrigger = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<
     React.ComponentRef<typeof SelectPrimitive.Trigger>,
     SelectTriggerProps
-  >(({ className, children, ...props }, ref) => (
+  >(({ className, children, size = "default", ...props }, ref) => (
     <SelectPrimitive.Trigger
       ref={ref}
       data-slot="select-trigger"
       className={cn(
-        "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors",
+        "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors",
+        size === "sm" ? "h-9 text-[13px]" : "h-11",
         "data-[placeholder]:text-muted-foreground",
         "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
         "disabled:cursor-not-allowed disabled:opacity-50",

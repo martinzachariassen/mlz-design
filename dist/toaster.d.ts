@@ -27,7 +27,7 @@ type ToasterProps = React.ComponentProps<typeof Toaster$1>;
  * <Toaster />
  *
  * // anywhere
- * import { toast } from "@martinzachariassen/design";
+ * import { toast } from "@martinzachariassen/design/toaster";
  * toast.success("Deployment queued");
  * ```
  */

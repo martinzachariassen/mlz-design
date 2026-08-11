@@ -62,3 +62,27 @@ describe("Textarea", () => {
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
 });
+
+describe("Input slots and sizes", () => {
+  it("renders prefix and suffix inside the frame", () => {
+    const { container } = render(
+      <Input aria-label="Price" prefix={<span aria-hidden>$</span>} suffix={<span>NOK</span>} />,
+    );
+    expect(container.querySelector('[data-slot="input-group"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-slot="input-prefix"]')).toHaveTextContent("$");
+    expect(container.querySelector('[data-slot="input-suffix"]')).toHaveTextContent("NOK");
+    // The input pads out of the slots' way.
+    expect(screen.getByRole("textbox").className).toContain("pl-9");
+    expect(screen.getByRole("textbox").className).toContain("pr-9");
+  });
+
+  it("stays a bare input without slots", () => {
+    const { container } = render(<Input aria-label="Plain" />);
+    expect(container.querySelector('[data-slot="input-group"]')).not.toBeInTheDocument();
+  });
+
+  it("lines up with small buttons at size=sm", () => {
+    render(<Input aria-label="Compact" size="sm" />);
+    expect(screen.getByRole("textbox").className).toContain("h-9");
+  });
+});

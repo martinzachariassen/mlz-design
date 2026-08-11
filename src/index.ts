@@ -37,6 +37,7 @@ export {
   AvatarImage,
   type AvatarImageProps,
   type AvatarProps,
+  avatarFallbackVariants,
   avatarVariants,
   fallbackVariants,
 } from "./components/data-display/avatar";
@@ -88,8 +89,11 @@ export {
   TableFooter,
   TableHead,
   TableHeader,
+  type TableHeadProps,
   type TableProps,
   TableRow,
+  TableSortButton,
+  type TableSortButtonProps,
 } from "./components/data-display/table";
 export { Text, type TextProps, textVariants } from "./components/data-display/text";
 export {
@@ -119,8 +123,13 @@ export {
   type FindingItemProps,
   FindingList,
 } from "./components/feedback/finding-list";
-export { indicatorVariants, Progress, type ProgressProps } from "./components/feedback/progress";
-export { Skeleton } from "./components/feedback/skeleton";
+export {
+  indicatorVariants,
+  Progress,
+  type ProgressProps,
+  progressIndicatorVariants,
+} from "./components/feedback/progress";
+export { Skeleton, type SkeletonProps } from "./components/feedback/skeleton";
 export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedback/spinner";
 // Toaster and toast live at "@martinzachariassen/design/toaster". sonner is not
 // side-effect-free and injects a <style> at module scope, so re-exporting it
@@ -191,6 +200,7 @@ export {
   type BreadcrumbLinkProps,
   BreadcrumbList,
   BreadcrumbPage,
+  type BreadcrumbProps,
   BreadcrumbSeparator,
 } from "./components/layout/breadcrumb";
 export {
@@ -231,6 +241,7 @@ export {
   type PaginationLinkProps,
   PaginationNext,
   PaginationPrevious,
+  paginationLinkVariants,
 } from "./components/layout/pagination";
 export {
   ScrollArea,
@@ -260,6 +271,8 @@ export {
   AlertDialogHeader,
   type AlertDialogProps,
   AlertDialogTitle,
+  AlertDialogTrigger,
+  type AlertDialogTriggerProps,
 } from "./components/overlay/alert-dialog";
 export {
   Command,
@@ -290,6 +303,8 @@ export {
   DialogHeader,
   type DialogProps,
   DialogTitle,
+  DialogTrigger,
+  type DialogTriggerProps,
 } from "./components/overlay/dialog";
 export {
   DropdownMenu,
@@ -338,6 +353,9 @@ export {
   SheetHeader,
   type SheetProps,
   SheetTitle,
+  SheetTrigger,
+  type SheetTriggerProps,
+  sheetVariants,
 } from "./components/overlay/sheet";
 export {
   Tooltip,

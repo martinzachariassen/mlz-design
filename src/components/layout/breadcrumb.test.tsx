@@ -77,3 +77,25 @@ describe("Breadcrumb", () => {
     expect(screen.getByRole("link", { name: "Work" })).toHaveAttribute("data-router", "true");
   });
 });
+
+describe("Breadcrumb separator prop", () => {
+  it("feeds every separator through context, children still winning", () => {
+    const { container } = render(
+      <Breadcrumb separator="/">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbSeparator>·</BreadcrumbSeparator>
+          <BreadcrumbItem>
+            <BreadcrumbPage>Here</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>,
+    );
+    const separators = container.querySelectorAll('[data-slot="breadcrumb-separator"]');
+    expect(separators[0]).toHaveTextContent("/");
+    expect(separators[1]).toHaveTextContent("·");
+  });
+});

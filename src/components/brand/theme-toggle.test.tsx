@@ -81,3 +81,17 @@ describe("AccentPicker", () => {
     expect(screen.getByRole("radiogroup")).toHaveAttribute("tabindex", "0");
   });
 });
+
+describe("ThemeToggle under enableSystem={false}", () => {
+  // Offering "System" when the provider coerces it to light is a lie in the UI;
+  // the control follows the provider unless explicitly overridden.
+  it("hides the System option automatically", () => {
+    render(
+      <ThemeProvider enableSystem={false} defaultTheme="light">
+        <ThemeToggle />
+      </ThemeProvider>,
+    );
+    expect(screen.queryByRole("radio", { name: "System" })).not.toBeInTheDocument();
+    expect(screen.queryByText("System")).not.toBeInTheDocument();
+  });
+});

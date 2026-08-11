@@ -4,7 +4,7 @@ export { cn } from './chunk-7EOSDFS3.js';
 import { accents } from './chunk-7IUMZ2OS.js';
 export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-7IUMZ2OS.js';
 import { cva } from 'class-variance-authority';
-import * as React40 from 'react';
+import * as React36 from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
 import { Slot } from '@radix-ui/react-slot';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
@@ -44,7 +44,7 @@ var brandMarkVariants = /* @__PURE__ */ cva("inline-block shrink-0 align-middle"
   defaultVariants: { variant: "tile" }
 });
 var BrandMark = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ variant = "tile", size = 32, tile = "var(--foreground)", glyph, className, ...props }, ref) => {
       const isTile = variant === "tile";
       const letter = glyph ?? (isTile ? "var(--background)" : "currentColor");
@@ -71,7 +71,7 @@ var BrandMark = /* @__PURE__ */ named(
   "BrandMark"
 );
 var BrandWordmark = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ size = 24, period, className, style, ...props }, ref) => /* @__PURE__ */ jsxs(
       "span",
       {
@@ -96,7 +96,7 @@ var BrandWordmark = /* @__PURE__ */ named(
   "BrandWordmark"
 );
 var BrandLockup = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       tagline = "",
       size = 40,
@@ -177,9 +177,9 @@ function Mark({ shape, size }) {
   }
 }
 var FloatingMarks = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ count = 14, className, ...props }, ref) => {
-      const marks = React40.useMemo(
+      const marks = React36.useMemo(
         () => Array.from({ length: count }, (_, i) => {
           const a = rand(i + 1);
           const b = rand(i + 7);
@@ -238,7 +238,7 @@ function prefersReducedMotion() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 var GlitchText = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       text,
       trigger = "ambient",
@@ -248,8 +248,8 @@ var GlitchText = /* @__PURE__ */ named(
       onPointerEnter,
       ...props
     }, ref) => {
-      const containerRef = React40.useRef(null);
-      const setRefs = React40.useCallback(
+      const containerRef = React36.useRef(null);
+      const setRefs = React36.useCallback(
         (node) => {
           containerRef.current = node;
           if (typeof ref === "function") ref(node);
@@ -257,11 +257,11 @@ var GlitchText = /* @__PURE__ */ named(
         },
         [ref]
       );
-      const segments = React40.useMemo(
+      const segments = React36.useMemo(
         () => Array.from(text).map((char, i) => ({ char, key: `${i} ${char}` })),
         [text]
       );
-      const burst = React40.useCallback(() => {
+      const burst = React36.useCallback(() => {
         const root = containerRef.current;
         if (!root) return;
         const chars = root.querySelectorAll("[data-glitch-char]");
@@ -278,7 +278,7 @@ var GlitchText = /* @__PURE__ */ named(
           });
         }
       }, []);
-      React40.useImperativeHandle(
+      React36.useImperativeHandle(
         burstRef,
         () => ({
           burst: () => {
@@ -288,7 +288,7 @@ var GlitchText = /* @__PURE__ */ named(
         [burst]
       );
       const [minMs, maxMs] = interval;
-      React40.useEffect(() => {
+      React36.useEffect(() => {
         if (trigger !== "ambient" || prefersReducedMotion()) return;
         let timer;
         const schedule = () => {
@@ -327,10 +327,10 @@ var GlitchText = /* @__PURE__ */ named(
   "GlitchText"
 );
 var GridBackground = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ cell = 30, interactive = false, glow = true, spotlight = 340, className, style, ...props }, ref) => {
-      const rootRef = React40.useRef(null);
-      const setRefs = React40.useCallback(
+      const rootRef = React36.useRef(null);
+      const setRefs = React36.useCallback(
         (node) => {
           rootRef.current = node;
           if (typeof ref === "function") ref(node);
@@ -338,7 +338,7 @@ var GridBackground = /* @__PURE__ */ named(
         },
         [ref]
       );
-      React40.useEffect(() => {
+      React36.useEffect(() => {
         if (!interactive) return;
         const move = (event) => {
           const root = rootRef.current;
@@ -396,7 +396,7 @@ var GridBackground = /* @__PURE__ */ named(
   "GridBackground"
 );
 var MarginNote = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ arrow = "none", as, className, children, ...props }, ref) => {
       const Component = as ?? "aside";
       const below = arrow === "down-left" || arrow === "down-right";
@@ -450,6 +450,8 @@ var badgeVariants = /* @__PURE__ */ cva(
         accent: "bg-accent text-accent-foreground",
         outline: "border border-border text-foreground",
         muted: "bg-muted text-muted-foreground",
+        /** shadcn-vocabulary alias for `muted`, so pasted snippets compile. */
+        secondary: "bg-muted text-muted-foreground",
         destructive: "bg-destructive text-destructive-foreground"
       }
     },
@@ -474,7 +476,7 @@ function DefaultCover() {
   ] });
 }
 var ProjectCard = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       className,
       title,
@@ -487,7 +489,7 @@ var ProjectCard = /* @__PURE__ */ named(
       cta = "View project",
       ...props
     }, ref) => {
-      const titleId = React40.useId();
+      const titleId = React36.useId();
       return /* @__PURE__ */ jsxs(
         "article",
         {
@@ -581,7 +583,7 @@ function Lockup({ size }) {
   ] });
 }
 var RepoBanner = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       project,
       eyebrow = "MLZ \xB7 Design System",
@@ -728,7 +730,7 @@ var RepoBanner = /* @__PURE__ */ named(
 var BASE_W2 = 1200;
 var BASE_H2 = 630;
 var SocialCard = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       title,
       eyebrow = "Martin Zachariassen",
@@ -855,9 +857,9 @@ function DotIcon({ className, ...props }) {
 }
 var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
-var ThemeContext = /* @__PURE__ */ React40.createContext(null);
+var ThemeContext = /* @__PURE__ */ React36.createContext(null);
 var isBrowser = typeof window !== "undefined";
-var useIsomorphicLayoutEffect = isBrowser ? React40.useLayoutEffect : React40.useEffect;
+var useIsomorphicLayoutEffect = isBrowser ? React36.useLayoutEffect : React36.useEffect;
 function readStored(key, fallback, allowed) {
   if (!isBrowser) return fallback;
   try {
@@ -893,9 +895,9 @@ function ThemeProvider({
   enableSystem = true,
   attribute = "class"
 }) {
-  const [theme, setThemeState] = React40.useState(defaultTheme);
-  const [accent, setAccentState] = React40.useState(defaultAccent);
-  const [systemDark, setSystemDark] = React40.useState(false);
+  const [theme, setThemeState] = React36.useState(defaultTheme);
+  const [accent, setAccentState] = React36.useState(defaultAccent);
+  const [systemDark, setSystemDark] = React36.useState(false);
   const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
   useIsomorphicLayoutEffect(() => {
@@ -913,28 +915,28 @@ function ThemeProvider({
   useIsomorphicLayoutEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
-  const setTheme = React40.useCallback(
+  const setTheme = React36.useCallback(
     (next) => {
       setThemeState(next);
       writeStored(storageKey, next);
     },
     [storageKey]
   );
-  const setAccent = React40.useCallback(
+  const setAccent = React36.useCallback(
     (next) => {
       setAccentState(next);
       writeStored(accentStorageKey, next);
     },
     [accentStorageKey]
   );
-  const value = React40.useMemo(
-    () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
-    [theme, setTheme, resolvedTheme, accent, setAccent]
+  const value = React36.useMemo(
+    () => ({ theme, setTheme, resolvedTheme, accent, setAccent, enableSystem }),
+    [theme, setTheme, resolvedTheme, accent, setAccent, enableSystem]
   );
   return /* @__PURE__ */ jsx(ThemeContext.Provider, { value, children });
 }
 function useTheme() {
-  const ctx = React40.useContext(ThemeContext);
+  const ctx = React36.useContext(ThemeContext);
   if (!ctx) {
     throw new Error("useTheme must be used within a <ThemeProvider>.");
   }
@@ -953,7 +955,7 @@ function themeInitScript(options = {}) {
   return `(function(){try{var d=document.documentElement;var t=localStorage.getItem(${s(storageKey)})||${s(defaultTheme)};var a=localStorage.getItem(${s(accentStorageKey)})||${s(defaultAccent)};var r=t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;${write}d.setAttribute("data-accent",a);}catch(e){}})();`;
 }
 var RadioGroup = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     RadioGroupPrimitive.Root,
     {
       ref,
@@ -965,7 +967,7 @@ var RadioGroup = /* @__PURE__ */ named(
   "RadioGroup"
 );
 var RadioGroupItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     RadioGroupPrimitive.Item,
     {
       ref,
@@ -1003,6 +1005,7 @@ var toggleVariants = /* @__PURE__ */ cva(
       size: {
         sm: "h-9 px-3 text-[11px]",
         default: "h-11 px-4",
+        lg: "h-12 px-5 text-sm",
         icon: "size-11 px-0"
       }
     },
@@ -1010,7 +1013,7 @@ var toggleVariants = /* @__PURE__ */ cva(
   }
 );
 var Toggle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(
       TogglePrimitive.Root,
       {
@@ -1023,10 +1026,10 @@ var Toggle = /* @__PURE__ */ named(
   ),
   "Toggle"
 );
-var ToggleGroupContext = /* @__PURE__ */ React40.createContext({});
+var ToggleGroupContext = /* @__PURE__ */ React36.createContext({});
 var ToggleGroup = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, variant, size, children, ...props }, ref) => {
-    const context = React40.useMemo(() => ({ variant, size }), [variant, size]);
+  /* @__PURE__ */ React36.forwardRef(({ className, variant, size, children, ...props }, ref) => {
+    const context = React36.useMemo(() => ({ variant, size }), [variant, size]);
     return /* @__PURE__ */ jsx(
       ToggleGroupPrimitive.Root,
       {
@@ -1041,8 +1044,8 @@ var ToggleGroup = /* @__PURE__ */ named(
   "ToggleGroup"
 );
 var ToggleGroupItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, variant, size, ...props }, ref) => {
-    const context = React40.useContext(ToggleGroupContext);
+  /* @__PURE__ */ React36.forwardRef(({ className, variant, size, ...props }, ref) => {
+    const context = React36.useContext(ToggleGroupContext);
     return /* @__PURE__ */ jsx(
       ToggleGroupPrimitive.Item,
       {
@@ -1064,10 +1067,11 @@ var THEMES2 = [
   { value: "system", label: "System", Icon: MonitorIcon }
 ];
 var ThemeToggle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, iconOnly, hideSystem, ...props }, ref) => {
-      const { theme, setTheme } = useTheme();
-      const options = hideSystem ? THEMES2.filter((t) => t.value !== "system") : THEMES2;
+      const { theme, setTheme, enableSystem } = useTheme();
+      const showSystem = hideSystem === void 0 ? enableSystem : !hideSystem;
+      const options = showSystem ? THEMES2 : THEMES2.filter((t) => t.value !== "system");
       return /* @__PURE__ */ jsx("div", { ref, "data-slot": "theme-toggle", className, ...props, children: /* @__PURE__ */ jsx(
         ToggleGroup,
         {
@@ -1099,7 +1103,7 @@ var ThemeToggle = /* @__PURE__ */ named(
 );
 var ALL_ACCENTS = /* @__PURE__ */ Object.keys(accents);
 var AccentPicker = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, families = ALL_ACCENTS, ...props }, ref) => {
       const { accent, setAccent } = useTheme();
       return /* @__PURE__ */ jsx("div", { ref, "data-slot": "accent-picker", className, ...props, children: /* @__PURE__ */ jsx(
@@ -1152,7 +1156,7 @@ var statusColor = {
   offline: "bg-[var(--muted-foreground)]"
 };
 var Avatar = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, size, shape = "circle", status, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "span",
       {
@@ -1189,7 +1193,7 @@ var Avatar = /* @__PURE__ */ named(
   "Avatar"
 );
 var AvatarImage = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     AvatarPrimitive.Image,
     {
       ref,
@@ -1200,7 +1204,7 @@ var AvatarImage = /* @__PURE__ */ named(
   )),
   "AvatarImage"
 );
-var fallbackVariants = /* @__PURE__ */ cva(
+var avatarFallbackVariants = /* @__PURE__ */ cva(
   "flex size-full items-center justify-center font-mono uppercase tracking-[0.08em]",
   {
     variants: {
@@ -1214,21 +1218,21 @@ var fallbackVariants = /* @__PURE__ */ cva(
   }
 );
 var AvatarFallback = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, tone, ...props }, ref) => /* @__PURE__ */ jsx(
     AvatarPrimitive.Fallback,
     {
       ref,
       "data-slot": "avatar-fallback",
-      className: cn(fallbackVariants({ tone }), className),
+      className: cn(avatarFallbackVariants({ tone }), className),
       ...props
     }
   )),
   "AvatarFallback"
 );
 var AvatarGroup = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, max, size = "default", children, ...props }, ref) => {
-      const items = React40.Children.toArray(children).filter(React40.isValidElement);
+      const items = React36.Children.toArray(children).filter(React36.isValidElement);
       const shown = typeof max === "number" ? items.slice(0, max) : items;
       const overflow = items.length - shown.length;
       return /* @__PURE__ */ jsxs(
@@ -1257,14 +1261,15 @@ var AvatarGroup = /* @__PURE__ */ named(
   ),
   "AvatarGroup"
 );
+var fallbackVariants = avatarFallbackVariants;
 function useCopyToClipboard(resetMs = 2e3) {
-  const [copied, setCopied] = React40.useState(false);
-  React40.useEffect(() => {
+  const [copied, setCopied] = React36.useState(false);
+  React36.useEffect(() => {
     if (!copied) return;
     const timer = setTimeout(() => setCopied(false), resetMs);
     return () => clearTimeout(timer);
   }, [copied, resetMs]);
-  const copy = React40.useCallback(async (text) => {
+  const copy = React36.useCallback(async (text) => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -1276,7 +1281,7 @@ function useCopyToClipboard(resetMs = 2e3) {
   return { copied, copy };
 }
 var Code = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "code",
     {
       ref,
@@ -1291,7 +1296,7 @@ var Code = /* @__PURE__ */ named(
   "Code"
 );
 var CodeBlock = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ children, filename, copyable, copyLabel = "Copy code", className, ...props }, ref) => {
       const { copied, copy } = useCopyToClipboard();
       return /* @__PURE__ */ jsxs(
@@ -1336,9 +1341,9 @@ var CodeBlock = /* @__PURE__ */ named(
   ),
   "CodeBlock"
 );
-var DataListContext = /* @__PURE__ */ React40.createContext("justify");
+var DataListContext = /* @__PURE__ */ React36.createContext("justify");
 var DataList = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ layout = "justify", className, ...props }, ref) => /* @__PURE__ */ jsx(DataListContext.Provider, { value: layout, children: /* @__PURE__ */ jsx(
       "dl",
       {
@@ -1357,9 +1362,9 @@ var DataList = /* @__PURE__ */ named(
   "DataList"
 );
 var DataRow = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ label, mono, layout, className, children, ...props }, ref) => {
-      const inherited = React40.useContext(DataListContext);
+      const inherited = React36.useContext(DataListContext);
       const resolved = layout ?? inherited;
       const ledger = resolved === "ledger";
       const grid = ledger || resolved === "grid";
@@ -1415,7 +1420,7 @@ var DataRow = /* @__PURE__ */ named(
   "DataRow"
 );
 var Kbd = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "kbd",
     {
       ref,
@@ -1455,7 +1460,7 @@ var linkVariants = /* @__PURE__ */ cva(
   }
 );
 var Link = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, asChild, external, children, target, rel, ...props }, ref) => {
       const Comp = asChild ? Slot : "a";
       return /* @__PURE__ */ jsx(
@@ -1481,7 +1486,7 @@ var Link = /* @__PURE__ */ named(
   "Link"
 );
 var Prose = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "div",
     {
       ref,
@@ -1538,7 +1543,7 @@ var statusDotVariants = /* @__PURE__ */ cva("relative inline-flex size-2 shrink-
   defaultVariants: { variant: "muted" }
 });
 var StatusDot = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ variant, pulse, label, className, ...props }, ref) => {
       const a11y = label ? { role: "img", "aria-label": label } : { "aria-hidden": true };
       return /* @__PURE__ */ jsxs(
@@ -1560,7 +1565,7 @@ var StatusDot = /* @__PURE__ */ named(
   "StatusDot"
 );
 var Readout = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "dl",
       {
@@ -1581,7 +1586,7 @@ var Readout = /* @__PURE__ */ named(
   "Readout"
 );
 var ReadoutCell = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ label, dot, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "div",
       {
@@ -1621,13 +1626,13 @@ var deltaVariants = /* @__PURE__ */ cva("font-mono text-xs tabular-nums", {
   defaultVariants: { direction: "flat" }
 });
 var Stat = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "stat", className: cn("flex flex-col gap-1", className), ...props })
   ),
   "Stat"
 );
 var StatLabel = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -1642,7 +1647,7 @@ var StatLabel = /* @__PURE__ */ named(
   "StatLabel"
 );
 var StatValue = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -1654,7 +1659,7 @@ var StatValue = /* @__PURE__ */ named(
   "StatValue"
 );
 var StatDelta = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, direction, ...props }, ref) => /* @__PURE__ */ jsx(
       "p",
       {
@@ -1684,7 +1689,7 @@ var statusChipVariants = /* @__PURE__ */ cva(
   }
 );
 var StatusChip = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ variant, dot = true, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "span",
       {
@@ -1709,7 +1714,7 @@ var StatusChip = /* @__PURE__ */ named(
   "StatusChip"
 );
 var Table = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, containerClassName, ...props }, ref) => (
       // A scrollable box must be reachable by keyboard (WCAG 2.1.1, and axe's
       // `scrollable-region-focusable`), or someone who can't drag horizontally
@@ -1738,15 +1743,15 @@ var Table = /* @__PURE__ */ named(
   "Table"
 );
 var TableHeader = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("thead", { ref, "data-slot": "table-header", className: cn(className), ...props })),
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("thead", { ref, "data-slot": "table-header", className: cn(className), ...props })),
   "TableHeader"
 );
 var TableBody = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("tbody", { ref, "data-slot": "table-body", className: cn(className), ...props })),
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("tbody", { ref, "data-slot": "table-body", className: cn(className), ...props })),
   "TableBody"
 );
 var TableFooter = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "tfoot",
     {
       ref,
@@ -1758,7 +1763,7 @@ var TableFooter = /* @__PURE__ */ named(
   "TableFooter"
 );
 var TableRow = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "tr",
       {
@@ -1776,24 +1781,66 @@ var TableRow = /* @__PURE__ */ named(
   "TableRow"
 );
 var TableHead = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, scope = "col", ...props }, ref) => /* @__PURE__ */ jsx(
-    "th",
-    {
-      ref,
-      scope,
-      "data-slot": "table-head",
-      className: cn(
-        "border-b border-border py-2 pr-4 text-left align-middle font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-muted-foreground",
-        "[&[align=right]]:text-right [&[align=center]]:text-center",
-        className
-      ),
-      ...props
-    }
-  )),
+  /* @__PURE__ */ React36.forwardRef(
+    ({ className, scope = "col", sort, ...props }, ref) => /* @__PURE__ */ jsx(
+      "th",
+      {
+        ref,
+        scope,
+        "aria-sort": sort === "asc" ? "ascending" : sort === "desc" ? "descending" : void 0,
+        "data-slot": "table-head",
+        className: cn(
+          "border-b border-border py-2 pr-4 text-left align-middle font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-muted-foreground",
+          "[&[align=right]]:text-right [&[align=center]]:text-center",
+          className
+        ),
+        ...props
+      }
+    )
+  ),
   "TableHead"
 );
+var TableSortButton = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(
+    ({ className, sort = "none", children, type, ...props }, ref) => /* @__PURE__ */ jsxs(
+      "button",
+      {
+        ref,
+        type: type ?? "button",
+        "data-slot": "table-sort-button",
+        className: cn(
+          "-my-1 inline-flex items-center gap-1 rounded-[var(--radius-sm)] py-1 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          sort !== "none" ? "text-foreground" : "text-muted-foreground",
+          className
+        ),
+        ...props,
+        children: [
+          children,
+          /* @__PURE__ */ jsxs(
+            "svg",
+            {
+              "aria-hidden": "true",
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              strokeWidth: 2.5,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              className: "size-3 shrink-0",
+              children: [
+                /* @__PURE__ */ jsx("path", { d: "m7 10 5-5 5 5", className: sort === "asc" ? "" : "opacity-30" }),
+                /* @__PURE__ */ jsx("path", { d: "m7 14 5 5 5-5", className: sort === "desc" ? "" : "opacity-30" })
+              ]
+            }
+          )
+        ]
+      }
+    )
+  ),
+  "TableSortButton"
+);
 var TableCell = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "td",
     {
       ref,
@@ -1809,7 +1856,7 @@ var TableCell = /* @__PURE__ */ named(
   "TableCell"
 );
 var TableCaption = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "caption",
     {
       ref,
@@ -1833,13 +1880,15 @@ var textVariants = /* @__PURE__ */ cva("", {
       xs: "text-xs",
       sm: "text-sm",
       base: "text-base",
+      /** Alias for `base`, so the control-scale word works here too. */
+      default: "text-base",
       lg: "text-lg"
     }
   },
   defaultVariants: { variant: "body" }
 });
 var Text = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ as, variant, size, className, ...props }, ref) => {
       const Component = as ?? "span";
       return /* @__PURE__ */ jsx(
@@ -1871,7 +1920,7 @@ var alertVariants = /* @__PURE__ */ cva(
   }
 );
 var Alert = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -1886,7 +1935,7 @@ var Alert = /* @__PURE__ */ named(
   "Alert"
 );
 var AlertTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -1901,7 +1950,7 @@ var AlertTitle = /* @__PURE__ */ named(
   "AlertTitle"
 );
 var AlertDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -1926,7 +1975,7 @@ var calloutVariants = /* @__PURE__ */ cva("flex gap-2.5 text-sm text-muted-foreg
   defaultVariants: { variant: "muted" }
 });
 var Callout = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ variant, title, description, pulse, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "div",
       {
@@ -1968,7 +2017,7 @@ var emptyStateVariants = /* @__PURE__ */ cva(
   }
 );
 var EmptyState = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -1982,7 +2031,7 @@ var EmptyState = /* @__PURE__ */ named(
   "EmptyState"
 );
 var EmptyStateMedia = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -2000,7 +2049,7 @@ var EmptyStateMedia = /* @__PURE__ */ named(
   "EmptyStateMedia"
 );
 var EmptyStateTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ as: Comp = "p", className, ...props }, ref) => /* @__PURE__ */ jsx(
       Comp,
       {
@@ -2017,7 +2066,7 @@ var EmptyStateTitle = /* @__PURE__ */ named(
   "EmptyStateTitle"
 );
 var EmptyStateDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -2029,7 +2078,7 @@ var EmptyStateDescription = /* @__PURE__ */ named(
   "EmptyStateDescription"
 );
 var EmptyStateActions = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -2043,7 +2092,7 @@ var EmptyStateActions = /* @__PURE__ */ named(
   "EmptyStateActions"
 );
 var FindingList = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "ul",
       {
@@ -2057,7 +2106,7 @@ var FindingList = /* @__PURE__ */ named(
   "FindingList"
 );
 var FindingItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ title, variant, statusLabel, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "li",
       {
@@ -2087,7 +2136,7 @@ var FindingItem = /* @__PURE__ */ named(
   ),
   "FindingItem"
 );
-var indicatorVariants = /* @__PURE__ */ cva(
+var progressIndicatorVariants = /* @__PURE__ */ cva(
   "h-full rounded-full transition-[width] duration-500 ease-[var(--ease-out)]",
   {
     variants: {
@@ -2100,7 +2149,7 @@ var indicatorVariants = /* @__PURE__ */ cva(
   }
 );
 var Progress = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, value = 0, variant, ...props }, ref) => {
     const pct = Math.min(100, Math.max(0, value));
     const hasLabel = props["aria-label"] != null || props["aria-labelledby"] != null;
     return /* @__PURE__ */ jsx(
@@ -2115,7 +2164,7 @@ var Progress = /* @__PURE__ */ named(
         children: /* @__PURE__ */ jsx(
           ProgressPrimitive.Indicator,
           {
-            className: cn(indicatorVariants({ variant })),
+            className: cn(progressIndicatorVariants({ variant })),
             style: { width: `${pct}%` }
           }
         )
@@ -2124,8 +2173,9 @@ var Progress = /* @__PURE__ */ named(
   }),
   "Progress"
 );
+var indicatorVariants = progressIndicatorVariants;
 var Skeleton = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -2151,7 +2201,7 @@ var spinnerVariants = /* @__PURE__ */ cva(
   }
 );
 var Spinner = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, size, label = "Loading", ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -2173,6 +2223,14 @@ var buttonVariants = /* @__PURE__ */ cva(
         default: "border-[1.5px] border-primary bg-transparent text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-accent hover:shadow-[5px_5px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:border-accent focus-visible:shadow-[5px_5px_0_0_var(--accent)]",
         solid: "border-[1.5px] border-primary bg-primary text-primary-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--accent)]",
         accent: "bg-accent text-accent-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--primary)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--primary)]",
+        /**
+         * shadcn-vocabulary alias for `default`: MLZ's default *is* the outline
+         * button, so pasted shadcn snippets and LLM-written call sites render
+         * the intended look instead of failing to compile.
+         */
+        outline: "border-[1.5px] border-primary bg-transparent text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:border-accent hover:shadow-[5px_5px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:border-accent focus-visible:shadow-[5px_5px_0_0_var(--accent)]",
+        /** The quiet filled companion (shadcn's `secondary`): secondary surface, same lift. */
+        secondary: "border-[1.5px] border-transparent bg-secondary text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--accent)]",
         ghost: "bg-transparent text-foreground hover:bg-muted",
         sketch: "border-[1.5px] border-dashed border-primary bg-transparent text-foreground hover:-translate-x-0.5 hover:-translate-y-0.5 hover:-rotate-[0.75deg] hover:border-accent hover:shadow-[4px_4px_0_0_var(--accent)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:-rotate-[0.75deg] focus-visible:border-accent focus-visible:shadow-[4px_4px_0_0_var(--accent)]",
         destructive: "border-[1.5px] border-destructive bg-transparent text-destructive-deep hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[5px_5px_0_0_var(--destructive)] focus-visible:-translate-x-0.5 focus-visible:-translate-y-0.5 focus-visible:shadow-[5px_5px_0_0_var(--destructive)]",
@@ -2189,7 +2247,7 @@ var buttonVariants = /* @__PURE__ */ cva(
   }
 );
 var Button = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, size, asChild, type, ...props }, ref) => {
       const Comp = asChild ? Slot : "button";
       return /* @__PURE__ */ jsx(
@@ -2206,9 +2264,9 @@ var Button = /* @__PURE__ */ named(
   "Button"
 );
 var Checkbox = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, id, ...props }, ref) => {
-      const generatedId = React40.useId();
+      const generatedId = React36.useId();
       const inputId = id ?? generatedId;
       return /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -2241,53 +2299,67 @@ var Checkbox = /* @__PURE__ */ named(
   ),
   "Checkbox"
 );
-var ModalContext = /* @__PURE__ */ React40.createContext(null);
+var ModalContext = /* @__PURE__ */ React36.createContext(null);
 function useModal() {
-  return React40.useContext(ModalContext);
+  return React36.useContext(ModalContext);
 }
 function useModalPart(part) {
   const modal = useModal();
   const register = part === "title" ? modal?.setHasTitle : modal?.setHasDescription;
-  React40.useEffect(() => {
+  React36.useEffect(() => {
     register?.(true);
     return () => register?.(false);
   }, [register]);
   return part === "title" ? modal?.titleId : modal?.descriptionId;
 }
-function ModalRoot({
+function ModalProvider({
   open: openProp,
   defaultOpen = false,
   onOpenChange,
+  children
+}) {
+  const reactId = React36.useId();
+  const titleId = `${reactId}-title`;
+  const descriptionId = `${reactId}-description`;
+  const [uncontrolledOpen, setUncontrolledOpen] = React36.useState(defaultOpen);
+  const isControlled = openProp !== void 0;
+  const open = isControlled ? openProp : uncontrolledOpen;
+  const [hasTitle, setHasTitle] = React36.useState(false);
+  const [hasDescription, setHasDescription] = React36.useState(false);
+  const show = React36.useCallback(() => {
+    if (!isControlled) setUncontrolledOpen(true);
+    onOpenChange?.(true);
+  }, [isControlled, onOpenChange]);
+  const close = React36.useCallback(() => {
+    if (!isControlled) setUncontrolledOpen(false);
+    onOpenChange?.(false);
+  }, [isControlled, onOpenChange]);
+  const ctx = React36.useMemo(
+    () => ({ open, show, close, titleId, descriptionId, setHasTitle, setHasDescription }),
+    [open, show, close, titleId, descriptionId]
+  );
+  return /* @__PURE__ */ jsx(ModalContext.Provider, { value: ctx, children: /* @__PURE__ */ jsx(ModalPartsContext.Provider, { value: { hasTitle, hasDescription }, children }) });
+}
+var ModalPartsContext = /* @__PURE__ */ React36.createContext({ hasTitle: false, hasDescription: false });
+function ModalDialog({
   className,
   slot,
   role,
   dismissOnBackdrop = true,
   children
 }) {
-  const ref = React40.useRef(null);
-  const pressStartedOnBackdrop = React40.useRef(false);
-  const reactId = React40.useId();
-  const titleId = `${reactId}-title`;
-  const descriptionId = `${reactId}-description`;
-  const [uncontrolledOpen, setUncontrolledOpen] = React40.useState(defaultOpen);
-  const isControlled = openProp !== void 0;
-  const open = isControlled ? openProp : uncontrolledOpen;
-  const [hasTitle, setHasTitle] = React40.useState(false);
-  const [hasDescription, setHasDescription] = React40.useState(false);
-  React40.useEffect(() => {
+  const ctx = useModal();
+  const { hasTitle, hasDescription } = React36.useContext(ModalPartsContext);
+  const ref = React36.useRef(null);
+  const pressStartedOnBackdrop = React36.useRef(false);
+  const open = ctx?.open ?? false;
+  React36.useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (open && !el.open) el.showModal();
     else if (!open && el.open) el.close();
   }, [open]);
-  const close = React40.useCallback(() => {
-    if (!isControlled) setUncontrolledOpen(false);
-    onOpenChange?.(false);
-  }, [isControlled, onOpenChange]);
-  const ctx = React40.useMemo(
-    () => ({ close, titleId, descriptionId, setHasTitle, setHasDescription }),
-    [close, titleId, descriptionId]
-  );
+  const close = ctx?.close;
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: backdrop dismissal is an enhancement; keyboard close (Esc) is handled natively by <dialog>
     /* @__PURE__ */ jsx(
@@ -2295,27 +2367,44 @@ function ModalRoot({
       {
         ref,
         role,
-        "aria-labelledby": hasTitle ? titleId : void 0,
-        "aria-describedby": hasDescription ? descriptionId : void 0,
+        "aria-labelledby": hasTitle ? ctx?.titleId : void 0,
+        "aria-describedby": hasDescription ? ctx?.descriptionId : void 0,
         onClose: close,
         onMouseDown: (event) => {
           pressStartedOnBackdrop.current = dismissOnBackdrop && event.target === ref.current;
         },
         onClick: (event) => {
           if (dismissOnBackdrop && event.target === ref.current && pressStartedOnBackdrop.current) {
-            close();
+            close?.();
           }
           pressStartedOnBackdrop.current = false;
         },
         "data-slot": slot,
         className,
-        children: open ? /* @__PURE__ */ jsx(ModalContext.Provider, { value: ctx, children }) : null
+        children: open ? children : null
       }
     )
   );
 }
+var ModalTrigger = /* @__PURE__ */ React36.forwardRef(({ asChild, onClick, type, slot, ...props }, ref) => {
+  const ctx = useModal();
+  const Comp = asChild ? Slot : "button";
+  return /* @__PURE__ */ jsx(
+    Comp,
+    {
+      ref,
+      "data-slot": slot,
+      type: asChild ? type : type ?? "button",
+      onClick: (event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) ctx?.show();
+      },
+      ...props
+    }
+  );
+});
 var Command = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       Command$1,
       {
@@ -2332,7 +2421,7 @@ var Command = /* @__PURE__ */ named(
   "Command"
 );
 var CommandInput = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxs(
     "div",
     {
       className: "flex items-center gap-2.5 border-b border-border px-4",
@@ -2356,8 +2445,8 @@ var CommandInput = /* @__PURE__ */ named(
   "CommandInput"
 );
 var CommandList = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => {
-    const markSizerPresentational = React40.useCallback((node) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => {
+    const markSizerPresentational = React36.useCallback((node) => {
       node?.querySelector("[cmdk-list-sizer]")?.setAttribute("role", "presentation");
     }, []);
     return /* @__PURE__ */ jsx(
@@ -2377,7 +2466,7 @@ var CommandList = /* @__PURE__ */ named(
   "CommandList"
 );
 var CommandEmpty = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     Command$1.Empty,
     {
       ref,
@@ -2389,7 +2478,7 @@ var CommandEmpty = /* @__PURE__ */ named(
   "CommandEmpty"
 );
 var CommandGroup = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     Command$1.Group,
     {
       ref,
@@ -2405,7 +2494,7 @@ var CommandGroup = /* @__PURE__ */ named(
   "CommandGroup"
 );
 var CommandItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     Command$1.Item,
     {
       ref,
@@ -2422,7 +2511,7 @@ var CommandItem = /* @__PURE__ */ named(
   "CommandItem"
 );
 var CommandSeparator = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     Command$1.Separator,
     {
       ref: (node) => {
@@ -2439,7 +2528,7 @@ var CommandSeparator = /* @__PURE__ */ named(
   "CommandSeparator"
 );
 var CommandShortcut = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "span",
       {
@@ -2464,12 +2553,9 @@ function CommandDialog({
   children,
   ...props
 }) {
-  return /* @__PURE__ */ jsx(
-    ModalRoot,
+  return /* @__PURE__ */ jsx(ModalProvider, { open, defaultOpen, onOpenChange, children: /* @__PURE__ */ jsx(
+    ModalDialog,
     {
-      open,
-      defaultOpen,
-      onOpenChange,
       slot: "command-dialog",
       className: "m-auto mt-[12vh] w-[calc(100%-2rem)] max-w-xl overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
       children: /* @__PURE__ */ jsx(
@@ -2485,7 +2571,7 @@ function CommandDialog({
         }
       )
     }
-  );
+  ) });
 }
 function Popover(props) {
   return /* @__PURE__ */ jsx(PopoverPrimitive.Root, { ...props });
@@ -2494,7 +2580,7 @@ var PopoverTrigger = PopoverPrimitive.Trigger;
 var PopoverAnchor = PopoverPrimitive.Anchor;
 var PopoverClose = PopoverPrimitive.Close;
 var PopoverContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(PopoverPrimitive.Portal, { children: /* @__PURE__ */ jsx(
     PopoverPrimitive.Content,
     {
       ref,
@@ -2513,7 +2599,7 @@ var PopoverContent = /* @__PURE__ */ named(
   "PopoverContent"
 );
 var Label = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       LabelPrimitive.Root,
       {
@@ -2528,9 +2614,9 @@ var Label = /* @__PURE__ */ named(
   ),
   "Label"
 );
-var FieldContext = /* @__PURE__ */ React40.createContext(null);
+var FieldContext = /* @__PURE__ */ React36.createContext(null);
 function useField() {
-  return React40.useContext(FieldContext);
+  return React36.useContext(FieldContext);
 }
 function useFieldControlProps() {
   const field = useField();
@@ -2544,17 +2630,17 @@ function useFieldControlProps() {
   };
 }
 var Field = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ id, invalid = false, disabled = false, className, children, ...props }, ref) => {
-      const reactId = React40.useId();
+      const reactId = React36.useId();
       const controlId = id ?? `${reactId}-control`;
-      const [hasDescription, setHasDescription] = React40.useState(false);
-      const [hasError, setHasError] = React40.useState(false);
-      const register = React40.useCallback((part, present) => {
+      const [hasDescription, setHasDescription] = React36.useState(false);
+      const [hasError, setHasError] = React36.useState(false);
+      const register = React36.useCallback((part, present) => {
         if (part === "description") setHasDescription(present);
         else setHasError(present);
       }, []);
-      const ctx = React40.useMemo(
+      const ctx = React36.useMemo(
         () => ({
           controlId,
           descriptionId: `${reactId}-description`,
@@ -2584,7 +2670,7 @@ var Field = /* @__PURE__ */ named(
   "Field"
 );
 var FieldLabel = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ htmlFor, className, ...props }, ref) => {
       const field = useField();
       return /* @__PURE__ */ jsx(
@@ -2602,10 +2688,10 @@ var FieldLabel = /* @__PURE__ */ named(
   "FieldLabel"
 );
 var FieldDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => {
     const field = useField();
     const register = field?.register;
-    React40.useEffect(() => {
+    React36.useEffect(() => {
       register?.("description", true);
       return () => register?.("description", false);
     }, [register]);
@@ -2623,11 +2709,11 @@ var FieldDescription = /* @__PURE__ */ named(
   "FieldDescription"
 );
 var FieldError = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => {
     const field = useField();
     const register = field?.register;
     const present = children !== void 0 && children !== null && children !== false;
-    React40.useEffect(() => {
+    React36.useEffect(() => {
       register?.("error", present);
       return () => register?.("error", false);
     }, [register, present]);
@@ -2648,12 +2734,18 @@ var FieldError = /* @__PURE__ */ named(
   "FieldError"
 );
 var Combobox = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({
       options,
       value: valueProp,
       defaultValue,
       onValueChange,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
+      name,
+      id,
+      size = "default",
       placeholder = "Select\u2026",
       searchPlaceholder = "Search\u2026",
       emptyMessage = "No results.",
@@ -2662,8 +2754,14 @@ var Combobox = /* @__PURE__ */ named(
       contentClassName,
       "aria-label": ariaLabel
     }, ref) => {
-      const [open, setOpen] = React40.useState(false);
-      const [uncontrolled, setUncontrolled] = React40.useState(defaultValue ?? "");
+      const [uncontrolledOpen, setUncontrolledOpen] = React36.useState(defaultOpen);
+      const isOpenControlled = openProp !== void 0;
+      const open = isOpenControlled ? openProp : uncontrolledOpen;
+      const setOpen = (next) => {
+        if (!isOpenControlled) setUncontrolledOpen(next);
+        onOpenChange?.(next);
+      };
+      const [uncontrolled, setUncontrolled] = React36.useState(defaultValue ?? "");
       const isControlled = valueProp !== void 0;
       const value = isControlled ? valueProp : uncontrolled;
       const fieldProps = useFieldControlProps();
@@ -2675,6 +2773,7 @@ var Combobox = /* @__PURE__ */ named(
         setOpen(false);
       };
       return /* @__PURE__ */ jsxs(Popover, { open, onOpenChange: setOpen, children: [
+        name ? /* @__PURE__ */ jsx("input", { type: "hidden", name, value }) : null,
         /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsxs(
           "button",
           {
@@ -2685,7 +2784,8 @@ var Combobox = /* @__PURE__ */ named(
             "aria-label": ariaLabel,
             "data-slot": "combobox",
             className: cn(
-              "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+              "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+              size === "sm" ? "h-9 text-[13px]" : "h-11",
               "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
               "disabled:cursor-not-allowed disabled:opacity-50",
               "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
@@ -2693,6 +2793,7 @@ var Combobox = /* @__PURE__ */ named(
               className
             ),
             ...fieldProps,
+            id: id ?? fieldProps.id,
             disabled: disabled ?? fieldProps.disabled,
             children: [
               /* @__PURE__ */ jsx("span", { className: "truncate", children: selected?.label ?? placeholder }),
@@ -2733,7 +2834,7 @@ var Combobox = /* @__PURE__ */ named(
   "Combobox"
 );
 var CopyButton = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ value, label = "Copy", copiedLabel = "Copied", resetMs, onCopied, className, ...props }, ref) => {
       const { copied, copy } = useCopyToClipboard(resetMs);
       return /* @__PURE__ */ jsxs(
@@ -2759,20 +2860,45 @@ var CopyButton = /* @__PURE__ */ named(
   "CopyButton"
 );
 var Input = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
-    ({ className, type, ...props }, ref) => /* @__PURE__ */ jsx(
-      "input",
-      {
-        ref,
-        type,
-        className: cn(
-          "flex h-11 w-full rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
-          className
-        ),
-        ...useFieldControlProps(),
-        ...props
-      }
-    )
+  /* @__PURE__ */ React36.forwardRef(
+    ({ className, type, size = "default", prefix, suffix, ...props }, ref) => {
+      const input = /* @__PURE__ */ jsx(
+        "input",
+        {
+          ref,
+          type,
+          className: cn(
+            "flex w-full rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+            size === "sm" ? "h-9 text-[13px]" : "h-11",
+            prefix != null && "pl-9",
+            suffix != null && "pr-9",
+            className
+          ),
+          ...useFieldControlProps(),
+          ...props
+        }
+      );
+      if (prefix == null && suffix == null) return input;
+      return /* @__PURE__ */ jsxs("div", { "data-slot": "input-group", className: "relative w-full", children: [
+        prefix != null ? /* @__PURE__ */ jsx(
+          "span",
+          {
+            "data-slot": "input-prefix",
+            className: "pointer-events-none absolute top-1/2 left-3 flex -translate-y-1/2 items-center text-muted-foreground [&>a]:pointer-events-auto [&>button]:pointer-events-auto [&_svg]:size-4",
+            children: prefix
+          }
+        ) : null,
+        input,
+        suffix != null ? /* @__PURE__ */ jsx(
+          "span",
+          {
+            "data-slot": "input-suffix",
+            className: "pointer-events-none absolute top-1/2 right-3 flex -translate-y-1/2 items-center text-muted-foreground [&>a]:pointer-events-auto [&>button]:pointer-events-auto [&_svg]:size-4",
+            children: suffix
+          }
+        ) : null
+      ] });
+    }
   ),
   "Input"
 );
@@ -2782,13 +2908,14 @@ function Select(props) {
 var SelectValue = SelectPrimitive.Value;
 var SelectGroup = SelectPrimitive.Group;
 var SelectTrigger = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, size = "default", ...props }, ref) => /* @__PURE__ */ jsxs(
     SelectPrimitive.Trigger,
     {
       ref,
       "data-slot": "select-trigger",
       className: cn(
-        "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors",
+        "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors",
+        size === "sm" ? "h-9 text-[13px]" : "h-11",
         "data-[placeholder]:text-muted-foreground",
         "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
         "disabled:cursor-not-allowed disabled:opacity-50",
@@ -2805,7 +2932,7 @@ var SelectTrigger = /* @__PURE__ */ named(
   "SelectTrigger"
 );
 var SelectContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, position = "popper", sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(SelectPrimitive.Portal, { children: /* @__PURE__ */ jsxs(
     SelectPrimitive.Content,
     {
       ref,
@@ -2830,7 +2957,7 @@ var SelectContent = /* @__PURE__ */ named(
   "SelectContent"
 );
 var SelectItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     SelectPrimitive.Item,
     {
       ref,
@@ -2851,7 +2978,7 @@ var SelectItem = /* @__PURE__ */ named(
   "SelectItem"
 );
 var SelectLabel = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     SelectPrimitive.Label,
     {
       ref,
@@ -2866,7 +2993,7 @@ var SelectLabel = /* @__PURE__ */ named(
   "SelectLabel"
 );
 var SelectSeparator = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     SelectPrimitive.Separator,
     {
       ref,
@@ -2878,7 +3005,7 @@ var SelectSeparator = /* @__PURE__ */ named(
   "SelectSeparator"
 );
 var Slider = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, thumbLabels, ...props }, ref) => {
       const thumbCount = (props.value ?? props.defaultValue)?.length ?? 1;
       const rootLabel = props["aria-label"];
@@ -2925,9 +3052,9 @@ var Slider = /* @__PURE__ */ named(
   "Slider"
 );
 var Switch = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, id, ...props }, ref) => {
-      const generatedId = React40.useId();
+      const generatedId = React36.useId();
       const inputId = id ?? generatedId;
       return /* @__PURE__ */ jsxs(Fragment, { children: [
         /* @__PURE__ */ jsx("input", { ref, id: inputId, type: "checkbox", className: "peer sr-only", ...props }),
@@ -2948,13 +3075,14 @@ var Switch = /* @__PURE__ */ named(
   "Switch"
 );
 var Textarea = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
-    ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(
+    ({ className, size = "default", ...props }, ref) => /* @__PURE__ */ jsx(
       "textarea",
       {
         ref,
         className: cn(
-          "flex min-h-24 w-full resize-y rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors duration-200 ease-[var(--ease-out)] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+          "flex w-full resize-y rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm text-foreground transition-colors duration-200 ease-[var(--ease-out)] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+          size === "sm" ? "min-h-16 text-[13px]" : "min-h-24",
           className
         ),
         ...useFieldControlProps(),
@@ -2965,7 +3093,7 @@ var Textarea = /* @__PURE__ */ named(
   "Textarea"
 );
 var Accordion = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, type = "single", ...props }, ref) => /* @__PURE__ */ jsx(
     AccordionPrimitive.Root,
     {
       ref,
@@ -2977,7 +3105,7 @@ var Accordion = /* @__PURE__ */ named(
   "Accordion"
 );
 var AccordionItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     AccordionPrimitive.Item,
     {
       ref,
@@ -2989,7 +3117,7 @@ var AccordionItem = /* @__PURE__ */ named(
   "AccordionItem"
 );
 var AccordionTrigger = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, hideIndicator, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, { className: "m-0 flex", children: /* @__PURE__ */ jsxs(
     AccordionPrimitive.Trigger,
     {
       ref,
@@ -3021,7 +3149,7 @@ var AccordionTrigger = /* @__PURE__ */ named(
   "AccordionTrigger"
 );
 var AccordionContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
     AccordionPrimitive.Content,
     {
       forceMount: true,
@@ -3035,21 +3163,24 @@ var AccordionContent = /* @__PURE__ */ named(
   )),
   "AccordionContent"
 );
+var BreadcrumbSeparatorContext = /* @__PURE__ */ React36.createContext(void 0);
 var Breadcrumb = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-    "nav",
-    {
-      ref,
-      "aria-label": "Breadcrumb",
-      "data-slot": "breadcrumb",
-      className: cn(className),
-      ...props
-    }
-  )),
+  /* @__PURE__ */ React36.forwardRef(
+    ({ className, separator, ...props }, ref) => /* @__PURE__ */ jsx(BreadcrumbSeparatorContext.Provider, { value: separator, children: /* @__PURE__ */ jsx(
+      "nav",
+      {
+        ref,
+        "aria-label": "Breadcrumb",
+        "data-slot": "breadcrumb",
+        className: cn(className),
+        ...props
+      }
+    ) })
+  ),
   "Breadcrumb"
 );
 var BreadcrumbList = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "ol",
       {
@@ -3066,7 +3197,7 @@ var BreadcrumbList = /* @__PURE__ */ named(
   "BreadcrumbList"
 );
 var BreadcrumbItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "li",
       {
@@ -3080,7 +3211,7 @@ var BreadcrumbItem = /* @__PURE__ */ named(
   "BreadcrumbItem"
 );
 var BreadcrumbLink = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, asChild, ...props }, ref) => {
       const Comp = asChild ? Slot : "a";
       return /* @__PURE__ */ jsx(
@@ -3100,7 +3231,7 @@ var BreadcrumbLink = /* @__PURE__ */ named(
   "BreadcrumbLink"
 );
 var BreadcrumbPage = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "span",
       {
@@ -3119,6 +3250,7 @@ function BreadcrumbSeparator({
   className,
   ...props
 }) {
+  const separator = React36.useContext(BreadcrumbSeparatorContext);
   return /* @__PURE__ */ jsx(
     "li",
     {
@@ -3126,7 +3258,7 @@ function BreadcrumbSeparator({
       "data-slot": "breadcrumb-separator",
       className: cn("[&>svg]:size-3 text-muted-foreground-2", className),
       ...props,
-      children: children ?? /* @__PURE__ */ jsx(ChevronRightIcon, {})
+      children: children ?? separator ?? /* @__PURE__ */ jsx(ChevronRightIcon, {})
     }
   );
 }
@@ -3163,7 +3295,7 @@ var cardVariants = /* @__PURE__ */ cva(
   }
 );
 var Card = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, variant, asChild, ...props }, ref) => {
       const Comp = asChild ? Slot : "div";
       return /* @__PURE__ */ jsx(
@@ -3180,7 +3312,7 @@ var Card = /* @__PURE__ */ named(
   "Card"
 );
 var CardHeader = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3197,7 +3329,7 @@ var CardHeader = /* @__PURE__ */ named(
   "CardHeader"
 );
 var CardTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3214,7 +3346,7 @@ var CardTitle = /* @__PURE__ */ named(
   "CardTitle"
 );
 var CardDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     "p",
     {
       ref,
@@ -3226,7 +3358,7 @@ var CardDescription = /* @__PURE__ */ named(
   "CardDescription"
 );
 var CardAction = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3240,13 +3372,13 @@ var CardAction = /* @__PURE__ */ named(
   "CardAction"
 );
 var CardContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { ref, "data-slot": "card-content", className: cn("p-5 pt-0", className), ...props })
   ),
   "CardContent"
 );
 var CardFooter = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3263,7 +3395,7 @@ function Collapsible(props) {
   return /* @__PURE__ */ jsx(CollapsiblePrimitive.Root, { "data-slot": "collapsible", ...props });
 }
 var CollapsibleTrigger = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     CollapsiblePrimitive.Trigger,
     {
       ref,
@@ -3278,7 +3410,7 @@ var CollapsibleTrigger = /* @__PURE__ */ named(
   "CollapsibleTrigger"
 );
 var CollapsibleContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(
     CollapsiblePrimitive.Content,
     {
       forceMount: true,
@@ -3317,7 +3449,7 @@ var containerVariants = /* @__PURE__ */ cva("mx-auto w-full", {
   defaultVariants: { size: "lg", gutter: "md" }
 });
 var Container = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, size, gutter, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3368,7 +3500,7 @@ var stackVariants = /* @__PURE__ */ cva("flex", {
   defaultVariants: { direction: "col", gap: "md", align: "stretch", justify: "start" }
 });
 var Stack = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, direction, gap, align, justify, wrap, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3398,7 +3530,7 @@ var gapMap = {
   xl: "gap-10"
 };
 var Grid = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, min, cols = 3, gap = "md", style, ...props }, ref) => {
       const auto = min != null;
       const minW = typeof min === "number" ? `${min}px` : min;
@@ -3419,7 +3551,7 @@ var Grid = /* @__PURE__ */ named(
   ),
   "Grid"
 );
-var pageVariants = /* @__PURE__ */ cva(
+var paginationLinkVariants = /* @__PURE__ */ cva(
   "inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 [&_svg]:size-3.5",
   {
     variants: {
@@ -3443,7 +3575,7 @@ function Pagination({ className, ...props }) {
   );
 }
 var PaginationContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "ul",
       {
@@ -3457,13 +3589,13 @@ var PaginationContent = /* @__PURE__ */ named(
   "PaginationContent"
 );
 var PaginationItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx("li", { ref, "data-slot": "pagination-item", className: cn(className), ...props })
   ),
   "PaginationItem"
 );
 var PaginationLink = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, isActive, asChild, ...props }, ref) => {
       const Comp = asChild ? Slot : "a";
       return /* @__PURE__ */ jsx(
@@ -3472,7 +3604,7 @@ var PaginationLink = /* @__PURE__ */ named(
           ref,
           "aria-current": isActive ? "page" : void 0,
           "data-slot": "pagination-link",
-          className: cn(pageVariants({ active: Boolean(isActive) }), className),
+          className: cn(paginationLinkVariants({ active: Boolean(isActive) }), className),
           ...props
         }
       );
@@ -3514,7 +3646,7 @@ function PaginationEllipsis({
   );
 }
 var ScrollArea = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, viewportClassName, orientation = "vertical", children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, viewportClassName, orientation = "vertical", children, ...props }, ref) => /* @__PURE__ */ jsxs(
     ScrollAreaPrimitive.Root,
     {
       ref,
@@ -3545,7 +3677,7 @@ var ScrollArea = /* @__PURE__ */ named(
   "ScrollArea"
 );
 var ScrollBar = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, orientation = "vertical", ...props }, ref) => /* @__PURE__ */ jsx(
     ScrollAreaPrimitive.ScrollAreaScrollbar,
     {
       ref,
@@ -3570,7 +3702,7 @@ var ScrollBar = /* @__PURE__ */ named(
   "ScrollBar"
 );
 var Separator2 = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, orientation = "horizontal", decorative = true, label, ...props }, ref) => {
     if (label != null && orientation === "horizontal") {
       return /* @__PURE__ */ jsxs(
         SeparatorPrimitive.Root,
@@ -3607,7 +3739,7 @@ var Separator2 = /* @__PURE__ */ named(
   "Separator"
 );
 var SectionHeading = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ as: Comp = "h2", rule = true, actions, className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
       "div",
       {
@@ -3626,7 +3758,7 @@ var SectionHeading = /* @__PURE__ */ named(
   "SectionHeading"
 );
 var Tabs = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       TabsPrimitive.Root,
       {
@@ -3639,7 +3771,7 @@ var Tabs = /* @__PURE__ */ named(
   "Tabs"
 );
 var TabsList = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     TabsPrimitive.List,
     {
       ref,
@@ -3654,7 +3786,7 @@ var TabsList = /* @__PURE__ */ named(
   "TabsList"
 );
 var TabsTrigger = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     TabsPrimitive.Trigger,
     {
       ref,
@@ -3670,7 +3802,7 @@ var TabsTrigger = /* @__PURE__ */ named(
   "TabsTrigger"
 );
 var TabsContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     TabsPrimitive.Content,
     {
       ref,
@@ -3689,39 +3821,40 @@ function AlertDialog({
   onOpenChange,
   children
 }) {
-  return /* @__PURE__ */ jsx(
-    ModalRoot,
-    {
-      open,
-      defaultOpen,
-      onOpenChange,
-      slot: "alert-dialog",
-      role: "alertdialog",
-      dismissOnBackdrop: false,
-      className: "m-auto w-[calc(100%-2rem)] max-w-md overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
-      children
-    }
-  );
+  return /* @__PURE__ */ jsx(ModalProvider, { open, defaultOpen, onOpenChange, children });
 }
+var AlertDialogTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef((props, ref) => /* @__PURE__ */ jsx(ModalTrigger, { ref, slot: "alert-dialog-trigger", ...props })),
+  "AlertDialogTrigger"
+);
 var AlertDialogContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
-      "div",
+      ModalDialog,
       {
-        ref,
-        "data-slot": "alert-dialog-content",
-        className: cn(
-          "relative mx-auto w-full rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-          className
-        ),
-        ...props
+        slot: "alert-dialog",
+        role: "alertdialog",
+        dismissOnBackdrop: false,
+        className: "m-auto w-[calc(100%-2rem)] overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
+        children: /* @__PURE__ */ jsx(
+          "div",
+          {
+            ref,
+            "data-slot": "alert-dialog-content",
+            className: cn(
+              "relative mx-auto w-full max-w-md rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+              className
+            ),
+            ...props
+          }
+        )
       }
     )
   ),
   "AlertDialogContent"
 );
 var AlertDialogHeader = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3735,7 +3868,7 @@ var AlertDialogHeader = /* @__PURE__ */ named(
   "AlertDialogHeader"
 );
 var AlertDialogTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => {
       const titleId = useModalPart("title");
       return /* @__PURE__ */ jsx(
@@ -3756,7 +3889,7 @@ var AlertDialogTitle = /* @__PURE__ */ named(
   "AlertDialogTitle"
 );
 var AlertDialogDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => {
     const descriptionId = useModalPart("description");
     return /* @__PURE__ */ jsx(
       "p",
@@ -3772,7 +3905,7 @@ var AlertDialogDescription = /* @__PURE__ */ named(
   "AlertDialogDescription"
 );
 var AlertDialogFooter = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3789,12 +3922,12 @@ var AlertDialogFooter = /* @__PURE__ */ named(
   "AlertDialogFooter"
 );
 var AlertDialogCancel = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ asChild, onClick, type, ...props }, ref) => {
       const ctx = useModal();
-      const localRef = React40.useRef(null);
-      React40.useImperativeHandle(ref, () => localRef.current);
-      React40.useEffect(() => {
+      const localRef = React36.useRef(null);
+      React36.useImperativeHandle(ref, () => localRef.current);
+      React36.useEffect(() => {
         localRef.current?.setAttribute("autofocus", "");
       }, []);
       const Comp = asChild ? Slot : "button";
@@ -3816,7 +3949,7 @@ var AlertDialogCancel = /* @__PURE__ */ named(
   "AlertDialogCancel"
 );
 var AlertDialogAction = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ asChild, onClick, type, ...props }, ref) => {
       const ctx = useModal();
       const Comp = asChild ? Slot : "button";
@@ -3838,47 +3971,48 @@ var AlertDialogAction = /* @__PURE__ */ named(
   "AlertDialogAction"
 );
 function Dialog({ open, defaultOpen = false, onOpenChange, children }) {
-  return /* @__PURE__ */ jsx(
-    ModalRoot,
-    {
-      open,
-      defaultOpen,
-      onOpenChange,
-      slot: "dialog",
-      className: "m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
-      children
-    }
-  );
+  return /* @__PURE__ */ jsx(ModalProvider, { open, defaultOpen, onOpenChange, children });
 }
+var DialogTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef((props, ref) => /* @__PURE__ */ jsx(ModalTrigger, { ref, slot: "dialog-trigger", ...props })),
+  "DialogTrigger"
+);
 var DialogContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, children, ...props }, ref) => {
       const ctx = useModal();
-      return /* @__PURE__ */ jsxs(
-        "div",
+      return /* @__PURE__ */ jsx(
+        ModalDialog,
         {
-          ref,
-          "data-slot": "dialog-content",
-          className: cn(
-            "relative mx-auto max-h-[85dvh] w-full overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-            className
-          ),
-          ...props,
-          children: [
-            children,
-            /* @__PURE__ */ jsxs(
-              "button",
-              {
-                type: "button",
-                onClick: () => ctx?.close(),
-                className: "absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
-                children: [
-                  /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-base leading-none", children: "\u2715" }),
-                  /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
-                ]
-              }
-            )
-          ]
+          slot: "dialog",
+          className: "m-auto w-[calc(100%-2rem)] overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]",
+          children: /* @__PURE__ */ jsxs(
+            "div",
+            {
+              ref,
+              "data-slot": "dialog-content",
+              className: cn(
+                "relative mx-auto max-h-[85dvh] w-full max-w-lg overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+                className
+              ),
+              ...props,
+              children: [
+                children,
+                /* @__PURE__ */ jsxs(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: () => ctx?.close(),
+                    className: "absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+                    children: [
+                      /* @__PURE__ */ jsx("span", { "aria-hidden": true, className: "text-base leading-none", children: "\u2715" }),
+                      /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Close" })
+                    ]
+                  }
+                )
+              ]
+            }
+          )
         }
       );
     }
@@ -3886,7 +4020,7 @@ var DialogContent = /* @__PURE__ */ named(
   "DialogContent"
 );
 var DialogHeader = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3900,7 +4034,7 @@ var DialogHeader = /* @__PURE__ */ named(
   "DialogHeader"
 );
 var DialogTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => {
       const titleId = useModalPart("title");
       return /* @__PURE__ */ jsx(
@@ -3921,7 +4055,7 @@ var DialogTitle = /* @__PURE__ */ named(
   "DialogTitle"
 );
 var DialogDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => {
     const descriptionId = useModalPart("description");
     return /* @__PURE__ */ jsx(
       "p",
@@ -3937,7 +4071,7 @@ var DialogDescription = /* @__PURE__ */ named(
   "DialogDescription"
 );
 var DialogFooter = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -3954,7 +4088,7 @@ var DialogFooter = /* @__PURE__ */ named(
   "DialogFooter"
 );
 var DialogClose = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ asChild, onClick, type, ...props }, ref) => {
       const ctx = useModal();
       const Comp = asChild ? Slot : "button";
@@ -3991,7 +4125,7 @@ var DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
 var DropdownMenuGroup = DropdownMenuPrimitive.Group;
 var DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 var DropdownMenuContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
     DropdownMenuPrimitive.Content,
     {
       ref,
@@ -4005,7 +4139,7 @@ var DropdownMenuContent = /* @__PURE__ */ named(
   "DropdownMenuContent"
 );
 var DropdownMenuItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, variant = "default", inset, ...props }, ref) => /* @__PURE__ */ jsx(
     DropdownMenuPrimitive.Item,
     {
       ref,
@@ -4023,7 +4157,7 @@ var DropdownMenuItem = /* @__PURE__ */ named(
   "DropdownMenuItem"
 );
 var DropdownMenuCheckboxItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     DropdownMenuPrimitive.CheckboxItem,
     {
       ref,
@@ -4039,7 +4173,7 @@ var DropdownMenuCheckboxItem = /* @__PURE__ */ named(
   "DropdownMenuCheckboxItem"
 );
 var DropdownMenuRadioItem = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     DropdownMenuPrimitive.RadioItem,
     {
       ref,
@@ -4055,7 +4189,7 @@ var DropdownMenuRadioItem = /* @__PURE__ */ named(
   "DropdownMenuRadioItem"
 );
 var DropdownMenuLabel = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, inset, ...props }, ref) => /* @__PURE__ */ jsx(
     DropdownMenuPrimitive.Label,
     {
       ref,
@@ -4071,7 +4205,7 @@ var DropdownMenuLabel = /* @__PURE__ */ named(
   "DropdownMenuLabel"
 );
 var DropdownMenuSeparator = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
     DropdownMenuPrimitive.Separator,
     {
       ref,
@@ -4101,7 +4235,7 @@ function DropdownMenuShortcut({
 }
 var DropdownMenuSub = DropdownMenuPrimitive.Sub;
 var DropdownMenuSubTrigger = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+  /* @__PURE__ */ React36.forwardRef(({ className, inset, children, ...props }, ref) => /* @__PURE__ */ jsxs(
     DropdownMenuPrimitive.SubTrigger,
     {
       ref,
@@ -4117,7 +4251,7 @@ var DropdownMenuSubTrigger = /* @__PURE__ */ named(
   "DropdownMenuSubTrigger"
 );
 var DropdownMenuSubContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DropdownMenuPrimitive.Portal, { children: /* @__PURE__ */ jsx(
     DropdownMenuPrimitive.SubContent,
     {
       ref,
@@ -4134,7 +4268,7 @@ function HoverCard({ openDelay = 700, closeDelay = 200, ...props }) {
 }
 var HoverCardTrigger = HoverCardPrimitive.Trigger;
 var HoverCardContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(HoverCardPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, align = "center", side = "bottom", sideOffset = 8, ...props }, ref) => /* @__PURE__ */ jsx(HoverCardPrimitive.Portal, { children: /* @__PURE__ */ jsx(
     HoverCardPrimitive.Content,
     {
       ref,
@@ -4160,12 +4294,13 @@ function InfoTip({
   children,
   side = "auto",
   open,
+  defaultOpen,
   onOpenChange,
   className,
   contentClassName
 }) {
-  const titleId = React40.useId();
-  return /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open, onOpenChange, children: [
+  const titleId = React36.useId();
+  return /* @__PURE__ */ jsxs(PopoverPrimitive.Root, { open, defaultOpen, onOpenChange, children: [
     /* @__PURE__ */ jsx(
       PopoverPrimitive.Trigger,
       {
@@ -4256,23 +4391,20 @@ function Sheet({
   className,
   children
 }) {
-  return /* @__PURE__ */ jsx(
-    ModalRoot,
-    {
-      open,
-      defaultOpen,
-      onOpenChange,
-      slot: "sheet",
-      className: cn(sheetVariants({ side }), className),
-      children
-    }
-  );
+  const config = React36.useMemo(() => ({ side, panelClassName: className }), [side, className]);
+  return /* @__PURE__ */ jsx(ModalProvider, { open, defaultOpen, onOpenChange, children: /* @__PURE__ */ jsx(SheetConfigContext.Provider, { value: config, children }) });
 }
+var SheetConfigContext = /* @__PURE__ */ React36.createContext({});
+var SheetTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef((props, ref) => /* @__PURE__ */ jsx(ModalTrigger, { ref, slot: "sheet-trigger", ...props })),
+  "SheetTrigger"
+);
 var SheetContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, children, ...props }, ref) => {
       const ctx = useModal();
-      return /* @__PURE__ */ jsxs(
+      const { side, panelClassName } = React36.useContext(SheetConfigContext);
+      return /* @__PURE__ */ jsx(ModalDialog, { slot: "sheet", className: cn(sheetVariants({ side }), panelClassName), children: /* @__PURE__ */ jsxs(
         "div",
         {
           ref,
@@ -4295,13 +4427,13 @@ var SheetContent = /* @__PURE__ */ named(
             )
           ]
         }
-      );
+      ) });
     }
   ),
   "SheetContent"
 );
 var SheetHeader = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -4315,7 +4447,7 @@ var SheetHeader = /* @__PURE__ */ named(
   "SheetHeader"
 );
 var SheetTitle = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => {
       const titleId = useModalPart("title");
       return /* @__PURE__ */ jsx(
@@ -4336,7 +4468,7 @@ var SheetTitle = /* @__PURE__ */ named(
   "SheetTitle"
 );
 var SheetDescription = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, ...props }, ref) => {
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => {
     const descriptionId = useModalPart("description");
     return /* @__PURE__ */ jsx(
       "p",
@@ -4352,7 +4484,7 @@ var SheetDescription = /* @__PURE__ */ named(
   "SheetDescription"
 );
 var SheetFooter = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ className, ...props }, ref) => /* @__PURE__ */ jsx(
       "div",
       {
@@ -4369,7 +4501,7 @@ var SheetFooter = /* @__PURE__ */ named(
   "SheetFooter"
 );
 var SheetClose = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(
+  /* @__PURE__ */ React36.forwardRef(
     ({ asChild, onClick, type, ...props }, ref) => {
       const ctx = useModal();
       const Comp = asChild ? Slot : "button";
@@ -4395,7 +4527,7 @@ function Tooltip(props) {
 }
 var TooltipTrigger = TooltipPrimitive.Trigger;
 var TooltipContent = /* @__PURE__ */ named(
-  /* @__PURE__ */ React40.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
+  /* @__PURE__ */ React36.forwardRef(({ className, sideOffset = 6, ...props }, ref) => /* @__PURE__ */ jsx(TooltipPrimitive.Portal, { children: /* @__PURE__ */ jsx(
     TooltipPrimitive.Content,
     {
       ref,
@@ -4413,4 +4545,4 @@ var TooltipContent = /* @__PURE__ */ named(
   "TooltipContent"
 );
 
-export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Combobox, Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Container, CopyButton, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FindingItem, FindingList, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, MarginNote, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, Readout, ReadoutCell, RepoBanner, ScrollArea, ScrollBar, SectionHeading, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusChip, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
+export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Combobox, Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Container, CopyButton, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FindingItem, FindingList, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, MarginNote, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, Readout, ReadoutCell, RepoBanner, ScrollArea, ScrollBar, SectionHeading, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusChip, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, TableSortButton, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };

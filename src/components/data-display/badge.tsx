@@ -12,6 +12,8 @@ const badgeVariants = /* @__PURE__ */ cva(
         accent: "bg-accent text-accent-foreground",
         outline: "border border-border text-foreground",
         muted: "bg-muted text-muted-foreground",
+        /** shadcn-vocabulary alias for `muted`, so pasted snippets compile. */
+        secondary: "bg-muted text-muted-foreground",
         destructive: "bg-destructive text-destructive-foreground",
       },
     },

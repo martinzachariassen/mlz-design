@@ -10,6 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./dialog";
 import { stubNativeDialog } from "./modal-test-env";
 
@@ -105,5 +106,41 @@ describe("Button asChild", () => {
   it("still renders a real button by default", () => {
     render(<Button>Send</Button>);
     expect(screen.getByRole("button", { name: "Send" })).toHaveAttribute("type", "button");
+  });
+});
+
+describe("DialogTrigger", () => {
+  // The trigger is what makes the uncontrolled form self-contained — no
+  // consumer useState just to open a modal.
+  it("opens an uncontrolled dialog", () => {
+    render(
+      <Dialog>
+        <DialogTrigger>New project</DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>New project</DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>,
+    );
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "New project" }));
+    expect(screen.getByRole("dialog", { name: "New project" })).toBeInTheDocument();
+  });
+
+  it("reports opening through onOpenChange and works asChild", () => {
+    const onOpenChange = vi.fn();
+    render(
+      <Dialog onOpenChange={onOpenChange}>
+        <DialogTrigger asChild>
+          <Button>Open</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+        </DialogContent>
+      </Dialog>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Open" }));
+    expect(onOpenChange).toHaveBeenCalledWith(true);
   });
 });

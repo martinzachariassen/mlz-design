@@ -5,7 +5,7 @@ import { cn } from "../../lib/cn";
 import { ChevronLeftIcon, ChevronRightIcon } from "../../lib/icons";
 import { named } from "../../lib/named";
 
-const pageVariants = /* @__PURE__ */ cva(
+const paginationLinkVariants = /* @__PURE__ */ cva(
   "inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 [&_svg]:size-3.5",
   {
     variants: {
@@ -81,7 +81,7 @@ export const PaginationItem = /* @__PURE__ */ named(
 
 export interface PaginationLinkProps
   extends React.ComponentPropsWithoutRef<"a">,
-    VariantProps<typeof pageVariants> {
+    VariantProps<typeof paginationLinkVariants> {
   /** Marks the page you're on — sets `aria-current="page"`. */
   isActive?: boolean;
   /** Render your router's link component instead of an `<a>`. */
@@ -100,7 +100,7 @@ export const PaginationLink = /* @__PURE__ */ named(
           // `aria-current` is what distinguishes it, not a disabled state.
           aria-current={isActive ? "page" : undefined}
           data-slot="pagination-link"
-          className={cn(pageVariants({ active: Boolean(isActive) }), className)}
+          className={cn(paginationLinkVariants({ active: Boolean(isActive) }), className)}
           {...props}
         />
       );
@@ -152,3 +152,5 @@ export function PaginationEllipsis({
     </span>
   );
 }
+
+export { paginationLinkVariants };

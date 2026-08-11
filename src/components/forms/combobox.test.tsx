@@ -118,3 +118,30 @@ describe("Combobox", () => {
     expect(screen.getByText("Region")).toHaveAttribute("for", trigger.id);
   });
 });
+
+describe("Combobox in a form", () => {
+  // The trigger is a <button>, so without the hidden input a combobox inside a
+  // <form> would post nothing.
+  it("submits its value through a hidden input when named", () => {
+    const { container } = render(
+      <Combobox options={regions} name="region" defaultValue="eu-west-1" aria-label="Region" />,
+    );
+    const hidden = container.querySelector('input[type="hidden"][name="region"]');
+    expect(hidden).toHaveValue("eu-west-1");
+  });
+
+  it("supports a controlled open state", () => {
+    const onOpenChange = vi.fn();
+    const { rerender } = render(
+      <Combobox options={regions} aria-label="Region" open={false} onOpenChange={onOpenChange} />,
+    );
+    expect(screen.queryByPlaceholderText("Search…")).not.toBeInTheDocument();
+    rerender(<Combobox options={regions} aria-label="Region" open onOpenChange={onOpenChange} />);
+    expect(screen.getByPlaceholderText("Search…")).toBeInTheDocument();
+  });
+
+  it("takes an explicit id for external labelling", () => {
+    render(<Combobox options={regions} id="region-field" aria-label="Region" />);
+    expect(screen.getByRole("combobox")).toHaveAttribute("id", "region-field");
+  });
+});

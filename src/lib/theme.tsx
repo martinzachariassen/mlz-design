@@ -49,6 +49,12 @@ interface ThemeContextValue {
   resolvedTheme: ResolvedTheme;
   accent: AccentName;
   setAccent: (accent: AccentName) => void;
+  /**
+   * Whether the provider honours `"system"` — mirrors the `enableSystem` prop,
+   * so controls like `ThemeToggle` can hide the System option automatically
+   * instead of offering a choice the provider would silently coerce to light.
+   */
+  enableSystem: boolean;
 }
 
 const ThemeContext = /* @__PURE__ */ React.createContext<ThemeContextValue | null>(null);
@@ -176,8 +182,8 @@ export function ThemeProvider({
   );
 
   const value = React.useMemo<ThemeContextValue>(
-    () => ({ theme, setTheme, resolvedTheme, accent, setAccent }),
-    [theme, setTheme, resolvedTheme, accent, setAccent],
+    () => ({ theme, setTheme, resolvedTheme, accent, setAccent, enableSystem }),
+    [theme, setTheme, resolvedTheme, accent, setAccent, enableSystem],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

@@ -13,6 +13,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./dialog";
 
 const meta = {
@@ -82,6 +83,32 @@ export const Default: Story = {
 };
 
 /** A confirm step. Say what will be destroyed in the description, and keep Cancel first in the source — the footer reverses on mobile so the confirm lands on top. */
+/**
+ * The self-contained form: `DialogTrigger` opens it, `DialogClose`/Esc close
+ * it, and no consumer state is involved. Reach for the controlled form only
+ * when something else needs to know the dialog is open.
+ */
+export const Uncontrolled: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button>Show details</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Details</DialogTitle>
+          <DialogDescription>Opened without any useState on the call site.</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="ghost">Done</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
 export const Destructive: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false);
