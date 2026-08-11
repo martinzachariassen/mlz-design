@@ -304,6 +304,7 @@ describe("documentation quotes real token values", () => {
    */
   const ILLUSTRATIVE = new Set([
     "oklch(0.70 0.15 300)",
+    "oklch(0.45 0.14 300)",
     "oklch(0.62 0.14 250)",
     "oklch(0.62 0.14 148)",
     "oklch(0.62 0.14 45)",

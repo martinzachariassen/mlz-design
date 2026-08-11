@@ -28,9 +28,12 @@ bun run changeset        # start a release (see below)
 ```
 
 `mise.toml` mirrors these as tasks (`mise run check` = lint · typecheck · test).
-Docs live in `docs/` — [architecture](docs/architecture.md),
-[design system](docs/design-system.md), [contributing](docs/CONTRIBUTING.md),
-[security](docs/SECURITY.md). Only `README.md`, `CHANGELOG.md` (Changesets writes
+Docs live in `docs/` — [getting started](docs/getting-started.md) (new-app
+recipe), [architecture](docs/architecture.md),
+[design system](docs/design-system.md), [versioning](docs/VERSIONING.md)
+(**what counts as breaking — read before removing/renaming anything public**),
+[decisions](docs/DECISIONS.md) (don't undo these by accident),
+[contributing](docs/CONTRIBUTING.md), [security](docs/SECURITY.md). Only `README.md`, `CHANGELOG.md` (Changesets writes
 it next to `package.json`) and this file stay at the root.
 
 ## Architecture — three-layer tokens
@@ -137,6 +140,11 @@ shipped bug:
   attribute**, never a mount-effect `.focus()` — `showModal()`'s focusing steps
   run later and win (see `AlertDialogCancel`).
 
+**Two size scales, on purpose.** Controls use `sm / default / lg / icon`
+(h-9 / h-11 / h-12 across Button, Toggle, Input, Select, Combobox, DatePicker —
+keep new controls on the same rungs). Layout primitives (`Container`, `Stack`,
+`Grid`) use the `sm / md / lg` breakpoint family. Don't mix the vocabularies.
+
 ## Adding a component — definition of done
 
 JSDoc that says what it is *and* when to reach for the sibling (cross-link both
@@ -154,21 +162,29 @@ are documented in `docs/architecture.md` with an explicit removal condition
 
 Interaction behaviour comes from **Radix primitives**; we only style them. Same
 backbone as shadcn/ui, so anything `npx shadcn add …` drops in behaves like ours.
-Three tiers — know which one you're touching before adding a dependency:
+Four tiers — know which one you're touching before adding a dependency, and
+**the authoritative per-component table lives in docs/architecture.md**
+("Behaviour comes from Radix, styling is ours"); this file doesn't restate it
+because the two copies drifted once:
 
-- **Radix** — `Tabs`, `Accordion`, `InfoTip` (popover), `Avatar`, `Progress`,
-  `Separator`, `Label`, plus `Slot` behind `asChild`.
+- **Radix** — granular primitives (`Tabs`, `NavigationMenu`, `Select`, …), plus
+  `Slot` behind `asChild`.
 - **Platform** — do *not* migrate these; Radix would add JS for what the browser
-  already does. `Dialog` is the native `<dialog>` + `showModal()` (focus-trap,
-  Esc, inerting and top layer for free); `Checkbox`/`Switch` are native inputs
-  styled with `peer-checked:`, zero JS. `Button`/`Input`/`Textarea` are plain
-  elements — **Radix has no Button primitive**.
+  already does. `Dialog`/`Sheet`/`AlertDialog` are the native `<dialog>` +
+  `showModal()` (focus-trap, Esc, inerting and top layer for free);
+  `Checkbox`/`Switch` are native inputs styled with `peer-checked:`, zero JS.
+  `Button`/`Input`/`Textarea` are plain elements — **Radix has no Button
+  primitive**.
+- **Third party** — `sonner` (behind `./toaster`), `cmdk`, `react-day-picker` —
+  each restyled from tokens, adopted only with a recorded decision
+  (docs/DECISIONS.md).
 - **Presentational** — no behaviour at all, nothing to adopt.
 
-`sonner` is the one runtime dependency that is **not** Radix — it backs
-`Toaster`, with its own styling switched off and every slot re-dressed from
-semantic tokens. If that trade ever stops being worth it, the component is
-self-contained enough to drop.
+Of the third-party three, `sonner` is the only one that is not side-effect
+free — which is why `Toaster`/`toast` live behind the `./toaster` subpath
+(`cmdk` and `react-day-picker` tree-shake cleanly and stay in the root entry).
+If any of those trades stops being worth it, the components are self-contained
+enough to drop — the reasoning per dependency is in docs/DECISIONS.md.
 
 Radix is depended on **granularly** (`@radix-ui/react-tabs`, …), never via the
 unified `radix-ui` meta-package: this ships as a library, and the meta-package

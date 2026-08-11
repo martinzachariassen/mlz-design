@@ -137,9 +137,12 @@ These mirror `theme.css` value-for-value. One naming quirk: the signal role call
 Colour is authored in OKLCH and every chromatic value is held inside the sRGB
 gamut, so the contrast figures hold on any display rather than only on wide-gamut
 ones. Each value sits on a rung that decides its use — `base` fills, `deep`
-colours text, icons and focus rings on paper — and `src/tokens.contrast.test.ts`
-asserts each rung's promise, so a value edited in only one of the two files fails
-CI. Foundations → Colour model documents the whole ladder.
+colours text, icons and focus rings on paper. Two tests split the enforcement:
+`src/tokens.contrast.test.ts` asserts each rung's promise against this JS
+mirror, and `src/theme-css.test.ts` reads `theme.css` itself and fails CI if
+the two files disagree on any value — so editing one file without the other is
+what actually gets caught, and by the second test, not the first. Foundations →
+Colour model documents the whole ladder.
 
 ## Fonts
 
