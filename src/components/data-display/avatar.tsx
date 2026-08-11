@@ -172,7 +172,10 @@ export const AvatarGroup = /* @__PURE__ */ named(
           ref={ref}
           data-slot="avatar-group"
           className={cn(
-            "flex items-center -space-x-2 [&_[data-slot=avatar-frame]]:ring-2 [&_[data-slot=avatar-frame]]:ring-background",
+            // Members are elevated on focus-within so that when a consumer makes
+            // them focusable (avatars as links), the focus ring isn't painted
+            // over by the next overlapping sibling.
+            "flex items-center -space-x-2 [&>*]:relative [&>*:focus-within]:z-10 [&_[data-slot=avatar-frame]]:ring-2 [&_[data-slot=avatar-frame]]:ring-background",
             className,
           )}
           {...props}

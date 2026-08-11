@@ -82,7 +82,7 @@ export const Slider = /* @__PURE__ */ named(
               // outline is the only thing marking where it sits. The base fill is
               // 1.83:1 on paper — under SC 1.4.11 — and, worse, identical to the
               // range it slides over, so the border vanished on the filled half.
-              className="block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none"
+              className="block size-4 shrink-0 rounded-full border-[1.5px] border-accent-deep bg-background shadow-[var(--shadow-sm)] transition-[box-shadow,transform] hover:scale-110 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 data-[disabled]:pointer-events-none"
             />
           ))}
         </SliderPrimitive.Root>

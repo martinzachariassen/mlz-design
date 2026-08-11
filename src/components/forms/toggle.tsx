@@ -12,9 +12,15 @@ const toggleVariants = /* @__PURE__ */ cva(
         /** Text only until pressed — the quiet default, for a row of them. */
         default:
           "bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground",
-        /** Carries a hairline border, so a lone toggle still reads as a control. */
+        /**
+         * Carries a hairline border, so a lone toggle still reads as a control.
+         * Hover borders use `--ring` (the `-deep` rung), not the base accent —
+         * the base is 1.83:1 on paper, *below* `border-input`, so hovering would
+         * make the control's boundary fainter. The pressed border keeps the base
+         * accent: there the state is carried by the tinted fill, not the border.
+         */
         outline:
-          "border-[1.5px] border-input bg-transparent text-muted-foreground hover:border-accent hover:text-foreground data-[state=on]:border-accent data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground",
+          "border-[1.5px] border-input bg-transparent text-muted-foreground hover:border-ring hover:text-foreground data-[state=on]:border-accent data-[state=on]:bg-accent-subtle data-[state=on]:text-foreground",
       },
       size: {
         sm: "h-9 px-3 text-[11px]",

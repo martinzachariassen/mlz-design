@@ -9,13 +9,13 @@ const alertVariants = /* @__PURE__ */ cva(
     variants: {
       variant: {
         default: "border-border bg-card text-card-foreground",
-        info: "border-[var(--info)]/25 border-l-[var(--info)] bg-info-subtle text-[var(--info)]",
+        info: "border-[var(--info)]/25 border-l-[var(--info)] bg-info-subtle text-info-deep",
         success:
-          "border-[var(--success)]/25 border-l-[var(--success)] bg-success-subtle text-[var(--success)]",
+          "border-[var(--success)]/25 border-l-[var(--success)] bg-success-subtle text-success-deep",
         warning:
-          "border-[var(--warning)]/30 border-l-[var(--warning)] bg-warning-subtle text-[var(--warning)]",
+          "border-[var(--warning)]/30 border-l-[var(--warning)] bg-warning-subtle text-warning-deep",
         destructive:
-          "border-[var(--destructive)]/25 border-l-[var(--destructive)] bg-destructive-subtle text-[var(--destructive)]",
+          "border-[var(--destructive)]/25 border-l-[var(--destructive)] bg-destructive-subtle text-destructive-deep",
       },
     },
     defaultVariants: { variant: "default" },

@@ -54,7 +54,9 @@ export const ScrollArea = /* @__PURE__ */ named(
         // would be an unnamed landmark — as `Table` and `CodeBlock`.
         tabIndex={0}
         className={cn(
-          "size-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          // The ring is inset because the root's `overflow-hidden` would clip
+          // anything painted outside the viewport, which fills it exactly.
+          "size-full rounded-[inherit] focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-ring/30",
           viewportClassName,
         )}
       >

@@ -43,4 +43,17 @@ describe("Button", () => {
     render(<Button disabled>Nope</Button>);
     expect(screen.getByRole("button")).toBeDisabled();
   });
+
+  // The base suppresses the global outline, so every variant — including the
+  // shadow-less ghost and link — must get the ring replacement from the base,
+  // or keyboard focus becomes invisible (WCAG 2.4.7).
+  it.each(["default", "solid", "accent", "ghost", "sketch", "destructive", "link"] as const)(
+    "gives the %s variant a visible focus ring",
+    (variant) => {
+      render(<Button variant={variant}>Focusable</Button>);
+      const className = screen.getByRole("button").className;
+      expect(className).toContain("focus-visible:ring-[3px]");
+      expect(className).toContain("focus-visible:ring-ring/30");
+    },
+  );
 });

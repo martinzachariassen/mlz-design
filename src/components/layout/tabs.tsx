@@ -109,7 +109,12 @@ export const TabsContent = /* @__PURE__ */ named(
   >(({ className, ...props }, ref) => (
     <TabsPrimitive.Content
       ref={ref}
-      className={cn("text-sm text-muted-foreground focus-visible:outline-none", className)}
+      // Radix gives the panel tabIndex={0}, so it takes focus — suppressing the
+      // outline needs a ring in its place or a keyboard user loses their spot.
+      className={cn(
+        "rounded-[var(--radius-sm)] text-sm text-muted-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+        className,
+      )}
       {...props}
     />
   )),

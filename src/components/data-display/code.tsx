@@ -14,8 +14,9 @@ export type CodeProps = React.HTMLAttributes<HTMLElement>;
  *
  * Inside `Prose`, plain `<code>` elements are already styled by the descendant
  * rules there — this is for code outside long-form copy, where nothing else
- * would style it. Using it inside `Prose` is harmless: the classes are the same
- * shape and `tailwind-merge` keeps the later win.
+ * would style it. Using it inside `Prose` is harmless because the two styles
+ * agree — but note `Prose`'s descendant selectors win on specificity, so a
+ * `className` override on a `Code` inside `Prose` won't take.
  */
 export const Code = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLElement, CodeProps>(({ className, ...props }, ref) => (
@@ -83,12 +84,12 @@ export const CodeBlock = /* @__PURE__ */ named(
               {copyable ? (
                 <button
                   type="button"
+                  aria-label={copyLabel}
                   onClick={() => void copy(children)}
                   className="inline-flex shrink-0 items-center gap-1.5 rounded-[var(--radius-sm)] px-1.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
                 >
                   {copied ? <CheckIcon className="size-3.5 text-success-deep" /> : null}
                   {copied ? "Copied" : "Copy"}
-                  <span className="sr-only">{copyLabel}</span>
                 </button>
               ) : null}
             </div>
@@ -100,7 +101,9 @@ export const CodeBlock = /* @__PURE__ */ named(
           <pre
             // biome-ignore lint/a11y/noNoninteractiveTabindex: making the scroll container focusable is the point — it's how a keyboard user reads a long line
             tabIndex={0}
-            className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+            // The ring is inset because the parent's `overflow-hidden` (needed for
+            // the rounded corners) would clip anything painted outside the box.
+            className="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-ring/30"
           >
             <code>{children}</code>
           </pre>

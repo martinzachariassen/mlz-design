@@ -199,11 +199,15 @@ export const AlertDialogCancel = /* @__PURE__ */ named(
       const localRef = React.useRef<HTMLButtonElement>(null);
       React.useImperativeHandle(ref, () => localRef.current as HTMLButtonElement);
 
-      // The platform focuses the first tabbable element, which is the confirm in
-      // source order — and source order is what puts confirm on top on mobile. So
-      // move focus here explicitly rather than reordering the DOM.
+      // Cancel comes first in source (that's what puts confirm on top on mobile),
+      // but initial focus must not depend on source order staying that way — so
+      // mark this button `autofocus` and let `showModal()`'s dialog focusing
+      // steps pick it. The attribute is set imperatively because this effect runs
+      // before ModalRoot's `showModal()` (child effects flush first): a plain
+      // `.focus()` here — or React's `autoFocus`, which also just calls
+      // `.focus()` — would be discarded by those same focusing steps.
       React.useEffect(() => {
-        localRef.current?.focus();
+        localRef.current?.setAttribute("autofocus", "");
       }, []);
 
       const Comp = asChild ? Slot : "button";

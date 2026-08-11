@@ -18,7 +18,10 @@ const indicatorVariants = /* @__PURE__ */ cva(
 );
 
 export interface ProgressProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value">,
+  // `max` is omitted along with `value`: the bar is drawn from the clamped
+  // percentage, so a caller-supplied `max` would make aria-valuemax disagree
+  // with what's painted.
+  extends Omit<React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>, "value" | "max">,
     VariantProps<typeof indicatorVariants> {
   /** Completion as a percentage, clamped to 0–100. */
   value?: number;
@@ -44,11 +47,13 @@ export const Progress = /* @__PURE__ */ named(
     return (
       <ProgressPrimitive.Root
         ref={ref}
-        value={pct}
-        max={100}
         aria-label={hasLabel ? undefined : "Progress"}
         className={cn("h-2 w-full overflow-hidden rounded-full bg-muted", className)}
         {...props}
+        // After the spread: the drawn width comes from the clamped percentage,
+        // so value/max must not be overridable or ARIA and paint disagree.
+        value={pct}
+        max={100}
       >
         <ProgressPrimitive.Indicator
           className={cn(indicatorVariants({ variant }))}

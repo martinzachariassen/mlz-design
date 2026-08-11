@@ -38,4 +38,13 @@ describe("Progress", () => {
     render(<Progress aria-label="Idle" />);
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "0");
   });
+
+  // `max` is fixed at 100: the bar is *drawn* from the clamped percentage, so a
+  // caller-supplied max would make aria-valuemax disagree with the painted
+  // width. The prop is omitted from the type; this guards the runtime path.
+  it("ignores a smuggled max", () => {
+    const smuggled = { max: 50 } as Record<string, unknown>;
+    render(<Progress value={80} aria-label="Fixed" {...smuggled} />);
+    expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuemax", "100");
+  });
 });
