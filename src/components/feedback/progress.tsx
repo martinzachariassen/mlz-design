@@ -34,6 +34,10 @@ export interface ProgressProps
  * a `role="progressbar"` with the ARIA value attributes wired up — pass
  * `aria-label` (or `aria-labelledby`) when you have a real label, otherwise it
  * falls back to a generic "Progress".
+ *
+ * Determinate only — it needs a real percentage. **Reach for `Spinner`** when
+ * all you know is "still working", and for **`Skeleton`** when it's the first
+ * paint of content whose shape you already know.
  */
 export const Progress = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<

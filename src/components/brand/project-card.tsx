@@ -48,6 +48,11 @@ function DefaultCover() {
  *   for the hero project at the top of a portfolio. Stacks on mobile.
  *
  * With `href`, the whole card becomes one link (the title anchor stretches over it).
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is live
+ * UI, rendered in the page. **Reach for `RepoBanner`** (README header image) or
+ * **`SocialCard`** (Open-Graph share image) when the deliverable is a PNG you
+ * snapshot, and for the plain **`Card`** when the content isn't a project.
  */
 export const ProjectCard = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLElement, ProjectCardProps>(

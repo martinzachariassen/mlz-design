@@ -13,6 +13,11 @@ export type ProseProps = React.HTMLAttributes<HTMLDivElement>;
  *
  * It's a descendant-styled container (the `@tailwindcss/typography` idea, done
  * with tokens), so it needs no plugin and re-themes with light/dark and accent.
+ *
+ * **Reach for `Text`** when you're styling one piece of copy rather than a
+ * flow of article markup — a lead, a caption, an eyebrow. Note the descendant
+ * rules win on specificity, so `Code`/`Link` rendered inside a `Prose` take
+ * their look from here, not from their own classes.
  */
 export const Prose = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, ProseProps>(({ className, ...props }, ref) => (

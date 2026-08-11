@@ -18,6 +18,10 @@ export interface SeparatorProps
  * `decorative={false}` for a real `role="separator"` with the right
  * `aria-orientation`. A horizontal rule can carry a centered mono label that
  * splits the line.
+ *
+ * **Reach for `SectionHeading`** when the line is introducing a section — that
+ * one is a real heading with the rule attached, so the document outline stays
+ * honest. The label here is just text on a divider, not a heading.
  */
 export const Separator = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<

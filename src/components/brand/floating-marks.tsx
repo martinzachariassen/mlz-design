@@ -52,6 +52,10 @@ function Mark({ shape, size }: { shape: Shape; size: number }) {
  * Positions, drift, rotation, timing and opacity are derived deterministically
  * from each mark's index (no `Math.random`), so it's SSR-safe and stable across
  * renders. Render inside a `relative` container; it fills that box.
+ *
+ * **Reach for `GridBackground`** when the backdrop should be still — the ruled
+ * notebook grid, with or without the pointer-reveal. The two layer well
+ * together: grid behind, a few marks drifting over it.
  */
 export const FloatingMarks = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, FloatingMarksProps>(
