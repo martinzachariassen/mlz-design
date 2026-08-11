@@ -17,6 +17,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../../components/layout/collapsible";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "../../components/layout/navigation-menu";
 import { Separator } from "../../components/layout/separator";
 import {
   Command,
@@ -43,13 +52,36 @@ function TopBar({ onOpenPalette }: { onOpenPalette?: () => void }) {
   return (
     <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-background/80 px-6 py-3 backdrop-blur">
       <BrandLockup size={30} tagline="" />
-      <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
-        {["Overview", "Components", "Tokens"].map((item, i) => (
-          <Button key={item} variant={i === 0 ? "ghost" : "link"} size="sm">
-            {item}
-          </Button>
-        ))}
-      </nav>
+      <NavigationMenu aria-label="Main" className="hidden md:flex">
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuLink active href="#overview" className={navigationMenuTriggerStyle()}>
+              Overview
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-56 gap-1">
+                <li>
+                  <NavigationMenuLink href="#forms">Forms</NavigationMenuLink>
+                </li>
+                <li>
+                  <NavigationMenuLink href="#data">Data display</NavigationMenuLink>
+                </li>
+                <li>
+                  <NavigationMenuLink href="#overlay">Overlay</NavigationMenuLink>
+                </li>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#tokens" className={navigationMenuTriggerStyle()}>
+              Tokens
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
       <div className="flex items-center gap-3">
         <button
           type="button"

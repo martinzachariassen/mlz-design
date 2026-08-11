@@ -5,6 +5,7 @@ import { AccentName } from './tokens.js';
 export { Breakpoint, FillMode, Tokens, accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './tokens.js';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { DayPickerProps, PropsBase } from 'react-day-picker';
 import * as LabelPrimitive from '@radix-ui/react-label';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import * as SelectPrimitive from '@radix-ui/react-select';
@@ -13,6 +14,7 @@ import * as TogglePrimitive from '@radix-ui/react-toggle';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
+import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
@@ -1175,6 +1177,26 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, Var
  */
 declare const Button: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>;
 
+type CalendarProps = DayPickerProps;
+/**
+ * A month grid for picking dates — `react-day-picker` re-dressed in the
+ * engineering-notebook voice, styled purely from semantic tokens so it follows
+ * both themes and every accent family. All of DayPicker's own props pass
+ * through: `mode="single" | "multiple" | "range"`, `disabled` matchers,
+ * `numberOfMonths`, `captionLayout="dropdown"` and the rest.
+ *
+ * **Reach for `DatePicker`** when the calendar belongs in a form field — it
+ * wraps this in a `Popover` behind a `Select`-shaped trigger. Use `Calendar`
+ * directly when the grid should be visible in the page (a booking view, a
+ * range dashboard). And when the reader *knows* the date — a birthday — a
+ * plain `<Input type="date">` is still the faster control.
+ *
+ * ```tsx
+ * <Calendar mode="single" selected={date} onSelect={setDate} />
+ * ```
+ */
+declare function Calendar({ className, classNames, showOutsideDays, ...props }: CalendarProps): React.JSX.Element;
+
 type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 /**
  * A checkbox with a real `<input type="checkbox">` underneath — the box you see
@@ -1289,6 +1311,63 @@ interface CopyButtonProps extends Omit<ButtonProps, "children" | "onClick" | "as
  * ```
  */
 declare const CopyButton: React.ForwardRefExoticComponent<CopyButtonProps & React.RefAttributes<HTMLButtonElement>>;
+
+interface DatePickerProps {
+    /** Controlled value. Provide `onValueChange` alongside it. */
+    value?: Date;
+    /** Initial value when uncontrolled. */
+    defaultValue?: Date;
+    /** Called with the picked date, or `undefined` when the pick is cleared. */
+    onValueChange?: (date: Date | undefined) => void;
+    /** Controlled open state. Provide `onOpenChange` alongside it. */
+    open?: boolean;
+    /** Initial open state when uncontrolled. */
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    /**
+     * Submits the value with a surrounding `<form>` via a hidden input, as
+     * `yyyy-mm-dd` — the same wire format `<input type="date">` posts.
+     */
+    name?: string;
+    /** Id for the trigger, when you label it yourself outside a `Field`. */
+    id?: string;
+    /** Trigger height. `sm` (h-9) lines up with `Button size="sm"`. */
+    size?: "sm" | "default";
+    /** Shown on the trigger while no date is chosen. */
+    placeholder?: string;
+    /** How the chosen date reads on the trigger. Defaults to the reader's locale. */
+    formatDate?: (date: Date) => string;
+    /** Extra DayPicker props for the panel — `disabled` matchers, `startMonth`… */
+    calendarProps?: Partial<Omit<PropsBase, "className" | "classNames">>;
+    disabled?: boolean;
+    /** Extra classes for the trigger button. */
+    className?: string;
+    /** Extra classes for the popover panel. */
+    contentClassName?: string;
+    /** Names the control when there is no visible `FieldLabel`. */
+    "aria-label"?: string;
+}
+/**
+ * A date in a form field: a `Select`-shaped trigger that opens a `Calendar` in
+ * a `Popover`. Picking a day closes the panel and returns focus to the trigger.
+ *
+ * Inside a `Field` it picks up the generated id, `aria-describedby` and
+ * `aria-invalid` automatically; outside one, give it an `aria-label`. With
+ * `name` it posts `yyyy-mm-dd` through a hidden input, like `<input
+ * type="date">` would.
+ *
+ * **Reach for `Calendar`** when the grid belongs in the page rather than
+ * behind a field, and for a plain `<Input type="date">` when the reader knows
+ * the date and typing beats clicking (birthdays, document dates).
+ *
+ * ```tsx
+ * <Field>
+ *   <FieldLabel>Deploy date</FieldLabel>
+ *   <DatePicker placeholder="Pick a date" />
+ * </Field>
+ * ```
+ */
+declare const DatePicker: React.ForwardRefExoticComponent<DatePickerProps & React.RefAttributes<HTMLButtonElement>>;
 
 type LabelProps = React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>;
 /**
@@ -1843,7 +1922,7 @@ type CollapsibleContentProps = React.ComponentPropsWithoutRef<typeof Collapsible
 declare const CollapsibleContent: React.ForwardRefExoticComponent<Omit<CollapsiblePrimitive.CollapsibleContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
 
 declare const containerVariants: (props?: ({
-    size?: "sm" | "lg" | "xl" | "prose" | "md" | "full" | null | undefined;
+    size?: "sm" | "lg" | "xl" | "prose" | "full" | "md" | null | undefined;
     gutter?: "none" | "sm" | "lg" | "md" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface ContainerProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof containerVariants> {
@@ -1862,7 +1941,7 @@ declare const stackVariants: (props?: ({
     direction?: "row" | "col" | "responsive" | null | undefined;
     gap?: "none" | "sm" | "lg" | "xs" | "xl" | "md" | null | undefined;
     align?: "end" | "baseline" | "start" | "stretch" | "center" | null | undefined;
-    justify?: "end" | "start" | "center" | "between" | "around" | null | undefined;
+    justify?: "end" | "start" | "center" | "around" | "between" | null | undefined;
     wrap?: boolean | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StackProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof stackVariants> {
@@ -1908,6 +1987,56 @@ interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
  * steps up at `sm`/`lg`. `min` wins if you set both.
  */
 declare const Grid: React.ForwardRefExoticComponent<GridProps & React.RefAttributes<HTMLDivElement>>;
+
+type NavigationMenuProps = React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Root>;
+/**
+ * Top-level app navigation on the Radix primitive: a horizontal bar of links
+ * and hover/focus-opened panels, with the full keyboard pattern (arrows between
+ * triggers, Esc closes, focus wraps into the panel) supplied by Radix.
+ *
+ * **Use it for the primary nav of an app shell** — the place the application
+ * shell pattern used to hand-roll out of `Button`s. **Reach for `Tabs`** when
+ * the "navigation" switches content in place rather than routes, for
+ * `DropdownMenu` when the entries are actions, and for `Breadcrumb` for the
+ * trail back up. Simple link rows don't need panels at all: use
+ * `NavigationMenuLink` alone with `navigationMenuTriggerStyle()`.
+ *
+ * ```tsx
+ * <NavigationMenu>
+ *   <NavigationMenuList>
+ *     <NavigationMenuItem>
+ *       <NavigationMenuTrigger>Projects</NavigationMenuTrigger>
+ *       <NavigationMenuContent>…panel…</NavigationMenuContent>
+ *     </NavigationMenuItem>
+ *     <NavigationMenuItem>
+ *       <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+ *         <a href="/about">About</a>
+ *       </NavigationMenuLink>
+ *     </NavigationMenuItem>
+ *   </NavigationMenuList>
+ * </NavigationMenu>
+ * ```
+ */
+declare const NavigationMenu: React.ForwardRefExoticComponent<Omit<NavigationMenuPrimitive.NavigationMenuProps & React.RefAttributes<HTMLElement>, "ref"> & React.RefAttributes<HTMLElement>>;
+/** The horizontal row of items. */
+declare const NavigationMenuList: React.ForwardRefExoticComponent<Omit<NavigationMenuPrimitive.NavigationMenuListProps & React.RefAttributes<HTMLUListElement>, "ref"> & React.RefAttributes<HTMLUListElement>>;
+/** One slot in the bar — holds a trigger + content pair, or a bare link. */
+declare const NavigationMenuItem: React.ForwardRefExoticComponent<NavigationMenuPrimitive.NavigationMenuItemProps & React.RefAttributes<HTMLLIElement>>;
+/**
+ * The shared look of a bar entry, exported so a plain `NavigationMenuLink`
+ * (no panel) sits flush beside real triggers.
+ */
+declare const navigationMenuTriggerStyle: (props?: class_variance_authority_types.ClassProp | undefined) => string;
+/** Opens this item's panel. The chevron flips while open. */
+declare const NavigationMenuTrigger: React.ForwardRefExoticComponent<Omit<NavigationMenuPrimitive.NavigationMenuTriggerProps & React.RefAttributes<HTMLButtonElement>, "ref"> & React.RefAttributes<HTMLButtonElement>>;
+/** The panel a trigger opens. Size it with width utilities on your inner layout. */
+declare const NavigationMenuContent: React.ForwardRefExoticComponent<Omit<NavigationMenuPrimitive.NavigationMenuContentProps & React.RefAttributes<HTMLDivElement>, "ref"> & React.RefAttributes<HTMLDivElement>>;
+/**
+ * A link in the bar or inside a panel. Radix wires `aria-current`-style
+ * highlighting through the `active` prop; pass `asChild` to hand navigation to
+ * your router's Link.
+ */
+declare const NavigationMenuLink: React.ForwardRefExoticComponent<Omit<NavigationMenuPrimitive.NavigationMenuLinkProps & React.RefAttributes<HTMLAnchorElement>, "ref"> & React.RefAttributes<HTMLAnchorElement>>;
 
 declare const paginationLinkVariants: (props?: ({
     active?: boolean | null | undefined;
@@ -2908,4 +3037,4 @@ interface UseCopyToClipboard {
  */
 declare function useCopyToClipboard(resetMs?: number): UseCopyToClipboard;
 
-export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, AlertDialogTrigger, type AlertDialogTriggerProps, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, type BreadcrumbProps, BreadcrumbSeparator, Button, type ButtonProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, CopyButton, type CopyButtonProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DialogTrigger, type DialogTriggerProps, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FindingItem, type FindingItemProps, FindingList, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextHandle, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, MarginNote, type MarginNoteArrow, type MarginNoteProps, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, Readout, ReadoutCell, type ReadoutCellProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, SectionHeading, type SectionHeadingProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, SheetTrigger, type SheetTriggerProps, Skeleton, type SkeletonProps, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusChip, type StatusChipProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, type TableHeadProps, TableHeader, type TableProps, TableRow, TableSortButton, type TableSortButtonProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, type UseCopyToClipboard, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
+export { AccentName, AccentPicker, type AccentPickerProps, Accordion, AccordionContent, AccordionItem, type AccordionItemProps, type AccordionProps, AccordionTrigger, type AccordionTriggerProps, Alert, AlertDescription, AlertDialog, AlertDialogAction, type AlertDialogActionProps, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, type AlertDialogProps, AlertDialogTitle, AlertDialogTrigger, type AlertDialogTriggerProps, type AlertProps, AlertTitle, Avatar, AvatarFallback, type AvatarFallbackProps, AvatarGroup, type AvatarGroupProps, AvatarImage, type AvatarImageProps, type AvatarProps, Badge, type BadgeProps, BrandLockup, type BrandLockupProps, BrandMark, type BrandMarkProps, BrandWordmark, type BrandWordmarkProps, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, type BreadcrumbLinkProps, BreadcrumbList, BreadcrumbPage, type BreadcrumbProps, BreadcrumbSeparator, Button, type ButtonProps, Calendar, type CalendarProps, Callout, type CalloutProps, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, type CardProps, CardTitle, Checkbox, type CheckboxProps, Code, CodeBlock, type CodeBlockProps, type CodeProps, Collapsible, CollapsibleContent, type CollapsibleContentProps, type CollapsibleProps, CollapsibleTrigger, type CollapsibleTriggerProps, Combobox, type ComboboxOption, type ComboboxProps, Command, CommandDialog, type CommandDialogProps, CommandEmpty, type CommandEmptyProps, CommandGroup, type CommandGroupProps, CommandInput, type CommandInputProps, CommandItem, type CommandItemProps, CommandList, type CommandListProps, type CommandProps, CommandSeparator, type CommandSeparatorProps, CommandShortcut, Container, type ContainerProps, CopyButton, type CopyButtonProps, type DataLayout, DataList, type DataListProps, DataRow, type DataRowProps, DatePicker, type DatePickerProps, Dialog, DialogClose, type DialogCloseProps, DialogContent, DialogDescription, DialogFooter, DialogHeader, type DialogProps, DialogTitle, DialogTrigger, type DialogTriggerProps, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, type DropdownMenuContentProps, DropdownMenuGroup, DropdownMenuItem, type DropdownMenuItemProps, DropdownMenuLabel, type DropdownMenuLabelProps, type DropdownMenuProps, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, type EmptyStateProps, EmptyStateTitle, type EmptyStateTitleProps, Field, FieldDescription, FieldError, FieldLabel, type FieldLabelProps, type FieldProps, FindingItem, type FindingItemProps, FindingList, FloatingMarks, type FloatingMarksProps, GlitchText, type GlitchTextHandle, type GlitchTextProps, type GlitchTrigger, Grid, GridBackground, type GridBackgroundProps, type GridProps, HoverCard, HoverCardContent, type HoverCardContentProps, type HoverCardProps, HoverCardTrigger, InfoTip, type InfoTipProps, Input, type InputProps, Kbd, type KbdProps, Label, type LabelProps, Link, type LinkProps, MarginNote, type MarginNoteArrow, type MarginNoteProps, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, type NavigationMenuProps, NavigationMenuTrigger, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, type PaginationLinkProps, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, type PopoverContentProps, type PopoverProps, PopoverTrigger, Progress, type ProgressProps, ProjectCard, type ProjectCardProps, Prose, type ProseProps, RadioGroup, RadioGroupItem, type RadioGroupItemProps, type RadioGroupProps, Readout, ReadoutCell, type ReadoutCellProps, RepoBanner, type RepoBannerProps, type ResolvedTheme, ScrollArea, type ScrollAreaProps, ScrollBar, type ScrollBarProps, SectionHeading, type SectionHeadingProps, Select, SelectContent, type SelectContentProps, SelectGroup, SelectItem, SelectLabel, type SelectProps, SelectSeparator, SelectTrigger, type SelectTriggerProps, SelectValue, Separator, type SeparatorProps, Sheet, SheetClose, type SheetCloseProps, SheetContent, SheetDescription, SheetFooter, SheetHeader, type SheetProps, SheetTitle, SheetTrigger, type SheetTriggerProps, Skeleton, type SkeletonProps, Slider, type SliderProps, SocialCard, type SocialCardProps, Spinner, type SpinnerProps, Stack, type StackProps, Stat, StatDelta, type StatDeltaProps, StatLabel, StatValue, StatusChip, type StatusChipProps, StatusDot, type StatusDotProps, Switch, type SwitchProps, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, type TableHeadProps, TableHeader, type TableProps, TableRow, TableSortButton, type TableSortButtonProps, Tabs, TabsContent, type TabsContentProps, TabsList, type TabsProps, TabsTrigger, type TabsTriggerProps, Text, type TextProps, Textarea, type TextareaProps, type Theme, type ThemeInitScriptOptions, ThemeProvider, type ThemeProviderProps, ThemeToggle, type ThemeToggleProps, Toggle, ToggleGroup, ToggleGroupItem, type ToggleGroupItemProps, type ToggleGroupProps, type ToggleProps, Tooltip, TooltipContent, type TooltipContentProps, type TooltipProps, TooltipProvider, TooltipTrigger, type UseCopyToClipboard, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, cn, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, navigationMenuTriggerStyle, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
