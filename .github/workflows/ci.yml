@@ -35,6 +35,12 @@ jobs:
       - run: bun run typecheck
       - run: bun run test
       - run: bun run build
+      # Package metadata lint (publint) + type-resolution matrix (attw), then a
+      # real tarball install in a scratch app importing every entry from ESM and
+      # CJS — the class of regression (missing export condition, missing
+      # "use client", broken styles path) that source tests can't see.
+      - run: bun run lint:package
+      - run: bash scripts/package-smoke.sh
       # dist/ is committed as the fallback for `bun add github:...`, so a PR that
       # changes src/ without rebuilding would ship stale code to those consumers.
       #

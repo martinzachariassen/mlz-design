@@ -33,6 +33,17 @@
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
+   0. DARK VARIANT — bind Tailwind's `dark:` to the theme switch, not the OS.
+
+   Tailwind v4's `dark:` variant defaults to `prefers-color-scheme`, but this
+   system switches theme via the `.dark` class / `data-theme` attribute that
+   `ThemeProvider` writes to <html>. Without this binding, a consumer's own
+   `dark:*` utilities would follow the OS while the components follow the
+   toggle — a half-dark page whenever the two disagree.
+   -------------------------------------------------------------------------- */
+@custom-variant dark (&:where(.dark, [data-theme="dark"], .dark *, [data-theme="dark"] *));
+
+/* -----------------------------------------------------------------------------
    1. PRIMITIVES  — the canonical MLZ brand values.
 
    The seven neutrals below are the ONLY hex left in this file, and deliberately

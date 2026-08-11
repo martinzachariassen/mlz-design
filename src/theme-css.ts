@@ -47,7 +47,9 @@ export function parseTheme(css = readFileSync(THEME_PATH, "utf8")): Block[] {
   // Comments go first, deliberately: the file's own header comment *describes*
   // the `@theme inline` layer, so searching the raw text finds the prose rather
   // than the at-rule and truncates almost the whole file.
-  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  // `@custom-variant` is a block-less at-rule terminated by `;` — strip it too,
+  // or its text glues onto the following selector in the brace-matching pass.
+  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/@custom-variant[^;]*;/g, "");
   const marker = stripped.indexOf("@theme inline");
   if (marker === -1) {
     throw new Error("theme.css no longer contains `@theme inline` — update the parser's cut-off");

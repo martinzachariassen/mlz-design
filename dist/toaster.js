@@ -1,4 +1,5 @@
-import { cn } from './chunk-QM73NHJL.js';
+"use client";
+import { cn } from './chunk-7EOSDFS3.js';
 import { Toaster as Toaster$1 } from 'sonner';
 export { toast } from 'sonner';
 import { jsx } from 'react/jsx-runtime';
@@ -38,5 +39,3 @@ function Toaster({ className, toastOptions, ...props }) {
 }
 
 export { Toaster };
-//# sourceMappingURL=toaster.js.map
-//# sourceMappingURL=toaster.js.map

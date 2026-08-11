@@ -55,9 +55,9 @@ const ThemeContext = /* @__PURE__ */ React.createContext<ThemeContextValue | nul
 
 const isBrowser = typeof window !== "undefined";
 
-function prefersDark(): boolean {
-  return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
+// Layout effect on the client so persisted-state reads land before paint;
+// plain effect on the server only to silence React's SSR warning (it never runs).
+const useIsomorphicLayoutEffect = isBrowser ? React.useLayoutEffect : React.useEffect;
 
 function readStored<T extends string>(key: string, fallback: T, allowed: readonly T[]): T {
   if (!isBrowser) return fallback;
@@ -122,20 +122,28 @@ export function ThemeProvider({
   enableSystem = true,
   attribute = "class",
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = React.useState<Theme>(() =>
-    readStored(storageKey, defaultTheme, THEMES),
-  );
-  const [accent, setAccentState] = React.useState<AccentName>(() =>
-    readStored(accentStorageKey, defaultAccent, ACCENTS),
-  );
-  const [systemDark, setSystemDark] = React.useState<boolean>(() => prefersDark());
+  // State starts from the *defaults*, never from localStorage: under SSR the
+  // server renders the defaults, so the client's first render must too, or every
+  // returning visitor with a stored choice gets a hydration mismatch (e.g.
+  // ThemeToggle marking a different segment pressed than the server HTML did).
+  const [theme, setThemeState] = React.useState<Theme>(defaultTheme);
+  const [accent, setAccentState] = React.useState<AccentName>(defaultAccent);
+  const [systemDark, setSystemDark] = React.useState<boolean>(false);
 
   const effectiveTheme: Theme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme: ResolvedTheme =
     effectiveTheme === "system" ? (systemDark ? "dark" : "light") : effectiveTheme;
 
+  // Catch React state up with the persisted choices (which themeInitScript has
+  // already painted onto <html>). A layout effect so the whole
+  // read → re-render → apply cycle completes before the first paint.
+  useIsomorphicLayoutEffect(() => {
+    setThemeState(readStored(storageKey, defaultTheme, THEMES));
+    setAccentState(readStored(accentStorageKey, defaultAccent, ACCENTS));
+  }, [storageKey, accentStorageKey, defaultTheme, defaultAccent]);
+
   // Follow the OS while on "system".
-  React.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!isBrowser || !enableSystem) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setSystemDark(mql.matches);
@@ -144,8 +152,10 @@ export function ThemeProvider({
     return () => mql.removeEventListener("change", onChange);
   }, [enableSystem]);
 
-  // Keep <html> in sync with the resolved theme + accent.
-  React.useEffect(() => {
+  // Keep <html> in sync with the resolved theme + accent. Also a layout effect:
+  // if it ran after paint, the correction from the persisted-state read above
+  // would be visible as a one-frame flash of the default theme.
+  useIsomorphicLayoutEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
 

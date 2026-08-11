@@ -1,7 +1,8 @@
-import { cn } from './chunk-QM73NHJL.js';
-export { cn } from './chunk-QM73NHJL.js';
-import { accents } from './chunk-2DUXDNAX.js';
-export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-2DUXDNAX.js';
+"use client";
+import { cn } from './chunk-7EOSDFS3.js';
+export { cn } from './chunk-7EOSDFS3.js';
+import { accents } from './chunk-7IUMZ2OS.js';
+export { accentFill, accents, animations, breakpoints, colors, fonts, motion, onDark, radius, signalFill, signals, signalsDeep, tokens } from './chunk-7IUMZ2OS.js';
 import { cva } from 'class-variance-authority';
 import * as React40 from 'react';
 import { jsx, jsxs, Fragment } from 'react/jsx-runtime';
@@ -856,9 +857,7 @@ var THEMES = ["light", "dark", "system"];
 var ACCENTS = ["cyan", "blue", "green", "rust", "ink"];
 var ThemeContext = /* @__PURE__ */ React40.createContext(null);
 var isBrowser = typeof window !== "undefined";
-function prefersDark() {
-  return isBrowser && window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
+var useIsomorphicLayoutEffect = isBrowser ? React40.useLayoutEffect : React40.useEffect;
 function readStored(key, fallback, allowed) {
   if (!isBrowser) return fallback;
   try {
@@ -894,16 +893,16 @@ function ThemeProvider({
   enableSystem = true,
   attribute = "class"
 }) {
-  const [theme, setThemeState] = React40.useState(
-    () => readStored(storageKey, defaultTheme, THEMES)
-  );
-  const [accent, setAccentState] = React40.useState(
-    () => readStored(accentStorageKey, defaultAccent, ACCENTS)
-  );
-  const [systemDark, setSystemDark] = React40.useState(() => prefersDark());
+  const [theme, setThemeState] = React40.useState(defaultTheme);
+  const [accent, setAccentState] = React40.useState(defaultAccent);
+  const [systemDark, setSystemDark] = React40.useState(false);
   const effectiveTheme = !enableSystem && theme === "system" ? "light" : theme;
   const resolvedTheme = effectiveTheme === "system" ? systemDark ? "dark" : "light" : effectiveTheme;
-  React40.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
+    setThemeState(readStored(storageKey, defaultTheme, THEMES));
+    setAccentState(readStored(accentStorageKey, defaultAccent, ACCENTS));
+  }, [storageKey, accentStorageKey, defaultTheme, defaultAccent]);
+  useIsomorphicLayoutEffect(() => {
     if (!isBrowser || !enableSystem) return;
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => setSystemDark(mql.matches);
@@ -911,7 +910,7 @@ function ThemeProvider({
     mql.addEventListener("change", onChange);
     return () => mql.removeEventListener("change", onChange);
   }, [enableSystem]);
-  React40.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     applyToDocument(resolvedTheme, accent, attribute);
   }, [resolvedTheme, accent, attribute]);
   const setTheme = React40.useCallback(
@@ -4415,5 +4414,3 @@ var TooltipContent = /* @__PURE__ */ named(
 );
 
 export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Combobox, Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Container, CopyButton, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FindingItem, FindingList, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, MarginNote, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, Readout, ReadoutCell, RepoBanner, ScrollArea, ScrollBar, SectionHeading, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusChip, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
-//# sourceMappingURL=index.js.map
-//# sourceMappingURL=index.js.map
