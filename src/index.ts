@@ -135,6 +135,7 @@ export { Spinner, type SpinnerProps, spinnerVariants } from "./components/feedba
 // side-effect-free and injects a <style> at module scope, so re-exporting it
 // here made every consumer ship and run it. See src/toaster.ts.
 export { Button, type ButtonProps, buttonVariants } from "./components/forms/button";
+export { Calendar, type CalendarProps } from "./components/forms/calendar";
 export { Checkbox, type CheckboxProps } from "./components/forms/checkbox";
 export {
   Combobox,
@@ -142,6 +143,7 @@ export {
   type ComboboxProps,
 } from "./components/forms/combobox";
 export { CopyButton, type CopyButtonProps } from "./components/forms/copy-button";
+export { DatePicker, type DatePickerProps } from "./components/forms/date-picker";
 export {
   Field,
   FieldDescription,
@@ -232,6 +234,16 @@ export {
   type StackProps,
   stackVariants,
 } from "./components/layout/layout";
+export {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  type NavigationMenuProps,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "./components/layout/navigation-menu";
 export {
   Pagination,
   PaginationContent,

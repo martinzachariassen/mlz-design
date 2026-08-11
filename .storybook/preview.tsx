@@ -123,6 +123,8 @@ const preview: Preview = {
               "Slider",
               "Toggle",
               "ToggleGroup",
+              "Calendar",
+              "DatePicker",
             ],
             "Data display",
             [
@@ -163,6 +165,7 @@ const preview: Preview = {
               "Collapsible",
               "ScrollArea",
               "Breadcrumb",
+              "NavigationMenu",
               "Pagination",
             ],
             "Overlay",

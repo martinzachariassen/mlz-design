@@ -46,6 +46,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Toggle` · `ToggleGroup` (+ `Item`) | a button that stays pressed (`aria-pressed`); the group is a segmented control (`single`) or a filter bar (`multiple`) |
 | `CopyButton` | a `Button` that puts a string on the clipboard and says so — the label swaps to a check plus "Copied" and returns on its own. A refused copy leaves the label alone rather than claiming success. `useCopyToClipboard` is the same behaviour without the button |
 | `RadioGroup` (+ `Item`) | two to five exclusive choices, all visible; one tab stop, arrows move within it |
+| `Calendar` · `DatePicker` | a month grid on `react-day-picker`, restyled from tokens, and the `Select`-shaped field that opens it in a popover. For a date the reader knows, `<Input type="date">` still wins |
 | `Combobox` | a `Select` you can type into — one value from a list long enough that scrolling it is a hunt (~15 options up). `Command` inside a `Popover`; joins a `Field` automatically. Below that line, `Select` costs one click instead of a click plus recall |
 | `Select` (+ `Trigger`/`Value`/`Content`/`Item`/`Label`/`Separator`/`Group`) | one value from many (~6+ options); grouped, collision-aware listbox. Pass `name` inside a `<form>` for a native submit value |
 
@@ -96,6 +97,7 @@ Every component reads only semantic tokens, so all of them re-theme with the `cl
 | `Container` | centred max-width page frame with responsive gutters (`sm`…`xl`/`prose`/`full`) |
 | `Stack`    | flex row/column with a token gap; `direction="responsive"` stacks on mobile, flows to a row at `sm` |
 | `Grid`     | responsive grid — auto-fitting (`min`) or fixed responsive `cols` (1–6) |
+| `NavigationMenu` (+ `List`/`Item`/`Trigger`/`Content`/`Link`) | primary app-shell navigation on the Radix primitive — hover/focus panels with the full keyboard pattern; `navigationMenuTriggerStyle()` keeps bare links flush with triggers |
 | `Breadcrumb` (+ `List`/`Item`/`Link`/`Page`/`Separator`/`Ellipsis`) | the trail back up — a `<nav>` around an `<ol>`; the current page is marked with `aria-current`, not linked |
 | `Pagination` (+ `Content`/`Item`/`Link`/`Previous`/`Next`/`Ellipsis`) | page-by-page navigation where every page is a real, bookmarkable URL |
 

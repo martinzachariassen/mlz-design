@@ -12,6 +12,7 @@ import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import * as ProgressPrimitive from '@radix-ui/react-progress';
+import { DayPicker } from 'react-day-picker';
 import { Command as Command$1 } from 'cmdk';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as LabelPrimitive from '@radix-ui/react-label';
@@ -19,6 +20,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
+import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
@@ -2263,6 +2265,58 @@ var Button = /* @__PURE__ */ named(
   ),
   "Button"
 );
+function Calendar({
+  className,
+  classNames,
+  showOutsideDays = true,
+  ...props
+}) {
+  return /* @__PURE__ */ jsx(
+    DayPicker,
+    {
+      showOutsideDays,
+      className: cn("inline-block p-3", className),
+      classNames: {
+        root: "relative",
+        months: "relative flex flex-col gap-4 sm:flex-row",
+        month: "flex flex-col gap-3",
+        month_caption: "flex h-8 items-center justify-center",
+        caption_label: "font-mono text-xs font-bold uppercase tracking-[0.12em] text-foreground",
+        nav: "absolute inset-x-0 top-0 z-10 flex h-8 items-center justify-between",
+        button_previous: "inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-40",
+        button_next: "inline-flex size-8 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-40",
+        month_grid: "border-separate border-spacing-0.5",
+        weekday: "size-9 pb-1 text-center font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground",
+        day: "p-0 text-center",
+        day_button: cn(
+          "size-9 rounded-[var(--radius-sm)] font-mono text-[13px] text-foreground transition-colors",
+          "hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+          "disabled:pointer-events-none"
+        ),
+        // `border-accent` is decorative here (today is also announced by AT);
+        // selection itself uses the fill + paired foreground rungs.
+        today: "[&>button]:border [&>button]:border-accent",
+        selected: "[&>button]:bg-accent [&>button]:text-accent-foreground [&>button]:hover:bg-accent",
+        range_start: "rounded-l-[var(--radius-sm)]",
+        range_end: "rounded-r-[var(--radius-sm)]",
+        range_middle: "[&>button]:rounded-none [&>button]:bg-accent-subtle [&>button]:text-foreground [&>button]:hover:bg-accent-subtle",
+        outside: "[&>button]:text-muted-foreground-2",
+        disabled: "[&>button]:opacity-40",
+        hidden: "invisible",
+        footer: "pt-2 text-sm text-muted-foreground",
+        dropdowns: "flex items-center justify-center gap-2",
+        ...classNames
+      },
+      components: {
+        Chevron: ({ orientation, className: chevronClassName }) => {
+          const Icon2 = orientation === "left" ? ChevronLeftIcon : orientation === "right" ? ChevronRightIcon : orientation === "up" ? ChevronUpIcon : ChevronDownIcon;
+          return /* @__PURE__ */ jsx(Icon2, { className: cn("size-4", chevronClassName) });
+        }
+      },
+      ...props
+    }
+  );
+}
 var Checkbox = /* @__PURE__ */ named(
   /* @__PURE__ */ React36.forwardRef(
     ({ className, id, ...props }, ref) => {
@@ -2858,6 +2912,99 @@ var CopyButton = /* @__PURE__ */ named(
     }
   ),
   "CopyButton"
+);
+function toWireFormat(date) {
+  const y = date.getFullYear();
+  const m = `${date.getMonth() + 1}`.padStart(2, "0");
+  const d = `${date.getDate()}`.padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+var DatePicker = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(
+    ({
+      value: valueProp,
+      defaultValue,
+      onValueChange,
+      open: openProp,
+      defaultOpen = false,
+      onOpenChange,
+      name,
+      id,
+      size = "default",
+      placeholder = "Pick a date",
+      formatDate,
+      calendarProps,
+      disabled,
+      className,
+      contentClassName,
+      "aria-label": ariaLabel
+    }, ref) => {
+      const [uncontrolledOpen, setUncontrolledOpen] = React36.useState(defaultOpen);
+      const isOpenControlled = openProp !== void 0;
+      const open = isOpenControlled ? openProp : uncontrolledOpen;
+      const setOpen = (next) => {
+        if (!isOpenControlled) setUncontrolledOpen(next);
+        onOpenChange?.(next);
+      };
+      const [uncontrolled, setUncontrolled] = React36.useState(defaultValue);
+      const isControlled = valueProp !== void 0;
+      const value = isControlled ? valueProp : uncontrolled;
+      const fieldProps = useFieldControlProps();
+      const select = (next) => {
+        if (!isControlled) setUncontrolled(next);
+        onValueChange?.(next);
+        if (next) setOpen(false);
+      };
+      const label = value ? formatDate?.(value) ?? new Intl.DateTimeFormat(void 0, { dateStyle: "medium" }).format(value) : placeholder;
+      return /* @__PURE__ */ jsxs(Popover, { open, onOpenChange: setOpen, children: [
+        name ? /* @__PURE__ */ jsx("input", { type: "hidden", name, value: value ? toWireFormat(value) : "" }) : null,
+        /* @__PURE__ */ jsx(PopoverTrigger, { asChild: true, children: /* @__PURE__ */ jsxs(
+          "button",
+          {
+            ref,
+            type: "button",
+            "aria-label": ariaLabel,
+            "data-slot": "date-picker",
+            className: cn(
+              "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+              size === "sm" ? "h-9 text-[13px]" : "h-11",
+              "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
+              !value && "text-muted-foreground",
+              className
+            ),
+            ...fieldProps,
+            id: id ?? fieldProps.id,
+            disabled: disabled ?? fieldProps.disabled,
+            children: [
+              /* @__PURE__ */ jsx("span", { className: "truncate", children: label }),
+              /* @__PURE__ */ jsx(ChevronDownIcon, { className: "size-4 shrink-0 opacity-60" })
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsx(
+          PopoverContent,
+          {
+            align: "start",
+            sideOffset: 4,
+            className: cn("w-auto p-0", contentClassName),
+            children: /* @__PURE__ */ jsx(
+              Calendar,
+              {
+                defaultMonth: value,
+                ...calendarProps,
+                mode: "single",
+                selected: value,
+                onSelect: select
+              }
+            )
+          }
+        )
+      ] });
+    }
+  ),
+  "DatePicker"
 );
 var Input = /* @__PURE__ */ named(
   /* @__PURE__ */ React36.forwardRef(
@@ -3550,6 +3697,103 @@ var Grid = /* @__PURE__ */ named(
     }
   ),
   "Grid"
+);
+var NavigationMenu = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+    NavigationMenuPrimitive.Root,
+    {
+      ref,
+      "data-slot": "navigation-menu",
+      className: cn("relative z-10 flex max-w-max flex-1 items-center justify-center", className),
+      ...props,
+      children: [
+        children,
+        /* @__PURE__ */ jsx(NavigationMenuViewport, {})
+      ]
+    }
+  )),
+  "NavigationMenu"
+);
+var NavigationMenuList = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+    NavigationMenuPrimitive.List,
+    {
+      ref,
+      "data-slot": "navigation-menu-list",
+      className: cn("group flex flex-1 list-none items-center justify-center gap-1", className),
+      ...props
+    }
+  )),
+  "NavigationMenuList"
+);
+var NavigationMenuItem = NavigationMenuPrimitive.Item;
+var navigationMenuTriggerStyle = /* @__PURE__ */ cva(
+  "group inline-flex h-9 w-max items-center justify-center gap-1 rounded-[var(--radius-sm)] px-3 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 data-[state=open]:bg-muted data-[state=open]:text-foreground"
+);
+var NavigationMenuTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxs(
+    NavigationMenuPrimitive.Trigger,
+    {
+      ref,
+      "data-slot": "navigation-menu-trigger",
+      className: cn(navigationMenuTriggerStyle(), className),
+      ...props,
+      children: [
+        children,
+        /* @__PURE__ */ jsx(
+          ChevronDownIcon,
+          {
+            "aria-hidden": "true",
+            className: "size-3 transition-transform duration-200 ease-[var(--ease-out)] group-data-[state=open]:rotate-180 motion-reduce:transition-none"
+          }
+        )
+      ]
+    }
+  )),
+  "NavigationMenuTrigger"
+);
+var NavigationMenuContent = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+    NavigationMenuPrimitive.Content,
+    {
+      ref,
+      "data-slot": "navigation-menu-content",
+      className: cn("p-2 md:absolute md:w-auto", className),
+      ...props
+    }
+  )),
+  "NavigationMenuContent"
+);
+var NavigationMenuLink = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+    NavigationMenuPrimitive.Link,
+    {
+      ref,
+      "data-slot": "navigation-menu-link",
+      className: cn(
+        "block rounded-[var(--radius-sm)] px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 data-[active=true]:bg-accent-subtle data-[active=true]:text-foreground",
+        className
+      ),
+      ...props
+    }
+  )),
+  "NavigationMenuLink"
+);
+var NavigationMenuViewport = /* @__PURE__ */ named(
+  /* @__PURE__ */ React36.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { className: "absolute top-full left-0 isolate z-50 flex w-full justify-center", children: /* @__PURE__ */ jsx(
+    NavigationMenuPrimitive.Viewport,
+    {
+      ref,
+      "data-slot": "navigation-menu-viewport",
+      className: cn(
+        "relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full origin-top-center overflow-hidden rounded-[var(--radius-lg)] border border-border bg-popover text-popover-foreground shadow-[var(--shadow-lg)] md:w-[var(--radix-navigation-menu-viewport-width)]",
+        "motion-safe:animate-rise",
+        className
+      ),
+      ...props
+    }
+  ) })),
+  "NavigationMenuViewport"
 );
 var paginationLinkVariants = /* @__PURE__ */ cva(
   "inline-flex h-9 min-w-9 items-center justify-center gap-1.5 rounded-[var(--radius-sm)] px-2.5 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30 [&_svg]:size-3.5",
@@ -4545,4 +4789,4 @@ var TooltipContent = /* @__PURE__ */ named(
   "TooltipContent"
 );
 
-export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Combobox, Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Container, CopyButton, DataList, DataRow, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FindingItem, FindingList, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, MarginNote, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, Readout, ReadoutCell, RepoBanner, ScrollArea, ScrollBar, SectionHeading, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusChip, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, TableSortButton, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
+export { AccentPicker, Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AlertTitle, Avatar, AvatarFallback, AvatarGroup, AvatarImage, Badge, BrandLockup, BrandMark, BrandWordmark, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Calendar, Callout, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Checkbox, Code, CodeBlock, Collapsible, CollapsibleContent, CollapsibleTrigger, Combobox, Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut, Container, CopyButton, DataList, DataRow, DatePicker, Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger, EmptyState, EmptyStateActions, EmptyStateDescription, EmptyStateMedia, EmptyStateTitle, Field, FieldDescription, FieldError, FieldLabel, FindingItem, FindingList, FloatingMarks, GlitchText, Grid, GridBackground, HoverCard, HoverCardContent, HoverCardTrigger, InfoTip, Input, Kbd, Label, Link, MarginNote, NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious, Popover, PopoverAnchor, PopoverClose, PopoverContent, PopoverTrigger, Progress, ProjectCard, Prose, RadioGroup, RadioGroupItem, Readout, ReadoutCell, RepoBanner, ScrollArea, ScrollBar, SectionHeading, Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue, Separator2 as Separator, Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger, Skeleton, Slider, SocialCard, Spinner, Stack, Stat, StatDelta, StatLabel, StatValue, StatusChip, StatusDot, Switch, Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow, TableSortButton, Tabs, TabsContent, TabsList, TabsTrigger, Text, Textarea, ThemeProvider, ThemeToggle, Toggle, ToggleGroup, ToggleGroupItem, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, alertVariants, avatarFallbackVariants, avatarVariants, badgeVariants, buttonVariants, calloutVariants, cardVariants, containerVariants, emptyStateVariants, fallbackVariants, indicatorVariants, linkVariants, navigationMenuTriggerStyle, paginationLinkVariants, progressIndicatorVariants, sheetVariants, spinnerVariants, stackVariants, deltaVariants as statDeltaVariants, statusChipVariants, statusDotVariants, textVariants, themeInitScript, toggleVariants, useCopyToClipboard, useField, useFieldControlProps, useTheme };
