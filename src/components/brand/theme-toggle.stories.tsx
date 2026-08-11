@@ -7,18 +7,10 @@ const meta = {
   component: ThemeToggle,
   subcomponents: { AccentPicker },
   tags: ["autodocs", "status:new"],
-  parameters: {
-    layout: "centered",
-    docs: {
-      description: {
-        component:
-          "**Heads up while you're in Storybook:** these controls and the toolbar's " +
-          "Theme / Accent switches drive the *same* two attributes on `<html>`. " +
-          "They will fight each other here — that's an artifact of the playground, " +
-          "not of the components. In a real app only `ThemeProvider` is writing.",
-      },
-    },
-  },
+  // No `docs.description.component` here: it would silently *replace* the
+  // component's JSDoc on the Docs page. The Storybook-only caveat lives on the
+  // first story instead.
+  parameters: { layout: "centered" },
   argTypes: {
     iconOnly: { control: "boolean", description: "Drop the text labels." },
     hideSystem: { control: "boolean", description: "Offer only light and dark." },
@@ -38,7 +30,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** The default: light, dark and system, labelled. */
-export const Playground: Story = {};
+export const Playground: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "**Heads up while you're in Storybook:** these controls and the toolbar's " +
+          "Theme / Accent switches drive the *same* two attributes on `<html>`. " +
+          "They will fight each other here — that's an artifact of the playground, " +
+          "not of the components. In a real app only `ThemeProvider` is writing.",
+      },
+    },
+  },
+};
 
 /** `iconOnly` for a header or a toolbar. Each button keeps an `aria-label`. */
 export const IconOnly: Story = { args: { iconOnly: true } };

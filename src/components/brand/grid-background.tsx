@@ -23,6 +23,9 @@ export interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement
  *   pointer (the signature MLZ effect), optionally with an accent `glow`.
  *
  * Render it as the first child of a `relative` container; it fills that box.
+ *
+ * **Reach for `FloatingMarks`** when the backdrop should move — the drifting
+ * sketch glyphs. The two layer well together: grid behind, marks over it.
  */
 export const GridBackground = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, GridBackgroundProps>(

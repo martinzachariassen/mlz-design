@@ -66,6 +66,11 @@ function Lockup({ size }: { size: number }) {
  * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
  * it at the top of the README. For light + dark, capture once plain and once
  * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is the
+ * image at the top of a README. **Reach for `SocialCard`** for the 1200×630
+ * Open-Graph / share image, and for **`ProjectCard`** when the card is live UI
+ * in a portfolio rather than an image you export.
  */
 export const RepoBanner = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, RepoBannerProps>(
