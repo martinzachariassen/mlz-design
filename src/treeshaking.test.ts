@@ -50,8 +50,10 @@ describe("the published entry has no top-level side effects", () => {
   });
 
   it("contains no bare expression statements", () => {
+    // The `"use client"` directive is exempt: it's a directive prologue, not an
+    // expression — bundlers treat it as metadata and it cannot pin anything.
     const bare = topLevel.filter(
-      (l) => !/^(import|export|var |const |let |function |class |\/\/|\/\*|\*)/.test(l),
+      (l) => !/^(import|export|var |const |let |function |class |\/\/|\/\*|\*|"use \w+";$)/.test(l),
     );
     expect(bare).toEqual([]);
   });
