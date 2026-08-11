@@ -3,7 +3,7 @@ import { ThemeSplit } from "../../foundations/theme-split";
 import { MarginNote } from "./margin-note";
 
 const meta = {
-  title: "Components/Brand/MarginNote",
+  title: "Brand/MarginNote",
   component: MarginNote,
   tags: ["autodocs"],
   parameters: { layout: "centered" },

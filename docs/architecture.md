@@ -219,6 +219,33 @@ theme colours through `polished`, which parses only hex/rgb/hsl. An `oklch()`
 string reaching the theme throws the *same* `PolishedError` for an entirely
 different reason — hence `.storybook/oklch.ts`, which converts them.
 
+### The MDX docs-page crash, and the `focus` shim in `preview.tsx`
+
+On Storybook **10.5.7**, opening any MDX docs page (Installation, Theming,
+Accessibility) throws `TypeError: Illegal invocation` from
+`HTMLElement.get [as focus]` and the page dies. Two upstream halves collide:
+Storybook's test annotation installs an *accessor* for `focus` on
+`HTMLElement.prototype` whose getter dereferences `this.ownerDocument`, and the
+react-aria code bundled into the docs-blocks chunk reads
+`HTMLElement.prototype.focus` at module top level — a prototype receiver, so the
+getter throws. Because ES modules cache the failed evaluation, every docs page
+then replays the identical error, which is why all three pages "break at once".
+
+**The workaround.** `preview.tsx` shadows `ownerDocument` on
+`HTMLElement.prototype` with a receiver-safe wrapper around the native getter:
+real elements behave identically, while a prototype receiver gets `null` instead
+of a throw — so Storybook's `focus` getter falls back to its own noop, which is
+behaviourally what the upstream fix does. Don't reach for the more obvious
+"make `focus` non-redefinable" shim: user-event's `patchFocus()` also redefines
+`focus`, *outside* any try/catch, so that variant breaks every play-function
+story (found by the axe run).
+
+**Remove when** Storybook ≥ 10.6 lands: the upstream fix
+([storybookjs/storybook#35528](https://github.com/storybookjs/storybook/pull/35528),
+merged 2026-07-28) makes the getter safe for prototype receivers. It shipped in
+`10.6.0-alpha.4`; delete the shim when bumping past it, and retest the
+two-addon/manager workaround above at the same time.
+
 ### MDX needs GFM wired up explicitly
 
 Storybook's MDX pipeline ships **no GFM**, so a markdown table in an `.mdx` page

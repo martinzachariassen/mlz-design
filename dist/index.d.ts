@@ -100,6 +100,10 @@ interface FloatingMarksProps extends React.HTMLAttributes<HTMLDivElement> {
  * Positions, drift, rotation, timing and opacity are derived deterministically
  * from each mark's index (no `Math.random`), so it's SSR-safe and stable across
  * renders. Render inside a `relative` container; it fills that box.
+ *
+ * **Reach for `GridBackground`** when the backdrop should be still — the ruled
+ * notebook grid, with or without the pointer-reveal. The two layer well
+ * together: grid behind, a few marks drifting over it.
  */
 declare const FloatingMarks: React.ForwardRefExoticComponent<FloatingMarksProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -169,6 +173,9 @@ interface GridBackgroundProps extends React.HTMLAttributes<HTMLDivElement> {
  *   pointer (the signature MLZ effect), optionally with an accent `glow`.
  *
  * Render it as the first child of a `relative` container; it fills that box.
+ *
+ * **Reach for `FloatingMarks`** when the backdrop should move — the drifting
+ * sketch glyphs. The two layer well together: grid behind, marks over it.
  */
 declare const GridBackground: React.ForwardRefExoticComponent<GridBackgroundProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -240,6 +247,11 @@ interface ProjectCardProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
  *   for the hero project at the top of a portfolio. Stacks on mobile.
  *
  * With `href`, the whole card becomes one link (the title anchor stretches over it).
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is live
+ * UI, rendered in the page. **Reach for `RepoBanner`** (README header image) or
+ * **`SocialCard`** (Open-Graph share image) when the deliverable is a PNG you
+ * snapshot, and for the plain **`Card`** when the content isn't a project.
  */
 declare const ProjectCard: React.ForwardRefExoticComponent<ProjectCardProps & React.RefAttributes<HTMLElement>>;
 
@@ -281,6 +293,11 @@ interface RepoBannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
  * Snapshot it (Satori / `@vercel/og`, or a 2× browser capture) to a PNG and drop
  * it at the top of the README. For light + dark, capture once plain and once
  * inside a `.dark` wrapper, then swap with a `<picture>` `prefers-color-scheme`.
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is the
+ * image at the top of a README. **Reach for `SocialCard`** for the 1200×630
+ * Open-Graph / share image, and for **`ProjectCard`** when the card is live UI
+ * in a portfolio rather than an image you export.
  */
 declare const RepoBanner: React.ForwardRefExoticComponent<RepoBannerProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -315,6 +332,11 @@ interface SocialCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "ti
  *
  * `width` scales the whole card proportionally (height is locked to the 1.91:1
  * OG ratio) so it previews at any size without breaking the internal rhythm.
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is the
+ * link-preview image social platforms unfurl. **Reach for `RepoBanner`** for the
+ * wide 1280×340 image at the top of a README, and for **`ProjectCard`** when the
+ * card is live UI in a portfolio rather than an image you export.
  */
 declare const SocialCard: React.ForwardRefExoticComponent<SocialCardProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -615,11 +637,16 @@ type ProseProps = React.HTMLAttributes<HTMLDivElement>;
  *
  * It's a descendant-styled container (the `@tailwindcss/typography` idea, done
  * with tokens), so it needs no plugin and re-themes with light/dark and accent.
+ *
+ * **Reach for `Text`** when you're styling one piece of copy rather than a
+ * flow of article markup — a lead, a caption, an eyebrow. Note the descendant
+ * rules win on specificity, so `Code`/`Link` rendered inside a `Prose` take
+ * their look from here, not from their own classes.
  */
 declare const Prose: React.ForwardRefExoticComponent<ProseProps & React.RefAttributes<HTMLDivElement>>;
 
 declare const statusDotVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusDotVariants> {
     /** Add a soft pulsing ring in the dot's colour to signal live/active state. */
@@ -636,6 +663,10 @@ interface StatusDotProps extends React.HTMLAttributes<HTMLSpanElement>, VariantP
  * Decorative by default (`aria-hidden`) — colour alone never carries meaning, so
  * pair it with text. When the dot *is* the whole message, give it a `label` and
  * it becomes a named `role="img"`.
+ *
+ * **Reach for `StatusChip`** when the dot should come with its finding written
+ * out as a pill ("All systems normal"), and for **`Badge`** when the label is a
+ * category or version rather than a live state.
  *
  * ```tsx
  * <StatusDot variant="success" />
@@ -748,7 +779,7 @@ declare const StatDelta: React.ForwardRefExoticComponent<StatDeltaProps & React.
  * rung is the right one here — the dot inside takes `-deep` via `StatusDot`.
  */
 declare const statusChipVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface StatusChipProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof statusChipVariants> {
     /** Show the leading `StatusDot`. Turn it off for a chip that is pure label. */
@@ -871,7 +902,7 @@ interface TextProps extends React.HTMLAttributes<HTMLElement>, VariantProps<type
 declare const Text: React.ForwardRefExoticComponent<TextProps & React.RefAttributes<HTMLElement>>;
 
 declare const alertVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "default" | "destructive" | null | undefined;
+    variant?: "default" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof alertVariants> {
 }
@@ -898,7 +929,7 @@ declare const AlertTitle: React.ForwardRefExoticComponent<React.HTMLAttributes<H
 declare const AlertDescription: React.ForwardRefExoticComponent<React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>>;
 
 declare const calloutVariants: (props?: ({
-    variant?: "success" | "warning" | "info" | "accent" | "muted" | "destructive" | null | undefined;
+    variant?: "accent" | "muted" | "destructive" | "success" | "warning" | "info" | null | undefined;
 } & class_variance_authority_types.ClassProp) | undefined) => string;
 interface CalloutProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof calloutVariants> {
     /** The headline — the finding itself, in full-strength foreground. */
@@ -1038,6 +1069,10 @@ interface ProgressProps extends Omit<React.ComponentPropsWithoutRef<typeof Progr
  * a `role="progressbar"` with the ARIA value attributes wired up — pass
  * `aria-label` (or `aria-labelledby`) when you have a real label, otherwise it
  * falls back to a generic "Progress".
+ *
+ * Determinate only — it needs a real percentage. **Reach for `Spinner`** when
+ * all you know is "still working", and for **`Skeleton`** when it's the first
+ * paint of content whose shape you already know.
  */
 declare const Progress: React.ForwardRefExoticComponent<ProgressProps & React.RefAttributes<HTMLDivElement>>;
 
@@ -1932,6 +1967,10 @@ interface SeparatorProps extends React.ComponentPropsWithoutRef<typeof Separator
  * `decorative={false}` for a real `role="separator"` with the right
  * `aria-orientation`. A horizontal rule can carry a centered mono label that
  * splits the line.
+ *
+ * **Reach for `SectionHeading`** when the line is introducing a section — that
+ * one is a real heading with the rule attached, so the document outline stays
+ * honest. The label here is just text on a divider, not a heading.
  */
 declare const Separator: React.ForwardRefExoticComponent<SeparatorProps & React.RefAttributes<HTMLDivElement>>;
 

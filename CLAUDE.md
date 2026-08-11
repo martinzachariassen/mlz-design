@@ -89,7 +89,10 @@ behind the "update both" rule above.
 - **Never use a fill value as a text, icon, ring or hover colour.** `text-accent`,
   `text-success`, `hover:text-accent` are all bugs; use the `-deep` rung. It maps
   back to the fill in dark mode, so `-deep` is correct in *both* themes — reach
-  for it unconditionally.
+  for it unconditionally. When auditing for this, grep **both spellings**: the
+  utility form (`text-success`) *and* the arbitrary form (`text-[var(--success)]`)
+  — an `Alert` bug lived for months in the second spelling because greps only
+  covered the first.
 - **Two fill modes, and the foreground follows from the mode, not from taste.**
   `tint` (L 0.74) carries ink text; `bold` (dark) carries paper text. Only
   `danger` and the `ink`/slate accent are bold.
@@ -107,6 +110,45 @@ behind the "update both" rule above.
 
 Foundations → **Colour model** (`src/foundations/ColourModel.stories.tsx`) is the
 long form, and computes its figures from the tokens so it cannot go stale.
+
+## Interaction & focus contracts
+
+Hard rules distilled from the 2026-08 component audit — every one of these was a
+shipped bug:
+
+- **`focus-visible:outline-none` never ships alone.** It suppresses the global
+  outline in `base.css`, so the same class string must supply the replacement:
+  `focus-visible:ring-[3px] focus-visible:ring-ring/30`. Inside an
+  `overflow-hidden` parent the ring must also be `ring-inset` — Tailwind rings
+  paint *outside* the border box and get clipped to nothing (`CodeBlock` and
+  `ScrollArea` shipped exactly that). Hover and focus must not look identical.
+- **Overlapping segmented siblings** (`-ml-*` seams): the negative margin must
+  equal the border width exactly (`border-[1.5px]` ↔ `-ml-[1.5px]`), and the
+  active/hover/focus item needs `relative` plus `z-10` variants — later DOM
+  siblings paint on top, so without elevation the neighbour's neutral border
+  covers the state edge (the ThemeToggle divider bug).
+- **`className` lands on the root element the props interface describes**, and
+  internal event handlers compose with the consumer's (`onX?.(event)` first) —
+  a handler written only before `{...props}` is silently replaced.
+- **No fresh-identity default parameters in effect deps.** `interval = [900,
+  3600]` in a dependency array re-runs the effect on every parent render;
+  hoist the default to a module constant and depend on the scalars.
+- **Initial focus in a native `<dialog>` goes through the `autofocus`
+  attribute**, never a mount-effect `.focus()` — `showModal()`'s focusing steps
+  run later and win (see `AlertDialogCancel`).
+
+## Adding a component — definition of done
+
+JSDoc that says what it is *and* when to reach for the sibling (cross-link both
+directions); its own `*.stories.tsx` with explicit `tags` and `component`, titled
+after the folder (`Components/<Group>/<Name>`; brand components are
+`Brand/<Name>` — no one-component sections); a leaf entry in `preview.tsx`'s
+`storySort` in the same change; a colocated test (or a documented shared file,
+see CONTRIBUTING); export from `src/index.ts`; a changeset. **Every exported
+component gets its own docs page** — `ToggleGroup` and `Code` once shipped
+without one, and "this has no docs" was the direct result. Storybook workarounds
+are documented in `docs/architecture.md` with an explicit removal condition
+(version / upstream issue).
 
 ## Behaviour: Radix backbone, MLZ styling
 

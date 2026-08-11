@@ -1,12 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ThemeSplit } from "../../foundations/theme-split";
 import { Toggle } from "./toggle";
-import { ToggleGroup, ToggleGroupItem } from "./toggle-group";
 
 const meta = {
   title: "Components/Forms/Toggle",
   component: Toggle,
-  subcomponents: { ToggleGroup, ToggleGroupItem },
   tags: ["autodocs", "status:new"],
   parameters: { layout: "centered" },
   argTypes: {
@@ -58,36 +56,16 @@ export const IconOnly: Story = {
   ),
 };
 
-/** `type="single"` is a segmented control — exactly one on. The group is one tab stop; arrows move within it. */
-export const SingleGroup: Story = {
-  render: () => (
-    <ToggleGroup type="single" defaultValue="grid" variant="outline" aria-label="Layout">
-      <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
-      <ToggleGroupItem value="list">List</ToggleGroupItem>
-      <ToggleGroupItem value="table">Table</ToggleGroupItem>
-    </ToggleGroup>
-  ),
-};
-
-/** `type="multiple"` lets several be on at once — a filter bar rather than a switch. */
-export const MultipleGroup: Story = {
-  render: () => (
-    <ToggleGroup type="multiple" defaultValue={["draft"]} variant="outline" aria-label="Filters">
-      <ToggleGroupItem value="draft">Draft</ToggleGroupItem>
-      <ToggleGroupItem value="archived">Archived</ToggleGroupItem>
-      <ToggleGroupItem value="mine">Mine</ToggleGroupItem>
-    </ToggleGroup>
-  ),
-};
-
 export const LightDark: Story = {
   parameters: { layout: "fullscreen" },
   render: () => (
     <ThemeSplit>
-      <ToggleGroup type="single" defaultValue="grid" variant="outline" aria-label="Layout">
-        <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
-        <ToggleGroupItem value="list">List</ToggleGroupItem>
-      </ToggleGroup>
+      <div className="flex items-center gap-4">
+        <Toggle variant="outline" defaultPressed>
+          Archived
+        </Toggle>
+        <Toggle variant="outline">Archived</Toggle>
+      </div>
     </ThemeSplit>
   ),
 };

@@ -41,6 +41,11 @@ const BASE_H = 630;
  *
  * `width` scales the whole card proportionally (height is locked to the 1.91:1
  * OG ratio) so it previews at any size without breaking the internal rhythm.
+ *
+ * One of three card-shaped brand pieces — pick by destination: this one is the
+ * link-preview image social platforms unfurl. **Reach for `RepoBanner`** for the
+ * wide 1280×340 image at the top of a README, and for **`ProjectCard`** when the
+ * card is live UI in a portfolio rather than an image you export.
  */
 export const SocialCard = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, SocialCardProps>(

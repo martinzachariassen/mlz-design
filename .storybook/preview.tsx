@@ -3,6 +3,34 @@ import { useEffect } from "react";
 import { breakpoints } from "../src/tokens";
 import "./app.css";
 
+// Storybook 10.5.7's test annotation installs a `focus` accessor on
+// HTMLElement.prototype whose getter dereferences `this.ownerDocument`. When
+// react-aria (bundled into the docs-blocks chunk) reads
+// `HTMLElement.prototype.focus` at module top level, `this` is the *prototype*,
+// so the branded native `ownerDocument` getter throws "Illegal invocation" —
+// the blocks chunk fails to evaluate and every MDX docs page crashes (the
+// failed module evaluation is cached, so all pages replay the same error).
+//
+// Making `focus` non-redefinable is not an option: user-event's patchFocus()
+// also redefines it, uncaught, so play-functions would break. Instead, shadow
+// `ownerDocument` with a receiver-safe wrapper — identical for real elements,
+// `null` for the prototype receiver, which makes Storybook's getter fall back
+// to its own noop. That is behaviourally the upstream fix.
+// Remove when Storybook ≥ 10.6 lands (storybookjs/storybook#35528).
+const nativeOwnerDocument = Object.getOwnPropertyDescriptor(Node.prototype, "ownerDocument")?.get;
+if (nativeOwnerDocument) {
+  Object.defineProperty(HTMLElement.prototype, "ownerDocument", {
+    configurable: true,
+    get(this: unknown) {
+      try {
+        return nativeOwnerDocument.call(this);
+      } catch {
+        return null;
+      }
+    },
+  });
+}
+
 // Viewport presets generated from the system's own breakpoint ladder, so
 // responsive checks happen at the widths the components actually switch at
 // rather than at some stock phone sizes. `mobile` is the one width below `sm`,
@@ -67,6 +95,7 @@ const preview: Preview = {
             "GlitchText",
             "GridBackground",
             "FloatingMarks",
+            "MarginNote",
             "ProjectCard",
             "RepoBanner",
             "SocialCard",
@@ -74,13 +103,14 @@ const preview: Preview = {
           ],
           // Every leaf is named, not just the six group headings. A group listed
           // without its children sorts its own children by definition order,
-          // which is file-discovery order — i.e. arbitrary.
+          // which is file-discovery order — i.e. arbitrary. When adding a
+          // component, add its title here in the same change.
           "Components",
           [
-            "Actions",
-            ["Button"],
             "Forms",
             [
+              "Button",
+              "CopyButton",
               "Field",
               "Input",
               "Textarea",
@@ -88,31 +118,46 @@ const preview: Preview = {
               "Checkbox",
               "RadioGroup",
               "Select",
+              "Combobox",
               "Switch",
               "Slider",
               "Toggle",
+              "ToggleGroup",
             ],
             "Data display",
             [
               "Text",
               "Prose",
               "Code",
+              "CodeBlock",
               "Link",
               "Badge",
               "Kbd",
               "StatusDot",
+              "StatusChip",
               "Stat",
+              "Readout",
               "Avatar",
               "Table",
               "DataList",
             ],
             "Feedback",
-            ["Alert", "Callout", "Toaster", "EmptyState", "Progress", "Spinner", "Skeleton"],
+            [
+              "Alert",
+              "Callout",
+              "FindingList",
+              "Toaster",
+              "EmptyState",
+              "Progress",
+              "Spinner",
+              "Skeleton",
+            ],
             "Layout",
             [
               "Container",
               "Card",
               "Separator",
+              "SectionHeading",
               "Tabs",
               "Accordion",
               "Collapsible",
@@ -127,6 +172,7 @@ const preview: Preview = {
               "Sheet",
               "Popover",
               "DropdownMenu",
+              "Command",
               "Tooltip",
               "HoverCard",
               "InfoTip",

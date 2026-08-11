@@ -36,6 +36,10 @@ export interface StatusDotProps
  * pair it with text. When the dot *is* the whole message, give it a `label` and
  * it becomes a named `role="img"`.
  *
+ * **Reach for `StatusChip`** when the dot should come with its finding written
+ * out as a pill ("All systems normal"), and for **`Badge`** when the label is a
+ * category or version rather than a live state.
+ *
  * ```tsx
  * <StatusDot variant="success" />
  * <StatusDot variant="destructive" pulse />

@@ -36,6 +36,38 @@ The same applies to `cva()`, `createContext()` and any other top-level `const X 
 
 **A dependency that isn't side-effect-free belongs behind a subpath.** `sonner` ships no `sideEffects: false` and injects a stylesheet at module scope, so no consumer can shake it out — that's why `Toaster` and `toast` live at `./toaster` rather than in the root entry. Check a new runtime dependency's `sideEffects` field before exporting a component that uses it from `src/index.ts`.
 
+## Adding a component — the checklist
+
+Every item exists because skipping it has already bitten once. A component is
+done when it has:
+
+1. **JSDoc on the export** saying what it is *and* when to reach for a sibling
+   instead — cross-linked in both directions (`RepoBanner` ↔ `SocialCard`, not
+   just one way). Docgen lifts this prose onto the Docs page and into the
+   consumer's editor tooltip, so it is the single source of truth. Never put
+   component prose in `parameters.docs.description.component` — it silently
+   *replaces* the JSDoc; story-level descriptions are the place for
+   Storybook-only caveats.
+2. **Its own `*.stories.tsx`** with explicit `tags` and `component`, titled
+   after its folder: `Components/<Group>/<Name>` (brand: `Brand/<Name>`). Every
+   *exported* component gets its own docs page, even when it shares a source
+   file with a sibling (`Code` / `CodeBlock`).
+3. **A leaf entry in `storySort`** (`.storybook/preview.tsx`) in the same
+   change — unlisted titles sort in file-discovery order, i.e. arbitrarily.
+4. **A colocated `*.test.tsx`**, or a documented home in a shared file (see
+   "Every component is covered" below).
+5. **An export from `src/index.ts`**, a **changeset**, and a refreshed `dist/`.
+
+**Interaction contracts** (each of these was a shipped bug — the long form with
+the reasoning lives in `CLAUDE.md`): never `focus-visible:outline-none` without
+the `ring-ring/30` replacement in the same string, and `ring-inset` inside
+`overflow-hidden` parents; overlap seams (`-ml-*`) must match the border width
+with the active item elevated (`relative` + `z-10` variants); `className` and
+composed event handlers land on the element the props type describes; no
+fresh-identity default parameters in effect dependency arrays; initial focus in
+a native `<dialog>` goes through the `autofocus` attribute, not a mount-effect
+`.focus()`.
+
 ## Testing
 
 There are **two tiers**, and they check different things. Both gate `main`.
