@@ -21,6 +21,20 @@ export interface ComboboxProps {
   /** Initial value when uncontrolled. */
   defaultValue?: string;
   onValueChange?: (value: string) => void;
+  /** Controlled open state. Provide `onOpenChange` alongside it. */
+  open?: boolean;
+  /** Initial open state when uncontrolled. */
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /**
+   * Submits the chosen value with a surrounding `<form>` via a hidden input —
+   * the combobox's trigger is a `<button>`, so without this it posts nothing.
+   */
+  name?: string;
+  /** Id for the trigger, when you label it yourself outside a `Field`. */
+  id?: string;
+  /** Trigger height. `sm` (h-9) lines up with `Button size="sm"`. */
+  size?: "sm" | "default";
   /** Shown on the trigger when nothing is chosen. */
   placeholder?: string;
   /** Placeholder inside the search field. */
@@ -68,6 +82,12 @@ export const Combobox = /* @__PURE__ */ named(
         value: valueProp,
         defaultValue,
         onValueChange,
+        open: openProp,
+        defaultOpen = false,
+        onOpenChange,
+        name,
+        id,
+        size = "default",
         placeholder = "Select…",
         searchPlaceholder = "Search…",
         emptyMessage = "No results.",
@@ -78,7 +98,14 @@ export const Combobox = /* @__PURE__ */ named(
       },
       ref,
     ) => {
-      const [open, setOpen] = React.useState(false);
+      const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
+      const isOpenControlled = openProp !== undefined;
+      const open = isOpenControlled ? openProp : uncontrolledOpen;
+      const setOpen = (next: boolean) => {
+        if (!isOpenControlled) setUncontrolledOpen(next);
+        onOpenChange?.(next);
+      };
+
       const [uncontrolled, setUncontrolled] = React.useState(defaultValue ?? "");
       const isControlled = valueProp !== undefined;
       const value = isControlled ? valueProp : uncontrolled;
@@ -97,6 +124,7 @@ export const Combobox = /* @__PURE__ */ named(
 
       return (
         <Popover open={open} onOpenChange={setOpen}>
+          {name ? <input type="hidden" name={name} value={value} /> : null}
           <PopoverTrigger asChild>
             <button
               ref={ref}
@@ -106,7 +134,8 @@ export const Combobox = /* @__PURE__ */ named(
               aria-label={ariaLabel}
               data-slot="combobox"
               className={cn(
-                "flex h-11 w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+                "flex w-full items-center justify-between gap-2 rounded-[var(--radius-sm)] border-[1.5px] border-input bg-background px-3 py-2 font-mono text-sm transition-colors",
+                size === "sm" ? "h-9 text-[13px]" : "h-11",
                 "focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30",
                 "disabled:cursor-not-allowed disabled:opacity-50",
                 "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/30",
@@ -114,6 +143,7 @@ export const Combobox = /* @__PURE__ */ named(
                 className,
               )}
               {...fieldProps}
+              id={id ?? fieldProps.id}
               disabled={disabled ?? fieldProps.disabled}
             >
               <span className="truncate">{selected?.label ?? placeholder}</span>

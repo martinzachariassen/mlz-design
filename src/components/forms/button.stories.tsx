@@ -10,7 +10,17 @@ const meta = {
     variant: {
       description: "Visual weight, from hairline outline through solid fill.",
       control: "select",
-      options: ["default", "solid", "accent", "ghost", "sketch", "destructive", "link"],
+      options: [
+        "default",
+        "outline",
+        "solid",
+        "secondary",
+        "accent",
+        "ghost",
+        "sketch",
+        "destructive",
+        "link",
+      ],
     },
     size: {
       description: "Control height and padding. `icon` renders a square button.",
@@ -35,6 +45,7 @@ export const Variants: Story = {
     <div className="flex flex-wrap items-center gap-4">
       <Button variant="default">Default</Button>
       <Button variant="solid">Solid</Button>
+      <Button variant="secondary">Secondary</Button>
       <Button variant="accent">Accent</Button>
       <Button variant="ghost">Ghost</Button>
       <Button variant="sketch">Sketch</Button>

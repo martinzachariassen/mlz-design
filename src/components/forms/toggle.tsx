@@ -25,6 +25,7 @@ const toggleVariants = /* @__PURE__ */ cva(
       size: {
         sm: "h-9 px-3 text-[11px]",
         default: "h-11 px-4",
+        lg: "h-12 px-5 text-sm",
         icon: "size-11 px-0",
       },
     },

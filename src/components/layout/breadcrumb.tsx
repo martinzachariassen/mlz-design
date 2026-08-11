@@ -27,19 +27,27 @@ import { named } from "../../lib/named";
  * </Breadcrumb>
  * ```
  */
+export interface BreadcrumbProps extends React.ComponentPropsWithoutRef<"nav"> {
+  /** Default glyph for every `BreadcrumbSeparator` below — a `/`, a `·`, an icon. */
+  separator?: React.ReactNode;
+}
+
+const BreadcrumbSeparatorContext = /* @__PURE__ */ React.createContext<React.ReactNode>(undefined);
+
 export const Breadcrumb = /* @__PURE__ */ named(
-  /* @__PURE__ */ React.forwardRef<
-    HTMLElement,
-    React.ComponentPropsWithoutRef<"nav"> & { separator?: React.ReactNode }
-  >(({ className, ...props }, ref) => (
-    <nav
-      ref={ref}
-      aria-label="Breadcrumb"
-      data-slot="breadcrumb"
-      className={cn(className)}
-      {...props}
-    />
-  )),
+  /* @__PURE__ */ React.forwardRef<HTMLElement, BreadcrumbProps>(
+    ({ className, separator, ...props }, ref) => (
+      <BreadcrumbSeparatorContext.Provider value={separator}>
+        <nav
+          ref={ref}
+          aria-label="Breadcrumb"
+          data-slot="breadcrumb"
+          className={cn(className)}
+          {...props}
+        />
+      </BreadcrumbSeparatorContext.Provider>
+    ),
+  ),
   "Breadcrumb",
 );
 
@@ -125,13 +133,15 @@ export const BreadcrumbPage = /* @__PURE__ */ named(
 
 /**
  * The chevron between steps. Decorative — the list order already carries the
- * relationship, so it's hidden from assistive tech.
+ * relationship, so it's hidden from assistive tech. `children` wins, then the
+ * root's `separator` prop, then the default chevron.
  */
 export function BreadcrumbSeparator({
   children,
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"li">) {
+  const separator = React.useContext(BreadcrumbSeparatorContext);
   return (
     <li
       aria-hidden="true"
@@ -139,7 +149,7 @@ export function BreadcrumbSeparator({
       className={cn("[&>svg]:size-3 text-muted-foreground-2", className)}
       {...props}
     >
-      {children ?? <ChevronRightIcon />}
+      {children ?? separator ?? <ChevronRightIcon />}
     </li>
   );
 }

@@ -17,6 +17,8 @@ import { named } from "../../lib/named";
  *
  * **Don't** animate a skeleton for sub-200ms waits; the flash reads as a glitch.
  */
+export type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
+
 export const Skeleton = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (

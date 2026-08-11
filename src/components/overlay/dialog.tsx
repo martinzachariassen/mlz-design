@@ -2,16 +2,23 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { named } from "../../lib/named";
-import { ModalRoot, useModal, useModalPart } from "./modal-root";
+import {
+  ModalDialog,
+  ModalProvider,
+  ModalTrigger,
+  type ModalTriggerProps,
+  useModal,
+  useModalPart,
+} from "./modal-root";
 
 export interface DialogProps {
   /** Whether the dialog is showing. Pass it to control the dialog yourself. */
   open?: boolean;
   /** Initial open state when uncontrolled. Ignored if `open` is provided. */
   defaultOpen?: boolean;
-  /** Called with `false` on Esc, the ✕ button, a `DialogClose`, or a backdrop click. */
+  /** Called on Esc, the ✕ button, a `DialogClose`/`DialogTrigger`, or a backdrop click. */
   onOpenChange?: (open: boolean) => void;
-  /** The dialog body — usually a single `DialogContent`. Only mounted while open. */
+  /** Usually a `DialogTrigger` and a `DialogContent`. The content mounts only while open. */
   children: React.ReactNode;
 }
 
@@ -33,7 +40,8 @@ export interface DialogProps {
  * Always give it a `DialogTitle`, or it reaches assistive tech unnamed.
  *
  * ```tsx
- * <Dialog open={open} onOpenChange={setOpen}>
+ * <Dialog>
+ *   <DialogTrigger asChild><Button>New project</Button></DialogTrigger>
  *   <DialogContent>
  *     <DialogHeader>
  *       <DialogTitle>Delete project</DialogTitle>
@@ -49,48 +57,62 @@ export interface DialogProps {
  */
 export function Dialog({ open, defaultOpen = false, onOpenChange, children }: DialogProps) {
   return (
-    <ModalRoot
-      open={open}
-      defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}
-      slot="dialog"
-      className="m-auto w-[calc(100%-2rem)] max-w-lg overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
-    >
+    <ModalProvider open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       {children}
-    </ModalRoot>
+    </ModalProvider>
   );
 }
 
+export type DialogTriggerProps = ModalTriggerProps;
+
+/** Opens the dialog. Wrap your own control with `asChild` — mirrors `DialogClose`. */
+export const DialogTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, DialogTriggerProps>((props, ref) => (
+    <ModalTrigger ref={ref} slot="dialog-trigger" {...props} />
+  )),
+  "DialogTrigger",
+);
+
 /**
- * The card surface inside the dialog, and where the ✕ close button lives. Caps at
- * 85% of the viewport height and scrolls its own overflow.
+ * The card surface inside the dialog, and where the ✕ close button lives. Caps
+ * at 85% of the viewport height and scrolls its own overflow. This part *is*
+ * the native `<dialog>` element — `className` styles the card, so a
+ * `max-w-2xl` here is how a dialog gets wider.
  */
 export const DialogContent = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, children, ...props }, ref) => {
       const ctx = useModal();
       return (
-        <div
-          ref={ref}
-          data-slot="dialog-content"
-          className={cn(
-            "relative mx-auto max-h-[85dvh] w-full overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-            className,
-          )}
-          {...props}
+        <ModalDialog
+          // Width lives on the *card* below so a consumer's `max-w-*` override
+          // actually widens the dialog; the element itself just spans the
+          // viewport minus a margin.
+          slot="dialog"
+          className="m-auto w-[calc(100%-2rem)] overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
         >
-          {children}
-          <button
-            type="button"
-            onClick={() => ctx?.close()}
-            className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+          <div
+            ref={ref}
+            data-slot="dialog-content"
+            className={cn(
+              "relative mx-auto max-h-[85dvh] w-full max-w-lg overflow-y-auto rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+              className,
+            )}
+            {...props}
           >
-            <span aria-hidden className="text-base leading-none">
-              ✕
-            </span>
-            <span className="sr-only">Close</span>
-          </button>
-        </div>
+            {children}
+            <button
+              type="button"
+              onClick={() => ctx?.close()}
+              className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+            >
+              <span aria-hidden className="text-base leading-none">
+                ✕
+              </span>
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
+        </ModalDialog>
       );
     },
   ),

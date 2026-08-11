@@ -180,7 +180,12 @@ minimal. Everything else is inline SVG in the component that needs it.
 Consumers install `lucide-react` themselves. shadcn's generated components
 import from `lucide-react`, so strip those when porting one or the CLI adds the
 dependency by the back door: `rg -n 'from "lucide-react"' src/` must stay empty.
-`asChild` is available on `Button`, `Badge`, `Card` and `DialogClose`.
+`asChild` is available on `Button`, `Badge`, `Card`, `Link`, `PaginationLink`,
+`BreadcrumbLink`, the modal `*Trigger`/`*Close` parts (`Dialog`, `Sheet`,
+`AlertDialog`) and everything Radix provides it on (`PopoverTrigger`,
+`DropdownMenuTrigger`, `TabsTrigger`, …). Presentational text parts use `as`
+instead (`Text`, `SectionHeading`, `MarginNote`, `EmptyStateTitle`) — `asChild`
+merges behaviour onto *your* element; `as` just swaps the tag.
 
 ## Conventions that bite
 

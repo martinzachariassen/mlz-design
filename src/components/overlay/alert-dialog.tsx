@@ -2,7 +2,14 @@ import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 import { cn } from "../../lib/cn";
 import { named } from "../../lib/named";
-import { ModalRoot, useModal, useModalPart } from "./modal-root";
+import {
+  ModalDialog,
+  ModalProvider,
+  ModalTrigger,
+  type ModalTriggerProps,
+  useModal,
+  useModalPart,
+} from "./modal-root";
 
 export interface AlertDialogProps {
   /** Whether the dialog is showing. Pass it to control the dialog yourself. */
@@ -68,33 +75,43 @@ export function AlertDialog({
   children,
 }: AlertDialogProps) {
   return (
-    <ModalRoot
-      open={open}
-      defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}
-      slot="alert-dialog"
-      role="alertdialog"
-      dismissOnBackdrop={false}
-      className="m-auto w-[calc(100%-2rem)] max-w-md overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
-    >
+    <ModalProvider open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       {children}
-    </ModalRoot>
+    </ModalProvider>
   );
 }
+
+export type AlertDialogTriggerProps = ModalTriggerProps;
+
+/** Opens the alert dialog. Wrap the provoking control with `asChild`. */
+export const AlertDialogTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, AlertDialogTriggerProps>((props, ref) => (
+    <ModalTrigger ref={ref} slot="alert-dialog-trigger" {...props} />
+  )),
+  "AlertDialogTrigger",
+);
 
 /** The card surface. Narrower than `DialogContent` — a confirm is two sentences. */
 export const AlertDialogContent = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, ...props }, ref) => (
-      <div
-        ref={ref}
-        data-slot="alert-dialog-content"
-        className={cn(
-          "relative mx-auto w-full rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
-          className,
-        )}
-        {...props}
-      />
+      <ModalDialog
+        slot="alert-dialog"
+        role="alertdialog"
+        dismissOnBackdrop={false}
+        // Width lives on the card below so a consumer's `max-w-*` can widen it.
+        className="m-auto w-[calc(100%-2rem)] overflow-visible bg-transparent p-0 text-foreground backdrop:bg-[var(--overlay)] backdrop:backdrop-blur-[2px]"
+      >
+        <div
+          ref={ref}
+          data-slot="alert-dialog-content"
+          className={cn(
+            "relative mx-auto w-full max-w-md rounded-[var(--radius-lg)] border border-border bg-card p-6 text-card-foreground shadow-[var(--shadow-lg)] motion-safe:animate-rise",
+            className,
+          )}
+          {...props}
+        />
+      </ModalDialog>
     ),
   ),
   "AlertDialogContent",

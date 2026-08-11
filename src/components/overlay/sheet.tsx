@@ -4,7 +4,14 @@ import * as React from "react";
 import { cn } from "../../lib/cn";
 import { CloseIcon } from "../../lib/icons";
 import { named } from "../../lib/named";
-import { ModalRoot, useModal, useModalPart } from "./modal-root";
+import {
+  ModalDialog,
+  ModalProvider,
+  ModalTrigger,
+  type ModalTriggerProps,
+  useModal,
+  useModalPart,
+} from "./modal-root";
 
 const sheetVariants = /* @__PURE__ */ cva(
   [
@@ -64,7 +71,8 @@ export interface SheetProps extends VariantProps<typeof sheetVariants> {
  * appears in place, fully usable — and `prefers-reduced-motion` skips it too.
  *
  * ```tsx
- * <Sheet open={open} onOpenChange={setOpen} side="left">
+ * <Sheet side="left">
+ *   <SheetTrigger asChild><Button>Menu</Button></SheetTrigger>
  *   <SheetContent>
  *     <SheetHeader>
  *       <SheetTitle>Menu</SheetTitle>
@@ -82,18 +90,30 @@ export function Sheet({
   className,
   children,
 }: SheetProps) {
+  // The panel itself renders inside SheetContent (so a SheetTrigger can live
+  // out here while the sheet is closed); side + className travel down to it.
+  const config = React.useMemo(() => ({ side, panelClassName: className }), [side, className]);
   return (
-    <ModalRoot
-      open={open}
-      defaultOpen={defaultOpen}
-      onOpenChange={onOpenChange}
-      slot="sheet"
-      className={cn(sheetVariants({ side }), className)}
-    >
-      {children}
-    </ModalRoot>
+    <ModalProvider open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+      <SheetConfigContext.Provider value={config}>{children}</SheetConfigContext.Provider>
+    </ModalProvider>
   );
 }
+
+const SheetConfigContext = /* @__PURE__ */ React.createContext<{
+  side?: VariantProps<typeof sheetVariants>["side"];
+  panelClassName?: string;
+}>({});
+
+export type SheetTriggerProps = ModalTriggerProps;
+
+/** Opens the sheet. Wrap your own control with `asChild` — mirrors `SheetClose`. */
+export const SheetTrigger = /* @__PURE__ */ named(
+  /* @__PURE__ */ React.forwardRef<HTMLButtonElement, SheetTriggerProps>((props, ref) => (
+    <ModalTrigger ref={ref} slot="sheet-trigger" {...props} />
+  )),
+  "SheetTrigger",
+);
 
 /**
  * The scrolling body of a `Sheet` — every sheet needs exactly one, wrapping all
@@ -108,23 +128,26 @@ export const SheetContent = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
     ({ className, children, ...props }, ref) => {
       const ctx = useModal();
+      const { side, panelClassName } = React.useContext(SheetConfigContext);
       return (
-        <div
-          ref={ref}
-          data-slot="sheet-content"
-          className={cn("relative flex h-full flex-col overflow-y-auto p-6", className)}
-          {...props}
-        >
-          {children}
-          <button
-            type="button"
-            onClick={() => ctx?.close()}
-            className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+        <ModalDialog slot="sheet" className={cn(sheetVariants({ side }), panelClassName)}>
+          <div
+            ref={ref}
+            data-slot="sheet-content"
+            className={cn("relative flex h-full flex-col overflow-y-auto p-6", className)}
+            {...props}
           >
-            <CloseIcon className="size-4" />
-            <span className="sr-only">Close</span>
-          </button>
-        </div>
+            {children}
+            <button
+              type="button"
+              onClick={() => ctx?.close()}
+              className="absolute top-4 right-4 inline-flex size-7 items-center justify-center rounded-[var(--radius-sm)] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/30"
+            >
+              <CloseIcon className="size-4" />
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
+        </ModalDialog>
       );
     },
   ),
@@ -205,6 +228,8 @@ export const SheetFooter = /* @__PURE__ */ named(
   ),
   "SheetFooter",
 );
+
+export { sheetVariants };
 
 export interface SheetCloseProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Render the single child as the trigger instead of a `<button>`. */

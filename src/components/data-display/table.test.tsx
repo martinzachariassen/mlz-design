@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import {
   Table,
   TableBody,
@@ -10,6 +10,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableSortButton,
 } from "./table";
 
 function Sample() {
@@ -111,5 +112,47 @@ describe("Table", () => {
     expect(container.querySelector('[data-slot="table-container"]')?.className).toContain(
       "rounded-md",
     );
+  });
+});
+
+describe("Table sorting affordance", () => {
+  it("exposes the order through aria-sort", () => {
+    render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead sort="asc">Name</TableHead>
+            <TableHead sort="none">Age</TableHead>
+            <TableHead>Plain</TableHead>
+          </TableRow>
+        </TableHeader>
+      </Table>,
+    );
+    expect(screen.getByRole("columnheader", { name: "Name" })).toHaveAttribute(
+      "aria-sort",
+      "ascending",
+    );
+    // "none" and absent both mean unsorted; neither should emit the attribute.
+    expect(screen.getByRole("columnheader", { name: "Age" })).not.toHaveAttribute("aria-sort");
+    expect(screen.getByRole("columnheader", { name: "Plain" })).not.toHaveAttribute("aria-sort");
+  });
+
+  it("makes the header operable through TableSortButton", () => {
+    const onClick = vi.fn();
+    render(
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead sort="desc">
+              <TableSortButton sort="desc" onClick={onClick}>
+                Age
+              </TableSortButton>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+      </Table>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Age" }));
+    expect(onClick).toHaveBeenCalled();
   });
 });

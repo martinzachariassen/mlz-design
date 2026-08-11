@@ -16,6 +16,8 @@ export interface InfoTipProps {
   side?: "top" | "bottom" | "auto";
   /** Controlled open state. Provide `onOpenChange` alongside it. */
   open?: boolean;
+  /** Initial open state when uncontrolled — an onboarding hint that starts visible. */
+  defaultOpen?: boolean;
   /** Notified whenever the open state should change (controlled or not). */
   onOpenChange?: (open: boolean) => void;
   /** Extra classes for the trigger button. */
@@ -63,6 +65,7 @@ export function InfoTip({
   children,
   side = "auto",
   open,
+  defaultOpen,
   onOpenChange,
   className,
   contentClassName,
@@ -70,7 +73,7 @@ export function InfoTip({
   const titleId = React.useId();
 
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    <PopoverPrimitive.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
       <PopoverPrimitive.Trigger
         data-slot="info-tip-trigger"
         aria-label={label}

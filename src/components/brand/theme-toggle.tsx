@@ -15,7 +15,10 @@ const THEMES: ReadonlyArray<{ value: Theme; label: string; Icon: typeof SunIcon 
 export interface ThemeToggleProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Drop the text labels and show only the icons. */
   iconOnly?: boolean;
-  /** Hide "System", leaving a straight light/dark choice. */
+  /**
+   * Hide "System", leaving a straight light/dark choice. Defaults to following
+   * the provider: `<ThemeProvider enableSystem={false}>` hides it automatically.
+   */
   hideSystem?: boolean;
 }
 
@@ -42,8 +45,12 @@ export interface ThemeToggleProps extends React.HTMLAttributes<HTMLDivElement> {
 export const ThemeToggle = /* @__PURE__ */ named(
   /* @__PURE__ */ React.forwardRef<HTMLDivElement, ThemeToggleProps>(
     ({ className, iconOnly, hideSystem, ...props }, ref) => {
-      const { theme, setTheme } = useTheme();
-      const options = hideSystem ? THEMES.filter((t) => t.value !== "system") : THEMES;
+      const { theme, setTheme, enableSystem } = useTheme();
+      // Follow the provider unless explicitly overridden — offering "System"
+      // under `enableSystem={false}` would render a button whose choice the
+      // provider silently coerces to light.
+      const showSystem = hideSystem === undefined ? enableSystem : !hideSystem;
+      const options = showSystem ? THEMES : THEMES.filter((t) => t.value !== "system");
 
       return (
         <div ref={ref} data-slot="theme-toggle" className={className} {...props}>
