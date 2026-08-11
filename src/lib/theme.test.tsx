@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { act, render, renderHook, screen } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider, themeInitScript, useTheme } from "./theme";
 import { installThemeTestEnv } from "./theme-test-env";
@@ -59,6 +60,25 @@ describe("ThemeProvider / useTheme", () => {
     act(() => env.setSystemDark(false));
     expect(result.current.resolvedTheme).toBe("light");
     expect(document.documentElement).not.toHaveClass("dark");
+  });
+
+  // The SSR contract: the server (and therefore the client's *first* render)
+  // always shows the defaults — persisted choices are read in a pre-paint
+  // effect. Reading localStorage during render would make server HTML and
+  // client hydration disagree for every returning visitor.
+  it("renders the defaults on the server pass even with a stored choice", () => {
+    window.localStorage.setItem("mlz-theme", "dark");
+    function Probe() {
+      const { theme } = useTheme();
+      return <span>{theme}</span>;
+    }
+    const html = renderToString(
+      <ThemeProvider>
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(html).toContain("system");
+    expect(html).not.toContain("dark");
   });
 
   it("throws when useTheme is used outside a provider", () => {

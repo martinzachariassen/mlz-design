@@ -21,15 +21,18 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./tokens": {
       "types": "./dist/tokens.d.ts",
-      "import": "./dist/tokens.js"
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
     },
     "./toaster": {
       "types": "./dist/toaster.d.ts",
-      "import": "./dist/toaster.js"
+      "import": "./dist/toaster.js",
+      "default": "./dist/toaster.js"
     },
     "./styles/index.css": "./dist/styles/index.css",
     "./styles/index-self-hosted.css": "./dist/styles/index-self-hosted.css",
@@ -40,7 +43,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "tsup && rm -rf dist/styles && cp -R src/styles dist/styles",
+    "build": "rm -rf dist && tsup && node scripts/use-client-banner.mjs && cp -R src/styles dist/styles",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -53,12 +56,23 @@
     "test-storybook": "test-storybook",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "bun run build && changeset publish",
+    "lint:package": "publint && attw --pack . --profile esm-only --entrypoints . tokens toaster",
+    "release": "bun run lint && bun run typecheck && bun run test && bun run build && bun run lint:package && changeset publish",
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=19",
+    "react-dom": ">=19",
+    "tailwindcss": ">=4.0.0",
+    "@types/react": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",
@@ -86,6 +100,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@biomejs/biome": "^2.5.7",
     "@changesets/cli": "^2.31.1",
     "@storybook/addon-a11y": "~10.5.7",
@@ -105,6 +120,7 @@
     "http-server": "^14.1.1",
     "jsdom": "^30.0.1",
     "playwright": "1.61.1",
+    "publint": "^0.3.23",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "remark-gfm": "^4.0.1",
