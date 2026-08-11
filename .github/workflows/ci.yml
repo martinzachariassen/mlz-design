@@ -35,6 +35,22 @@ jobs:
       - run: bun run typecheck
       - run: bun run test
       - run: bun run build
+      # A `major` changeset must be deliberate: the versioning policy
+      # (docs/VERSIONING.md) keeps this package on 0.x, so a major bump merged
+      # by accident would publish irreversibly. Requiring the word "BREAKING"
+      # in the changeset body forces the author to say so out loud.
+      - name: Major changesets declare their breakage
+        run: |
+          bad=0
+          for f in .changeset/*.md; do
+            [ -e "$f" ] || continue
+            case "$(basename "$f")" in README.md) continue;; esac
+            if grep -qE '"@martinzachariassen/design":\s*major' "$f" && ! grep -q "BREAKING" "$f"; then
+              echo "::error file=$f::major bump without a BREAKING section — see docs/VERSIONING.md"
+              bad=1
+            fi
+          done
+          exit $bad
       # Package metadata lint (publint) + type-resolution matrix (attw), then a
       # real tarball install in a scratch app importing every entry from ESM and
       # CJS — the class of regression (missing export condition, missing

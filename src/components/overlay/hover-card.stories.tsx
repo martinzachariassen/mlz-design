@@ -9,7 +9,7 @@ const meta = {
   title: "Components/Overlay/HoverCard",
   component: HoverCard,
   subcomponents: { HoverCardTrigger, HoverCardContent },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: {

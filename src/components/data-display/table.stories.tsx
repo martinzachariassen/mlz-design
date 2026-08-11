@@ -27,7 +27,7 @@ const meta = {
     TableCell,
     TableCaption,
   },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "padded" },
 } satisfies Meta<typeof Table>;
 

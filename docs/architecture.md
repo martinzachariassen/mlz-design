@@ -210,7 +210,7 @@ gated on `MLZ_STORYBOOK_BUILD=1` which `build:storybook` sets. The panel is
 available in `bun run storybook`; the deployed build drops it and keeps the
 branded chrome. **The a11y *gate* is unaffected** — that's `axe-playwright` in
 `test-runner.ts`, which reads `parameters.a11y` directly and never imported the
-addon. Verified: all 161 checks pass either way.
+addon. Verified: the full axe suite passes either way.
 
 Revisit on the next Storybook release; if it's fixed, delete the `isBuild` gate.
 

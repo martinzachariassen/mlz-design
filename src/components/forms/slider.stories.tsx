@@ -8,7 +8,7 @@ import { Slider } from "./slider";
 const meta = {
   title: "Components/Forms/Slider",
   component: Slider,
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     min: { control: "number" },

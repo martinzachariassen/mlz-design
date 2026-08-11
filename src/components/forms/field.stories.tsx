@@ -10,7 +10,7 @@ const meta = {
   title: "Components/Forms/Field",
   component: Field,
   subcomponents: { FieldLabel, FieldDescription, FieldError },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: {

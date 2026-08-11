@@ -6,7 +6,7 @@ import { Link } from "./link";
 const meta = {
   title: "Components/Data display/Link",
   component: Link,
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     variant: {

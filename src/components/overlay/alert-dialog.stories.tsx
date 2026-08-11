@@ -26,7 +26,7 @@ const meta = {
     AlertDialogCancel,
     AlertDialogAction,
   },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: { children: { table: { disable: true } } },

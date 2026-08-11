@@ -5,7 +5,7 @@ import { Toggle } from "./toggle";
 const meta = {
   title: "Components/Forms/Toggle",
   component: Toggle,
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     variant: {

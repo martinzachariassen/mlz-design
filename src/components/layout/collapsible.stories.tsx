@@ -9,7 +9,7 @@ const meta = {
   title: "Components/Layout/Collapsible",
   component: Collapsible,
   subcomponents: { CollapsibleTrigger, CollapsibleContent },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: { children: { table: { disable: true } } },

@@ -20,7 +20,7 @@ const regions = [
 const meta = {
   title: "Components/Forms/Combobox",
   component: Combobox,
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     placeholder: { control: "text" },
