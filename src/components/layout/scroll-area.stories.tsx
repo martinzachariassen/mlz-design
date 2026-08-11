@@ -8,7 +8,7 @@ const meta = {
   title: "Components/Layout/ScrollArea",
   component: ScrollArea,
   subcomponents: { ScrollBar },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     orientation: { control: "inline-radio", options: ["vertical", "horizontal", "both"] },

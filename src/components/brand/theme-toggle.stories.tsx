@@ -6,7 +6,7 @@ const meta = {
   title: "Brand/ThemeToggle",
   component: ThemeToggle,
   subcomponents: { AccentPicker },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   // No `docs.description.component` here: it would silently *replace* the
   // component's JSDoc on the Docs page. The Storybook-only caveat lives on the
   // first story instead.

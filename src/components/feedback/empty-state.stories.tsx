@@ -20,7 +20,7 @@ const meta = {
     EmptyStateDescription,
     EmptyStateActions,
   },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: { children: null },
   argTypes: {

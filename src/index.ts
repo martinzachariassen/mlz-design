@@ -391,4 +391,24 @@ export {
   type UseCopyToClipboard,
   useCopyToClipboard,
 } from "./lib/use-copy-to-clipboard";
-export * from "./tokens";
+// Named, not `export *`: a wildcard makes the token surface unreviewable at
+// the barrel — api-surface.test.ts pins these, so removals show up as diffs.
+export {
+  type AccentName,
+  accentFill,
+  accents,
+  animations,
+  type Breakpoint,
+  breakpoints,
+  colors,
+  type FillMode,
+  fonts,
+  motion,
+  onDark,
+  radius,
+  signalFill,
+  signals,
+  signalsDeep,
+  type Tokens,
+  tokens,
+} from "./tokens";

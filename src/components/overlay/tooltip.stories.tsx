@@ -8,7 +8,7 @@ const meta = {
   title: "Components/Overlay/Tooltip",
   component: Tooltip,
   subcomponents: { TooltipTrigger, TooltipContent },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     defaultOpen: { control: "boolean", description: "Start open — handy for screenshots." },

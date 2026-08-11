@@ -7,7 +7,7 @@ const meta = {
   title: "Components/Forms/RadioGroup",
   component: RadioGroup,
   subcomponents: { RadioGroupItem },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   argTypes: {
     defaultValue: { control: "text", description: "Uncontrolled initial choice." },

@@ -17,10 +17,25 @@
  *      prose is a mirror too, and drifts the same way.
  */
 
+import { readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { contrastRatio, inSrgbGamut, toHex } from "./lib/contrast";
 import { parseTheme, readFromRepo, resolveColour, resolvedScope, scopeFor } from "./theme-css";
-import { accentFill, accents, colors, onDark, signalFill, signals, signalsDeep } from "./tokens";
+import {
+  accentFill,
+  accents,
+  colors,
+  fonts,
+  motion,
+  onDark,
+  signalFill,
+  signals,
+  signalsDeep,
+} from "./tokens";
+
+const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const blocks = parseTheme();
 
@@ -266,14 +281,18 @@ describe("documentation quotes real token values", () => {
    * Every `oklch()` literal in the docs below must therefore be a value the
    * palette actually ships.
    */
+  // Globbed, not hand-listed: a new doc that quotes a colour must not be born
+  // outside the gate. CHANGELOG.md is excluded on purpose — history is allowed
+  // to quote values the palette no longer ships.
   const DOCS = [
     "README.md",
-    "docs/design-system.md",
-    "docs/architecture.md",
-    "src/foundations/Installation.mdx",
-    "src/foundations/Theming.mdx",
-    "src/foundations/Logo.stories.tsx",
-    "src/foundations/ColourModel.stories.tsx",
+    "CLAUDE.md",
+    ...readdirSync(join(REPO, "docs"))
+      .filter((f) => f.endsWith(".md"))
+      .map((f) => `docs/${f}`),
+    ...readdirSync(join(REPO, "src", "foundations"))
+      .filter((f) => f.endsWith(".mdx") || f.endsWith(".stories.tsx"))
+      .map((f) => `src/foundations/${f}`),
   ];
 
   /**
@@ -309,7 +328,84 @@ describe("documentation quotes real token values", () => {
   });
 });
 
+describe("non-colour primitives mirror tokens.ts", () => {
+  /**
+   * The colour mirror above cannot see these — `NON_COLOUR` exempts fonts,
+   * easings and durations from the value-for-value check, which left the exact
+   * failure mode this file exists to prevent open for a different token class:
+   * edit `--mlz-ease-out` alone and `motion.easeGlide` silently disagrees.
+   */
+  const NON_COLOUR_MIRROR: Record<string, string> = {
+    "--mlz-font-hand": fonts.hand,
+    "--mlz-font-mono": fonts.mono,
+    "--mlz-font-grotesk": fonts.grotesk,
+    "--mlz-font-serif": fonts.serif,
+    "--mlz-ease-out": motion.easeOut,
+    "--mlz-ease-in-out": motion.easeInOut,
+    "--mlz-ease-glide": motion.easeGlide,
+    "--mlz-dur-fast": motion.durationFast,
+    "--mlz-dur-hover": motion.durationHover,
+    "--mlz-dur-base": motion.durationBase,
+    "--mlz-dur-slow": motion.durationSlow,
+  };
+
+  it.each(Object.entries(NON_COLOUR_MIRROR))("%s matches the JS mirror", (name, mirrored) => {
+    const declared = primitives.get(name);
+    expect(declared, `${name} is missing from theme.css`).toBeDefined();
+    expect(normaliseNumeric(declared as string)).toBe(normaliseNumeric(mirrored));
+  });
+
+  it("mirrors every declared font/ease/dur primitive — no unmirrored stragglers", () => {
+    for (const name of primitives.keys()) {
+      if (NON_COLOUR.test(name)) {
+        expect(
+          NON_COLOUR_MIRROR[name],
+          `${name} is declared in theme.css but missing from the non-colour mirror table (and likely from tokens.ts)`,
+        ).toBeDefined();
+      }
+    }
+  });
+});
+
+describe("accent families stay in sync", () => {
+  /**
+   * `data-accent` blocks are five hand-maintained restatements of the same
+   * shape. A family missing one role falls back to cyan for that role only — a
+   * mixed-family theme nothing would flag visually until someone switches
+   * accent and squints.
+   */
+  const families = ["cyan", "blue", "green", "rust", "ink"];
+
+  const keysFor = (family: string): string[] => {
+    const keys = new Set<string>();
+    for (const block of blocks) {
+      if (block.selector.includes(`[data-accent="${family}"]`)) {
+        for (const key of block.declarations.keys()) keys.add(key);
+      }
+    }
+    return [...keys].sort();
+  };
+
+  const reference = keysFor("cyan");
+
+  it("parses the cyan family as the reference shape", () => {
+    expect(reference.length).toBeGreaterThan(3);
+  });
+
+  it.each(families.slice(1))("%s declares exactly the same roles as cyan", (family) => {
+    expect(keysFor(family)).toEqual(reference);
+  });
+});
+
 /** Whitespace-insensitive comparison, so formatting is not a false failure. */
 function normalise(value: string): string {
   return value.replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Additionally tolerates `.15s` vs `0.15s` — the CSS drops the leading zero,
+ * the JS mirror keeps it, and both are the same value.
+ */
+function normaliseNumeric(value: string): string {
+  return normalise(value).replace(/(^|[\s(,])\./g, "$10.");
 }

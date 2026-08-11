@@ -27,7 +27,7 @@ const config: StorybookConfig = {
     // So the panel loads locally, and the deployed build drops it to keep the
     // branded chrome. Nothing is lost from the a11y *gate*: that's
     // `axe-playwright` in `test-runner.ts`, which reads `parameters.a11y`
-    // directly and never imported this addon. Verified: 161 checks still pass.
+    // directly and never imported this addon. Verified: the full axe suite passes either way.
     //
     // Revisit on the next Storybook upgrade — see docs/architecture.md.
     ...(isBuild ? [] : ["@storybook/addon-a11y"]),

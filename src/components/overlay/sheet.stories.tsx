@@ -26,7 +26,7 @@ const meta = {
     SheetFooter,
     SheetClose,
   },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   args: { children: null },
   argTypes: {
     children: { table: { disable: true } },

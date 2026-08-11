@@ -74,7 +74,7 @@ There are **two tiers**, and they check different things. Both gate `main`.
 
 **Vitest + Testing Library** (`bun run test`) is the fast tier: jsdom, no browser, run on every commit. Tests colocate as `*.test.tsx` next to their component. They assert behaviour and API — that `Toggle` reports through `aria-pressed`, that `ToggleGroup` passes `variant` down through context, that a controlled component stays controlled. Class assertions are fair game (`expect(item.className).toContain("border-input")`), because the classes *are* the styling contract, but prefer a role query over a class query wherever one exists. Vitest runs with `globals: true` so Testing Library's auto-cleanup registers.
 
-**axe over every story** is the slow tier: a real Chromium, driven by `@storybook/test-runner` against a built Storybook. `.storybook/test-runner.ts` runs WCAG 2.1 A/AA on each story and fails the build on any violation — currently 161 checks. It is scoped to the preview `body` rather than `#storybook-root` on purpose: dialogs, menus, listboxes and tooltips portal to `document.body`, and a root-scoped run would silently skip exactly the markup most worth auditing.
+**axe over every story** is the slow tier: a real Chromium, driven by `@storybook/test-runner` against a built Storybook. `.storybook/test-runner.ts` runs WCAG 2.1 A/AA on each story and fails the build on any violation. It is scoped to the preview `body` rather than `#storybook-root` on purpose: dialogs, menus, listboxes and tooltips portal to `document.body`, and a root-scoped run would silently skip exactly the markup most worth auditing.
 
 Run it locally — it needs a *built and served* Storybook, not the dev server:
 

@@ -11,7 +11,7 @@ const meta = {
   title: "Components/Overlay/Popover",
   component: Popover,
   subcomponents: { PopoverTrigger, PopoverContent, PopoverClose },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: { children: { table: { disable: true } } },

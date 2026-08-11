@@ -165,7 +165,7 @@ export const Interactive: Story = {
       <CardContent>
         <a
           href="#changelog"
-          className="font-mono text-xs uppercase tracking-[0.14em] text-foreground after:absolute after:inset-0 focus-visible:outline-none"
+          className="font-mono text-xs uppercase tracking-[0.14em] text-foreground after:absolute after:inset-0 after:rounded-[var(--radius-lg)] focus-visible:outline-none focus-visible:after:ring-[3px] focus-visible:after:ring-ring/30"
         >
           <span className="sr-only">Read the changelog</span>
         </a>

@@ -21,7 +21,7 @@ const meta = {
     BreadcrumbSeparator,
     BreadcrumbEllipsis,
   },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
 } satisfies Meta<typeof Breadcrumb>;
 

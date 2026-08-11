@@ -8,7 +8,7 @@ const meta = {
   title: "Components/Data display/Stat",
   component: Stat,
   subcomponents: { StatLabel, StatValue, StatDelta },
-  tags: ["autodocs", "status:new"],
+  tags: ["autodocs"],
   parameters: { layout: "centered" },
   args: { children: null },
   argTypes: { children: { table: { disable: true } } },
