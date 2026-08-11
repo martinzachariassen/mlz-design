@@ -1,5 +1,117 @@
 # @martinzachariassen/design
 
+## 0.8.0
+
+### Minor Changes
+
+- 2188a10: API consistency pass, from a consumer's perspective:
+
+  - **`DialogTrigger` / `SheetTrigger` / `AlertDialogTrigger`**: the dialog family
+    finally opens itself — no more hand-rolled `useState` per modal. The native
+    `<dialog>` element moved from the root into `*Content` to make room (existing
+    controlled/uncontrolled usage is unchanged), and dialog width is now
+    overridable via `className` on the content (`max-w-2xl` works).
+  - **shadcn vocabulary compiles**: `Button` gains `outline` (the MLZ default
+    look) and `secondary`; `Badge` gains `secondary` (alias of `muted`). Pasted
+    shadcn snippets and LLM-written call sites render the intended look.
+  - **Size axis on field controls**: `size="sm"` (h-9) on `Input`, `SelectTrigger`
+    and `Combobox`, a `sm` scale on `Textarea`, and `lg` on `Toggle` — form
+    controls finally line up with small/large buttons.
+  - **`Input` slots**: `prefix`/`suffix` render inside the frame, so a search
+    icon or unit no longer means rebuilding the border and focus ring by hand.
+  - **`Combobox`**: controlled/uncontrolled `open`, a `name` prop (hidden input,
+    so it submits with a `<form>`), and an `id` for external labelling.
+  - **`ThemeProvider enableSystem={false}`** now reaches `ThemeToggle`, which
+    hides the System option automatically. `InfoTip` gains `defaultOpen`.
+  - **`Breadcrumb`'s `separator` prop actually works** (it used to leak to the
+    DOM) and feeds every `BreadcrumbSeparator` via context.
+  - **Table sorting affordance**: `TableHead sort` sets `aria-sort`, and the new
+    `TableSortButton` makes the header operable — ordering logic stays in the app.
+  - **Export hygiene**: `progressIndicatorVariants` and `avatarFallbackVariants`
+    replace the unnamespaced `indicatorVariants`/`fallbackVariants` (old names
+    remain as deprecated aliases); `sheetVariants` and `paginationLinkVariants`
+    are now exported; `SkeletonProps`, `BreadcrumbProps`, `TableHeadProps` and
+    the trigger prop types ship; `Text` accepts `size="default"`.
+
+- a921a89: Two new component families, closing the audit's top gaps:
+
+  - **NavigationMenu** (`@radix-ui/react-navigation-menu`, granular per the
+    dependency policy): primary app-shell navigation with hover/focus panels and
+    the full Radix keyboard pattern, styled from semantic tokens.
+    `navigationMenuTriggerStyle()` keeps bare links flush with real triggers.
+    The application-shell pattern story now uses it instead of a hand-rolled nav.
+  - **Calendar** (`react-day-picker`, side-effect-free JS so it tree-shakes when
+    unused) restyled entirely from tokens — single/multiple/range modes, both
+    themes, all five accent families. **DatePicker** wraps it in a `Popover`
+    behind a `Select`-shaped trigger: controlled/uncontrolled value and open
+    state, `Field` integration, `size="sm"`, and a `name` prop that posts
+    `yyyy-mm-dd` like `<input type="date">` would.
+
+- bd9afa8: Make the package consumable everywhere it's supposed to work:
+
+  - **Next.js App Router / RSC**: `dist/index.js` and `dist/toaster.js` now lead
+    with `"use client"`, so `ThemeProvider`, `Dialog`, `Combobox` and every other
+    client component can be imported from a server component tree without
+    crashing. The `./tokens` entry stays directive-free — pure data, safe in
+    server components.
+  - **CJS consumers**: every JS entry gains a `"default"` export condition, so
+    `require("@martinzachariassen/design")` resolves (Node ≥ 22.12 `require(esm)`)
+    instead of throwing `ERR_PACKAGE_PATH_NOT_EXPORTED`.
+  - **`dark:` utilities follow the theme switch**: `theme.css` now declares
+    `@custom-variant dark`, binding Tailwind's `dark:` variant to the `.dark`
+    class / `data-theme` attribute that `ThemeProvider` writes — previously a
+    consumer's own `dark:*` classes followed the OS while the components followed
+    the toggle.
+  - **SSR hydration**: `ThemeProvider` no longer reads `localStorage` during
+    render; persisted choices are applied in a pre-paint effect, so server HTML
+    and the client's first render always agree (pair with `themeInitScript()` as
+    before — no flash).
+  - **Peer dependencies now tell the truth**: `tailwindcss >= 4` declared
+    (optional, for tokens-only consumers), `react`/`react-dom` narrowed to `>= 19`
+    (18 was claimed but never built or tested), `@types/react` optional peer.
+  - Releases run lint · typecheck · test · build · package-lint before
+    `changeset publish`; CI gained `publint` + `@arethetypeswrong/cli` and a
+    tarball-install smoke test covering every entry from ESM and CJS.
+  - Sourcemaps are no longer emitted (they were git-ignored, so the
+    `bun add github:` install path shipped dangling `sourceMappingURL`s).
+
+### Patch Changes
+
+- 7eb6955: Documentation: every component's JSDoc now says when to reach for its sibling —
+  `RepoBanner` ↔ `SocialCard` ↔ `ProjectCard` cross-reference each other, and
+  `Prose`, `StatusDot`, `Progress`, `Separator`, `FloatingMarks` and
+  `GridBackground` gained the same guidance. These descriptions ship in the
+  package types, so they also appear in editor tooltips.
+- 056e451: Fix component bugs found in a full audit:
+
+  - **ThemeToggle**: the divider between segments no longer disappears — overlap now
+    matches the 1.5px border and the pressed/hovered/focused segment is elevated so
+    its accent edge isn't painted over by the next button. `className` now lands on
+    the wrapper element (also for `AccentPicker`).
+  - **Alert**: `info`/`success`/`warning`/`destructive` text and icons use the
+    `-deep` rung instead of the ~1.9:1 fill tokens (WCAG 1.4.3/1.4.11 in light mode).
+  - **Button**: every variant gets a real `ring-ring` focus indicator — `ghost` and
+    `link` previously had none, and the other variants relied on the 1.83:1 accent
+    shadow that was identical to hover.
+  - **CodeBlock / ScrollArea**: keyboard-focusable scroll regions had their focus
+    ring fully clipped by `overflow-hidden` parents; rings are now inset. The
+    CodeBlock copy button no longer announces a doubled name.
+  - **CollapsibleContent**: the documented `0fr → 1fr` grid animation actually runs
+    now (`forceMount` + transitioned `visibility`, mirroring `Accordion`).
+  - **TabsContent**: focusable panel keeps a visible focus ring instead of
+    suppressing the outline with no replacement.
+  - **AlertDialogCancel**: initial focus is claimed via the `autofocus` attribute so
+    `showModal()`'s focusing steps respect it regardless of source order.
+  - **GlitchText**: the ambient timer survives parent re-renders, and a consumer's
+    `onPointerEnter` composes with the hover trigger instead of replacing it.
+  - **Slider**: disabled thumbs use `data-[disabled]` (the `:disabled` selector
+    never matched a `<span>`).
+  - **Progress**: `max` can no longer be overridden out from under the 0–100 clamp.
+  - **AvatarGroup**: members elevate on `focus-within` so focus rings survive the
+    overlap. **DropdownMenu**: destructive items use `bg-destructive-subtle` instead
+    of an off-system alpha tint. **Toggle**: outline-variant hover borders use the
+    ring token so hovering no longer lowers the boundary below 3:1.
+
 ## 0.7.0
 
 ### Minor Changes
