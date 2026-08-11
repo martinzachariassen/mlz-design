@@ -28,3 +28,9 @@ PR title must be a Conventional Commit — it becomes the squash-merge subject.
       value-for-value
 - [ ] Ran the a11y gate if the change is visual or interactive
       (`mise run a11y`, or `bun run build:storybook` → serve → `bun run test-storybook`)
+- [ ] Removing or renaming an export, prop, variant value or semantic token?
+      That's breaking — follow [docs/VERSIONING.md](../docs/VERSIONING.md)
+      (deprecation cycle, BREAKING note in the changeset, api-surface snapshot
+      updated deliberately)
+- [ ] Added a component? The layout lists in `docs/architecture.md` and the
+      catalogue in `docs/design-system.md` name it

@@ -47,23 +47,27 @@ src/
   lib/
     cn.ts               clsx + tailwind-merge
     theme.tsx           ThemeProvider / useTheme / init script
+    named.ts            displayName-as-expression, keeps the entry tree-shakeable
+    contrast.ts         shared colour maths (contrast tests + ColourModel page)
+    use-copy-to-clipboard.ts  the hook behind CopyButton, exported
     dom-test-env.ts     jsdom stubs (ResizeObserver, scrollIntoView), test-only
+    theme-test-env.ts   matchMedia/localStorage stubs, test-only
     icons.tsx           the handful of glyphs components draw themselves —
-                        internal, never exported (consumers bring lucide-react)
+                        internal, never exported (consumers inline their own)
   components/           grouped by function, kebab-case files
-    brand/              BrandMark/Wordmark/Lockup, GlitchText, GridBackground,
-                        FloatingMarks, ProjectCard, RepoBanner, SocialCard,
-                        ThemeToggle/AccentPicker
+    brand/              BrandMark/Wordmark/Lockup, FloatingMarks, GlitchText,
+                        GridBackground, MarginNote, ProjectCard, RepoBanner,
+                        SocialCard, ThemeToggle/AccentPicker
     data-display/       Avatar, Badge, Code/CodeBlock, DataList, Kbd, Link,
-                        Prose, Stat, StatusDot, Table, Text
-    feedback/           Alert, Callout, EmptyState, Progress, Skeleton, Spinner,
-                        Toaster
-    forms/              Button, Checkbox, Combobox, Field, Input, Label,
-                        RadioGroup, Select, Slider, Switch, Textarea, Toggle,
-                        ToggleGroup
+                        Prose, Readout, Stat, StatusChip, StatusDot, Table, Text
+    feedback/           Alert, Callout, EmptyState, FindingList, Progress,
+                        Skeleton, Spinner, Toaster
+    forms/              Button, Calendar, Checkbox, Combobox, CopyButton,
+                        DatePicker, Field, Input, Label, RadioGroup, Select,
+                        Slider, Switch, Textarea, Toggle, ToggleGroup
     layout/             Accordion, Breadcrumb, Card, Collapsible,
-                        Container/Stack/Grid, Pagination, ScrollArea,
-                        Separator, Tabs
+                        Container/Stack/Grid, NavigationMenu, Pagination,
+                        ScrollArea, SectionHeading, Separator, Tabs
     overlay/            AlertDialog, Command, Dialog, DropdownMenu, HoverCard,
                         InfoTip, Popover, Sheet, Tooltip
                         modal-root.tsx — the shared <dialog> engine, internal
@@ -80,8 +84,10 @@ src/
     fonts.css           font loading                         → ./styles/fonts.css
     base.css            optional base layer                  → ./styles/base.css
     fonts/              bundled WOFF2 (self-hosted bundle)
-docs/                   architecture, design system, contributing, security
-.storybook/             main.ts · preview.tsx · app.css · test-runner.ts
+docs/                   getting-started, design system, architecture, versioning,
+                        decisions, contributing, security
+.storybook/             main.ts · preview.tsx · manager.tsx · theme.ts · oklch.ts ·
+                        app.css · test-runner.ts · public/
 .github/workflows/      ci · deploy · release · codeql · dependency-review · scorecard · zizmor
 wrangler.jsonc          Cloudflare Workers deploy config (static assets + custom domain)
 mise.toml               pinned toolchain + task aliases for the bun scripts
@@ -112,10 +118,10 @@ Which layer owns what:
 
 | Layer | Components |
 | ----- | ---------- |
-| **Radix primitive** | `Accordion` · `Avatar` · `Collapsible` · `DropdownMenu` · `HoverCard` · `Popover` · `InfoTip` (a narrower popover) · `Label` · `ScrollArea` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Slider` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
+| **Radix primitive** | `Accordion` · `Avatar` · `Collapsible` · `DropdownMenu` · `HoverCard` · `NavigationMenu` · `Popover` · `InfoTip` (a narrower popover) · `Label` · `ScrollArea` · `Progress` · `RadioGroup` · `Select` · `Separator` · `Slider` · `Tabs` · `Toggle` · `ToggleGroup` · `Tooltip`, plus `Slot` for `asChild` |
 | **Platform element** — Radix would add JS for what the browser already does | `Dialog`, `Sheet` and `AlertDialog` (native `<dialog>` + `showModal()`: focus-trap, Esc, inerting, top layer) · `Table` (a real `<table>`) · `DataList` (a real `<dl>`) · `Button` · `Input` · `Textarea` · `Checkbox` · `Switch` (native inputs styled with `peer-checked:`, zero JS) |
-| **Third party** — the two non-Radix runtime dependencies | `Toaster` (`sonner`, behind the `./toaster` subpath) and `Command` / `Combobox` (`cmdk`), both with their own styling switched off and every slot re-dressed from semantic tokens |
-| **Presentational only** — no behaviour to own | everything else: `Alert`, `Badge`, `Breadcrumb`, `Callout`, `Card`, `Kbd`, `Pagination`, `Prose`, `Skeleton`, `Spinner`, `StatusDot`, `Text`, the layout primitives, all of `brand/` |
+| **Third party** — the non-Radix runtime dependencies | `Toaster` (`sonner`, behind the `./toaster` subpath), `Command` / `Combobox` (`cmdk`) and `Calendar` / `DatePicker` (`react-day-picker`), each with its own styling switched off and every slot re-dressed from semantic tokens |
+| **Presentational only** — no behaviour to own | everything else: `Alert`, `Badge`, `Breadcrumb`, `Callout`, `Card`, `FindingList`, `Kbd`, `Pagination`, `Prose`, `Readout`, `SectionHeading`, `Skeleton`, `Spinner`, `StatusChip`, `StatusDot`, `Text`, the layout primitives, all of `brand/` |
 
 **`ScrollArea` is the one entry that overlaps something the browser already does**, so it earns a sentence. It does not replace scrolling: the viewport underneath is ordinary `overflow: auto`, so wheel, trackpad, touch, keyboard, scroll-anchoring and find-in-page stay native. What it replaces is the scrollbar's *appearance*, which otherwise ranges from a heavy slab on Windows to nothing at all on macOS until you scroll. Use it for bounded panels where the bar is part of the design — never around the document, where taking over the browser's own bar breaks scroll restoration and overscroll.
 
@@ -185,23 +191,23 @@ Reference implementation: `vite/theme-init.ts` in [mlz-no](https://github.com/ma
 
 ### Storybook manager theming, and the addon bug behind it
 
-The manager chrome is MLZ-branded via `.storybook/manager.ts` + `theme.ts`, with
+The manager chrome is MLZ-branded via `.storybook/manager.tsx` + `theme.ts`, with
 every colour read from `src/tokens.ts` so the chrome can't drift from the system
 it documents. Getting there required working around a Storybook bug; both the
 workaround and the trap next to it are load-bearing.
 
 **The bug.** On Storybook **10.5.7**, a *built* manager renders a blank page and
 throws `PolishedError #5` from `parseToRgb` when **two addons are registered and
-a `.storybook/manager.ts` exists**. Bisected:
+a `.storybook/manager.tsx` exists**. Bisected:
 
 | Setup | Result |
 | ----- | ------ |
-| 2 addons, no `manager.ts` | works |
-| 1 addon + `manager.ts` | works (either addon) |
-| 2 addons + `manager.ts` | **blank** |
-| `storybook dev`, 2 addons + `manager.ts` | works |
+| 2 addons, no `manager.tsx` | works |
+| 1 addon + `manager.tsx` | works (either addon) |
+| 2 addons + `manager.tsx` | **blank** |
+| `storybook dev`, 2 addons + `manager.tsx` | works |
 
-It is neither the theme values nor `create()` — a `manager.ts` containing only
+It is neither the theme values nor `create()` — a `manager.tsx` containing only
 `export {}` reproduces it, a built-in `themes.light` reproduces it, and swapping
 the addon order changes nothing. Only `storybook build` is affected.
 
