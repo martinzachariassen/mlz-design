@@ -263,8 +263,8 @@ merges behaviour onto *your* element; `as` just swaps the tag.
   `storybook-static` as an artifact that the `Storybook a11y` job (axe, WCAG 2.1
   A/AA via `test-runner.ts`) consumes, so Storybook is built once per run. Plus
   CodeQL, Dependency Review, Scorecard, zizmor, Dependabot (npm / actions).
-- **Releases via Changesets → GitHub Packages** (scope `@martinzachariassen`,
-  `.npmrc`), **fully automated** by the Changesets action — no manual version
+- **Releases via Changesets → npmjs.org** (scope `@martinzachariassen`),
+  **fully automated** by the Changesets action — no manual version
   bump, no `v*` tag, no local `publish`. `release.yml` runs on **push to `main`**;
   the action decides what to do from pending changesets:
   1. Add a changeset to your feature PR (`bun run changeset` — describe the change,
@@ -274,12 +274,17 @@ merges behaviour onto *your* element; `as` just swaps the tag.
      every bump + CHANGELOG and consumes the changesets).
   3. Merge that version PR. `release.yml` now finds no pending changesets and runs
      the publish path (`bun run release` = `bun run build && changeset publish`) —
-     publishes to GitHub Packages and cuts the GitHub Release + tag. (No npm
-     provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing /
-     Sigstore attestation — that's a `registry.npmjs.org` feature.)
-  Committed `dist/` is the token-free fallback for
-  `bun add github:martinzachariassen/mlz-design`; refresh it (`bun run build`) in
-  any PR touching `src/`.
+     publishes to npm and cuts the GitHub Release + tag.
+  Publishing is **keyless** via npm trusted publishing: `id-token: write` mints an
+  OIDC token that npm exchanges for a short-lived credential, so there is no
+  `NPM_TOKEN`. Sigstore provenance is emitted automatically
+  (`publishConfig.provenance`). Two tripwires: `release.yml` must keep its exact
+  filename (the trusted-publisher config on npmjs matches on it), and
+  `setup-node` must **not** set `registry-url` — that writes an empty
+  `_authToken`, which makes npm skip the OIDC exchange and fail `ENEEDAUTH`.
+  Committed `dist/` keeps `bun add github:martinzachariassen/mlz-design` working;
+  refresh it (`bun run build`) in any PR touching `src/`. It is no longer a
+  *token-free* fallback — npm needs no token now either.
 
 ## Hosting
 

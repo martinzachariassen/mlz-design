@@ -187,7 +187,9 @@ Reference implementation: `vite/theme-init.ts` in [mlz-no](https://github.com/ma
 
 ## Distribution
 
-`tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`. The committed `dist/` is the token-free fallback for `bun add github:martinzachariassen/mlz-design` — refresh it (`bun run build`) in any PR that changes `src/`. Primary distribution is **GitHub Packages** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+`tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`. Primary distribution is **npmjs.org** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+
+`dist/` is still committed so `bun add github:martinzachariassen/mlz-design` keeps working — refresh it (`bun run build`) in any PR that changes `src/`. Note that its original justification is gone: it was the *token-free* fallback back when the registry required a `read:packages` PAT. The npm install path now needs no token either, so this is a convenience for git-ref installs, not a workaround. Worth revisiting if keeping it in sync ever becomes a chore.
 
 ### Storybook manager theming, and the addon bug behind it
 

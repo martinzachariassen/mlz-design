@@ -135,7 +135,7 @@ tags: ["autodocs", "status:new"],
 
 ## Releasing
 
-Automated with [Changesets](https://github.com/changesets/changesets) → GitHub Packages. There's no manual version bump or tag — you only ever describe changes; `release.yml` does the rest on merge to `main`.
+Automated with [Changesets](https://github.com/changesets/changesets) → npm. There's no manual version bump or tag — you only ever describe changes; `release.yml` does the rest on merge to `main`.
 
 1. **Add a changeset to your feature PR** — one per user-facing change:
 
@@ -145,9 +145,13 @@ Automated with [Changesets](https://github.com/changesets/changesets) → GitHub
 
 2. **Merge the PR.** `release.yml` sees the pending changeset and opens (or updates) a **"version packages"** PR that applies every accumulated bump, updates each `CHANGELOG`, and consumes the changesets.
 
-3. **Merge the "version packages" PR** when you're ready to ship. That merge runs `bun run release` (build + `changeset publish`), which publishes to GitHub Packages and cuts the matching GitHub Release + tag.
+3. **Merge the "version packages" PR** when you're ready to ship. That merge runs `bun run release` (build + `changeset publish`), which publishes to npm and cuts the matching GitHub Release + tag.
 
-So the whole release surface is two merges: your change, then the version PR — no local tagging, no `publish` from a laptop. Publishing stays on **GitHub Packages**, so consumers keep the `.npmrc` + `read:packages` token from the README quickstart. (No npm provenance: GitHub Packages doesn't support npm's OIDC trusted-publishing / Sigstore attestation — that's a `registry.npmjs.org` feature.)
+So the whole release surface is two merges: your change, then the version PR — no local tagging, no `publish` from a laptop.
+
+Publishing goes to **npmjs.org** and is **keyless**: npm [trusted publishing](https://docs.npmjs.com/trusted-publishers/) exchanges the workflow's OIDC token for a short-lived credential, so there is no `NPM_TOKEN` secret to rotate or leak. Because the exchange is bound to this repository *and* to `release.yml` by name, renaming that file breaks publishing until the trusted-publisher config on npmjs is updated to match. Every release carries a [Sigstore provenance attestation](https://docs.npmjs.com/generating-provenance-statements), generated automatically from the same token.
+
+Consumers need nothing: `bun add @martinzachariassen/design`, no `.npmrc`, no token.
 
 ## Deployment (playground)
 

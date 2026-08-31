@@ -1,12 +1,23 @@
 name: Release
 
-# Automated, Changesets-driven release to GitHub Packages.
+# Automated, Changesets-driven release to npmjs.org.
 #
 # Add a changeset to each feature PR (`bun run changeset` — describe the change
 # and pick the semver bump). When PRs merge to main, this workflow opens/updates
 # a "version packages" PR that accumulates every pending bump and its CHANGELOG.
-# Merging THAT PR runs `changeset publish`, which publishes to GitHub Packages
-# and cuts the GitHub Release + tag. No manual version bumping or tagging.
+# Merging THAT PR runs `changeset publish`, which publishes to npmjs and cuts
+# the GitHub Release + tag. No manual version bumping or tagging.
+#
+# Publishing is keyless. npm trusted publishing exchanges the job's OIDC token
+# for a short-lived credential, so there is no NPM_TOKEN and nothing to rotate;
+# that is what `id-token: write` below is for. Provenance attestations are
+# generated automatically from the same token (publishConfig.provenance).
+#
+# This used to publish to GitHub Packages, which required auth even though the
+# package is public. That forced every consumer to hold a classic PAT and a
+# committed .npmrc just to install, and it broke Dependabot in consumer repos
+# (dependabot-core#16107, #15415). npmjs needs none of that: consumers just
+# `bun add @martinzachariassen/design`.
 on:
   push:
     branches: [main]
@@ -27,7 +38,7 @@ jobs:
     permissions:
       contents: write # push the version-packages branch + cut the release/tag
       pull-requests: write # open/update the version-packages PR
-      packages: write # publish to GitHub Packages
+      id-token: write # mint the OIDC token npm trusted publishing exchanges
     steps:
       - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2
         with:
@@ -40,11 +51,16 @@ jobs:
         with:
           bun-version: "1.3" # matches mise.toml + package.json engines
           no-cache: true # publishing job — don't restore a poisonable cache
+      # No `registry-url` on purpose. Given one, setup-node writes an .npmrc
+      # containing `//<registry>/:_authToken=${NODE_AUTH_TOKEN}`; with no token
+      # in the environment that expands to an empty _authToken, npm reads it as
+      # "auth is already configured", skips the OIDC exchange entirely and dies
+      # with ENEEDAUTH. Omitting it leaves npm on its default registry
+      # (registry.npmjs.org) with no .npmrc at all, which is what trusted
+      # publishing needs. Node 26 ships npm >= 11.5.1, the minimum for OIDC.
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: 26
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@martinzachariassen"
       - run: bun install --frozen-lockfile
       - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1.9.0
         with:
@@ -59,5 +75,7 @@ jobs:
           # `persist-credentials: false` (no git-remote token needed).
           commitMode: github-api
         env:
+          # Only for the version-packages PR and the GitHub Release. Publishing
+          # itself is keyless — deliberately no NODE_AUTH_TOKEN here, since any
+          # value (even empty) makes npm skip the OIDC exchange.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

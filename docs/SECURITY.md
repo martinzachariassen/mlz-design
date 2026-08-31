@@ -25,6 +25,10 @@ once a fix is available.
 - Every GitHub Actions workflow pins its actions to a full commit SHA and runs
   under `step-security/harden-runner`.
 - Releases are published by an automated, least-privilege workflow
-  ([Changesets](https://github.com/changesets/changesets) → GitHub Packages). No
-  build provenance / Sigstore attestation — GitHub Packages doesn't support npm's
-  OIDC trusted-publishing yet (a `registry.npmjs.org`-only feature).
+  ([Changesets](https://github.com/changesets/changesets) → npmjs.org) using npm
+  [trusted publishing](https://docs.npmjs.com/trusted-publishers/). Publishing is
+  keyless — the workflow's OIDC token is exchanged for a short-lived credential,
+  so there is no long-lived `NPM_TOKEN` to rotate, leak or scope-creep. Every
+  release carries a Sigstore build-provenance attestation linking the published
+  tarball to the exact commit and workflow run that produced it; verify with
+  `npm audit signatures`.

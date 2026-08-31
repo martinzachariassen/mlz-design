@@ -10,13 +10,10 @@ layers, which v3 can't read), Node 22.12+ or Bun.
 
 ## 1. Install
 
-The package publishes to GitHub Packages, so the scope needs a registry entry
-and a token with `read:packages` (never commit the token):
+The package is public on npm, so there is nothing to configure — no registry
+entry, no `.npmrc`, no token:
 
 ```bash
-export GITHUB_TOKEN=<YOUR_TOKEN>
-printf '@martinzachariassen:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}\n' >> .npmrc
-
 bun add @martinzachariassen/design react react-dom
 ```
 

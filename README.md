@@ -3,10 +3,10 @@
 Martin Zachariassen's design system — colour, type, style and motion as an installable React + Tailwind v4 package.
 
 [![CI](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml/badge.svg)](https://github.com/martinzachariassen/mlz-design/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/github/package-json/v/martinzachariassen/mlz-design?label=version)](https://github.com/martinzachariassen/mlz-design/pkgs/npm/design)
+[![npm](https://img.shields.io/npm/v/@martinzachariassen/design)](https://www.npmjs.com/package/@martinzachariassen/design)
 [![License: MIT](https://img.shields.io/github/license/martinzachariassen/mlz-design)](LICENSE)
 
-**Status:** Stable, actively maintained · Published as `@martinzachariassen/design` on GitHub Packages · Requires React 19 and Tailwind v4
+**Status:** Stable, actively maintained · Published as `@martinzachariassen/design` on npm · Requires React 19 and Tailwind v4
 
 **Live playground: [design.mlz.no](https://design.mlz.no)** — every component, foundation and pattern, with light/dark and all five accent families switchable from the toolbar.
 
@@ -24,14 +24,10 @@ The repo is **public** on purpose — browse it, learn from it, lift pieces — 
 ## Quickstart
 
 ```bash
-# 1. Point the @martinzachariassen scope at GitHub Packages.
-#    The token needs the read:packages scope. Never commit it.
-export GITHUB_TOKEN=<YOUR_TOKEN>
-printf '@martinzachariassen:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}\n' >> .npmrc
-
-# 2. Install the package and its peers.
 bun add @martinzachariassen/design react react-dom
 ```
+
+No registry configuration, no `.npmrc`, no token — it's a public package on npm.
 
 Put these two lines at the **top** of your app's main stylesheet — they must come before any rule of your own:
 
