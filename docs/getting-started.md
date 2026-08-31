@@ -10,18 +10,36 @@ layers, which v3 can't read), Node 22.12+ or Bun.
 
 ## 1. Install
 
-The package publishes to GitHub Packages, so the scope needs a registry entry
-and a token with `read:packages` (never commit the token):
+Install from the public repo — no registry setup, no token:
 
 ```bash
-export GITHUB_TOKEN=<YOUR_TOKEN>
-printf '@martinzachariassen:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}\n' >> .npmrc
-
-bun add @martinzachariassen/design react react-dom
+bun add github:martinzachariassen/mlz-design#v0.8.0 react react-dom
 ```
 
-Pin with a tilde range (`"~0.8.0"`): the package is on 0.x, so minors are
-deliberate upgrades — see [VERSIONING.md](VERSIONING.md).
+This resolves the committed `dist/` (CI fails if it is stale), so nothing has
+to be built on install.
+
+**Pin the tag, and treat bumping it as deliberate.** A git ref carries no
+semver range, so the tilde-range contract in [VERSIONING.md](VERSIONING.md)
+becomes something you apply by hand: the package is on 0.x, where minors may
+break you. Read the CHANGELOG before moving the tag.
+
+<details>
+<summary>Installing from GitHub Packages instead</summary>
+
+Releases are also published to GitHub Packages, which does support real semver
+ranges (`"~0.8.0"`). The cost is authentication: GitHub Packages requires a
+token even for public packages, and only classic PATs work — a fine-grained
+token has no packages permission. You need a PAT with `read:packages` plus a
+registry entry for the scope in your consuming project.
+
+Be aware this also affects Dependabot in the consuming repo: it runs in its own
+credential context and needs a `registries:` block, which currently trips two
+open upstream bugs ([dependabot-core#16107](https://github.com/dependabot/dependabot-core/issues/16107),
+[#15415](https://github.com/dependabot/dependabot-core/issues/15415)) that can
+rewrite unrelated packages' lockfile URLs to `npm.pkg.github.com`.
+
+</details>
 
 ## 2. Inherit the system — two CSS lines
 
