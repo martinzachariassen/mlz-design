@@ -187,7 +187,11 @@ Reference implementation: `vite/theme-init.ts` in [mlz-no](https://github.com/ma
 
 ## Distribution
 
-`tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`. The committed `dist/` is the token-free fallback for `bun add github:martinzachariassen/mlz-design` — refresh it (`bun run build`) in any PR that changes `src/`. Primary distribution is **GitHub Packages** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)).
+`tsup` builds `dist` (ESM + `.d.ts`), then the build copies `src/styles` into `dist/styles`.
+
+**The committed `dist/` is the primary consumption path**, not a fallback: consumers install `bun add github:martinzachariassen/mlz-design#vX.Y.Z`, which needs no registry and no token. Refresh it (`bun run build`) in any PR that changes `src/` — CI fails if it is stale, and that check is now load-bearing rather than a nicety, because a stale `dist/` ships directly to every consumer.
+
+Releases still publish to **GitHub Packages** via Changesets (see [CONTRIBUTING.md](CONTRIBUTING.md)), which is what cuts the tags git-ref installs pin to. Almost nobody installs from the registry, because GitHub Packages demands auth even for public packages.
 
 ### Storybook manager theming, and the addon bug behind it
 

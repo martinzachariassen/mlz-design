@@ -24,14 +24,23 @@ The repo is **public** on purpose — browse it, learn from it, lift pieces — 
 ## Quickstart
 
 ```bash
-# 1. Point the @martinzachariassen scope at GitHub Packages.
-#    The token needs the read:packages scope. Never commit it.
-export GITHUB_TOKEN=<YOUR_TOKEN>
-printf '@martinzachariassen:registry=https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}\n' >> .npmrc
-
-# 2. Install the package and its peers.
-bun add @martinzachariassen/design react react-dom
+bun add github:martinzachariassen/mlz-design#v0.8.0 react react-dom
 ```
+
+Installing from the public repo needs no registry setup and no token — the
+built `dist/` is committed for exactly this, and CI fails if it goes stale.
+Pin the tag: a git ref has no semver range, so upgrading is a deliberate edit
+(see [VERSIONING.md](docs/VERSIONING.md) for what a bump can change).
+
+<details>
+<summary>Installing from GitHub Packages instead</summary>
+
+Releases are also published to GitHub Packages. That path needs a classic PAT
+with `read:packages` and a registry entry for the scope, because GitHub
+Packages requires authentication even for public packages — which is why the
+git ref above is the recommended route.
+
+</details>
 
 Put these two lines at the **top** of your app's main stylesheet — they must come before any rule of your own:
 
