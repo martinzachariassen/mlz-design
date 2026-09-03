@@ -16,7 +16,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "skills"
   ],
   "exports": {
     ".": {
@@ -48,6 +49,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "skill:inventory": "node scripts/generate-skill-inventory.mjs",
+    "skill:check": "node scripts/generate-skill-inventory.mjs --check",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "format": "biome format --write .",
@@ -57,7 +60,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "lint:package": "publint && attw --pack . --profile esm-only --entrypoints . tokens toaster",
-    "release": "bun run lint && bun run typecheck && bun run test && bun run build && bun run lint:package && changeset publish",
+    "release": "bun run lint && bun run typecheck && bun run test && bun run skill:check && bun run build && bun run lint:package && changeset publish",
     "prepublishOnly": "bun run build"
   },
   "peerDependencies": {
