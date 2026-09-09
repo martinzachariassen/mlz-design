@@ -126,7 +126,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "remark-gfm": "^4.0.1",
-    "storybook": "~10.5.7",
+    "storybook": "~10.6.0",
     "tailwindcss": "^4.3.3",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3",
